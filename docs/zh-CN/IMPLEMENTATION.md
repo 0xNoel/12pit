@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 1cc8c8c1a8a4520218eb448773741617c4a6e1e8 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: 9228ce1d7f225363569041019f27aa3a450fe194 -->
 
 # 12pit 实现
 
@@ -176,9 +176,9 @@ HUD 缓存文字时，保留语言监听器，在 `start()` 中注册，在 `sto
 
 API 字段中的已标记文字如果会传给前端 `t(...)`，用 `Languages.sourceText(...)` 保留经过 JSON 传递的使用位置。
 
-提取脚本读取 Java 的 `source(...)`、`translate(...)`、带编号参数的 `format(...)`，以及前端的 `t(...)`。修改这些调用后，运行 `python scripts/languages.py sync` 更新 PO 文件中的使用位置。同步会保留已有译文，新条目留空。`python scripts/languages.py status` 显示翻译进度和文件问题。
+提取脚本读取 Java 的 `source(...)`、`translate(...)`、带编号参数的 `format(...)`，以及前端的 `t(...)`。CI 运行 `python scripts/languages.py extract`，生成临时 POT 并上传到 Crowdin。
 
-每个 PO 条目包含原文、译文和使用位置。行号变化不影响自动生成的标识。修改文件或调用次数会改变受影响的标识。调整同一原文的调用顺序可能交换对应的译文，重构后应核对这些条目。翻译和语言申请见[贡献翻译](TRANSLATING.md)。
+每个 PO 条目包含原文、译文和使用位置。自动生成的 `msgctxt` 包含文件路径，以及该原文在文件中的使用序号，例如 `src/main/java/pit12/feature/autofish/AutoFishConfig.java#1`。行号和列号放在 `#:` 引用中。行号变化不影响标识。移动到其他文件，或增删、调整同一原文的使用顺序，可能改变译文的对应关系。翻译和语言文件维护见[贡献翻译](TRANSLATING.md)。
 
 ## HUD
 
