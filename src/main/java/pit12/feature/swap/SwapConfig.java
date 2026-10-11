@@ -44,6 +44,7 @@ public final class SwapConfig extends FeatureConfig {
     final IntegerSetting unequipKey;
     final BooleanSetting bindingMessages;
     final BooleanSetting swapMessages;
+    final BooleanSetting showGem;
     final BooleanSetting highlight;
     final BooleanSetting venomArmor;
     final BooleanSetting venomSpade;
@@ -98,6 +99,8 @@ public final class SwapConfig extends FeatureConfig {
                 true);
         swapMessages = booleanSetting("swap_messages", source("Swap messages"),
                 source("Shows a message after items are swapped or unequipped."), true);
+        showGem = booleanSetting("show_gem", source("Show gem"),
+                source("Shows a green diamond on gemmed items."), true);
         workspace = integerSliderSetting("workspace_slot", source("Transfer slot"),
                 source("Hotbar slot used to move armor from the inventory."), 1, 1, 9, 1);
         restoreWorkspace = booleanSetting("restore_workspace", source("Restore transfer slot"),
@@ -209,6 +212,7 @@ public final class SwapConfig extends FeatureConfig {
         final boolean resumeInputNextTick;
         final boolean messages;
         final boolean automaticMessages;
+        final boolean showGem;
 
         Options(SwapConfig config) {
             rightClick = config.rightClick.get();
@@ -226,6 +230,7 @@ public final class SwapConfig extends FeatureConfig {
             resumeInputNextTick = config.resumeInputNextTick.get();
             messages = config.swapMessages.get();
             automaticMessages = config.autoSwapMessages.get();
+            showGem = config.showGem.get();
         }
     }
 }

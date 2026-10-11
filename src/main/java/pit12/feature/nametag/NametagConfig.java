@@ -28,7 +28,10 @@ import pit12.runtime.config.IntegerSetting;
 import pit12.runtime.item.PitEnchantmentFormat;
 
 public final class NametagConfig extends FeatureConfig {
+    private final BooleanSetting nickMarker;
+    private final BooleanSetting realNames;
     private final ChoiceSetting enchantmentFormat;
+    private final BooleanSetting showGem;
     private final BooleanSetting showHeldItem;
     private final BooleanSetting showLeggings;
     private final IntegerSetting displayDistance;
@@ -36,11 +39,18 @@ public final class NametagConfig extends FeatureConfig {
 
     public NametagConfig() {
         super("nametag", source("Nametag"), new ConfigCategory("render", source("Render"), 100),
-                source("Shows Pit enchantments above player nametags."));
+                source("Adds real names and Pit enchantments to player nametags."));
+        subsubcategory("names", source("Denick"));
+        nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
+                source("Adds N to nicked players' names."), true);
+        realNames = booleanSetting("real_names", source("Show real names on nametags"),
+                source("Adds the real name after the nicked name."), true);
         subsubcategory("enchantments", source("Enchantments"));
         enchantmentFormat = choiceSetting("enchantment_format", source("Enchantment format"),
                 source("Controls how enchantment names and levels are shown."),
                 PitEnchantmentFormat.BOLD_LEVELS, PitEnchantmentFormat.choices());
+        showGem = booleanSetting("show_gem", source("Show gem"),
+                source("Shows a green diamond on gemmed items."), true);
         showHeldItem = booleanSetting("show_held_item", source("Show held item enchantments"),
                 source("Shows the held item's Pit enchantments."), true);
         showLeggings = booleanSetting("show_leggings", source("Show leggings enchantments"),
@@ -53,8 +63,20 @@ public final class NametagConfig extends FeatureConfig {
                 40, 1);
     }
 
+    public boolean nickMarker() {
+        return nickMarker.get();
+    }
+
+    public boolean realNames() {
+        return realNames.get();
+    }
+
     public int enchantmentFormat() {
         return enchantmentFormat.get();
+    }
+
+    public boolean showGem() {
+        return showGem.get();
     }
 
     public boolean showHeldItem() {

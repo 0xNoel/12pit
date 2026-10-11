@@ -32,6 +32,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final BooleanSetting showHeldItem;
     private final BooleanSetting showLeggings;
     private final ChoiceSetting enchantmentFormat;
+    private final BooleanSetting showGem;
     private final BooleanSetting shortPlayerNames;
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
@@ -39,6 +40,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final BooleanSetting showGroupName;
     private final BooleanSetting showFriend;
     private final BooleanSetting showEnemy;
+    private final BooleanSetting showNick;
     private final BooleanSetting showRegularity;
     private final BooleanSetting showDark;
     private final BooleanSetting showBountyHunter;
@@ -58,6 +60,8 @@ public final class PlayerListConfig extends FeatureConfig {
                 source("Shows the held item's Pit enchantments."), false);
         showLeggings = booleanSetting("show_leggings", source("Show leggings enchantments"),
                 source("Shows the leggings' Pit enchantments."), true);
+        showGem = booleanSetting("show_gem", source("Show gem"),
+                source("Shows a green diamond on gemmed items."), true);
         subsubcategory("player_information", source("Player information"));
         shortPlayerNames = booleanSetting("short_player_names", source("Short player names"),
                 source("Shows only the level and player name, keeping their formatting."), false);
@@ -70,11 +74,13 @@ public final class PlayerListConfig extends FeatureConfig {
                 true);
         subcategory("groups", source("Groups"));
         showGroupName = booleanSetting("show_group_name", source("Show group names"),
-                source("Shows the name above each equipment group."), true);
+                source("Shows the name above each group."), true);
         showFriend = booleanSetting("show_friend", source("Show Friend group"),
                 source("Shows friends in the player list."), true);
         showEnemy = booleanSetting("show_enemy", source("Show Enemy group"),
                 source("Shows enemies in the player list."), true);
+        showNick = booleanSetting("show_nick", source("Show Nick group"),
+                source("Shows nicked players in the player list."), true);
         showRegularity = booleanSetting("show_regularity", source("Show Regularity group"),
                 source("Shows the Regularity equipment group."), true);
         showDark = booleanSetting("show_dark", source("Show Dark group"),
@@ -93,6 +99,10 @@ public final class PlayerListConfig extends FeatureConfig {
 
     public int enchantmentFormat() {
         return enchantmentFormat.get();
+    }
+
+    public boolean showGem() {
+        return showGem.get();
     }
 
     public boolean shortPlayerNames() {
@@ -145,6 +155,8 @@ public final class PlayerListConfig extends FeatureConfig {
                 return showFriend();
             case ENEMY:
                 return showEnemy();
+            case NICK:
+                return showNick.get();
             case REGULARITY:
                 return showRegularity();
             case DARK:

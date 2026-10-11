@@ -50,8 +50,8 @@ public abstract class HeldItemTooltipMixin extends GuiIngame implements HeldItem
         if (config == null || !config.enabled() || !config.showEnchantments()) {
             return originalName;
         }
-        String enchantments =
-                PitEnchantmentReader.read(highlightingItemStack).formatBoldDisplayNames();
+        String enchantments = PitEnchantmentReader.read(highlightingItemStack)
+                .formatBoldDisplayNames(config.showGem());
         return enchantments == null ? originalName : enchantments;
     }
 

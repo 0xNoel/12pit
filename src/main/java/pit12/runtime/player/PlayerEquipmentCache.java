@@ -31,7 +31,10 @@ import pit12.runtime.item.PitEnchantments;
 public final class PlayerEquipmentCache {
     public static final int HELD_ITEM = 1;
     public static final int LEGGINGS = 1 << 1;
-    public static final int ALL = HELD_ITEM | LEGGINGS;
+    public static final int BOOTS = 1 << 2;
+    public static final int CHESTPLATE = 1 << 3;
+    public static final int HELMET = 1 << 4;
+    public static final int ALL = HELD_ITEM | LEGGINGS | BOOTS | CHESTPLATE | HELMET;
     private final Map<UUID, PlayerEquipmentSnapshot> entries =
             new LinkedHashMap<UUID, PlayerEquipmentSnapshot>();
     private final Map<UUID, Integer> dirty = new LinkedHashMap<UUID, Integer>();
@@ -54,26 +57,34 @@ public final class PlayerEquipmentCache {
     public PlayerEquipmentSnapshot observe(EntityPlayer player, int slots) {
         UUID playerId = player.getUniqueID();
         PlayerEquipmentSnapshot previous = entries.get(playerId);
-        int knownSlots = previous == null ? 0 : knownSlots(previous);
-        ItemStack heldItem = previous == null ? null : previous.copyHeldItem();
-        ItemStack leggings = previous == null ? null : previous.copyLeggings();
+        int knownSlots = previous == null ? 0 : previous.knownSlots();
+        ItemStack[] equipment = new ItemStack[5];
+        for (int slot = 0; slot < equipment.length; slot++) {
+            int mask = slot == 0 ? HELD_ITEM
+                    : slot == 1 ? BOOTS : slot == 2 ? LEGGINGS : slot == 3 ? CHESTPLATE : HELMET;
+            if ((slots & mask) != 0) {
+                ItemStack stack =
+                        slot == 0 ? player.getHeldItem() : player.getCurrentArmor(slot - 1);
+                equipment[slot] = stack == null ? null : stack.copy();
+            } else {
+                equipment[slot] = previous == null ? null : previous.copyEquipment(slot);
+            }
+        }
         PitEnchantments heldEnchantments =
                 previous == null ? PitEnchantments.empty() : previous.heldEnchantments();
         PitEnchantments leggingsEnchantments =
                 previous == null ? PitEnchantments.empty() : previous.leggingsEnchantments();
         if ((slots & HELD_ITEM) != 0) {
-            heldItem = player.getHeldItem();
-            heldEnchantments = PitEnchantmentReader.read(heldItem);
+            heldEnchantments = PitEnchantmentReader.read(equipment[0]);
             knownSlots |= HELD_ITEM;
         }
         if ((slots & LEGGINGS) != 0) {
-            leggings = player.getCurrentArmor(1);
-            leggingsEnchantments = PitEnchantmentReader.read(leggings);
+            leggingsEnchantments = PitEnchantmentReader.read(equipment[2]);
             knownSlots |= LEGGINGS;
         }
         long revision = previous == null ? 1L : previous.revision() + 1L;
-        PlayerEquipmentSnapshot snapshot = new PlayerEquipmentSnapshot(playerId, heldItem, leggings,
-                heldEnchantments, leggingsEnchantments, knownSlots, revision);
+        PlayerEquipmentSnapshot snapshot = new PlayerEquipmentSnapshot(playerId, equipment,
+                heldEnchantments, leggingsEnchantments, knownSlots | slots, revision);
         entries.put(playerId, snapshot);
         return snapshot;
     }
@@ -95,16 +106,5 @@ public final class PlayerEquipmentCache {
 
     public PlayerEquipmentSnapshot loadedEquipment(UUID playerId) {
         return entries.get(playerId);
-    }
-
-    private static int knownSlots(PlayerEquipmentSnapshot snapshot) {
-        int slots = 0;
-        if (snapshot.heldItemKnown()) {
-            slots |= HELD_ITEM;
-        }
-        if (snapshot.leggingsKnown()) {
-            slots |= LEGGINGS;
-        }
-        return slots;
     }
 }

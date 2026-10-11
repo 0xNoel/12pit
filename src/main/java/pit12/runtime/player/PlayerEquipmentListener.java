@@ -19,8 +19,12 @@
 package pit12.runtime.player;
 
 import java.util.UUID;
+import net.minecraft.item.ItemStack;
 
 public interface PlayerEquipmentListener {
+    /** Called for each equipment packet. Read the live stack only during this callback. */
+    default void onPlayerEquipmentReceived(UUID playerId, ItemStack stack) {}
+
     void onPlayerEquipmentChanged(UUID playerId, int changedSlots, long revision);
 
     void onPlayerEquipmentRemoved(UUID playerId);

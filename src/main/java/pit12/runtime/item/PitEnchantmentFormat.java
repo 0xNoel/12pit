@@ -37,16 +37,16 @@ public final class PitEnchantmentFormat {
     }
 
     /** Returns null when there are no known enchantments to show. */
-    public static String format(PitEnchantments enchantments, int format) {
+    public static String format(PitEnchantments enchantments, int format, boolean showGem) {
         switch (format) {
             case PLAIN_LEVELS:
-                return enchantments.formatDisplayNames();
+                return enchantments.formatDisplayNames(showGem);
             case HIDE_LEVEL_THREE:
-                return enchantments.formatBoldDisplayNamesWithoutLevelThree();
+                return enchantments.formatBoldDisplayNamesWithoutLevelThree(showGem);
             case NAMES_ONLY:
-                return enchantments.formatBoldDisplayNamesWithoutLevels();
+                return enchantments.formatBoldDisplayNamesWithoutLevels(showGem);
             case BOLD_LEVELS:
-                return enchantments.formatBoldDisplayNames();
+                return enchantments.formatBoldDisplayNames(showGem);
             default:
                 throw new IllegalStateException("Unknown enchantment format: " + format);
         }

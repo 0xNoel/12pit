@@ -66,6 +66,7 @@ final class BindingStore {
             entry.addProperty("target", binding.target);
             entry.addProperty("name", binding.name);
             entry.addProperty("details", binding.details);
+            entry.addProperty("gemmed", binding.gemmed);
             JsonObject identity = new JsonObject();
             identity.addProperty("item", binding.identity.item);
             identity.addProperty("variant", binding.identity.variant);
@@ -126,8 +127,13 @@ final class BindingStore {
                     || target < 1 || target > (equipment ? 4 : 9) || name.isEmpty()) {
                 throw new IllegalArgumentException(source("Invalid swap binding"));
             }
+            JsonElement gemmed = entry.get("gemmed");
+            if (gemmed != null
+                    && (!gemmed.isJsonPrimitive() || !gemmed.getAsJsonPrimitive().isBoolean())) {
+                throw new IllegalArgumentException(source("Invalid gem state"));
+            }
             result.add(new SwapBinding(key, identity, equipment, target, name,
-                    string(entry, "details")));
+                    string(entry, "details"), gemmed != null && gemmed.getAsBoolean()));
         }
         return result;
     }

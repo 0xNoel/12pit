@@ -28,17 +28,33 @@ public final class PlayerNameFormatter {
             return name;
         }
         int firstSpace = name.indexOf(' ', start);
-        int end = firstSpace < 0 ? name.length() : name.indexOf(' ', firstSpace + 1);
-        if (end < 0) {
-            end = name.length();
-        }
-        StringBuilder shortened = new StringBuilder(end);
+        int playerStart = firstSpace < 0 ? name.length() : firstSpace + 1;
+        StringBuilder shortened = new StringBuilder(name.length());
         for (int index = 0; index < start; index++) {
-            if (name.charAt(index) == '\u00A7' && index + 1 < start) {
+            if (name.charAt(index) == '§' && index + 1 < start) {
                 shortened.append(name, index, index + 2);
                 index++;
             }
         }
-        return shortened.append(name, start, end).toString();
+        shortened.append(name, start, playerStart);
+        while (playerStart < name.length()) {
+            char character = name.charAt(playerStart);
+            if (character == '§' && playerStart + 1 < name.length()) {
+                shortened.append(name, playerStart, playerStart + 2);
+                playerStart += 2;
+            } else if (character == '[') {
+                int rankEnd = name.indexOf(']', playerStart);
+                if (rankEnd < 0) {
+                    break;
+                }
+                playerStart = rankEnd + 1;
+            } else if (character == ' ') {
+                playerStart++;
+            } else {
+                break;
+            }
+        }
+        int end = name.indexOf(' ', playerStart);
+        return shortened.append(name, playerStart, end < 0 ? name.length() : end).toString();
     }
 }

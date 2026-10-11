@@ -199,7 +199,7 @@ function keyLabel(value: string) {
             :key="choice.value"
             type="button"
             :disabled="busy"
-            :aria-label="choice.name.replace(/\u00a7[0-9a-flmnor]/gi, '')"
+            :aria-label="choice.name.replace(/§[0-9a-flmnor]/gi, '')"
             :aria-current="choice.value === option.value ? 'true' : undefined"
             @click="setChoice(choice.value)"
           >

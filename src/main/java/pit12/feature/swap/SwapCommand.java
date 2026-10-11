@@ -97,8 +97,9 @@ final class SwapCommand {
                 SwapBinding.create(key(args[0]), minecraft.thePlayer.getHeldItem(), target);
         bindings.bind(binding);
         if (config.bindingMessages.get())
-            reply(sender, Tone.SUCCESS, language.format("Bound {0} to {1} ({2})", binding.display(),
-                    Keyboard.getKeyName(binding.key), binding.targetName()));
+            reply(sender, Tone.SUCCESS,
+                    language.format("Bound {0} to {1} ({2})", binding.display(config.showGem.get()),
+                            Keyboard.getKeyName(binding.key), binding.targetName()));
     }
 
     private void unbind(ICommandSender sender, String[] args) {
@@ -121,8 +122,8 @@ final class SwapCommand {
             throw new IllegalArgumentException(bindings.readinessProblem());
         reply(sender, Tone.INFO, language.format("Swap bindings: {0}", bindings.count()));
         for (SwapBinding entry : bindings.entries())
-            reply(sender, Tone.INFO, Keyboard.getKeyName(entry.key) + ": " + entry.display()
-                    + " -> " + entry.targetName());
+            reply(sender, Tone.INFO, Keyboard.getKeyName(entry.key) + ": "
+                    + entry.display(config.showGem.get()) + " -> " + entry.targetName());
     }
 
     private void status(ICommandSender sender, String[] args) {

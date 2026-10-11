@@ -32,6 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import pit12.feature.denick.api.DenickNames;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
@@ -50,6 +51,8 @@ public final class NametagFeature
     private final NametagConfig config;
     private final ClientSession session;
     private final PlayerEquipmentAccess equipment;
+    private final DenickNames denickNames;
+    private final NametagNamesBinding binding;
     private final NametagRenderer renderer = new NametagRenderer();
     private final Map<UUID, NametagText> texts = new HashMap<>();
     private final Runnable sessionChanged = this::rebuildTexts;
@@ -57,14 +60,18 @@ public final class NametagFeature
     private boolean fontDirty;
     private boolean started;
     private boolean active;
+    private boolean namesBound;
 
     public NametagFeature(Minecraft minecraft, ConfigCatalog configs, NametagConfig config,
-            ClientSession session, PlayerEquipmentAccess equipment) {
+            ClientSession session, PlayerEquipmentAccess equipment, DenickNames denickNames,
+            NametagNamesBinding binding) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
         this.session = session;
         this.equipment = equipment;
+        this.denickNames = denickNames;
+        this.binding = binding;
     }
 
     @Override
@@ -75,6 +82,7 @@ public final class NametagFeature
         }
         started = true;
         configs.addListener(this);
+        MinecraftForge.EVENT_BUS.register(this);
         updateActivation();
     }
 
@@ -85,6 +93,11 @@ public final class NametagFeature
             return;
         }
         started = false;
+        if (namesBound) {
+            binding.pit12$bindNametagNames(null);
+            namesBound = false;
+        }
+        MinecraftForge.EVENT_BUS.unregister(this);
         configs.removeListener(this);
         deactivate();
     }
@@ -96,7 +109,6 @@ public final class NametagFeature
                 try {
                     equipment.addListener(this);
                     session.addListener(sessionChanged);
-                    MinecraftForge.EVENT_BUS.register(this);
                     rebuildTexts();
                 } catch (RuntimeException failure) {
                     deactivate();
@@ -113,7 +125,6 @@ public final class NametagFeature
             return;
         }
         active = false;
-        MinecraftForge.EVENT_BUS.unregister(this);
         session.removeListener(sessionChanged);
         equipment.removeListener(this);
         texts.clear();
@@ -139,11 +150,12 @@ public final class NametagFeature
             return;
         }
         String heldItem = config.showHeldItem() && snapshot.heldItemKnown() ? PitEnchantmentFormat
-                .format(snapshot.heldEnchantments(), config.enchantmentFormat()) : null;
+                .format(snapshot.heldEnchantments(), config.enchantmentFormat(), config.showGem())
+                : null;
         String leggings =
                 config.showLeggings() && snapshot.leggingsKnown()
                         ? PitEnchantmentFormat.format(snapshot.leggingsEnchantments(),
-                                config.enchantmentFormat())
+                                config.enchantmentFormat(), config.showGem())
                         : null;
         if (heldItem == null && leggings == null) {
             texts.remove(playerId);
@@ -182,6 +194,7 @@ public final class NametagFeature
             updateActivation();
         }
         if (active && (changes.affects("nametag", "enchantment_format")
+                || changes.affects("nametag", "show_gem")
                 || changes.affects("nametag", "show_held_item")
                 || changes.affects("nametag", "show_leggings"))) {
             rebuildTexts();
@@ -190,20 +203,46 @@ public final class NametagFeature
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Post event) {
-        fontDirty = true;
-    }
-
-    @SubscribeEvent
-    public void onClientTick(ClientTickEvent event) {
-        if (event.phase == Phase.END
-                && (fontDirty || unicodeFont != minecraft.fontRendererObj.getUnicodeFlag())) {
-            rebuildTexts();
+        if (active) {
+            fontDirty = true;
         }
     }
 
     @SubscribeEvent
+    public void onClientTick(ClientTickEvent event) {
+        if (event.phase != Phase.END) {
+            return;
+        }
+        session.checkThread();
+        if (!namesBound) {
+            // Bind after Minecraft has created its player renderers.
+            binding.pit12$bindNametagNames(this::displayName);
+            namesBound = true;
+        }
+        if (active && (fontDirty || unicodeFont != minecraft.fontRendererObj.getUnicodeFlag())) {
+            rebuildTexts();
+        }
+    }
+
+    private String displayName(UUID playerId, String original) {
+        session.checkThread();
+        if (!config.enabled()) {
+            return original;
+        }
+        String name = config.nickMarker() && denickNames.isNicked(playerId) ? original + " §c§lN"
+                : original;
+        if (config.realNames()) {
+            String realName = denickNames.realDisplayName(playerId);
+            if (realName != null) {
+                return name + " §7(" + realName + "§7)";
+            }
+        }
+        return name;
+    }
+
+    @SubscribeEvent
     public void onRenderName(RenderLivingEvent.Specials.Post<?> event) {
-        if (!(event.entity instanceof EntityPlayer) || minecraft.thePlayer == null
+        if (!active || !(event.entity instanceof EntityPlayer) || minecraft.thePlayer == null
                 || event.entity == minecraft.thePlayer
                 || event.entity.worldObj != minecraft.theWorld
                 || session.world() != minecraft.theWorld || !Minecraft.isGuiEnabled()) {

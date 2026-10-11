@@ -66,7 +66,7 @@ final class UiTextCache {
         int currentColor = color;
         boolean bold = false;
         for (int index = 0; index < text.length(); index++) {
-            if (text.charAt(index) != '\u00A7') {
+            if (text.charAt(index) != '§') {
                 continue;
             }
             String run = text.substring(runStart, index);
@@ -123,7 +123,7 @@ final class UiTextCache {
         int runStart = 0;
         boolean bold = false;
         for (int index = 0; index < text.length(); index++) {
-            if (text.charAt(index) != '\u00A7') {
+            if (text.charAt(index) != '§') {
                 continue;
             }
             width += runWidth(text.substring(runStart, index), bold);
@@ -149,7 +149,7 @@ final class UiTextCache {
 
     private int runWidth(String text, boolean bold) {
         String plainText = text.replace('\n', ' ');
-        TextureEntry cached = entries.get(bold ? "\u00A7l" + plainText : plainText);
+        TextureEntry cached = entries.get(bold ? "§l" + plainText : plainText);
         return cached == null ? metrics[bold ? 1 : 0].stringWidth(plainText) : cached.advance;
     }
 
@@ -162,7 +162,7 @@ final class UiTextCache {
 
     private TextureEntry entry(String text, boolean bold) {
         String plainText = text.replace('\n', ' ');
-        String key = bold ? "\u00A7l" + plainText : plainText;
+        String key = bold ? "§l" + plainText : plainText;
         TextureEntry cached = entries.get(key);
         if (cached != null) {
             return cached;

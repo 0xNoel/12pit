@@ -23,6 +23,7 @@ import static pit12.runtime.languages.Languages.source;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import pit12.runtime.item.PitEnchantmentReader;
+import pit12.runtime.item.PitEnchantments;
 
 final class SwapBinding {
     final int key;
@@ -31,15 +32,17 @@ final class SwapBinding {
     final int target;
     final String name;
     final String details;
+    final boolean gemmed;
 
     SwapBinding(int key, ItemIdentity identity, boolean equipment, int target, String name,
-            String details) {
+            String details, boolean gemmed) {
         this.key = key;
         this.identity = identity;
         this.equipment = equipment;
         this.target = target;
         this.name = name;
         this.details = details;
+        this.gemmed = gemmed;
     }
 
     static SwapBinding create(int key, ItemStack stack, int hotbarTarget) {
@@ -50,14 +53,15 @@ final class SwapBinding {
             throw new IllegalArgumentException(
                     source("Hold armor or specify a hotbar slot from 1 to 9"));
         }
-        String details = PitEnchantmentReader.read(stack).formatDisplayNames();
+        PitEnchantments enchantments = PitEnchantmentReader.read(stack);
+        String details = enchantments.formatDisplayNames(false);
         ItemIdentity identity = ItemIdentity.read(stack);
         if (identity == null)
             throw new IllegalArgumentException(source("Held item could not be identified"));
         String name = stack.getDisplayName();
         return new SwapBinding(key, identity, hotbarTarget == 0,
                 hotbarTarget == 0 ? armor : hotbarTarget, name.isEmpty() ? identity.item : name,
-                details == null ? "" : details);
+                details == null ? "" : details, enchantments.gemmed());
     }
 
     static int armorTarget(ItemStack stack) {
@@ -70,8 +74,9 @@ final class SwapBinding {
         return equipment ? 9 - target : 35 + target;
     }
 
-    String display() {
-        return details.isEmpty() ? name : name + " (" + details + "\u00a7r)";
+    String display(boolean showGem) {
+        return details.isEmpty() ? name
+                : name + " (" + details + (showGem && gemmed ? " §a♦" : "") + "§r)";
     }
 
     String targetName() {

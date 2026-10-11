@@ -150,7 +150,7 @@ final class UiFont {
                 }
                 continue;
             }
-            if (character == '\u00A7') {
+            if (character == '§') {
                 formatting = true;
                 continue;
             }
@@ -169,7 +169,7 @@ final class UiFont {
                 formatting = false;
                 continue;
             }
-            if (character == '\u00A7') {
+            if (character == '§') {
                 formatting = true;
                 continue;
             }
@@ -212,7 +212,7 @@ final class UiFont {
                     }
                     continue;
                 }
-                if (character == '\u00A7') {
+                if (character == '§') {
                     formatting = true;
                     continue;
                 }

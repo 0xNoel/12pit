@@ -21,11 +21,13 @@ package pit12.feature.playerlist;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.runtime.item.PitEnchantment;
@@ -44,15 +46,18 @@ final class PlayerListBuilder {
     private final PlayerListConfig config;
     private final RelationLookup relations;
     private final PlayerNameCache playerNames;
+    private final DenickNames denickNames;
 
     PlayerListBuilder(Minecraft minecraft, PlayerEquipmentAccess equipment, PitContext pitContext,
-            PlayerListConfig config, RelationLookup relations, PlayerNameCache playerNames) {
+            PlayerListConfig config, RelationLookup relations, PlayerNameCache playerNames,
+            DenickNames denickNames) {
         this.minecraft = minecraft;
         this.equipment = equipment;
         this.pitContext = pitContext;
         this.config = config;
         this.relations = relations;
         this.playerNames = playerNames;
+        this.denickNames = denickNames;
     }
 
     PlayerListSnapshot build() {
@@ -81,8 +86,15 @@ final class PlayerListBuilder {
                 continue;
             }
             PlayerEquipmentSnapshot playerEquipment = equipment.loadedEquipment(playerId);
-            PlayerListGroup group = groupOf(relations.relationOf(playerId), playerEquipment);
-            if (group == null || !config.showGroup(group)) {
+            Relation relation = relations.relationOf(playerId);
+            PlayerListGroup special = relation == Relation.FRIEND ? PlayerListGroup.FRIEND
+                    : relation == Relation.ENEMY ? PlayerListGroup.ENEMY : null;
+            PlayerListGroup group = equipmentGroup(playerEquipment);
+            boolean showSpecial = special != null && config.showGroup(special);
+            boolean showNick =
+                    config.showGroup(PlayerListGroup.NICK) && denickNames.isNicked(playerId);
+            boolean showEquipment = group != null && config.showGroup(group);
+            if (!showSpecial && !showNick && !showEquipment) {
                 continue;
             }
             String name = config.shortPlayerNames() ? playerNames.shortName(playerId)
@@ -90,6 +102,7 @@ final class PlayerListBuilder {
             if (name == null) {
                 continue;
             }
+            name = denickNames.listName(playerId, name, config.shortPlayerNames());
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =
@@ -103,33 +116,35 @@ final class PlayerListBuilder {
             String leggingsText = config.showLeggings() && playerEquipment != null
                     && playerEquipment.leggingsKnown()
                             ? PitEnchantmentFormat.format(playerEquipment.leggingsEnchantments(),
-                                    config.enchantmentFormat())
+                                    config.enchantmentFormat(), config.showGem())
                             : null;
             String heldItemText = config.showHeldItem() && playerEquipment != null
                     && playerEquipment.heldItemKnown()
                             ? PitEnchantmentFormat.format(playerEquipment.heldEnchantments(),
-                                    config.enchantmentFormat())
+                                    config.enchantmentFormat(), config.showGem())
                             : null;
             PlayerListEntry entry = new PlayerListEntry(playerId,
                     player == null ? 0 : player.getEntityId(), name, leggingsText, heldItemText,
                     distance, direction, distanceKnown, directionKnown, spawn);
-            List<PlayerListEntry> groupEntries = groups.get(group);
-            if (groupEntries == null) {
-                groupEntries = new ArrayList<PlayerListEntry>();
-                groups.put(group, groupEntries);
+            if (showSpecial) {
+                add(groups, special, entry);
             }
-            groupEntries.add(entry);
+            if (showNick) {
+                add(groups, PlayerListGroup.NICK, entry);
+            }
+            if (showEquipment) {
+                add(groups, group, entry);
+            }
         }
         return PlayerListSnapshot.create(groups);
     }
 
-    private static PlayerListGroup groupOf(Relation relation, PlayerEquipmentSnapshot equipment) {
-        if (relation == Relation.FRIEND) {
-            return PlayerListGroup.FRIEND;
-        }
-        if (relation == Relation.ENEMY) {
-            return PlayerListGroup.ENEMY;
-        }
+    private static void add(Map<PlayerListGroup, List<PlayerListEntry>> groups,
+            PlayerListGroup group, PlayerListEntry entry) {
+        groups.computeIfAbsent(group, key -> new ArrayList<>()).add(entry);
+    }
+
+    private static PlayerListGroup equipmentGroup(PlayerEquipmentSnapshot equipment) {
         if (equipment == null || !equipment.leggingsKnown()) {
             return null;
         }

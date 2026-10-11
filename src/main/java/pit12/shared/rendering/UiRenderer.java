@@ -168,7 +168,7 @@ public class UiRenderer {
             char character = text.charAt(index);
             if (formatting) {
                 formatting = false;
-            } else if (character == '\u00A7') {
+            } else if (character == '§') {
                 formatting = true;
             } else if (fallbackFont.getCharWidth(character) <= 0) {
                 vanilla = false;

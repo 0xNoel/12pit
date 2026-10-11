@@ -27,11 +27,12 @@ public final class PitEnchantmentReader {
     private PitEnchantmentReader() {}
 
     public static PitEnchantments read(ItemStack stack) {
-        NBTTagList enchantments = customEnchantments(stack);
-        if (enchantments == null) {
+        NBTTagCompound extra = extraAttributes(stack);
+        if (extra == null) {
             return PitEnchantments.empty();
         }
-        int count = enchantments.tagCount();
+        NBTTagList enchantments = customEnchantments(extra);
+        int count = enchantments == null ? 0 : enchantments.tagCount();
         PitEnchantments.Entry[] entries = new PitEnchantments.Entry[count];
         int size = 0;
         for (int index = 0; index < count; index++) {
@@ -44,7 +45,7 @@ public final class PitEnchantmentReader {
             }
             entries[size++] = new PitEnchantments.Entry(key, PitEnchantment.fromKey(key), level);
         }
-        return PitEnchantments.create(entries, size);
+        return PitEnchantments.create(entries, size, extra.getInteger("UpgradeGemsUses") > 0);
     }
 
     public static boolean contains(ItemStack stack, PitEnchantment enchantment) {
@@ -52,7 +53,7 @@ public final class PitEnchantmentReader {
     }
 
     public static int levelOf(ItemStack stack, PitEnchantment enchantment) {
-        NBTTagList enchantments = customEnchantments(stack);
+        NBTTagList enchantments = customEnchantments(extraAttributes(stack));
         if (enchantments == null) {
             return 0;
         }
@@ -70,7 +71,7 @@ public final class PitEnchantmentReader {
         return 0;
     }
 
-    private static NBTTagList customEnchantments(ItemStack stack) {
+    private static NBTTagCompound extraAttributes(ItemStack stack) {
         if (stack == null || !stack.hasTagCompound()) {
             return null;
         }
@@ -79,7 +80,13 @@ public final class PitEnchantmentReader {
         if (!itemTag.hasKey("ExtraAttributes", Constants.NBT.TAG_COMPOUND)) {
             return null;
         }
-        NBTTagCompound extraAttributes = itemTag.getCompoundTag("ExtraAttributes");
+        return itemTag.getCompoundTag("ExtraAttributes");
+    }
+
+    private static NBTTagList customEnchantments(NBTTagCompound extraAttributes) {
+        if (extraAttributes == null) {
+            return null;
+        }
         if (!extraAttributes.hasKey("CustomEnchants", Constants.NBT.TAG_LIST)) {
             return null;
         }
