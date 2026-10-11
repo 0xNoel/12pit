@@ -18,13 +18,16 @@ along with 12pit. If not, see <https://www.gnu.org/licenses/>.
 -->
 <script setup lang="ts">
 import { Download, RotateCcw, Upload, X } from '@lucide/vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { Feature } from './api'
 import { t } from './languages'
-import SettingSections from './SettingSections.vue'
+import LanguagePicker from './LanguagePicker.vue'
+import SettingRow from './SettingRow.vue'
 
 const props = defineProps<{
   settings: Feature
+  systemLocale: string
+  requestedLanguage: number | null
   profilesLoading: boolean
   busy: boolean
   pending: boolean
@@ -41,8 +44,12 @@ const emit = defineEmits<{
   ]
   capture: [featureId: string, settingId: string]
   cancel: []
+  languageOpened: []
 }>()
 const discordRpcDialog = ref<HTMLDialogElement | null>(null)
+const options = computed(() =>
+  props.settings.sections.flatMap((section) => section.options),
+)
 
 function changeSetting(id: string, value: boolean | number | string) {
   if (id === 'discord_rpc' && value === false) {
@@ -55,6 +62,11 @@ function changeSetting(id: string, value: boolean | number | string) {
 function disableDiscordRpc() {
   discordRpcDialog.value?.close()
   emit('change', props.settings.id, 'discord_rpc', false)
+}
+
+function languageOpened() {
+  emit('cancel')
+  emit('languageOpened')
 }
 </script>
 
@@ -89,17 +101,33 @@ function disableDiscordRpc() {
       </button>
     </div>
   </div>
-  <SettingSections
-    :feature-id="settings.id"
-    :sections="settings.sections"
-    :capturing="capturing"
-    :busy="pending"
-    :show-details="showDetails"
-    flat
-    @change="changeSetting"
-    @capture="emit('capture', settings.id, $event)"
-    @cancel="emit('cancel')"
-  />
+  <section class="settings-options">
+    <template v-for="option in options" :key="option.id">
+      <LanguagePicker
+        v-if="option.id === 'language'"
+        :option="option"
+        :system-locale="systemLocale"
+        :requested-language="requestedLanguage"
+        :busy="busy || pending"
+        :show-details="showDetails"
+        @open="languageOpened"
+        @change="changeSetting(option.id, $event)"
+      />
+      <SettingRow
+        v-else
+        :option="option"
+        :capturing="
+          capturing?.featureId === settings.id &&
+          capturing?.settingId === option.id
+        "
+        :busy="pending"
+        :show-details="showDetails"
+        @change="changeSetting(option.id, $event)"
+        @capture="emit('capture', settings.id, option.id)"
+        @cancel="emit('cancel')"
+      />
+    </template>
+  </section>
   <dialog
     ref="discordRpcDialog"
     class="transfer-dialog discord-rpc-dialog"

@@ -515,13 +515,15 @@
   color: var(--danger);
 }
 
-.error-notice {
+.toast-stack {
   position: fixed;
   z-index: 90;
   right: 24px;
   bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   width: min(420px, calc(100vw - 48px));
-  margin: 0;
 }
 
 .error-notice .notice-content {

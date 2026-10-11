@@ -75,6 +75,23 @@
   transform: translateY(-6px);
 }
 
+.toast-enter-active,
+.toast-leave-active {
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.toast-leave-active {
+  pointer-events: none;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(12px);
+}
+
 .expand-reveal {
   display: grid;
   grid-template-rows: 1fr;
@@ -154,7 +171,9 @@
   .danger,
   .profile-list-enter-active,
   .profile-list-leave-active,
-  .profile-list-move {
+  .profile-list-move,
+  .toast-enter-active,
+  .toast-leave-active {
     transition: none;
   }
 }

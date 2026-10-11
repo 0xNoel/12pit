@@ -28,7 +28,12 @@ export interface Option {
   max?: number
   step?: number
   keyName?: string
-  choices?: { value: number; name: string }[]
+  choices?: {
+    value: number
+    name: string
+    locale?: string
+    displayName?: SourceText
+  }[]
 }
 
 export interface Feature {
@@ -71,6 +76,8 @@ export interface State {
   features: Feature[]
   webui: {
     settings: Feature
+    systemLanguage: string
+    languageHint: boolean
     favorites: string[]
     ready: boolean
     problem: SourceText | null
@@ -129,6 +136,8 @@ export const changeSetting = (
   settingId: string,
   value: boolean | number | string,
 ) => request('/api/setting', { featureId, settingId, value })
+export const dismissLanguageHint = () =>
+  request('/api/language-hint/dismiss', {})
 export const changeProfile = (action: string, id?: string, name?: string) =>
   request('/api/profile', { action, id, name })
 export const changeRelations = (

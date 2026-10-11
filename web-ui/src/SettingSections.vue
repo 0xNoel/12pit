@@ -17,36 +17,28 @@ You should have received a copy of the GNU General Public License
 along with 12pit. If not, see <https://www.gnu.org/licenses/>.
 -->
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { Feature } from './api'
 import FormattedText from './FormattedText.vue'
 import SettingRow from './SettingRow.vue'
 
-const props = defineProps<{
+defineProps<{
   featureId: string
   sections: Feature['sections']
   capturing: { featureId: string; settingId: string } | null
   busy: boolean
   showDetails: boolean
-  flat?: boolean
 }>()
 const emit = defineEmits<{
   change: [settingId: string, value: boolean | number | string]
   capture: [settingId: string]
   cancel: []
 }>()
-const groups = computed<Feature['sections']>(() =>
-  props.flat
-    ? [{ options: props.sections.flatMap((section) => section.options) }]
-    : props.sections,
-)
 </script>
 
 <template>
   <section
-    v-for="(section, index) in groups"
+    v-for="(section, index) in sections"
     :key="`${section.subcategory?.id ?? ''}/${section.id ?? index}`"
-    :class="{ 'settings-options': flat }"
   >
     <h2 v-if="section.name"><FormattedText :text="section.name" /></h2>
     <SettingRow

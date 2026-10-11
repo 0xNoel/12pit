@@ -209,8 +209,9 @@ final class WebUiServer {
         }
         if (!"POST".equals(exchange.getRequestMethod()) || !"/api/setting".equals(path)
                 && !"/api/favorite".equals(path) && !"/api/profile".equals(path)
-                && !"/api/relation".equals(path) && !"/api/transfer/export".equals(path)
-                && !"/api/transfer/preview".equals(path) && !"/api/transfer/apply".equals(path)) {
+                && !"/api/language-hint/dismiss".equals(path) && !"/api/relation".equals(path)
+                && !"/api/transfer/export".equals(path) && !"/api/transfer/preview".equals(path)
+                && !"/api/transfer/apply".equals(path)) {
             sendJson(exchange, 404, object("error", "Unknown endpoint"));
             return;
         }
@@ -247,6 +248,12 @@ final class WebUiServer {
             if ("/api/relation".equals(path)) {
                 List<Object> results = changeRelations(request);
                 return object("state", state(), "results", results);
+            }
+            if ("/api/language-hint/dismiss".equals(path)) {
+                if (!preferences.ready())
+                    throw new IllegalArgumentException(source("Web UI settings are unavailable"));
+                config.languageHint().set(false);
+                return state();
             }
             if ("/api/favorite".equals(path)) {
                 String id = requiredString(request, "featureId");
@@ -498,7 +505,8 @@ final class WebUiServer {
         return object("version", BUILD_LABEL, "language", language.locale(), "features", features,
                 "webui",
                 object("settings", featureState(config), "favorites", preferences.favorites(),
-                        "ready", preferences.ready(), "problem",
+                        "systemLanguage", Locale.getDefault().toLanguageTag(), "languageHint",
+                        config.languageHint().get(), "ready", preferences.ready(), "problem",
                         Languages.sourceText(preferences.problem())),
                 "relations",
                 object("problem", relations.readinessProblem(), "lookupProblems",
@@ -569,7 +577,13 @@ final class WebUiServer {
         if (setting instanceof ChoiceSetting) {
             List<Object> choices = new ArrayList<Object>();
             for (ChoiceSetting.Choice choice : ((ChoiceSetting) setting).choices()) {
-                choices.add(object("value", choice.value(), "name", choice.displayName()));
+                Map<String, Object> entry =
+                        object("value", choice.value(), "name", choice.displayName());
+                if (setting == config.language()) {
+                    entry.put("locale", language.locale(choice.value()));
+                    entry.put("displayName", language.displayNameSource(choice.value()));
+                }
+                choices.add(entry);
             }
             value.put("choices", choices);
         }

@@ -22,6 +22,7 @@ import {
   changeProfile,
   changeRelations,
   changeSetting,
+  dismissLanguageHint,
   loadState,
   type RelationInput,
   type RelationResult,
@@ -181,6 +182,10 @@ export function useWebUiState() {
     )
   }
 
+  async function hideLanguageHint() {
+    return (await mutate(dismissLanguageHint, (result) => result)) !== null
+  }
+
   async function updateRelations(
     action: 'add' | 'remove',
     relation: RelationType,
@@ -272,6 +277,7 @@ export function useWebUiState() {
     toggleFavorite,
     setting,
     profileAction,
+    hideLanguageHint,
     updateRelations,
     imported,
     reportError,
