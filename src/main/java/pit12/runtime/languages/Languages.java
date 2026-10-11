@@ -227,8 +227,9 @@ public final class Languages {
                     }
                     line = line.trim();
                 }
-                if (line == null || line.isEmpty() || (message.fields.containsKey("msgstr")
-                        && (line.startsWith("#") || line.startsWith("msgctxt") || line.startsWith("msgid")))) {
+                if (line == null || line.isEmpty()
+                        || (message.fields.containsKey("msgstr") && (line.startsWith("#")
+                                || line.startsWith("msgctxt") || line.startsWith("msgid")))) {
                     message.addTo(values);
                     message = new PoMessage();
                     current = null;
@@ -260,24 +261,28 @@ public final class Languages {
                 String quoted;
                 if (line.startsWith("\"")) {
                     if (current == null) {
-                        throw new IllegalArgumentException(file + ":" + number + ": unexpected PO continuation");
+                        throw new IllegalArgumentException(
+                                file + ":" + number + ": unexpected PO continuation");
                     }
                     quoted = line;
                 } else {
                     Matcher field = PO_FIELD.matcher(line);
                     if (!field.matches()) {
-                        throw new IllegalArgumentException(file + ":" + number + ": unsupported PO line");
+                        throw new IllegalArgumentException(
+                                file + ":" + number + ": unsupported PO line");
                     }
                     current = new StringBuilder();
                     if (message.fields.put(field.group(1), current) != null) {
-                        throw new IllegalArgumentException(file + ":" + number + ": duplicate PO field");
+                        throw new IllegalArgumentException(
+                                file + ":" + number + ": duplicate PO field");
                     }
                     quoted = field.group(2);
                 }
                 current.append(decode(quoted));
             }
             // Shared translations keep the direct lookup and avoid caller lookups.
-            Iterator<Map.Entry<String, Map<String, String>>> iterator = values.contextual.entrySet().iterator();
+            Iterator<Map.Entry<String, Map<String, String>>> iterator =
+                    values.contextual.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<String, Map<String, String>> variants = iterator.next();
                 String text = variants.getValue().values().iterator().next();
@@ -321,7 +326,8 @@ public final class Languages {
     }
 
     private static String decode(String quoted) {
-        if (quoted.length() < 2 || quoted.charAt(0) != '"' || quoted.charAt(quoted.length() - 1) != '"') {
+        if (quoted.length() < 2 || quoted.charAt(0) != '"'
+                || quoted.charAt(quoted.length() - 1) != '"') {
             throw new IllegalArgumentException("Invalid PO string");
         }
         StringBuilder result = new StringBuilder(quoted.length() - 2);
@@ -333,13 +339,27 @@ public final class Languages {
                 }
                 character = quoted.charAt(index);
                 switch (character) {
-                    case 'a': character = '\u0007'; break;
-                    case 'b': character = '\b'; break;
-                    case 'f': character = '\f'; break;
-                    case 'n': character = '\n'; break;
-                    case 'r': character = '\r'; break;
-                    case 't': character = '\t'; break;
-                    case 'v': character = '\u000B'; break;
+                    case 'a':
+                        character = '\u0007';
+                        break;
+                    case 'b':
+                        character = '\b';
+                        break;
+                    case 'f':
+                        character = '\f';
+                        break;
+                    case 'n':
+                        character = '\n';
+                        break;
+                    case 'r':
+                        character = '\r';
+                        break;
+                    case 't':
+                        character = '\t';
+                        break;
+                    case 'v':
+                        character = '\u000B';
+                        break;
                     case '\\':
                     case '"':
                         break;
@@ -385,19 +405,22 @@ public final class Languages {
                 return; // The empty msgid holds the PO header.
             }
             StringBuilder context = fields.get("msgctxt");
-            if (context == null || context.length() == 0 || source.isEmpty() || locations.isEmpty()) {
-                throw new IllegalArgumentException("PO entries need a context, source, and usage location");
+            if (context == null || context.length() == 0 || source.isEmpty()
+                    || locations.isEmpty()) {
+                throw new IllegalArgumentException(
+                        "PO entries need a context, source, and usage location");
             }
             String target = fuzzy || translated.length() == 0 ? source : translated.toString();
-            Map<String, String> variants = catalog.contextual.computeIfAbsent(source, key -> new HashMap<>());
+            Map<String, String> variants =
+                    catalog.contextual.computeIfAbsent(source, key -> new HashMap<>());
             for (String location : locations) {
-                if (!LOCATION.matcher(location).matches() || variants.put(location, target) != null) {
+                if (!LOCATION.matcher(location).matches()
+                        || variants.put(location, target) != null) {
                     throw new IllegalArgumentException("Invalid or duplicate PO usage " + location);
                 }
             }
         }
     }
-
     private static final class Catalog {
         private final Map<String, String> shared = new HashMap<>();
         private final Map<String, Map<String, String>> contextual = new HashMap<>();
