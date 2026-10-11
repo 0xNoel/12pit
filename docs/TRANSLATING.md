@@ -2,96 +2,25 @@
 
 ## General rules
 
-When adding a new language:
-
-- If the language has an [ISO 639-1 two-letter code](https://www.loc.gov/standards/iso639-2/php/code_list.php), you can add it without opening an issue first.
-- If the language has no ISO 639-1 code, get a maintainer's approval before adding it. Its language tag must still follow [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html). Ask in an issue or mention a maintainer on [Discord](https://discord.gg/e9PRKMUenc).
-- We recommend translating only into your native language.
-
-For example, `nl-NL` uses the ISO 639-1 code `nl`.
+We recommend translating only into your native language.
 
 ## Contribute interface translations
 
 The same files include translations for the Web UI, configuration text, command messages, and HUD labels. The OneConfig settings view uses the original English text. Check translated settings in the Web UI.
 
-Use Python 3 and execute the commands below from the repository root.
+Interface translations use [Crowdin](https://crowdin.com/project/12pit). Each use of a string has its own entry, so the same English text can have different translations. The entry's context shows its source file and location.
 
-### Prepare a language
+### Request a language
 
-First, view the list of languages with their status:
-
-```sh
-python scripts/languages.py status
-```
-
-If the language already exists, edit its file directly. Leave `sync` to maintainers, who run it when needed.
-
-For a new language, use `add` with the language tag and its native name:
-
-```sh
-python scripts/languages.py add nl-NL --name Nederlands
-```
-
-That adds the language to languages.json and creates its text file.
-
-If the English source changes while you are adding a new language, run `sync` for that language only:
-
-```sh
-python scripts/languages.py sync --language nl-NL
-```
-
-Sync keeps translations for existing source text, marks new translation lines with `=`, and removes unused entries.
+Open an issue to request an interface language. Include the language name and region, if needed. Interface languages must be supported by [Crowdin](https://support.crowdin.com/project-settings/languages/).
 
 ### Write translations
 
-Open `src/main/resources/assets/pit12/languages/nl-NL.txt`. Each entry has an English source and a translation line. Use `=` followed by a space to share one translation across all uses:
-
-```text
-Player List
-= Spelerslijst
-
-Bound {0} to {1} ({2})
-= {0} gekoppeld aan {1} ({2})
-
-Settings
-=
-```
-
-When the same English text needs different translations, use `==` and separate them with `|` on one line:
-
-```text
-// src/main/java/pit12/feature/eventlist/EventListSnapshot.java:106, web-ui/src/ProfilesPage.vue:290:21
-Active
-== Actief | Huidig
-```
-
-The translations follow the order of the usage locations in the comment. Include one part for each location. An empty part uses English, so `== Actief |` leaves the second use untranslated. Spaces around each part are removed. Write `\|` for a literal pipe in a split translation. A pipe after `=` is part of the shared translation.
-
-Leave only `=` to use English for every location. Search with `^= ?$` for empty shared translations. Do not change the English source or the usage comments. Web UI locations include a column to distinguish calls on the same line. Each translation must keep the numbered parameters like {0} and their number of occurrences; their order may change. Preserve Minecraft color codes like §a.
-
-Sync keeps split translations in their order within each file. If a file gains or loses a use of that source, its parts are left empty for review. Review split translations after moving or reordering calls. The status report counts each split part separately.
-
-Use \n for a line break, \t for a tab character, and \\ for an escape backslash. Save the file in UTF-8.
-
-### Review your work
-
-Check the status of the language and the file issues:
-
-```sh
-python scripts/languages.py status --language nl-NL
-```
-
-The report shows translation progress and flags missing or obsolete entries, duplicate sources, invalid escapes, parameter errors, and invalid or changed usage locations for split translations.
-
-Review the wording in context. To check it in the mod, build with the changed resources and select the language on the Settings page.
-
-### Submit a translation
-
-Keep the pull request limited to one language. Attach the TXT file, and if that is a new language, attach the languages.json too. Mention the language, the text that you have changed and how you have checked it. Partial translations are OK.
-
-For changes to the English source text in the code, refer to [Languages in the implementation guide](IMPLEMENTATION.md#languages).
+Translate in [Crowdin](https://crowdin.com/project/12pit) and review the usage context. Keep numbered parameters like `{0}` and their number of occurrences; their order may change. Preserve Minecraft color codes like `§a`. Missing or empty translations use the English source. Partial translations are welcome.
 
 ## Contribute documentation translations
+
+Languages with an [ISO 639-1 two-letter code](https://www.loc.gov/standards/iso639-2/php/code_list.php) can be added without opening an issue first. For other languages, get a maintainer's approval in an issue or on [Discord](https://discord.gg/e9PRKMUenc). Documentation language tags must follow [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html).
 
 ### Paths and links
 

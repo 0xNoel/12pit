@@ -1,6 +1,7 @@
 import argparse
 import ast
 from collections import Counter
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -11,83 +12,100 @@ DIRECTORY = ROOT / "src/main/resources/assets/pit12/languages"
 PARAMETER = re.compile(r"\{([0-9]+)\}")
 TOKEN = re.compile(r'//[^\n]*|/\*[\s\S]*?\*/|"(?:\\.|[^"\\])*"|[A-Za-z_$][\w$]*|[^\s]')
 WEB_STRING = r'''(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')'''
+PO_STRING = re.compile(r'"(?:[^"\\\x00-\x1f]|\\(?:[abfnrtv"\\]|[0-7]{1,3}))*"')
+LOCATION = re.compile(r"(?:src/main/java/.+\.java:[1-9][0-9]*"
+                      r"|web-ui/src/.+\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?)")
 
 
 def write_changed(path, content):
     if path.exists() and path.read_text(encoding="utf-8") == content:
         return
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8", newline="\n")
 
 
-def decode_line(line, path, number):
-    escapes = {"n": "\n", "r": "\r", "t": "\t", "\\": "\\", "|": "|"}
-    result = []
-    index = 0
-    while index < len(line):
-        character = line[index]
-        index += 1
-        if character == "\\":
-            if index == len(line) or line[index] not in escapes:
-                raise ValueError(f"{path}:{number}: invalid escape")
-            character = escapes[line[index]]
-            index += 1
-        result.append(character)
-    return "".join(result)
+def read_catalog(path):
+    catalog = {}
+    usages = set()
+    fields, locations, comments, flags = {}, [], [], []
+    current = None
 
+    def finish():
+        if not fields:
+            return
+        if "msgid" not in fields or "msgstr" not in fields:
+            raise ValueError(f"{path}: incomplete PO entry")
+        source, target = fields["msgid"], fields["msgstr"]
+        if not source and "msgctxt" not in fields:
+            return  # The empty msgid holds the PO header.
+        key = fields.get("msgctxt", "")
+        if not key or not source or not locations:
+            raise ValueError(f"{path}: PO entries need a context, source, and usage location")
+        if key in catalog:
+            raise ValueError(f"{path}: duplicate context: {key}")
+        for location in locations:
+            if not LOCATION.fullmatch(location) or (source, location) in usages:
+                raise ValueError(f"{path}: {key}: invalid or duplicate usage location: {location}")
+            usages.add((source, location))
+        if target and "fuzzy" not in flags and Counter(PARAMETER.findall(source)) != Counter(PARAMETER.findall(target)):
+            raise ValueError(f"{path}: {key}: translation parameters do not match the source")
+        catalog[key] = {"source": source, "translation": target, "locations": locations,
+                        "comments": comments, "flags": flags}
 
-def encode_line(text):
-    return text.replace("\\", "\\\\").replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t")
-
-
-def read_pairs(path):
-    lines = path.read_text(encoding="utf-8-sig").splitlines()
-    pairs = {}
-    locations = []
-    index = 0
-    while index < len(lines):
-        source_line = lines[index]
-        index += 1
-        if source_line.startswith("// "):
-            locations = source_line[3:].split(", ")
+    for number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines() + [""], 1):
+        line = line.strip()
+        if not line or ("msgstr" in fields and line.startswith(("#", "msgctxt", "msgid"))):
+            finish()
+            fields, locations, comments, flags = {}, [], [], []
+            current = None
+        if not line:
             continue
-        if not source_line or source_line.startswith("//"):
+        if line.startswith("#"):
+            current = None
+            if line.startswith("#:"):
+                locations.extend(line[2:].split())
+            elif line.startswith("#,"):
+                flags.extend(flag.strip() for flag in line[2:].split(",") if flag.strip())
+            elif not line.startswith(("#~", "#|")):
+                comments.append(line)
             continue
-        number = index
-        source = decode_line(source_line, path, number)
-        if index == len(lines):
-            raise ValueError(f"{path}:{number}: missing translation line")
-        target_line = lines[index]
-        if target_line == "==" or target_line.startswith("== "):
-            parts, start, cursor = [], 3, 3
-            while cursor < len(target_line):
-                if target_line[cursor] == "\\":
-                    cursor += 2
-                    continue
-                if target_line[cursor] == "|":
-                    parts.append(target_line[start:cursor].strip())
-                    start = cursor + 1
-                cursor += 1
-            parts.append(target_line[start:].strip())
-            target = [decode_line(part, path, index + 1) for part in parts]
-            if len(target) < 2 or len(target) != len(locations):
-                raise ValueError(f"{path}:{index + 1}: '==' needs one translation per usage, separated by '|'")
-            if len(set(locations)) != len(locations) or any(
-                    not re.fullmatch(r"(?:src/main/java/.+\.java:[1-9][0-9]*|web-ui/src/.+\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?)", location)
-                    for location in locations):
-                raise ValueError(f"{path}:{number - 1}: '==' needs distinct usage locations")
-        elif target_line == "=" or target_line.startswith("= "):
-            target = decode_line(target_line[2:], path, index + 1)
+        if line.startswith('"'):
+            value = line
+            if current is None:
+                raise ValueError(f"{path}:{number}: unexpected PO continuation")
         else:
-            raise ValueError(f"{path}:{index + 1}: translation line must start with '= ' or '== '")
-        index += 1
-        if source in pairs:
-            raise ValueError(f"{path}:{number}: duplicate source: {source}")
-        for text in target if isinstance(target, list) else [target]:
-            if text and Counter(PARAMETER.findall(source)) != Counter(PARAMETER.findall(text)):
-                raise ValueError(f"{path}:{number + 1}: translation parameters do not match the source")
-        pairs[source] = (locations, target)
-        locations = []
-    return pairs
+            match = re.fullmatch(r'(msgctxt|msgid|msgstr)\s+(".*")', line)
+            if not match:
+                raise ValueError(f"{path}:{number}: unsupported PO line")
+            current, value = match.groups()
+            if current in fields:
+                raise ValueError(f"{path}:{number}: duplicate PO field: {current}")
+            fields[current] = ""
+        if not PO_STRING.fullmatch(value):
+            raise ValueError(f"{path}:{number}: invalid PO string")
+        fields[current] += ast.literal_eval(value)
+    return catalog
+
+
+def write_catalog(path, catalog, locale=None):
+    def quote(text):
+        escapes = {"\\": r"\\", '"': r'\"', "\n": r"\n", "\r": r"\r", "\t": r"\t"}
+        return '"' + "".join(escapes.get(character, f"\\{ord(character):03o}"
+                                       if ord(character) < 32 else character) for character in text) + '"'
+
+    headers = ["Project-Id-Version: 12pit\n", "MIME-Version: 1.0\n",
+               "Content-Type: text/plain; charset=UTF-8\n", "Content-Transfer-Encoding: 8bit\n"]
+    if locale:
+        headers.insert(1, f"Language: {locale}\n")
+    lines = ['msgid ""', 'msgstr ""', *(quote(header) for header in headers), ""]
+    for key, entry in catalog.items():
+        lines.extend(entry.get("comments", []))
+        lines.append("#: " + " ".join(entry["locations"]))
+        if entry.get("flags"):
+            lines.append("#, " + ", ".join(entry["flags"]))
+        lines.extend(["msgctxt " + quote(key), "msgid " + quote(entry["source"]),
+                      "msgstr " + quote(entry.get("translation", "")), ""])
+    write_changed(path, "\n".join(lines))
 
 
 def read_languages():
@@ -158,46 +176,42 @@ def sources():
     return found
 
 
-def remap_targets(locations, previous):
-    old_locations, target = previous
-    if not isinstance(target, list):
-        return target
-    old_files, new_files = {}, {}
-    for location, text in zip(old_locations, target):
-        old_files.setdefault(location.split(":", 1)[0], []).append(text)
-    for location in locations:
-        new_files.setdefault(location.split(":", 1)[0], []).append(location)
-    positions, targets = {}, []
-    for location in locations:
-        file = location.split(":", 1)[0]
-        texts = old_files.get(file, [])
-        position = positions.get(file, 0)
-        targets.append(texts[position] if len(texts) == len(new_files[file]) else "")
-        positions[file] = position + 1
-    return targets
-
-
-def sync(found, entry):
-    path = DIRECTORY / (entry["locale"] + ".txt")
-    previous = read_pairs(path) if path.exists() else {}
-    lines = []
+def source_catalog(found):
+    catalog = {}
     for source, locations in found.items():
-        target = remap_targets(locations, previous.get(source, ([], "")))
-        if isinstance(target, list) and len(target) == 1:
-            target = target[0]
-        if isinstance(target, list):
-            if len(set(locations)) != len(locations):
-                raise ValueError(f"{path}: {source!r}: '==' needs distinct usage locations; put Java calls on separate lines")
-            translation = "== " + " | ".join(encode_line(text).replace("|", "\\|") for text in target)
-        else:
-            translation = "= " + encode_line(target) if target else "="
-        lines.extend(["// " + ", ".join(locations), encode_line(source), translation, ""])
-    write_changed(path, "\n".join(lines) + "\n")
-    return len(found.keys() - previous.keys()), len(previous.keys() - found.keys())
+        counts = Counter(location.split(":", 1)[0] for location in locations)
+        positions = Counter()
+        if len(set(locations)) != len(locations):
+            raise ValueError(f"{source!r}: put separate Java uses on separate lines")
+        for location in locations:
+            file = location.split(":", 1)[0]
+            positions[file] += 1
+            # Line changes keep the key; changed usage counts need new translations.
+            identity = f"{source}\0{file}\0{counts[file]}\0{positions[file]}"
+            key = hashlib.sha256(identity.encode("utf-8")).hexdigest()
+            catalog[key] = {"source": source, "locations": [location]}
+    return catalog
 
 
-def status(found, entries):
-    total = len(found)
+def sync(catalog, entry):
+    path = (ROOT / "build/generated/languages/12pit.pot" if entry["value"] == 0
+            else DIRECTORY / (entry["locale"] + ".po"))
+    previous = read_catalog(path) if path.exists() else {}
+    if entry["value"] == 0:
+        updated = catalog
+    else:
+        updated = {}
+        for key, source in catalog.items():
+            old = previous.get(key, {})
+            if old and old["source"] != source["source"]:
+                raise ValueError(f"{path}: {key}: source does not match the code")
+            updated[key] = {**source, "translation": old.get("translation", ""),
+                            "comments": old.get("comments", []), "flags": old.get("flags", [])}
+    write_catalog(path, updated, entry["locale"] if entry["value"] != 0 else None)
+    return len(catalog.keys() - previous.keys()), len(previous.keys() - catalog.keys())
+
+
+def status(found, catalog, entries):
     rows, notes = [], []
     failed = False
     for entry in entries:
@@ -205,35 +219,36 @@ def status(found, entries):
         if entry["value"] == 0:
             rows.append((locale, "Source", "-", name))
             continue
-        path = DIRECTORY / (locale + ".txt")
+        path = DIRECTORY / (locale + ".po")
         try:
-            pairs = read_pairs(path) if path.exists() else {}
+            previous = read_catalog(path) if path.exists() else {}
+            for key in catalog.keys() & previous.keys():
+                if previous[key]["source"] != catalog[key]["source"]:
+                    raise ValueError(f"{path}: {key}: source does not match the code")
         except (OSError, ValueError) as error:
             rows.append((locale, "Invalid", "-", name))
             notes.append(f"{locale}: {error}")
             failed = True
             continue
-        translated, slots = 0, 0
-        for source, locations in found.items():
-            previous = pairs.get(source, ([], ""))
-            target = remap_targets(locations, previous)
-            targets = target if isinstance(target, list) else [target]
-            translated += sum(bool(text) for text in targets)
-            slots += len(targets)
-            if isinstance(target, list) and previous[0] != locations:
-                notes.append(f"{locale}: usage locations changed for {source!r}; run sync and review its translations")
+        translated = sum(bool(previous.get(key, {}).get("translation"))
+                         and "fuzzy" not in previous[key].get("flags", []) for key in catalog)
+        slots = len(catalog)
         progress = translated / slots if slots else 1
         rows.append((locale, f"{translated}/{slots}", f"{progress:.1%}", name))
-        missing = len(found.keys() - pairs.keys())
-        stale = len(pairs.keys() - found.keys())
+        missing = len(catalog.keys() - previous.keys())
+        stale = len(previous.keys() - catalog.keys())
+        moved = sum(previous[key]["locations"] != catalog[key]["locations"]
+                    for key in catalog.keys() & previous.keys())
         if not path.exists():
             notes.append(f"{locale}: file missing")
         elif missing or stale:
             notes.append(f"{locale}: {missing} missing, {stale} obsolete")
+        if moved:
+            notes.append(f"{locale}: {moved} usage locations changed; run sync")
 
     width = max(len("Language"), *(len(row[0]) for row in rows))
     count_width = max(len("Translated"), *(len(row[1]) for row in rows))
-    print(f"{total} source texts\n")
+    print(f"{len(found)} source texts, {len(catalog)} usages\n")
     print(f"{'Language':<{width}}  {'Translated':>{count_width}}  {'Progress':>8}  Name")
     for locale, count, progress, name in rows:
         print(f"{locale:<{width}}  {count:>{count_width}}  {progress:>8}  {name}")
@@ -246,7 +261,7 @@ def status(found, entries):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    add = commands.add_parser("add", help="Add a language")
+    add = commands.add_parser("add", help="Register a Crowdin target language (maintainers)")
     add.add_argument("language", help="Language tag, for example nl-NL")
     add.add_argument("--name", required=True, help="Native name, for example Nederlands")
     for name, help_text in (("sync", "Update source text"), ("status", "Show translation progress")):
@@ -265,22 +280,22 @@ def main():
             entry = {"value": max(entry["value"] for entry in entries) + 1,
                      "locale": args.language, "name": args.name.strip()}
             found = sources()
-            sync(found, entry)
+            catalog = source_catalog(found)
+            sync(catalog, entry)
             entries.append(entry)
             write_changed(DIRECTORY / "languages.json", json.dumps(entries, ensure_ascii=False, indent=2) + "\n")
             print(f"Added {entry['locale']} ({entry['name']}): {len(found)} texts")
             return 0
         selected = select_languages(entries, args.language)
         found = sources()
+        catalog = source_catalog(found)
         if args.command == "status":
-            return status(found, selected)
+            return status(found, catalog, selected)
+        if args.language is None:
+            selected = [entry for entry in selected if entry["value"] != 0]
         for entry in selected:
-            if entry["value"] == 0:
-                if args.language:
-                    print(f"{entry['locale']}: source language; nothing to sync")
-                continue
-            added, removed = sync(found, entry)
-            print(f"Synced {entry['locale']}: {len(found)} texts ({added} added, {removed} removed)")
+            added, removed = sync(catalog, entry)
+            print(f"Synced {entry['locale']}: {len(catalog)} usages ({added} added, {removed} removed)")
     except (OSError, ValueError, KeyError, TypeError) as error:
         print(error, file=sys.stderr)
         return 1

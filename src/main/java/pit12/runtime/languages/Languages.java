@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,9 @@ import pit12.shared.concurrent.ClientThread;
 
 public final class Languages {
     private static final Pattern PARAMETER = Pattern.compile("\\{([0-9]+)\\}");
+    private static final Pattern LOCATION = Pattern.compile("(?:src/main/java/.+\\.java:[1-9][0-9]*"
+            + "|web-ui/src/.+\\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?)");
+    private static final Pattern PO_FIELD = Pattern.compile("(msgctxt|msgid|msgstr)\\s+(\".*\")");
     private static final Map<String, String> MARKED_TEXTS = new HashMap<>();
     private static final Map<String, String> SOURCE_LOCATIONS = new IdentityHashMap<>();
     private final ClientThread client;
@@ -209,61 +213,85 @@ public final class Languages {
             return values;
         }
         values = new Catalog();
-        String file = entry.file + ".txt";
+        String file = entry.file + ".po";
         try (BufferedReader reader = resource(file)) {
-            String source;
-            String[] locations = new String[0];
+            PoMessage message = new PoMessage();
+            StringBuilder current = null;
             int number = 0;
-            while ((source = reader.readLine()) != null) {
+            while (true) {
+                String line = reader.readLine();
                 number++;
-                if (number == 1 && source.startsWith("\uFEFF")) {
-                    source = source.substring(1);
-                }
-                if (source.startsWith("// ")) {
-                    locations = source.substring(3).split(", ", -1);
-                    continue;
-                }
-                if (source.isEmpty() || source.startsWith("//")) {
-                    continue;
-                }
-                String target = reader.readLine();
-                if (target == null) {
-                    throw new IllegalArgumentException(
-                            file + ":" + number + ": missing translation line");
-                }
-                number++;
-                source = decode(source);
-                if (values.shared.containsKey(source) || values.contextual.containsKey(source)) {
-                    throw new IllegalArgumentException(
-                            file + ":" + (number - 1) + ": duplicate source");
-                }
-                if (target.equals("==") || target.startsWith("== ")) {
-                    List<String> targets = split(target.length() > 2 ? target.substring(3) : "");
-                    if (targets.size() < 2 || targets.size() != locations.length) {
-                        throw new IllegalArgumentException(file + ":" + number
-                                + ": '==' needs one translation per usage, separated by '|'");
+                if (line != null) {
+                    if (number == 1 && line.startsWith("\uFEFF")) {
+                        line = line.substring(1);
                     }
-                    Map<String, String> variants = new LinkedHashMap<>();
-                    for (int index = 0; index < locations.length; index++) {
-                        String location = locations[index];
-                        if (!location.matches("(?:src/main/java/.+\\.java:[1-9][0-9]*"
-                                + "|web-ui/src/.+\\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?)")
-                                || variants.containsKey(location)) {
-                            throw new IllegalArgumentException(file + ":" + (number - 2)
-                                    + ": '==' needs distinct usage locations");
+                    line = line.trim();
+                }
+                if (line == null || line.isEmpty() || (message.fields.containsKey("msgstr")
+                        && (line.startsWith("#") || line.startsWith("msgctxt") || line.startsWith("msgid")))) {
+                    message.addTo(values);
+                    message = new PoMessage();
+                    current = null;
+                }
+                if (line == null) {
+                    break;
+                }
+                if (line.isEmpty()) {
+                    continue;
+                }
+                if (line.startsWith("#")) {
+                    current = null;
+                    if (line.startsWith("#:")) {
+                        String references = line.substring(2).trim();
+                        if (!references.isEmpty()) {
+                            for (String reference : references.split("\\s+")) {
+                                message.locations.add(reference);
+                            }
                         }
-                        String text = targets.get(index);
-                        variants.put(location, text.isEmpty() ? source : text);
+                    } else if (line.startsWith("#,")) {
+                        for (String flag : line.substring(2).split(",")) {
+                            if (flag.trim().equals("fuzzy")) {
+                                message.fuzzy = true;
+                            }
+                        }
                     }
-                    values.contextual.put(source, variants);
-                } else if (target.equals("=") || target.startsWith("= ")) {
-                    target = target.equals("=") ? "" : decode(target.substring(2));
-                    values.shared.put(source, target.isEmpty() ? source : target);
-                } else {
-                    throw new IllegalArgumentException(file + ":" + number
-                            + ": translation line must start with '= ' or '== '");
+                    continue;
                 }
-                locations = new String[0];
+                String quoted;
+                if (line.startsWith("\"")) {
+                    if (current == null) {
+                        throw new IllegalArgumentException(file + ":" + number + ": unexpected PO continuation");
+                    }
+                    quoted = line;
+                } else {
+                    Matcher field = PO_FIELD.matcher(line);
+                    if (!field.matches()) {
+                        throw new IllegalArgumentException(file + ":" + number + ": unsupported PO line");
+                    }
+                    current = new StringBuilder();
+                    if (message.fields.put(field.group(1), current) != null) {
+                        throw new IllegalArgumentException(file + ":" + number + ": duplicate PO field");
+                    }
+                    quoted = field.group(2);
+                }
+                current.append(decode(quoted));
+            }
+            // Shared translations keep the direct lookup and avoid caller lookups.
+            Iterator<Map.Entry<String, Map<String, String>>> iterator = values.contextual.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Map<String, String>> variants = iterator.next();
+                String text = variants.getValue().values().iterator().next();
+                boolean shared = true;
+                for (String translation : variants.getValue().values()) {
+                    if (!text.equals(translation)) {
+                        shared = false;
+                        break;
+                    }
+                }
+                if (shared) {
+                    values.shared.put(variants.getKey(), text);
+                    iterator.remove();
+                }
             }
         } catch (IOException | RuntimeException failure) {
             throw new IllegalStateException("Could not read language file " + file, failure);
@@ -284,21 +312,6 @@ public final class Languages {
                 + caller.getFileName() + ":" + caller.getLineNumber();
     }
 
-    private static List<String> split(String text) {
-        List<String> targets = new ArrayList<>();
-        int start = 0;
-        for (int index = 0; index < text.length(); index++) {
-            if (text.charAt(index) == '\\') {
-                index++;
-            } else if (text.charAt(index) == '|') {
-                targets.add(decode(text.substring(start, index).trim()));
-                start = index + 1;
-            }
-        }
-        targets.add(decode(text.substring(start).trim()));
-        return targets;
-    }
-
     private static BufferedReader resource(String file) {
         InputStream stream = Languages.class.getResourceAsStream("/assets/pit12/languages/" + file);
         if (stream == null) {
@@ -307,37 +320,82 @@ public final class Languages {
         return new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 
-    private static String decode(String text) {
-        StringBuilder result = new StringBuilder(text.length());
-        for (int index = 0; index < text.length(); index++) {
-            char character = text.charAt(index);
+    private static String decode(String quoted) {
+        if (quoted.length() < 2 || quoted.charAt(0) != '"' || quoted.charAt(quoted.length() - 1) != '"') {
+            throw new IllegalArgumentException("Invalid PO string");
+        }
+        StringBuilder result = new StringBuilder(quoted.length() - 2);
+        for (int index = 1; index < quoted.length() - 1; index++) {
+            char character = quoted.charAt(index);
             if (character == '\\') {
-                if (++index == text.length()) {
-                    throw new IllegalArgumentException("Incomplete language escape");
+                if (++index == quoted.length() - 1) {
+                    throw new IllegalArgumentException("Incomplete PO escape");
                 }
-                switch (text.charAt(index)) {
-                    case 'n':
-                        character = '\n';
-                        break;
-                    case 'r':
-                        character = '\r';
-                        break;
-                    case 't':
-                        character = '\t';
-                        break;
+                character = quoted.charAt(index);
+                switch (character) {
+                    case 'a': character = '\u0007'; break;
+                    case 'b': character = '\b'; break;
+                    case 'f': character = '\f'; break;
+                    case 'n': character = '\n'; break;
+                    case 'r': character = '\r'; break;
+                    case 't': character = '\t'; break;
+                    case 'v': character = '\u000B'; break;
                     case '\\':
-                        character = '\\';
-                        break;
-                    case '|':
-                        character = '|';
+                    case '"':
                         break;
                     default:
-                        throw new IllegalArgumentException("Unknown language escape");
+                        if (character < '0' || character > '7') {
+                            throw new IllegalArgumentException("Unknown PO escape");
+                        }
+                        int value = character - '0';
+                        for (int count = 1; count < 3 && index + 1 < quoted.length() - 1; count++) {
+                            char digit = quoted.charAt(index + 1);
+                            if (digit < '0' || digit > '7') {
+                                break;
+                            }
+                            value = value * 8 + digit - '0';
+                            index++;
+                        }
+                        character = (char) value;
                 }
+            } else if (character == '"' || character < ' ') {
+                throw new IllegalArgumentException("Invalid PO string character");
             }
             result.append(character);
         }
         return result.toString();
+    }
+
+    private static final class PoMessage {
+        private final Map<String, StringBuilder> fields = new HashMap<>();
+        private final List<String> locations = new ArrayList<>();
+        private boolean fuzzy;
+
+        private void addTo(Catalog catalog) {
+            if (fields.isEmpty()) {
+                return;
+            }
+            StringBuilder original = fields.get("msgid");
+            StringBuilder translated = fields.get("msgstr");
+            if (original == null || translated == null) {
+                throw new IllegalArgumentException("Incomplete PO entry");
+            }
+            String source = original.toString();
+            if (source.isEmpty() && !fields.containsKey("msgctxt")) {
+                return; // The empty msgid holds the PO header.
+            }
+            StringBuilder context = fields.get("msgctxt");
+            if (context == null || context.length() == 0 || source.isEmpty() || locations.isEmpty()) {
+                throw new IllegalArgumentException("PO entries need a context, source, and usage location");
+            }
+            String target = fuzzy || translated.length() == 0 ? source : translated.toString();
+            Map<String, String> variants = catalog.contextual.computeIfAbsent(source, key -> new HashMap<>());
+            for (String location : locations) {
+                if (!LOCATION.matcher(location).matches() || variants.put(location, target) != null) {
+                    throw new IllegalArgumentException("Invalid or duplicate PO usage " + location);
+                }
+            }
+        }
     }
 
     private static final class Catalog {
