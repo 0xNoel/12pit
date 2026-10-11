@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 0166a4fe0c95c7a1ee065bb06a10e6ead2d82d30 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: 1cc8c8c1a8a4520218eb448773741617c4a6e1e8 -->
 
 # 12pit 实现
 
@@ -176,7 +176,9 @@ HUD 缓存文字时，保留语言监听器，在 `start()` 中注册，在 `sto
 
 API 字段中的已标记文字如果会传给前端 `t(...)`，用 `Languages.sourceText(...)` 保留经过 JSON 传递的使用位置。
 
-新增或修改已标记的原文后，在仓库根目录运行 `python scripts/languages.py sync`。脚本提取 Java 的 `source(...)`、`translate(...)`、带编号参数的 `format(...)`，以及前端的 `t(...)`。它读取字面量和字面量拼接，不追踪变量中的值。同步会保留已有译文，新条目尚未翻译。`python scripts/languages.py status` 显示翻译进度和文件问题。编辑或添加语言时，参阅[贡献翻译](TRANSLATING.md)。
+提取脚本读取 Java 的 `source(...)`、`translate(...)`、带编号参数的 `format(...)`，以及前端的 `t(...)`。修改这些调用后，运行 `python scripts/languages.py sync` 更新 PO 文件中的使用位置。同步会保留已有译文，新条目留空。`python scripts/languages.py status` 显示翻译进度和文件问题。
+
+每个 PO 条目包含原文、译文和使用位置。行号变化不影响自动生成的标识。修改文件或调用次数会改变受影响的标识。调整同一原文的调用顺序可能交换对应的译文，重构后应核对这些条目。翻译和语言申请见[贡献翻译](TRANSLATING.md)。
 
 ## HUD
 

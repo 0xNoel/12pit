@@ -174,7 +174,9 @@ Split translations need Java source filenames and line numbers in compiler debug
 
 Use `Languages.sourceText(...)` when sending marked text through an API field that the frontend passes to `t(...)`. It retains the usage location across JSON.
 
-After adding or changing marked source text, run `python scripts/languages.py sync` from the repository root. The script finds Java `source(...)`, `translate(...)`, numbered `format(...)` calls, and frontend `t(...)` calls. It reads literals and literal concatenations, not variables. Sync preserves translations and leaves new entries untranslated. `python scripts/languages.py status` shows progress and file errors. See [Contributing translations](TRANSLATING.md) for editing and adding a language.
+The extraction script finds Java `source(...)`, `translate(...)`, numbered `format(...)` calls, and frontend `t(...)` calls. After changing these calls, run `python scripts/languages.py sync` to update usage locations in the PO files. Sync preserves translations and leaves new entries empty. `python scripts/languages.py status` shows progress and file errors.
+
+Each PO entry contains its source, translation, and usage location. Line changes keep its generated identifier. Changing the file or the number of uses changes the affected identifiers. See [Contributing translations](TRANSLATING.md) for translating and requesting a language.
 
 ## HUD
 

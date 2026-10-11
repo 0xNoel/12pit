@@ -1,0 +1,3617 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 12pit\n"
+"Language: zh-CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:41
+msgctxt "90831e05b9ba94b142a113c022861dae335943c530b6a77deb282f1cbf097edc"
+msgid "Auto Click"
+msgstr "连点器"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:42
+msgctxt "3820bd4f085be39117a05d94de5365f088aa852657cc1a991ae87089a124d06f"
+msgid "Combat"
+msgstr "战斗"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:42
+msgctxt "729a931657f201e1b48ac60792f2a71b921994a17ff80b70eb4d5604bf18f97c"
+msgid "Combat"
+msgstr "战斗"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:74
+msgctxt "5ce5f1147367745316c9ce3a8d20515af945b46b0c438e99d4f8de9bb2341725"
+msgid "Combat"
+msgstr "战斗"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
+msgctxt "b600a8f4ac39d911a983e907f1dbd5b4ed3683553f1bbd1ebe56c1d67d1cf082"
+msgid "Clicks repeatedly while holding a mouse button."
+msgstr "按住鼠标按键时连点。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:44
+msgctxt "fa995a5af542109ceee4daba642c3758832d9c49761ece1bf922d3fbb87554c6"
+msgid "Left click"
+msgstr "左键"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:45
+msgctxt "32874f96c81cdc091dc8d6e47ae27ace8ec1223d2e69daa6e75485ef90425382"
+msgid "Left click enabled"
+msgstr "启用左键连点"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:46
+msgctxt "bfecb89f060750cc580882b6bec13f13221d3e292b26b7ec543eff29785dad49"
+msgid "Repeats left clicks while holding the attack button."
+msgstr "按住攻击键时连续左键点击。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:47
+msgctxt "e8d1cfb71cdb3592dad74caecad35019c3efc960f573cad916203cda37db6d81"
+msgid "Minimum CPS"
+msgstr "最低 CPS"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:59
+msgctxt "b64a05c70b9c92c1f2282b499fdfb3ef54dc4cc203692e13097238642191c98d"
+msgid "Minimum CPS"
+msgstr "最低 CPS"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:48
+msgctxt "6a3377477a031f00d171ca9dfabd664a266587c7125fba1566b935096d075f25"
+msgid "Lowest left click rate, in clicks per second."
+msgstr "左键每秒点击次数的下限。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:49
+msgctxt "2209198f57bfcbcd68d130d3c719287cd3143583a1e9d592050f78d81dc4568c"
+msgid "Maximum CPS"
+msgstr "最高 CPS"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:61
+msgctxt "25110b11bd435dba7807712233d4ed4b671a17aeceec4b5868ab8e867af85ed5"
+msgid "Maximum CPS"
+msgstr "最高 CPS"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:50
+msgctxt "6d541a6ed792d5f1a9e2de0513650130e09089d565f1fb2a44faddd66039d0a5"
+msgid "Highest left click rate, in clicks per second."
+msgstr "左键每秒点击次数的上限。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
+msgctxt "46cfb4fed74cdb6708ec4d02ebfa293ccfc3ef8670b5ccaa2469dd71a33cf9e8"
+msgid "Weapon only"
+msgstr "仅武器"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
+msgctxt "b151d9bfe6d6202cbac3d395fd789ea3dd6f583255e4f12de6cc91eac71bca80"
+msgid "Allows left clicks with swords and tools. Turn off both filters to allow any item."
+msgstr "手持剑或工具时允许左键连点。关闭两个筛选选项后，手持任何物品都可连点。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:54
+msgctxt "c997ab4441779c1eadc355789b13fcdb8d96871ca5847f4f952d5ce06b25fadf"
+msgid "Only fist"
+msgstr "仅空手"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:55
+msgctxt "11ece85597ce1473b7390153b601c48eff755806df0606852a33b49a19e2d6a6"
+msgid "Allows left clicks with an empty hand."
+msgstr "空手时允许左键连点。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:56
+msgctxt "f2ceb9538e75312d4e2497a6c543965aed2741823ea58b5058b6a690bf8f9adc"
+msgid "Right click"
+msgstr "右键"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:57
+msgctxt "51e9cab5b7fa0204f853a88c5a98450e6654d6944ef9e45c60b1ac39743d892f"
+msgid "Right click enabled"
+msgstr "启用右键连点"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:58
+msgctxt "5b6b6375cd04da5e44aa889c18de9b22977a3f772c5cbdfeeee387ea6187b311"
+msgid "Repeats right clicks while holding the use button."
+msgstr "按住使用键时连续右键点击。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:60
+msgctxt "bffff7373c002b6274bffc2dfffb38731874c893e226b900161b5aef9fc5454e"
+msgid "Lowest right click rate, in clicks per second."
+msgstr "右键每秒点击次数的下限。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:62
+msgctxt "9b3334561591ec15545671913fe01a7c9dcd65e463f0159f792f933cdc002e04"
+msgid "Highest right click rate, in clicks per second."
+msgstr "右键每秒点击次数的上限。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
+msgctxt "353fdd04e0f66ec03708a2a78fe9e085da854598018e5f3d4d5ffa3210c6eb98"
+msgid "Only blocks"
+msgstr "仅方块"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
+msgctxt "792cb53da6e3025ed321a9560f924ea853b058b173ebc7ad75b71dd732cfeed7"
+msgid "Allows right clicks while holding a block. Turn off both filters to allow any item."
+msgstr "手持方块时允许右键连点。关闭两个筛选选项后，手持任何物品都可连点。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:66
+msgctxt "7c82a4635e1b35c1239a5208beca0cd361611f72a58cb1964596935d4dba8eef"
+msgid "Only cake"
+msgstr "仅蛋糕"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:67
+msgctxt "d17dbb26ec04d4f2c0abf0d135663223bc8b9df0b5209610cce64b9096391fcb"
+msgid "Allows right clicks while pointing at cake."
+msgstr "指向蛋糕时允许右键连点。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:38
+msgctxt "31d0d242af6f9dbfdebb1c32a12209b7183451aecd51521e97ee36418883d2ee"
+msgid "Auto Fish"
+msgstr "自动钓鱼"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:38
+msgctxt "2f1cf60f22dfbf8b98a3b899f22ee08286cd0b54736acf127de143e5fc7b7d1d"
+msgid "Player"
+msgstr "玩家"
+
+#: src/main/java/pit12/feature/sprint/AutoSprintConfig.java:29
+msgctxt "35989ca40f2ec4c5dc1739f35f82a8e62df20b36631de66c9b4e80ca04ecf4d4"
+msgid "Player"
+msgstr "玩家"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:39
+msgctxt "a4d79bf7e7793093ac364a86427f18b4c700ae26fe1a01e57cff28b791485cae"
+msgid "Reels in when a fish bites and can cast again."
+msgstr "鱼咬钩时自动收竿，也可再次抛竿。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:40
+msgctxt "4ddb98b16792ef7f99c4ba283df7985778c60fe4906609034db611ae57fc4aa7"
+msgid "General"
+msgstr "常规"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:76
+msgctxt "c01bd303502b67b6be38a3c76b629fa4fed65d3cc42e676110289525acf8da98"
+msgid "General"
+msgstr "常规"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:41
+msgctxt "8597677f158b5271f98cc8f72989c807fccdbb98cc264ae0359df46d6eac72c5"
+msgid "Auto recast"
+msgstr "自动抛竿"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:42
+msgctxt "5d5ad2ef82b27ea3333cf9295a903be11971c36718746ede2f84da9dd1ac1064"
+msgid "Casts once after Auto Fish reels in."
+msgstr "自动钓鱼收竿后，再抛竿一次。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:43
+msgctxt "bcd840c030f8204f01f1efb99fa2d6ef3f21e0649316720b611b28df2412e320"
+msgid "Reel delay min"
+msgstr "最短收竿延迟"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:44
+msgctxt "69ae7dcfe8d0a4c9601acffedd3e91aea2f0a4ad3f5b3904479970861b3ae9de"
+msgid "Shortest wait before reeling in, in ticks."
+msgstr "收竿前的最短等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:45
+msgctxt "66722c0f7144f83a2c2519fa9d9adf517b1f3d331c1bfa0ea4dc6db737509a22"
+msgid "Reel delay max"
+msgstr "最长收竿延迟"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:46
+msgctxt "b2d08988fa2a612898496f5137ee116d59219b1597b8adc22bc4edad2e40e16b"
+msgid "Longest wait before reeling in, in ticks."
+msgstr "收竿前的最长等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:47
+msgctxt "2f91f586b838bccf9cb693c51c9cf107a1c77b4d2536e61c825271ed2e99bd37"
+msgid "Recast delay min"
+msgstr "最短抛竿延迟"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:48
+msgctxt "c78b05af72c90e27ee54f0c0ca4b6480f5a4abfb1a57623433558bb92fb19136"
+msgid "Shortest wait before casting again, in ticks."
+msgstr "再次抛竿前的最短等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:49
+msgctxt "89f7c0915fdec552999ae9e6430da4772cfae66a5d74649883313f69330ab3fa"
+msgid "Recast delay max"
+msgstr "最长抛竿延迟"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:50
+msgctxt "19e7ea42e46446565150d9fd97dcd4e0964bb8fb4cd8aa362fbe62f31e85ae55"
+msgid "Longest wait before casting again, in ticks."
+msgstr "再次抛竿前的最长等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:51
+msgctxt "9470322deac05166899fa6d06c1dca3cd5e78d4d3d97fd9279b934522a64518f"
+msgid "Hook chances"
+msgstr "咬钩处理概率"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:52
+msgctxt "980b980b339b0b3d18cf554d33d8c20cdf4c54103a391d3850995b4b9d82a0cc"
+msgid "Empty hook chance"
+msgstr "空钩概率"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:53
+msgctxt "fc7bb817f12c75648f5c103d8dcfc7e6160d915f68365ee4f93e7739468b40b7"
+msgid "Percent chance of waiting for the float to recover before reeling in."
+msgstr "等浮漂恢复后才收竿的概率，单位为百分比。"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:55
+msgctxt "09224886d98c376ce74289021dd0ba1e42880b1c2928550e3261a8bf177ff13d"
+msgid "Miss hook chance"
+msgstr "错过咬钩概率"
+
+#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:56
+msgctxt "411dff57a8b40fd4bc6db78abb7f10438cbd549cff30e6e56f014af2ecf9e103"
+msgid "Percent chance of ignoring a bite and waiting for the next one."
+msgstr "忽略本次咬钩、等待下次咬钩的概率，单位为百分比。"
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:35
+msgctxt "7f9469108d077cad9d7fa7d50f6cfe373367b4a291c112747203c6dd07039b3f"
+msgid "Denick"
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:43
+msgctxt "f10e5fc4b3b621e267a979960e66a8d454912a9e13db1b50b4d47575f2fc4e9b"
+msgid "Denick"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:35
+msgctxt "6ce8bfe3f87d5878bdfad0cde92dec331d7aba3831bc714def0553720877b026"
+msgid "Misc"
+msgstr "杂项"
+
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:32
+msgctxt "7c30e51c1067e0ad9e44b8689b20b68ea47406dd53d99b0428bc9248eac010e3"
+msgid "Misc"
+msgstr "杂项"
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:36
+msgctxt "ff84854da1c40c2fb1e49bfff84a1335fe2645bc54d4e6774e220cf097b66695"
+msgid "Finds nicked players using their current equipment."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:37
+msgctxt "c9d0315cd30d53b5d915ab943b3526747c8df59b0cd8a87875792e99bbc32c1f"
+msgid "Queries"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:38
+msgctxt "341f7fba2d6cab63cce03e0e71e7b4ffd5b675fd0f6bbe9c6c4a3203f9e4e7d8"
+msgid "Auto Denick"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:39
+msgctxt "71471acb7818b028f4e8a82339f02811d0b61a5073c4a2ff1f518936c0297f16"
+msgid "Queries nicked players when you enter the Pit or they join."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:40
+msgctxt "b3c7e39463a6d716e4a0052a508eac7f89b270b8493537412a34e13890c0d4c5"
+msgid "Only show successful queries"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:41
+msgctxt "47fb0a597b249af15bd8df3206267b8ae10b7afc8f8bd3d7ddd9337c9771457a"
+msgid "Hides failed automatic queries and monitoring messages."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:42
+msgctxt "6770e1634d173aafd4f5f82296dcfdec59c566f79d52bfa2197ca273b372ac0b"
+msgid "Keep monitoring"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:43
+msgctxt "d4d19d0997c375be5346a53cea9407f348a07dc78c189ea4c4236303ee66aa7f"
+msgid "Queues equipment changes until a real name is found."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:44
+msgctxt "18b418d2addecb7ec8e78a9a4dd1d854a1d7e558c802d1054e2351fe3ae109c5"
+msgid "Display"
+msgstr "显示"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:50
+msgctxt "55c40b1e4c51b99634fe5a5b0157631728f1303f8268639c6a16931fd2b8ae36"
+msgid "Display"
+msgstr "显示"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:58
+msgctxt "d4a7f6ebcb6d76133d4ee7e8b9d787c95012603b96cbab1ab921862d4e619f46"
+msgid "Display"
+msgstr "显示"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:53
+msgctxt "b4f974c0421c810c3128a2c49b38ef23cc68fc67d3e71092c706a5dd0db48d5b"
+msgid "Display"
+msgstr "显示"
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:45
+msgctxt "aaaf6d55b37b3e2b9d312a389db72c19767e31bb5f1847980628c60b4e7f9691"
+msgid "Show nick marker"
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:44
+msgctxt "4cd1c7b409944fd00108240cd3fd663520b1ce9c383d85aea2152e8e02cf2602"
+msgid "Show nick marker"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:46
+msgctxt "1c36893935a6902cac64d78ad3901c2be164e88050597d00e29394e18d00114d"
+msgid "Adds N to nicked players' names in Tab and Player List."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:47
+msgctxt "e5b4a87780e2cb96ab9d53110502d3aa64318c3226ea6bb87c3679feb8ae915f"
+msgid "Show real names while Tab is open"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickConfig.java:47
+msgctxt "091297bd5f58c9537cc2b72aac1565091a268dbcf74b9092cd9fbc38a8d2a472"
+msgid "Replaces nicked names in Tab and Player List with real names while Tab is open."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:126
+msgctxt "6a095394f021ac028d9e86e98d9513ad4ed73d91db650b0e2b7700bc46450423"
+msgid "Find a nicked player's name"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:225
+msgctxt "344bebbfe049243c19b4c8a793e8d0cd4c874d5d72548bbf1b00c1bdfaf53df8"
+msgid "Denick is disabled"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:228
+msgctxt "ccc161cc9527d4a3dd6f0aa8f55396de4291690f0fd05a0492030f5d3c6dae97"
+msgid "Denick cache is loading"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:231
+msgctxt "5c5210738047b76f9f6bc9929a1e3762c3a73c3d2166efb44a2e080959f7cde5"
+msgid "Use force as the second argument"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:234
+msgctxt "66becfc8b62e446460ffe82bc8ffd1606a1c78142a642369fccf34b990708e74"
+msgid "Join a world before using denick"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:238
+msgctxt "5ebc324b6fc93cebbf08ab32c74706f0ccd9407cca039f25a05ea90b7df153d3"
+msgid "Player is not in Tab"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:241
+msgctxt "aa8381199985b53600cf52e909fc9b9baae8f9242394da673db04073cfc10d15"
+msgid "Player is not nicked. Use force to query"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:248
+msgctxt "113fc8c9fdbecb0e6abd42d262948069a574d39e82418ba54b3579fdbd217d50"
+msgid "Querying {0}..."
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:482
+msgctxt "23a596839eba7e631065c64ab159d219d08a8a6ad50c79dedd7e4ced12d3c50a"
+msgid "{0} -> {1} (cached)"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:529
+msgctxt "b1b5e32ce539f579cec319e706bf24063a8d463108845c883c6d4809d1cd2426"
+msgid "{0} -> {1} (updated)"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:529
+msgctxt "317af93332051ef568f92371288a23cdd44903865dd8984126298a3ee399ae58"
+msgid "{0} -> {1}"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:544
+msgctxt "dfbc093beceb5cf4efc163e0b9b638d3ac8731c74d1a754d302ccb8773d57e3b"
+msgid "Cached identity for {0} is no longer confirmed"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:558
+msgctxt "1c5c4f2959770b5a8249f4f760e327b6d2e51549e2d320bda7b60b9cd440da11"
+msgid "No searchable equipment for {0}"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:559
+msgctxt "fe948c97f6a8580ab4e08fa6d5800dc81bf6a5d5d64b023539a1f6391d3684b9"
+msgid "Could not query {0}"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:560
+msgctxt "7995e90c2cdbbbaac9d2df2e3f62b689c6fbcc1d07ba2ad5af104b64dc57db10"
+msgid "No confirmed owner for {0}"
+msgstr ""
+
+#: src/main/java/pit12/feature/denick/DenickFeature.java:563
+msgctxt "7b9b3909b893705b635361f98b520c48aa96bd7f8ca44a5f0504063439e2d52f"
+msgid "Waiting for new equipment"
+msgstr ""
+
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:47
+msgctxt "1f81a1d5ef87e826ec239e6e20f3931ab5dca75bb1bd389188b8dc90eaa1c8ec"
+msgid "Show stored events"
+msgstr "查看已保存的事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:63
+msgctxt "46da82fd697637fc295bf8278466c5e2cedf1768f2a97c4b76e2d4a7c17c4294"
+msgid "Unknown event: {0}"
+msgstr "未知事件：{0}"
+
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:67
+msgctxt "eba242abf565a7bb63618fb51e51e51ea7d44daf75ec72dcb8d9b957f1c3a6a0"
+msgid "{0} events ({1}):"
+msgstr "{0}事件（{1} 个）："
+
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:77
+msgctxt "1863f767a06311a475c1199e570ec2a48b53e4b07b3414956201a038bbff045f"
+msgid "  No stored events"
+msgstr "  暂无已保存的事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:47
+msgctxt "39ccb084b73023370b65f4b6c86ad7380cfe585abec73a0331b7edbd6437ccd2"
+msgid "Event List"
+msgstr "事件列表"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:48
+msgctxt "a4665b74dcb7b5f2f12bb331cca123f7cae3bb0a6c1672035a3df2f7a0670e05"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:31
+msgctxt "780d699f92854444edbc0f36a85a4a16ca054649761d548e7ea28d0288037740"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:35
+msgctxt "6032fadf993fe02ce5e326cecb3d608b4b7a616c9b98af267cc1edca6a7bf2e0"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:41
+msgctxt "13ec34550aaa3f0da64fd2316c8de1d91e43794a58c0539a84a8ec5d6b8e5703"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:43
+msgctxt "8de2222d6df4ab9f8b01a632928068948b0158f238f13bd5f0db09d29f20cd22"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:51
+msgctxt "28b5af126d047afb1a4710188ace1f9e877fb4e657a3c5963e2b22d00b98aefa"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:35
+msgctxt "94a7d852e9ee22bf67e865d928c1feb581f1a8d61134f0848020eab2e74dcbc1"
+msgid "Render"
+msgstr "渲染"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:49
+msgctxt "6655497781fcdc3bfcb5bd6b9186deb31f3fda7a75f949da53f148c07861e6a7"
+msgid "Shows upcoming Pit events and their current stages."
+msgstr "显示即将到来的 Pit 事件及其当前阶段。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:52
+msgctxt "1c5ac79dce2a496e2f9decdbdbcb2a98a834bf0c8f413d9cbc5b36d9ce291b21"
+msgid "Event count"
+msgstr "事件数量"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:53
+msgctxt "0eec002b54ae4db30aad946a15cbd022a64e8284dcbe37b77cf1b95f340c5b5a"
+msgid "Sets the number of event rows. The day and night row is separate."
+msgstr "设置事件行数，昼夜行不计入其中。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:55
+msgctxt "b7e60813b6c3dacf4005f98d93e2a2205103bd602eb513c1d590b2bd922f392d"
+msgid "Show day and night"
+msgstr "显示昼夜"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:56
+msgctxt "fffb32cfe486792e6fbd2b0756f00f80bc74023a28f8280e6996d73d59d2005b"
+msgid "Shows the Pit day and night cycle above the events."
+msgstr "在事件列表上方显示 Pit 的昼夜周期。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:57
+msgctxt "368e0c580a434f6bef2d693ded571d187bc6ce9574dd64e73ba41dde12b24776"
+msgid "Show status icons"
+msgstr "显示状态图标"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:58
+msgctxt "af0c1d1a081027b414fbf3bb4a29f937587cb9ec9d460605f87fc433e3fa87f7"
+msgid "Marks upcoming major and minor events, preparation, and active events."
+msgstr "标记即将到来的大型与小型事件，以及准备中和进行中的事件。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:60
+msgctxt "d65c45a38d6a89f8afc8f1c4a5c74bd11cb592f9b4f476eb5df4fe12dd336e97"
+msgid "Show event colors"
+msgstr "显示事件颜色"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:61
+msgctxt "10414a842c18600f3b893277134ac1dc866952562250ae30da3594500ff21c4e"
+msgid "Uses each event's color for its name."
+msgstr "用各事件的颜色显示其名称。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:62
+msgctxt "570a3c522ba89587f255d9cc754d81715e1520f472afc848911fe07ef53d51a0"
+msgid "Pad time with zeros"
+msgstr "时间补零"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:63
+msgctxt "2317742566466f80558e0af90792b0b53f0e1d344674ab929adf264dc291be2f"
+msgid "Shows two digits for each part of a countdown."
+msgstr "将倒计时中各部分不足两位的数字补零。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:64
+msgctxt "6eba7a4eb015b5cb15c6458c57d35b9c236cf0d27153460cce91700aa6d8979c"
+msgid "Time format"
+msgstr "时间格式"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:65
+msgctxt "17e3410a3af6850eaf5173ca825e53562b4385e2327ed6771cddb356b688002a"
+msgid "Sets how event times are shown."
+msgstr "设置事件时间的显示方式。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:65
+msgctxt "09b92e7170fcbd6b6d5fa64629efbcd47afd72bd0f04e3cbb280089508546e5b"
+msgid "Countdown"
+msgstr "倒计时"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:66
+msgctxt "b73836169cf0a7d48dd79850616ca4fc195ba3a529b066c6bec2697182db090d"
+msgid "Local time (24-hour)"
+msgstr "本地时间（24 小时制）"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:67
+msgctxt "65e0d62ffd1c96737efdc1b5cf39b546c6e9ff9539c782bc12363471e205c14f"
+msgid "Countdown and local time"
+msgstr "倒计时与本地时间"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:68
+msgctxt "c2efad89fcdb85e881cc1c31209c6d605187b48345f22e8d16e7772d0aae998c"
+msgid "Filter"
+msgstr "筛选"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:69
+msgctxt "c0d6b25b1a04f7abddeae862e376b987e266adc9502f0186cf9e56e703ee2bf3"
+msgid "Major events"
+msgstr "大型事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:70
+msgctxt "ce0a21033e6e49c4a546bb6ca10d86a3270c13e25d0b0f47a06da9bef2588156"
+msgid "Show major events"
+msgstr "显示大型事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:71
+msgctxt "9415d9361f4f6d33be657a8f9184e9a29b570cb033cda4fb04c88939c71f2569"
+msgid "Shows major events in the list."
+msgstr "在列表中显示大型事件。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:75
+msgctxt "4ce0b033c406f58c421f455e6529e85252da15597955712c428af92db9557fc5"
+msgid "Shows this event in the list."
+msgstr "在列表中显示此事件。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:84
+msgctxt "dda0ebb619a5c4be9cede305267952f72314fde07928d2a9b4342fbedba3e78f"
+msgid "Shows this event in the list."
+msgstr "在列表中显示此事件。"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:78
+msgctxt "553ad2e114442590fc44a0866b8b76b482e77779cd270d7af3f83f6b3edd98c9"
+msgid "Minor events"
+msgstr "小型事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:79
+msgctxt "292e4573edb0d76cbbf1d530a71db7a883ee255ead4892e16e36828dc82daff7"
+msgid "Show minor events"
+msgstr "显示小型事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:80
+msgctxt "4da86cc110e56cc012d7018b9e02c151b8ea0228db1089f27005b126b1b46bf0"
+msgid "Shows minor events in the list."
+msgstr "在列表中显示小型事件。"
+
+#: src/main/java/pit12/feature/eventlist/EventListFeature.java:252
+msgctxt "c7c3489c81c31c15140a2955ff5f228a74fde373393b8ea73be7984c17a109b5"
+msgid "Could not load events"
+msgstr "无法加载事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListFeature.java:253
+msgctxt "e4f0f5d5f17bdaa316852975b808dc2f0409033d760704e5af95bbf97dd24266"
+msgid "Event schedule has ended"
+msgstr "事件时间表已结束"
+
+#: src/main/java/pit12/feature/eventlist/EventListFeature.java:254
+msgctxt "49dd33c3f4087f2d8dbd1307d553083533b4e14477e5dc530d67e4b5a799760b"
+msgid "Loading events…"
+msgstr "正在加载事件…"
+
+#: src/main/java/pit12/feature/eventlist/EventListSnapshot.java:73
+msgctxt "6c295ca26fed98e79454de7962b6786476c7e6daf60b37e8488fc7a620b612ab"
+msgid "Day"
+msgstr "白天"
+
+#: src/main/java/pit12/feature/eventlist/EventListSnapshot.java:74
+msgctxt "353b77cca55cc0d63fb18f10b408064f7aab3e2e2ad9735b151c54f578ed2cb5"
+msgid "Night"
+msgstr "夜晚"
+
+#: src/main/java/pit12/feature/eventlist/EventListSnapshot.java:80
+msgctxt "22a85e9a44fe07c642058ba1749d9fabfb114700127d834a6e2948f5a0a2dee2"
+msgid "No events match the filters"
+msgstr "没有符合筛选条件的事件"
+
+#: src/main/java/pit12/feature/eventlist/EventListSnapshot.java:104
+msgctxt "6fc042d99b8a1dc74cbbb9e3e2c8be2f6cf2f8b3ee18b145cf67f8e2b8541375"
+msgid "Preparing"
+msgstr "准备中"
+
+#: src/main/java/pit12/feature/eventlist/EventListSnapshot.java:105
+msgctxt "b82575e128d5c8208bb18e7a37a0d41b8a763a40d3c95cf1876401ebd083d113"
+msgid "Active"
+msgstr "进行中"
+
+#: web-ui/src/ProfilesPage.vue:290:21
+msgctxt "4a1c978e2bde32a005606c211a9552cedf4900074841c7a485cd49bf2107f5b6"
+msgid "Active"
+msgstr "当前使用"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:24
+msgctxt "c3fce8f6369be1c93473b6c8272ea62374962be588e4d94f116eb00928d0cf6c"
+msgid "Blockhead"
+msgstr "方块划地战"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:25
+msgctxt "185aec42aae8ebb02c28e3c75611733c37c7100b3b36b7a87c129cf7b9d4b21b"
+msgid "Robbery"
+msgstr "劫掠"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:26
+msgctxt "853d3f76e6fd043384f0fc4efc0613d5f57c4cc37e188d483a24dc6108207027"
+msgid "Raffle"
+msgstr "奖券"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:27
+msgctxt "b57808d2113d5d9d2ebe60be115be1712e52de0eefeb4b14e6c8cc29d78ebef7"
+msgid "Care Package"
+msgstr "空投"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:28
+msgctxt "7c5b11ebecc0118fd44cc3b160e964c2c7ee76fac7828110021c0b3653716e3f"
+msgid "All bounty"
+msgstr "全员赏金"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:29
+msgctxt "f65bf77bde60f05067c0e36fbc2c27a6e4b9ce33a69c3dc32f865f2731fb8192"
+msgid "Pizza"
+msgstr "披萨"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:30
+msgctxt "72831d1351fdf1723072b46d422b90ff847580aa6060ac89c0f0069f92a39965"
+msgid "Rage Pit"
+msgstr "狂热天坑"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:31
+msgctxt "b2e975b9a1590cefc0fc39b149eb4849b2cf0aa5256589abe5e27cdcdb6b103c"
+msgid "Beast"
+msgstr "野兽"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:32
+msgctxt "fcaa81b220cb681414016fbb751e8ec1877d5913c976ccbc1587c3dcbe718957"
+msgid "KOTL"
+msgstr "高梯之王"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:33
+msgctxt "2e4be50988a750cea181435ea91fcfc4a66b444835f414e54ea1779684f40935"
+msgid "Spire"
+msgstr "尖塔"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:34
+msgctxt "47ab7f689c84bd49c2125afe4f61795266999fcaa522c8d55fc51015f479fd12"
+msgid "Team Deathmatch"
+msgstr "团队死斗"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:35
+msgctxt "2403c38ded1f788faea7f46f044e369d2244948e8586fa0efa326ea7cba71863"
+msgid "Dragon Egg"
+msgstr "龙蛋"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:36
+msgctxt "b00b14e57730033b7b347f7589c28b3b3a39d32a3dc07f275c2ae5e181fa4a17"
+msgid "Quick Maths"
+msgstr "速算"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:37
+msgctxt "a3e89c4ad20a270ed2e5dbf6131f63ac09cf5916bad0255e345a52e7f7a2b065"
+msgid "Squads"
+msgstr "结队争锋"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:38
+msgctxt "3e5cee6dafc0a2b90c788d6b7fdd5def0d23b64d3733ba0719253642162c3c28"
+msgid "KOTH"
+msgstr "山丘之王"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:39
+msgctxt "c1883b99fbf96c244dbc4ea1f966e6b39c025b89b1582b2df749f0faf5105432"
+msgid "2x Rewards"
+msgstr "双倍奖励"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:40
+msgctxt "ac3d14b86294269ed10fc383b7ffd0ba92868a6f6939c4aa6435283b7c797fa5"
+msgid "Giant Cake"
+msgstr "蛋糕"
+
+#: src/main/java/pit12/feature/eventlist/EventType.java:41
+msgctxt "fc79b8b5afd6fd442ce1db416ffaed7ce589075b928b3c5e33c07ca91544a46e"
+msgid "Auction"
+msgstr "拍卖"
+
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:31
+msgctxt "05e322ab099f25c21ad28ac6f07c3eb382e682d1541f70c87fca2f997812fb44"
+msgid "Gamma"
+msgstr "伽马覆写"
+
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:32
+msgctxt "5e2c8103fef78b2ce8225a7b01ed53455ccc99be713cbef46ae8acf836eea18a"
+msgid "Adjusts world brightness with a custom gamma value."
+msgstr "用自定义伽马值调整世界亮度。"
+
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:33
+msgctxt "28b29f03e0a52a8042d7155f5559aa69f1f1d9dc04deb738fe0a362576879244"
+msgid "Gamma value"
+msgstr "伽马值"
+
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:34
+msgctxt "932bab90c46e94f8a54099ee55c29f08e95c298fe2d0e92281412701d5bf455a"
+msgid "Controls brightness. Minecraft's normal range is 0 to 1."
+msgstr "控制亮度。Minecraft 的常规范围为 0 到 1。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorFeature.java:56
+msgctxt "71bf5d7b1701c443f9b01889f560ee5fe6974dd48330745aac4c39a7e13bfe7d"
+msgid "Open the HUD editor"
+msgstr "打开 HUD 编辑器"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:78
+msgctxt "da37c644b8f121edebf803ea6aecfeb192c8a48fd785c5eacd3eae8ba9fb9c69"
+msgid "Hold Alt to disable snapping."
+msgstr "按住 Alt 暂时关闭吸附。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:79
+msgctxt "d17ea0c1465e191634d5fc7d538804f1d86110b1d3a5968171824f3ddf5a16bc"
+msgid "Drag to move. Drag empty space to select."
+msgstr "拖动 HUD 可移动，拖动空白区域可框选。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:80
+msgctxt "7b9dfd55f810433979b973aacb68350bda7e57cae2787befec425c006cc6c319"
+msgid "Ctrl+click to select multiple HUDs."
+msgstr "按住 Ctrl 点击可选择多个 HUD。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:81
+msgctxt "2cda133f15a84f7e36e8368f4174101270fd4aced9597a71749174f09744b95f"
+msgid "Scroll to resize. Hold Shift for smaller steps."
+msgstr "滚动鼠标滚轮可缩放，按住 Shift 可微调。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:82
+msgctxt "4678032fc340026c2621c0198afd74a9137a54c1ac640883bc87b1a2ab9c19b0"
+msgid "Arrow keys move by 1 px. Shift moves by 10 px."
+msgstr "方向键每次移动 1 像素，按住 Shift 每次移动 10 像素。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:83
+msgctxt "47c165c146b1202c176d46e775b49cd6a533495338c8491a1a956c2e11e1a764"
+msgid "Ctrl+Z to undo. Ctrl+Y to redo."
+msgstr "Ctrl+Z 撤销，Ctrl+Y 重做。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:84
+msgctxt "2f489fa403d1b24b1f68de1e9e221e3bc9495c75bb15bea3a0d9da7389cd0592"
+msgid "R to restore selection. Shift+R to restore all."
+msgstr "R 重置所选 HUD，Shift+R 重置全部 HUD。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:85
+msgctxt "8141ceb0b7625bacd388fd05083993d7c4d232b3931beab3478dde508cad1972"
+msgid "Hold Space to preview live HUDs."
+msgstr "按住空格键预览实时 HUD。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:88
+msgctxt "c1c8cfa7b3f0ac5ce99d285e2d03690669a9b52b26ac507ec7591118e432cc8b"
+msgid "When no HUD is selected, press {0} again to open the Web UI."
+msgstr "未选中 HUD 时，再按一次 {0} 即可打开网页界面。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:98
+msgctxt "3a7f9783d0232d762de3aa425581588e1afc5cafc5406095ed682c6a4918e6e8"
+msgid "Got it"
+msgstr "知道了"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:100
+msgctxt "c9ed36c9c4ea3a22cbdb3874845006af8d884e6a8adc18d48a48f81d3998bbae"
+msgid "Don't show again"
+msgstr "不再显示"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:35
+msgctxt "ce9376264af69175a24fa4a7a5ab1cec091cd0d3b2a83dcf4e4be6f83a52f604"
+msgid "Item ESP"
+msgstr "物品透视"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:36
+msgctxt "9342d50769fd4cd0f776c5c291ae80d86002e5f386c5a525cd04a5b1c24b4b82"
+msgid "Shows dropped raffle tickets and gold ingots through blocks."
+msgstr "隔着方块显示掉落的抽奖券和金锭。"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:38
+msgctxt "dae0f519776e67fe2b80e0e1b4c7337354707b7df336348d2723477d80d63509"
+msgid "Raffle tickets"
+msgstr "抽奖券"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:39
+msgctxt "b5016ee79d4a7ce256773e177a4d4b782f0ea954b0bbbc453a2fda9f6c63cf98"
+msgid "Show raffle tickets"
+msgstr "显示抽奖券"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:40
+msgctxt "af36879e3b10e707dd1becd1a325597dfbfad169fbf30bc5a6b0a92a35fd7d19"
+msgid "Marks dropped name tags."
+msgstr "标记掉落的命名牌。"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:42
+msgctxt "6efc88dda664ec6b6158dda8b3bc318ff5c0e2c1f8c958284787eebbf6c0bf06"
+msgid "Raffle ticket color"
+msgstr "抽奖券颜色"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:43
+msgctxt "6b12d5ba8ea7392814e3ea3e66232e878e00d30da3b83b48039dcdfc66c6260c"
+msgid "Gold ingots"
+msgstr "金锭"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:44
+msgctxt "f56221fe5b06ba448d60f2c91755219d44046ef664b2412ecd1bc82ffb07aac6"
+msgid "Show gold ingots"
+msgstr "显示金锭"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:45
+msgctxt "57fc2eb2c647d6a260193f295160ef88d7c4d8248b07b59ba0ea301d43b2b0cd"
+msgid "Marks dropped gold ingots."
+msgstr "标记掉落的金锭。"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:46
+msgctxt "c5b300bc4da9a21eb87acb0b44bd47bc551fd77ef264b9fd5a7cfa1e71feeff8"
+msgid "Gold ingot color"
+msgstr "金锭颜色"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:41
+msgctxt "86e4aabc7eeefa1a6411044368db6f107c47dee08a8eba267f9b4c56e4f45b57"
+msgid "Nametag"
+msgstr "名称标签"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:42
+msgctxt "91e86c5aa2ebdbe50880cc4f0edc0c14dfe124e24a34374816e44d94d35e33bd"
+msgid "Adds real names and Pit enchantments to player nametags."
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:45
+msgctxt "f995df19334fcb9d8611232b5173f9b935c814abb0e255995dd3c63544df041f"
+msgid "Adds N to nicked players' names."
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:46
+msgctxt "5b594a6f4297f08a87796547293134bb1b177d6bc590f27f5d2fd510e64717b9"
+msgid "Show real names on nametags"
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:47
+msgctxt "08038971a5590f74730e351d0b3254aad45140f4b37bf50cf60abe132a626c8d"
+msgid "Adds the real name after the nicked name."
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:48
+msgctxt "9b546dd61b5d31e573717d9eab0f84870da83ed26489d84b00e72e6432a7f44a"
+msgid "Enchantments"
+msgstr "附魔"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:55
+msgctxt "95f8f5c935fb8e7fb188f9e22e1aa0f6d57fa23f331e449b3c4fd227c9503a91"
+msgid "Enchantments"
+msgstr "附魔"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:45
+msgctxt "64185c4ce75e0ede7d9b242cec4a79905aa248a0508ee91266d0d282b61059e2"
+msgid "Enchantments"
+msgstr "附魔"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:49
+msgctxt "c75c96a03487c30fce419844fe0048b6db82c465ec6814915ac5736e0fffd652"
+msgid "Enchantment format"
+msgstr "附魔格式"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:56
+msgctxt "1ab0b129bae2244e2f1a99c8d4ce98f7d5d5f181b99d6b37e6106627722d0bbd"
+msgid "Enchantment format"
+msgstr "附魔格式"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:50
+msgctxt "2ce993a37dfb634c8b31a3c150fe43443a8efd1da15b46f6657b0645a50eb123"
+msgid "Controls how enchantment names and levels are shown."
+msgstr "设置附魔名称和等级的显示方式。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:57
+msgctxt "9c787701ad1de79a27b33f7c80040cd90542c820326569a8c5b668ec30d41bf5"
+msgid "Controls how enchantment names and levels are shown."
+msgstr "设置附魔名称和等级的显示方式。"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:52
+msgctxt "aa21e68af6a68d174df2831b3daa6860942f285e79e2cde483e4e81b766a20fe"
+msgid "Show gem"
+msgstr ""
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:63
+msgctxt "f5c670c5f4f1ace588ce74e4f38954b115bc42ff1a1782acd4010ca40b278484"
+msgid "Show gem"
+msgstr ""
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:102
+msgctxt "058347701799d8b6728fe9a9d0dd85717be286fb9bfaed1827ad3c5e8a5f90d2"
+msgid "Show gem"
+msgstr ""
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:40
+msgctxt "857ea50b74646df6cbb36904695d3d76b427f47d581e9379cda1dba4d11cca2f"
+msgid "Show gem"
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:53
+msgctxt "cbade8b73ac30398b7125fd045fb1b4daf4235477eeb5a7bebd9a86f8923f622"
+msgid "Shows a green diamond on gemmed items."
+msgstr ""
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:64
+msgctxt "0a853d0855b012dae86e134dea2a3f0d1f0d42d733738de7905d12f100067472"
+msgid "Shows a green diamond on gemmed items."
+msgstr ""
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:103
+msgctxt "173fd01e8004cc12b567b7eb6ea43a1ceb1feb3103f3f72bf1840d6f5ee4a2bf"
+msgid "Shows a green diamond on gemmed items."
+msgstr ""
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:41
+msgctxt "1c0db117d9192b3e3590d7e3aa88631a2ad95c5fb75ff7888dccb1ff3ae5511d"
+msgid "Shows a green diamond on gemmed items."
+msgstr ""
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:54
+msgctxt "b252c1311dc3d7d3e1381fe70adb7c436e745d200702c9d4b48de00da4ac434b"
+msgid "Show held item enchantments"
+msgstr "显示手持物品附魔"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:59
+msgctxt "f95082e2d3cae78b399866ca4fbe8588f206e167df34842371fc434b006098ff"
+msgid "Show held item enchantments"
+msgstr "显示手持物品附魔"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:55
+msgctxt "2c7064401f5561e53cb282c8eae417c16ad6c0b7fcb64ca8f5b73441f6b1c003"
+msgid "Shows the held item's Pit enchantments."
+msgstr "显示手持物品的 Pit 附魔。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:60
+msgctxt "1332249ff171b5cc163ee8cf53130bb514caaa64b47a33aa0bad6b6efcbbb513"
+msgid "Shows the held item's Pit enchantments."
+msgstr "显示手持物品的 Pit 附魔。"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:56
+msgctxt "247986484e9d8d1c6deff3ca4ae372257e9d48710767b2069d185937a2204f67"
+msgid "Show leggings enchantments"
+msgstr "显示护腿附魔"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:61
+msgctxt "50d3043d89a06f84dfae94119101c48f5de665455cfa84c402e5b84b54549ea2"
+msgid "Show leggings enchantments"
+msgstr "显示护腿附魔"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:57
+msgctxt "995d4b5cace608221daf2148714d1de28d26f64f773d0d97a1749397271a2a7d"
+msgid "Shows the leggings' Pit enchantments."
+msgstr "显示护腿的 Pit 附魔。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:62
+msgctxt "0e5d8d6bbcd6ecb1049d75da1669a801b47ae7fb6ac411dd170aab48d5da0982"
+msgid "Shows the leggings' Pit enchantments."
+msgstr "显示护腿的 Pit 附魔。"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:59
+msgctxt "2b4f248628b2994620fb0214f4b0b3d1d4e938eeec37468c2c25172bcbc68267"
+msgid "Display distance"
+msgstr "显示距离"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:60
+msgctxt "fc7ae9684ee39327de578fedf0c125b11dba1f76926a53dc0e7ac3e83f01327a"
+msgid "Shows enchantments within this distance, in blocks."
+msgstr "显示此距离内玩家的附魔，单位为方块。"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:61
+msgctxt "7a1743f4c28568d07a798a22dd8ef07d087d687c56e56f13995e029e56a0be0b"
+msgid "Upward offset"
+msgstr "向上偏移"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:62
+msgctxt "b506f81b9d05a3432ff2d5e1bdb8ffa5d5587b51093b6e5a1f7e4255076bfa0b"
+msgid "Moves enchantments above the nametag, in hundredths of a block."
+msgstr "附魔在名称标签上方的偏移距离，单位为百分之一方块。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:42
+msgctxt "b923a203574e10b875aca0c524723fa985df619df3d2ee2647be8a89c39d3ca9"
+msgid "Player ESP"
+msgstr "玩家透视"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:44
+msgctxt "1e16dddb2fd2e6834b1c81bf6353a29831134d1396258a1781f5f97669fd2544"
+msgid "Shows colored boxes around loaded players through blocks."
+msgstr "在已加载的玩家周围显示彩色方框，方框可透过方块看到。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:45
+msgctxt "24aaa7e3e5b21278a5b75903d7a859228bed16aa5fae0ef2f7f4f9b71c6777cc"
+msgid "Friends"
+msgstr "好友"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:81
+msgctxt "296ceb03ce133d493b0eb8a77688dc609f37b5eeee900d55e0aa4b18a228c834"
+msgid "Friends"
+msgstr "好友"
+
+#: web-ui/src/RelationsPage.vue:268:32
+msgctxt "595bd5839560d9c8e3ce653b1a100066dde36302acf77976ad014cc7bff3ff02"
+msgid "Friends"
+msgstr "好友"
+
+#: web-ui/src/TransferDialog.vue:448:40
+msgctxt "a450d01647095847230bed930381d6e7152fa513bd87668cb2b2f29df8da12b7"
+msgid "Friends"
+msgstr "好友"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:46
+msgctxt "0ae62e7f57f227213f96eda9192d775e836004da8b3e32ad3b84e4a8d3229f97"
+msgid "Show friends"
+msgstr "显示好友"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:46
+msgctxt "2253335d0fe59b99d6d2fdf4076d179a931f1c8209ce40058d7ebd0d6517a47d"
+msgid "Marks friends."
+msgstr "标记好友。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:48
+msgctxt "43238c570ada341b3c9c7f3ea37a9b6656a635e715c642c966469598f7771d30"
+msgid "Friend color"
+msgstr "好友颜色"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:49
+msgctxt "cdf5f74da6d1a83c6b8e833702ed020e8caa3771caaf3f8dacd85da6588d044a"
+msgid "Enemies"
+msgstr "敌人"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:82
+msgctxt "6c31dae1bf958e9c457efa8bd56d9cd48ba90392745bdfa0c6d0025b76f056b4"
+msgid "Enemies"
+msgstr "敌人"
+
+#: web-ui/src/RelationsPage.vue:268:47
+msgctxt "001a9ee0596c9f37ec79b6ab547dbc88acabc968ca89f9dc30ade44810fb494f"
+msgid "Enemies"
+msgstr "敌人"
+
+#: web-ui/src/TransferDialog.vue:448:55
+msgctxt "31059acfcf0df1ac4a2493488c6681c86c09b040115694221e8a42c267b1cef4"
+msgid "Enemies"
+msgstr "敌人"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:50
+msgctxt "537274b99de40003e78f1513106d4801f3993ea65e62e84cf140aa4693b15bb1"
+msgid "Show enemies"
+msgstr "显示敌人"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:50
+msgctxt "15efa0071617a6cabd1b564493f57b577b80cf0dde597cf9d858844a2dd1aa1a"
+msgid "Marks enemies."
+msgstr "标记敌人。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:52
+msgctxt "0276c94703bfbbe6661adc81e7c98269ecee82aed9475a161d29d6dcd34bfd71"
+msgid "Enemy color"
+msgstr "敌人颜色"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:53
+msgctxt "21d903291fd96309638707b767b071df4428600236a0bc2707b874da234af2fd"
+msgid "Other players"
+msgstr "其他玩家"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:54
+msgctxt "a81bcac11b7a63d62ae9a3bdee8913b86eb76792764ce57697d948adc32c2159"
+msgid "Show other players"
+msgstr "显示其他玩家"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:55
+msgctxt "540ac3ae06828e2b73d7742d80690c69f8e75d5bbd532054828172399186ab66"
+msgid "Marks players outside the friend and enemy lists."
+msgstr "标记不在好友和敌人列表中的玩家。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:57
+msgctxt "b1b10803ddf9fb9870b977a1d532710ac9e59046bfe1cbdcef7fe10a21186c83"
+msgid "Other player color"
+msgstr "其他玩家颜色"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:58
+msgctxt "fa393559ca51d3508920252c5eba2d103b851563c072a27cc97d6eb42e86a1ce"
+msgid "Distance fade"
+msgstr "距离淡化"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:59
+msgctxt "162d020a6cba4f679dc6a12527625c05d50c24f95c7c1dbfae9437f5bc345eae"
+msgid "Fade nearby players"
+msgstr "淡化附近玩家的方框"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:60
+msgctxt "1a09d1a2a1c465d401371e29c3c5f35bd2244b4ba53f24c5396fbbe610021bf3"
+msgid "Makes boxes fade out as players get closer."
+msgstr "玩家越近，方框越透明。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:61
+msgctxt "b69c3ecf02539225a59971024343b9addf665af95e22795d4001f7d274f2b6b7"
+msgid "Hidden distance"
+msgstr "隐藏距离"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:62
+msgctxt "099ba5114e4a6b639cfc72dc868c6d4dd3714c048c2c9bb8ccdd968b697e09de"
+msgid "Hides boxes at or below the smaller distance."
+msgstr "距离不超过两个距离设置中的较小值时，隐藏方框。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:63
+msgctxt "63caddcfa0787d759d5ef3543bfaeac440fd161a38feb1ba17cddb3fa7bad191"
+msgid "Full color distance"
+msgstr "完整显示距离"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:64
+msgctxt "be3ae35607b67bdfa8bd872d4c98ebde7b1d3356838c7bdcbf88e57b31b45171"
+msgid "Uses full color at or above the larger distance."
+msgstr "距离不小于两个距离设置中的较大值时，完整显示方框。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:50
+msgctxt "a170be5b773e7f2fadffb69d9efa62c9e43d3bd5924a850b4fd8af5c5d5474d4"
+msgid "Player List"
+msgstr "玩家列表"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:52
+msgctxt "be1ce28717e549386faef593ecce24e245a4a5a41e624dcd954b4908ac3d67dd"
+msgid "Shows loaded player equipment and direction in a compact HUD."
+msgstr "在紧凑的 HUD 中显示已加载玩家的装备和方向。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:65
+msgctxt "62643811ee1950118313b8d70de2cdf84325cad86e4d42bc7280dbe1f2867051"
+msgid "Player information"
+msgstr "玩家信息"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:66
+msgctxt "ee86449ce135f1f7c23474cd0e34c69eeb798f906399742a81d74d72e1e43d67"
+msgid "Short player names"
+msgstr "精简玩家名称"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:67
+msgctxt "11b0d92de2bf260a48f35b226a2877235425b9615ef35eca25edffb719b8ca25"
+msgid "Shows only the level and player name, keeping their formatting."
+msgstr "仅显示等级和玩家名称，保留原有文字格式。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:68
+msgctxt "17f8429aec01e0cf5cab535e924d95036194164b3d845a8259f7f08aacb6178c"
+msgid "Show player distance"
+msgstr "显示玩家距离"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:69
+msgctxt "7c3fdfc0580177635a8c4bab38c2eb9ad76edb4f80773fd2cc1e94fd258d548d"
+msgid "Shows the distance to each loaded player."
+msgstr "显示与每个已加载玩家的距离。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:70
+msgctxt "1f7915a31d22169945ebc168fbaffdb3025327373508c50d3599eeaeda94864b"
+msgid "Show player direction"
+msgstr "显示玩家方向"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:71
+msgctxt "1e2bda25ba5220776c91d93dac04038d3a0a3a79448ff1a8daf07a301d304397"
+msgid "Shows the continuous direction to each loaded player."
+msgstr "显示每个已加载玩家的方向，随方位连续变化。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:72
+msgctxt "22c8dcc56cd671ba6b5fb2f0bb09e5883c892470b6cc67d83bfb87ea3468f491"
+msgid "Show spawn marker"
+msgstr "显示出生点标记"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:73
+msgctxt "caad680db4d65b4e5a2fd5c263061a23dc25ec58a485d76f2c37391866f78ada"
+msgid "Shows SPAWN instead of distance and direction for players in spawn."
+msgstr "对出生点内的玩家显示 SPAWN，替代距离和方向。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:75
+msgctxt "6806754ae0ecc8c5f9952fb507ad04cec6aade6c4068bbaf9629aefa8acd963e"
+msgid "Groups"
+msgstr "分组"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:76
+msgctxt "214f6dfd196820d620bfb25c96f6191279f52679fca756fa29ab907548ce5349"
+msgid "Show group names"
+msgstr "显示分组名称"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:77
+msgctxt "d5072b3bd0fb12f87ccc735218a4a4fed9ae4542482c7e1116eab7baa55eab40"
+msgid "Shows the name above each group."
+msgstr ""
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:78
+msgctxt "37f84e30870e774328120743b7d17fb49c4eb7f0d374cc565edf581ecc5a24c0"
+msgid "Show Friend group"
+msgstr "显示好友分组"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:79
+msgctxt "2b68531a511292e48e3362ae1e07102aea43a3bcfc66dd17e19d8de2b40b5c0d"
+msgid "Shows friends in the player list."
+msgstr "在玩家列表中显示好友。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:80
+msgctxt "af272a1416988fc442675c629b793bb86cb9368ec1e3881fc07b9dba76a878c9"
+msgid "Show Enemy group"
+msgstr "显示敌人分组"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:81
+msgctxt "5a9c27dff20814a59ee467e7a542c7d856583d2799bb5857fb472d3f4e77983a"
+msgid "Shows enemies in the player list."
+msgstr "在玩家列表中显示敌人。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:82
+msgctxt "e804313bc2b19ba736ea1f7fc92453bc7a0fb66b4279b00427c73db1df6b9b2a"
+msgid "Show Nick group"
+msgstr ""
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:83
+msgctxt "12901a4f0c1fbc92b31222cf9b3618535c27022377c7c48a03ded197e931f31f"
+msgid "Shows nicked players in the player list."
+msgstr ""
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:84
+msgctxt "86f4c4e938603cb28591ce44d0579fa910f75f9155e157d5a9cb54f2dde20555"
+msgid "Show Regularity group"
+msgstr "显示 Regularity 分组"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:85
+msgctxt "8663d75f2d197fa205dd3d67abed63b90d043c05fc924dd8ea881e0d5663f69f"
+msgid "Shows the Regularity equipment group."
+msgstr "显示 Regularity 装备分组。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:86
+msgctxt "4781c3086fcd56fdf54b9a91e9abdb82697d6dc2884af53ef98fd9ccbc92b383"
+msgid "Show Dark group"
+msgstr "显示暗黑分组"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:87
+msgctxt "b4caec62b47c6cc51b6a4a688e234182925587d84c0f0bcd24d0a341dc16968c"
+msgid "Shows the Dark equipment group."
+msgstr "显示暗黑装备分组。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:88
+msgctxt "40413e972faa554f7aca15372985a196b55c5cffbec2dcd6d4c9ba094ec4449e"
+msgid "Show Bounty Hunter group"
+msgstr "显示赏金猎人分组"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:89
+msgctxt "a94e0ba00fe7f89c0287e5760e4b821813759d12a75d08da1abae7a9085d5ae7"
+msgid "Shows the Bounty Hunter equipment group."
+msgstr "显示赏金猎人装备分组。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListGroup.java:24
+msgctxt "0ed057e0db5099b573f8fdde86dede69a60ecd185cc75dbeb2b3f56e3cddbedf"
+msgid "§a§lFriend"
+msgstr "§a§l好友"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListGroup.java:25
+msgctxt "e779fa6eddca12a852f4d787eab6a6ecb35fbd3d523486d07e9fd3a6b5048657"
+msgid "§c§lEnemy"
+msgstr "§c§l敌人"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListGroup.java:26
+msgctxt "3adee60b3fd1fbbbf56e7cebc2aa1d4a572506852d07381b934dee0391934199"
+msgid "§c§lNick"
+msgstr ""
+
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:31
+msgctxt "23d4636e984d17510a3ba3072a9876d2655c0104489f2fc07720c26f507c93ae"
+msgid "Auto Quick Math"
+msgstr "自动速算"
+
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:33
+msgctxt "2d27d058a1e8b7cdea13f6b5ef69231f9ba80623b86cdbd5b60faad685e28990"
+msgid "Solves the QUICK MATHS! expression and answers in chat automatically."
+msgstr "自动计算 QUICK MATHS! 的算式，并在聊天中发送答案。"
+
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:35
+msgctxt "bfd5f9074e265019256a1ccab4c81d3981f3cbc79d720843ccb79ae7bc21527a"
+msgid "Answer delay"
+msgstr "答题延迟"
+
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:36
+msgctxt "62eb1ce65f9e8410d05445343dc9bebf5838fab2d486c23bab1e3901c283d50d"
+msgid "Waits this many seconds before sending the answer."
+msgstr "发送答案前的等待时间，单位为秒。"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:85
+msgctxt "72c1c703bd29bae51e4d21700b935969bdeba75874bbbbdda3a9607906ddc8a1"
+msgid "Enter a valid player name"
+msgstr "请输入有效的玩家名称"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:93
+msgctxt "57769195882df3933630fc71b139bf20942907155bff6f764dbd74957cf157b5"
+msgid "Multiple players on this list have that name"
+msgstr "此列表中有多名玩家使用该名称"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:101
+msgctxt "949443a318852a14dce727d5c3bd9bb82507046951fd4a339dc0f0bb03301196"
+msgid "{0} is not on the {1} list"
+msgstr "{0} 不在{1}列表中"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:104
+msgctxt "c7c6e35bd0de7220fd449f95e81a58127b115b4508d26ef2544853ddcea4b3ba"
+msgid "{0} removed from the {1} list"
+msgstr "已将 {0} 从{1}列表中移除"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:165
+msgctxt "d25ee93987ffbc362444bc2c276eab00425d0dffb3c4bf94c59232ff07e73603"
+msgid "{0} removed from the {1} list"
+msgstr "已将 {0} 从{1}列表中移除"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:108
+msgctxt "e784587fa754c2680d6b5db9a935e4eb30961128ec73907e9da912a62b196b86"
+msgid "Multiple saved players have that name"
+msgstr "已保存的玩家中有多人使用该名称"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:116
+msgctxt "9e90b02c92a0431ba1e522c2064db2eedd7d48abc30fc280c4da9831184c22d1"
+msgid "Multiple Tab players have that name"
+msgstr "Tab 列表中有多名玩家使用该名称"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:125
+msgctxt "14d78a90f430999643fb7f0d01eddc851b178e2dde17b5c6e9664d3119bc54d3"
+msgid "That name belongs to a different saved UUID"
+msgstr "该名称对应另一个已保存的 UUID"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:135
+msgctxt "b8af5cd90f4fbe2a354d8c3c7c738d0a26714df60c6cbd8362a2ff965081058e"
+msgid "{0} added to the {1} list"
+msgstr "已将 {0} 加入{1}列表"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:144
+msgctxt "d914c04c2b48aa5ab577f929e12c840ba4f026fc86a37ad938e6b3b4e87781df"
+msgid "{0} added to the {1} list"
+msgstr "已将 {0} 加入{1}列表"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:139
+msgctxt "c565ab81de0abdd013a857affc5a94562300a8b4607c05e901e23004bca69ad0"
+msgid "{0} is already on the {1} list"
+msgstr "{0} 已在{1}列表中"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:148
+msgctxt "ab2bdf6ed7a24d0d7dbd28787d59128c0696b1554946359a81e26a5f3b222b5a"
+msgid "{0} is already on the {1} list (UUID pending)"
+msgstr "{0} 已在{1}列表中（UUID 待查询）"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:154
+msgctxt "769f93765e91f8aeb584026f9ad11fb323ea5442136db6bf8e6c38a1d1f35346"
+msgid "{0} added to the {1} list (UUID pending)"
+msgstr "已将 {0} 加入{1}列表（UUID 待查询）"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:161
+msgctxt "02f3289c60cf3822c85bc1ad3ed2bc2d7a4b1561367eef1bd23dbb793b2551cb"
+msgid "Player is not on the {0} list"
+msgstr "玩家不在{0}列表中"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:169
+msgctxt "3d10f230977b4bf6b1ff93459847d53de5b03dbaaf24f9e484a73481a5aadcc3"
+msgid "friend"
+msgstr "好友"
+
+#: src/main/java/pit12/feature/relation/RelationBook.java:170
+msgctxt "82d191c4f0af7d771c4b13b9e3e1dde6fa4be6d4e4f59f2544d94bb4f791b29f"
+msgid "enemy"
+msgstr "敌人"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:55
+msgctxt "41f726a3367d65864010064ebda5e8fb6756e51d567e923ab1a74263ecce42b4"
+msgid "Manage friend relations"
+msgstr "管理好友列表"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:56
+msgctxt "768478b4f5a05fe6b5fdbd9af7e4cf6e5c5d3863f23e035381abc6f38139e619"
+msgid "Manage enemy relations"
+msgstr "管理敌人列表"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:61
+msgctxt "8cabdd15b78368cb0ce55beec6b9c6327f3566fcbfca2b80e27783073afde1fa"
+msgid "Show friend relations"
+msgstr "查看好友列表"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:62
+msgctxt "bf33f5774f11dbc90dff219670f545d58bd0b0912d8a9df152c82f9b4d44e952"
+msgid "Show enemy relations"
+msgstr "查看敌人列表"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:64
+msgctxt "8844e5536df0b62e9d8efb43ae9a39e7e93f9699cdde4d5908b289c74340e452"
+msgid "Add a player"
+msgstr "添加玩家"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:68
+msgctxt "c06e74f4e08a4197f7860e6ef179ebfaafcc0cfa25832fc98e642a9450466796"
+msgid "Remove a player"
+msgstr "移除玩家"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:80
+msgctxt "aea66be51045ecc30f50eaf69d0534c7868ebc511dadb8dca7a3941834039122"
+msgid "{0} ({1}):"
+msgstr "{0}（{1} 人）："
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:88
+msgctxt "1bfb227e077d8905eab6aab2937a619246f093b1f44ba606130ee2fcaccbd5a1"
+msgid " (UUID {0})"
+msgstr " （UUID {0}）"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:112
+msgctxt "67ce131aacdce0180acc26a075bff9b50697bee7b0437e4a8ceb2203aa10229b"
+msgid "waiting"
+msgstr "等待查询"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:143
+msgctxt "f542be36082a50c04bec321a7e31bfb615d5882ae661481b909166ad25dc783b"
+msgid "waiting"
+msgstr "等待查询"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:114
+msgctxt "0c11ad8f18a38c99112e34fa673f637ed01b14e1f7f28f6dbff45b6cbfc58201"
+msgid "resolving"
+msgstr "查询中"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:116
+msgctxt "813cc14edbb43f7da7a854fdfc7db2e109455a813006b157500c9f1287827d07"
+msgid "retrying"
+msgstr "重试中"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:118
+msgctxt "ecbac87adf5cb82acb24a0db0bcdeda4fce0ee43dba1e608f80d9852f72758f0"
+msgid "not_found"
+msgstr "未找到"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:120
+msgctxt "064bab1203a02ca416c9df2063e6b2ec02601f8deb73152940886ce6d79ffc19"
+msgid "failed"
+msgstr "查询失败"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:122
+msgctxt "9746df2ff5840aad5133e343f56bf43a2a6d81cb25521b7c08736a1473ea7e82"
+msgid "confirmed"
+msgstr "已确认"
+
+#: src/main/java/pit12/feature/relation/RelationCommand.java:124
+msgctxt "6b8803fcc8129b089e7595fb9519a77e4a5ebf3c77eee14dedf79d3ff0d83846"
+msgid "unknown"
+msgstr "未知"
+
+#: src/main/java/pit12/feature/relation/RelationFeature.java:202
+msgctxt "346d72a297971e4e33699ba5038a6139014dff4b54b8cce21603d01fedb3d616"
+msgid "Relations are unavailable"
+msgstr "玩家关系不可用"
+
+#: src/main/java/pit12/feature/relation/RelationFeature.java:204
+msgctxt "7afdeb8a8dead9f74a3f7b52e7239b388aba6c6e5d07d52f781a039753e4aade"
+msgid "Relations could not be loaded: {0}"
+msgstr "无法加载玩家关系：{0}"
+
+#: src/main/java/pit12/feature/relation/RelationFeature.java:206
+msgctxt "b320bff3bf989940e6d8bc2b1260580130666a8fb8d6535832e7181f07f566f0"
+msgid "Relations are still loading"
+msgstr "玩家关系仍在加载中"
+
+#: src/main/java/pit12/feature/relation/RelationFeature.java:346
+msgctxt "f7032223cbaab32d5f03ac9ee1de804803ab10936730a5e31953461de93e585a"
+msgid "Duplicate relation identity"
+msgstr "玩家关系中存在重复身份"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:41
+msgctxt "7603af84b7da9a4a17686736e91336554d21ca40107c2d9a53236cebf918205c"
+msgid "Smart Block"
+msgstr "智能格挡"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:43
+msgctxt "48594d89742ca6f6a0076b18c30d11950e723df07917ce365510b95641fb0479"
+msgid "Selects a Bullet Time or Bruiser sword from the hotbar while blocking."
+msgstr "格挡时切换到快捷栏中的 Bullet Time 或 Bruiser 剑。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:46
+msgctxt "3d941b5d274da14ffe65f926b2a1cad01738a4bffffeec53128609dc2345eb9a"
+msgid "Use Bullet Time"
+msgstr "使用 Bullet Time"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:47
+msgctxt "84915e8d01fbd78eef4c4bd7f7b4dc6f9541381f1c2ccf34470945f969d3970a"
+msgid "Selects swords with Bullet Time."
+msgstr "选择带有 Bullet Time 的剑。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:48
+msgctxt "7b8bc5d48b912c2c375356ce028f2ea900a758c940c695db60a5fa4da02ada9f"
+msgid "Use Bruiser"
+msgstr "使用 Bruiser"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:49
+msgctxt "53fa1a1f285093fe79260b822730ed0fe15374b01eea7eadbc40b93ca82d3867"
+msgid "Selects swords with Bruiser."
+msgstr "选择带有 Bruiser 的剑。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:50
+msgctxt "4e3ef50688941807340e1980ef9e67ce9b6946ceaf7984d7420fd3337e8b9553"
+msgid "Enchantment priority"
+msgstr "附魔优先级"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:50
+msgctxt "9fc7bcf35d551b4b0e5d30a6c116e07e310489599e9fbed167183a7a1a2b2317"
+msgid "Chooses the highest level of this enchantment. Ties use the other enabled enchantment's level."
+msgstr "优先选择此附魔等级最高的剑。等级相同时，再比较另一种已启用附魔的等级。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:52
+msgctxt "7d46bc85ff8baad6635008ab94c2d143684b8f8fb30723e4b0517d9bf7095fae"
+msgid "Bullet Time first"
+msgstr "优先 Bullet Time"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:53
+msgctxt "21f5b836bba243da7e9bd67dfcb48715a7260a97c9676a70411af63d3ad3bdc1"
+msgid "Bruiser first"
+msgstr "优先 Bruiser"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:55
+msgctxt "bb3708e10b630671d22d8ee7d0905961e2129bd5dd1db03c85031b67ed3a926c"
+msgid "Prefer Bullet Time near arrows"
+msgstr "附近有箭时优先 Bullet Time"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:56
+msgctxt "6b88dcf0fafbb1b01f99f124dd0dcb0d45144d9b4aae4c5f0fef4c9818e203eb"
+msgid "Switches to a Bullet Time sword when a flying arrow is within the detection range."
+msgstr "检测范围内有飞行中的箭时，切换到 Bullet Time 剑。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:58
+msgctxt "0d71e8e23d3e01f19191cbaf6263010a194802dc18a4ae1e5ba23a2fd2231d8a"
+msgid "Arrow detection range"
+msgstr "箭矢检测范围"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:59
+msgctxt "43929e46726e909e059fc190be22790d05fa26bf59fbc9c361a322a9c1724659"
+msgid "Detects flying arrows within this distance, in blocks."
+msgstr "检测此距离内飞行中的箭，单位为方块。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:60
+msgctxt "316103bfaea407aa2620c181e5852ed6560880a10fe162ea530efcae357f48c6"
+msgid "Switching"
+msgstr "切换"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:61
+msgctxt "14b06f1b651c164dea0060006f6d2282f333e93837e016035dc6d53e5ce8d953"
+msgid "Trigger with fist"
+msgstr "空手触发"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:62
+msgctxt "68b83e86fa1fde9e16d62fb1d954efbddc7a1e32b049c416aba06a700f0dc5e3"
+msgid "Also starts Smart Block when holding use with an empty hand."
+msgstr "空手按住使用键时也可触发智能格挡。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:63
+msgctxt "2b8d29e289def83bf6017661e7539c04ef9bcbe96fb3fe3fdcef4c11e99fe8e5"
+msgid "Prevent manual slot changes"
+msgstr "阻止手动切换槽位"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:63
+msgctxt "57f6856d123aeb0986f822df55303716053933e32e03de026a088d9ac5f4ea47"
+msgid "Blocks hotbar keys, scrolling and pick block during Smart Block. Otherwise, changing slots ends the current switch."
+msgstr "智能格挡期间禁用快捷栏按键、滚轮和选取方块操作。关闭后，手动切换槽位会结束本次切换。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:66
+msgctxt "a140b66af24521b2dcf03dfb573a47bc3bbbacf9c47dafc3d2a33540d7c4a729"
+msgid "Switch delay"
+msgstr "切换延迟"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:67
+msgctxt "84d8c53cc98195b678b4540f512ba1bd5c857fa2a027f33bff32bd60dcb23df3"
+msgid "Waits this many ticks before selecting the blocking sword."
+msgstr "切换到格挡用剑前的等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:68
+msgctxt "5e19e7862118eda1c8430ca1e9bdbd1bb650aed869f754e4d896a5e470a57af3"
+msgid "Restore delay"
+msgstr "恢复延迟"
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:68
+msgctxt "dd3e8927322ace78ae6d063e4b640214c7becda259031d0245c72b9d0207b84f"
+msgid "Waits this many ticks after releasing use before restoring the original slot."
+msgstr "松开使用键后到恢复原槽位的等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/sprint/AutoSprintConfig.java:28
+msgctxt "851680c27fb987d961c8e8410742f4f60f0a24a626237f427e649d5954ec5c04"
+msgid "Auto Sprint"
+msgstr "自动疾跑"
+
+#: src/main/java/pit12/feature/sprint/AutoSprintConfig.java:30
+msgctxt "8b305f733aa8d2b0f2ac7a4e29eaf3dc9ee20c3860ccb9c387ccdbad170cece3"
+msgid "Sprints automatically while moving forward, without holding the sprint key."
+msgstr "向前移动时自动疾跑，无需按住疾跑键。"
+
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:196
+msgctxt "5525c53a5755233f8116e895ce1c23e019643b222f0c53bbb223893057526878"
+msgid "venom"
+msgstr "中毒"
+
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:266
+msgctxt "dc7531b970666ee7a3e964433aee887b553318e5a2f093b7a7910e051eb4a82d"
+msgid "low target health"
+msgstr "目标血量低"
+
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:267
+msgctxt "254c4f75d68ebb2e6af925aaf28f3d6b1eb142c162e7c34a92e0c6ac6bc952b9"
+msgid "low health"
+msgstr "血量低"
+
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:317
+msgctxt "07ce98ddce0956df27d3245e4ecc652b97a889af8d6f6c3a4dff0d6ac5795bd9"
+msgid "no dark targets"
+msgstr "没有需要 Dark 的目标"
+
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:319
+msgctxt "4de63b5612bfc642c7d5f1c815a0f965088e0c8dcda393968fe64fa887f0f342"
+msgid "{0} activation"
+msgstr "{0} 触发"
+
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:322
+msgctxt "51b3bfe75ced6d064452c64d24f5c0d3ec8421d2d7c161cbd04a6382cfd3b35e"
+msgid "health recovery"
+msgstr "血量恢复"
+
+#: src/main/java/pit12/feature/swap/BindingBook.java:54
+msgctxt "5a64ce6d13565f6f71d9996e278214de51f255ee09aefcdebc7107b38ff9798a"
+msgid "Swap bindings are loading"
+msgstr "正在加载换装绑定"
+
+#: src/main/java/pit12/feature/swap/BindingBook.java:68
+msgctxt "4cab25263ccecaf1a49fe240a671ad05ada5579355d1ec46237563b5e1543c8e"
+msgid "Swap bindings are loading"
+msgstr "正在加载换装绑定"
+
+#: src/main/java/pit12/feature/swap/BindingBook.java:86
+msgctxt "d676837ede648799b8e18e7261ce4852b2f94c8e0e4e10aa0708d7a4b4732589"
+msgid "Swap bindings could not be loaded; import a file or use /swap clear"
+msgstr "无法加载换装绑定，请导入文件或使用 /swap clear"
+
+#: src/main/java/pit12/feature/swap/BindingBook.java:120
+msgctxt "8d2555641b1a7ecb35f62ec923c1fdaad79b3e841a40f9e3a8c8e14a662f761f"
+msgid "Swap bindings are unavailable"
+msgstr "换装绑定不可用"
+
+#: src/main/java/pit12/feature/swap/BindingBook.java:195
+msgctxt "8d1d2f1036d267fa91f3d0e2c6d3c00d0007f309c0e7ae0c37a43839a20e8100"
+msgid "Swap bindings could not be saved"
+msgstr "无法保存换装绑定"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:85
+msgctxt "84ab2c5eeb8a16168253933327a21eefe8e67741d2528cf13f866b3889b06d91"
+msgid "Swap bindings must be an object"
+msgstr "换装绑定必须为 JSON 对象"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:89
+msgctxt "c22bdb895d7ea35af3dde315b0cc87048a501aab3b3cda04bae9aebc9aec9f0c"
+msgid "Unsupported swap binding version"
+msgstr "不支持此换装绑定版本"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:93
+msgctxt "7fc6dcaad7f78b3af4a7df450608c1e152a513dfa0b246376368bd132e9caa9a"
+msgid "Expected swap binding list"
+msgstr "换装绑定应为列表"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:99
+msgctxt "3e4a801932d1d3b297d6b66501e4faf2256cf1f5e98671a1a736edcc5f5efeef"
+msgid "Invalid swap binding"
+msgstr "无效的换装绑定"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:128
+msgctxt "2acd4f4d988586f03187d1c78962f0b32dbdba96c45f30e272e37e152546a19b"
+msgid "Invalid swap binding"
+msgstr "无效的换装绑定"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:103
+msgctxt "28711d6dba4dcc1c472e201136bc8d612257651f9c7ddeaa25108982d8c518c1"
+msgid "Unknown swap binding type"
+msgstr "未知的换装绑定类型"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:107
+msgctxt "479d8c8065f1c7fc9e3d2511c99c37b6de18183b1b4df0deca7dafd4181929d8"
+msgid "Expected item identity"
+msgstr "物品标识必须为对象"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:117
+msgctxt "eec35b28ee4f8ccd91db358a909010021df45b1e6f02c57b10bf0114f178de3b"
+msgid "Invalid item identity"
+msgstr "无效的物品标识"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:121
+msgctxt "e9707f1e4c856c032adc2f8f23ba37a0a974670e6fb3c51cee04bdeac64439bc"
+msgid "Duplicate bound item"
+msgstr "物品重复绑定"
+
+#: src/main/java/pit12/feature/swap/BindingStore.java:133
+msgctxt "63e00b2a04a7c202b8f4330d708c1435bd95086a25d6750558492ebacaf54d3f"
+msgid "Invalid gem state"
+msgstr ""
+
+#: src/main/java/pit12/feature/swap/SwapBinding.java:50
+msgctxt "dfe9f50209dc14f1793363124229ab2f71c4e0378055d00a40b40dd67841c0f6"
+msgid "Hold an item to bind"
+msgstr "请手持要绑定的物品"
+
+#: src/main/java/pit12/feature/swap/SwapBinding.java:54
+msgctxt "c0194008edb443218644355bfda2bdbf530ba15def00da383ede8ec56d694414"
+msgid "Hold armor or specify a hotbar slot from 1 to 9"
+msgstr "请手持盔甲，或指定 1 到 9 的快捷栏槽位"
+
+#: src/main/java/pit12/feature/swap/SwapBinding.java:60
+msgctxt "1112423f49f7eaccab19775fa44ac096250df52634e5d92118424f6475f9d55c"
+msgid "Held item could not be identified"
+msgstr "无法识别手持物品"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:53
+msgctxt "f38d9e14018b34126b265dbd062e643e290309651e5701a60728cd6d476ca657"
+msgid "Manage swap bindings"
+msgstr "管理换装绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:54
+msgctxt "7ac714fcf3797b6ae34e6e716145803c421e742533fd60065ebe8c7be2a7f373"
+msgid "Bind held armor or a hotbar item"
+msgstr "绑定手持盔甲或快捷栏物品"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:56
+msgctxt "70972192f9410684b4b580cdfa4c1f3472c6756ee894194de30a5d4fc6b5c202"
+msgid "Remove key or held item bindings"
+msgstr "移除指定按键或手持物品的绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:58
+msgctxt "d11482af99389164812cd27831c9b038d3dac381cdb2fbdcf011b9f65640c7f0"
+msgid "Show swap bindings"
+msgstr "查看换装绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:59
+msgctxt "110083dc9c30a2e476dff51a5636dcb27b1ce91090b1f086d99a926625139cdc"
+msgid "Clear swap bindings"
+msgstr "清空换装绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:62
+msgctxt "bcaee603d87f71b458a36167ed0389752ff31aed2d36cc1badcd6d3714a54a80"
+msgid "Cleared swap bindings"
+msgstr "已清空换装绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:63
+msgctxt "b6ef6c7bd93b3dcb5d320e1815ff9c9109441869fbc61bf9e8fb26839b2b50c9"
+msgid "Show automatic swap state"
+msgstr "查看自动换装状态"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:64
+msgctxt "3fbaa1859a9bd64f2556a2d0e2b90694bb49abc928637d36afe51f46ec321a73"
+msgid "Reset automatic swap state"
+msgstr "重置自动换装状态"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:67
+msgctxt "f30cc26b84c3ed28ee48c79f25e79d945325cf3d710f09beabbf4c8d0889224b"
+msgid "Automatic swap state has been reset"
+msgstr "已重置自动换装状态"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:90
+msgctxt "60b7b8e8a3610c90070e8b8d9e9a3fc97ea3e321179dd65aeca0181a034b90b3"
+msgid "Hotbar slot must be from 1 to 9"
+msgstr "快捷栏槽位必须为 1 到 9"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:93
+msgctxt "3fe5deb8733b928f8d38d3de7dfcbd2c1d0e519dbc673b8c8c5f1121a7facf23"
+msgid "Hotbar slot must be from 1 to 9"
+msgstr "快捷栏槽位必须为 1 到 9"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:101
+msgctxt "388d62fa62926aa5d184f5e50c4241bb5c878ef21629272a2fda34d030860fc9"
+msgid "Bound {0} to {1} ({2})"
+msgstr "已将 {0} 绑定到 {1}（{2}）"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:111
+msgctxt "f8bc975088e6e06e3c51bb3be7d4d5f1d46e81e4ec7c2bcbb2b571351c4173d5"
+msgid "Hold an item to unbind"
+msgstr "请手持要解绑的物品"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:116
+msgctxt "af4e0bcc5d0062b61df24e76be9c6c229dbdd6524134cf5803aebb8047192e6b"
+msgid "No matching bindings"
+msgstr "没有匹配的绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:117
+msgctxt "98e17dc62b513fa22131fbe0aa5f1bfdee2d58b64126d001c06f8d2c941450d5"
+msgid "Removed {0} binding(s)"
+msgstr "已移除 {0} 项绑定"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:123
+msgctxt "21d5bbc07a68fe2699e03cc5926cddeffff09b0a10cf1439a58af530e72257ed"
+msgid "Swap bindings: {0}"
+msgstr "换装绑定：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:131
+msgctxt "6f07a5eedb2852721cfb01259cf183385f13e86d56688419021b1dfcc21f87d0"
+msgid "Automatic swap: {0}"
+msgstr "自动换装：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:459
+msgctxt "03e8f046a297abd62cf32b0324c89a329602309d8dc5d4588e0d8e8dd7f33240"
+msgid "Automatic swap: {0}"
+msgstr "自动换装遇到问题：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:132
+msgctxt "a115c713022988fe5134a178d028f0087a6c93c5f38ae5834a3c2f0c2eb5a1f8"
+msgid "enabled"
+msgstr "已启用"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:133
+msgctxt "663f6eff52e4898f67c70d406286cb5b8f3a6ac785c463df5e7c044836a92233"
+msgid "disabled"
+msgstr "已禁用"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:140
+msgctxt "25a6fc6b9e59e4f13fe5a90d6136804176caa4f6b0924318015a9c3b37029f2e"
+msgid "disabled"
+msgstr "已禁用"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:153
+msgctxt "369273283f6b9b9ed0b2a8beea9eefe915247214dbab954ebfa32cc886da0966"
+msgid "disabled"
+msgstr "已禁用"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:134
+msgctxt "8dc5f65049a506268026c3ce956b5abf5d5d1630371be14416198fbd5d20723d"
+msgid "Escape Pod: {0}"
+msgstr "Escape Pod：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:136
+msgctxt "851948260d9fe742652dcec890162e4f33a415daf25ee0de4790385bdd96fd58"
+msgid "Phoenix: {0}"
+msgstr "Phoenix：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:139
+msgctxt "cbf5180961cc8a1c98366dd85e181f52eaa1299d98b012cf4bd6c2f06d0cf321"
+msgid "Dark: {0}"
+msgstr "Dark：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:142
+msgctxt "49031f096166a05c1a4271e60d0ec8ccd1ee8b6ca99d3f5df471e23c255b8db9"
+msgid "equipped"
+msgstr "已装备"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:157
+msgctxt "2fa97117babed6a0b3d6dbf121bd4bfc36f8c3049f811e32e564a00e665268c2"
+msgid "equipped"
+msgstr "已装备"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:148
+msgctxt "6900f193f7708006b0fee26fff1f39752f50661ee3d686c266df28720658c098"
+msgid "Join a world first"
+msgstr "请先进入世界"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:155
+msgctxt "b5144990eb8d58f4ab280179a9a8792b139700ede1f8649a901469b9583987ce"
+msgid "used"
+msgstr "已触发"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:158
+msgctxt "17964ed95adac616051fcc3ec77919ede1a5794e736077377ca03bbbfdbe0c84"
+msgid "unused"
+msgstr "未触发"
+
+#: src/main/java/pit12/feature/swap/SwapCommand.java:164
+msgctxt "4666adb7fc9e22c650f9a46d8ddafa1c22267394551710d7dca9aa04d238f66b"
+msgid "Unknown keyboard key: {0}"
+msgstr "未知键盘按键：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:74
+msgctxt "0aa1684b7d29d767aeed945525e3b238185832ba101090249e291f9e3daa5abe"
+msgid "Swap"
+msgstr "换装"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:74
+msgctxt "ad95c3c5a465ad501f1854b3bcebf8c37d8e1f6cf35f8b607012ae4e5650bcde"
+msgid "Swaps armor and hotbar items manually, when poisoned or when players have low health."
+msgstr "手动更换盔甲和快捷栏物品，或在中毒、玩家血量低时自动更换。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:77
+msgctxt "604bf9e7f5efe2b741fa9eb22dc242f11a16d277f907f1e5408eeb6b03c9f68e"
+msgid "Right click swap"
+msgstr "右键换装"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:78
+msgctxt "b7e1a1c909bdd39727e0dcb0995147212abafd9aedaa5f6863ec853f21b6319c"
+msgid "Right-click held armor to replace the armor in its slot."
+msgstr "右键点击手持盔甲，替换对应部位的盔甲。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:79
+msgctxt "7111a3e5e7a92a9c0fcc44e9b8ca77e97a8f721c1e5ded4160c25575885e1353"
+msgid "Random click timing"
+msgstr "随机点击时机"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:80
+msgctxt "da6d5bc0d27f8331aff2bfc754c347c1dabfdd7e719be07509baca78d75c9446"
+msgid "Uses a random input phase before player updates for all swaps and unequipping."
+msgstr "所有换装和卸甲操作都在玩家更新前的随机输入阶段执行。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:82
+msgctxt "ccb5401307c65c2376cf884b5a12f7dea9abe22a3d892420dcc9cb8b259ff05b"
+msgid "Shift click swap"
+msgstr "Shift 点击换装"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:83
+msgctxt "3378b0786e74f9ae6c11f4060627838e3edac6a1f6a815bb86c62b74b709a182"
+msgid "Use shift clicks instead of number keys to swap armor."
+msgstr "使用 Shift 点击代替数字键进行盔甲换装。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:84
+msgctxt "9e2c685d9dee787f792e8b43e38e1253e92fa44b76d1b9d127fe7c4d878db388"
+msgid "Inventory visibility"
+msgstr "背包可见性"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:85
+msgctxt "a9d3032edc2a2a44ca37e0e1ea76b80bf850c43974f82c72004be1484d26d89c"
+msgid "Shows or hides the inventory during swaps."
+msgstr "换装时显示或隐藏背包界面。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:86
+msgctxt "94586f87796a99e7a17a7ae141db114655a4f69d8f29e8ce3229726a51ddef84"
+msgid "Hidden"
+msgstr "隐藏"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:87
+msgctxt "13872bbd45f7143500e18712e89ab1ff874b209015aee212d0fa288c672b4db0"
+msgid "Visible"
+msgstr "显示"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:88
+msgctxt "8403f0ec6dc29023554d18123fcc10400f8a250336a2f5a31052758c60fb685c"
+msgid "Open delay"
+msgstr "打开延迟"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:88
+msgctxt "9493fd94f20d008ce41acc366b3a0aeff4c5dd48fa9d78dc1b85bafba4e72c1c"
+msgid "Ticks to wait after opening the inventory before the first click. Set to 0 for no wait."
+msgstr "打开背包后到首次点击的等待时间，单位为游戏刻。设为 0 则不等待。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:91
+msgctxt "d21f1c5011ee450bca17340237292abcb7a3ed03e1ca6e3b23db609da39e7638"
+msgid "Swap delay"
+msgstr "换装延迟"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:92
+msgctxt "1c22927bef9e9f9b3129b90a10fb74abed8ca3e4db302e7d6abde0064ef837c6"
+msgid "Ticks between clicks for right click and automatic swaps."
+msgstr "右键换装和自动换装时的点击间隔，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:93
+msgctxt "dd442465853698e629d36cb90767604c2224363ee610d9878aa766bd1cb29b4c"
+msgid "Close delay"
+msgstr "关闭延迟"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:93
+msgctxt "f9913943ef502cbbfd9aaac8ba1a122e1d934d131c5ea41a75b59592f7a0026d"
+msgid "Ticks to wait after the last request finishes before closing the inventory."
+msgstr "最后一次请求完成后到关闭背包的等待时间，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:97
+msgctxt "4747d7eb4d84c26b37c7a1f546251043a383b0b8e545c80baeb9c22ad26996cc"
+msgid "Resume input next tick"
+msgstr "下一游戏刻恢复输入"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:98
+msgctxt "a6086043fb7e1e68f1b1867cbef7791dc81e1c3efb62fda9d42b23da7e4e238a"
+msgid "Keeps all input locked until the next tick after closing the inventory."
+msgstr "关闭背包后，保持所有输入锁定，直到下一游戏刻。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:100
+msgctxt "392d7a75db0cfdb65cbcc0afda28cc1dfc344f23527c68acd881253dab627a3d"
+msgid "Swap messages"
+msgstr "换装消息"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:101
+msgctxt "930f9e73edd34396771f3ac29ed4e9e496affe53a280451f298296a511e10501"
+msgid "Shows a message after items are swapped or unequipped."
+msgstr "更换或卸下物品后显示消息。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:104
+msgctxt "e8097b2fd4cdd8676ba285c5549b29c00dba495a37f76e7fc076e8f886ed5c7b"
+msgid "Transfer slot"
+msgstr "中转槽位"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:105
+msgctxt "5897dfc66a1145ff07c0e3121eff0d94972550acdf566ba20cb6592cda238553"
+msgid "Hotbar slot used to move armor from the inventory."
+msgstr "用于从背包移动盔甲的快捷栏槽位。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:106
+msgctxt "87cae8946673f952c1b9cf15c9198d34cbcbbb4c63536337c64b03a465a087f3"
+msgid "Restore transfer slot"
+msgstr "恢复中转槽位"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:107
+msgctxt "649bb271a7376f40451da31a9e186685c66acb2a25da242d4505814d3b67d597"
+msgid "Restores the transfer slot's contents after moving armor. Slot bindings take priority."
+msgstr "移动盔甲后恢复中转槽位中的物品，槽位绑定优先。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:109
+msgctxt "65554d453e58511e0b46b364771000948a65d98a8b1abbd3fabf3ae7d9d11e7b"
+msgid "Prefer empty hotbar slot"
+msgstr "优先使用空快捷栏槽位"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:110
+msgctxt "0ba83da6a56be33f1382e1a2e3f125159a7dcb887b47da36658659682fe30575"
+msgid "Uses the first empty hotbar slot as the transfer slot. Otherwise uses the selected transfer slot."
+msgstr "优先用快捷栏中第一个空槽位中转，否则使用指定的中转槽位。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:112
+msgctxt "e5f99907129bc109692db6a28c8acd7d5fafac0e2d221db6417ac592c9c39bf0"
+msgid "Bindings"
+msgstr "绑定"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:113
+msgctxt "c17d862f5fba3bd9cc0b390d2c105f32bc9f35cc70f409cdb526d0fd977b8eb1"
+msgid "Unequip all"
+msgstr "卸下全部盔甲"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:114
+msgctxt "628b02e72601abd39dcba0dd5fb39503e954db84179f031fe14a2b9507684567"
+msgid "Moves worn armor into free inventory slots."
+msgstr "将身上的盔甲移入背包空槽位。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:115
+msgctxt "470013babf2c68d2341cd9ce9f5c0d8613bf52401838ed082dc0d6dbc71faea0"
+msgid "Binding delay"
+msgstr "绑定换装延迟"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:116
+msgctxt "93b8c082b67e8cbd9a16d8977aa3e4f1deac214189ca49d6fe640a80b57c605d"
+msgid "Ticks between clicks for bindings and unequipping."
+msgstr "通过绑定换装或卸下盔甲时的点击间隔，单位为游戏刻。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:117
+msgctxt "285e4201bfdb5de45965c217442c48a126b2f2a33d83f48f1a5ee19485f4eaaa"
+msgid "Binding messages"
+msgstr "绑定消息"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:118
+msgctxt "e09857a279f67e4ded0a580e5a42e0ce0e947ad2d2aacbf449f67ff728132d8f"
+msgid "Shows messages when bindings are added, removed or cleared."
+msgstr "添加、移除或清空绑定时显示消息。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:119
+msgctxt "7783e3fa575f726bd5bfe0ee57f204ce04ece22096c8d86a8432b62fa2c0d9b3"
+msgid "Show binding keys"
+msgstr "显示绑定按键"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:120
+msgctxt "8515e21773bf887d6e7db25e3d12d14023815e1006ce85976f3884c6e2eade25"
+msgid "Shows keys on bound items outside their target slots."
+msgstr "在未处于目标槽位的绑定物品上显示按键。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:121
+msgctxt "c8e89ea198a50228b1878992383d41f98c1c2e7c5c953db0f8cec3839684dd80"
+msgid "Automatic swap"
+msgstr "自动换装"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:122
+msgctxt "c3b5db5b2b07eae0f31b513a6cc80ee91ea33a5bc33062a940e0ef568306ca42"
+msgid "Automatic swap"
+msgstr "自动换装"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:122
+msgctxt "3c565791908fadbae9ba0aeb002f4d3b47214ac858f066eb505fe658809b5680"
+msgid "Automatically swaps items when poisoned or when you or a dark target have low health."
+msgstr "中毒、自身血量低或 Dark 目标血量低时，自动更换物品。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:125
+msgctxt "758dcf403e902651aa9f575447b8ff096b41fc0555b04357a7f6403d36a7acf0"
+msgid "Automatic swap messages"
+msgstr "自动换装消息"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:126
+msgctxt "03606a3ff346b24842d2b7186dc6f4fd52371fd57e9c27766567ca5c7aa98384"
+msgid "Shows why automatic swaps happened."
+msgstr "显示自动换装的原因。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:128
+msgctxt "89a70aa1cc2f4591de10e046012feff0ecf020de192a9662856d796d93c26195"
+msgid "Swap diamond armor"
+msgstr "换上钻石盔甲"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:129
+msgctxt "587a7ca08c937bad74bdfe49e1ac49c6739bb3fe2614bb2deccc115a8cd39e25"
+msgid "Equips diamond leggings and boots when poisoned."
+msgstr "中毒时换上钻石护腿和靴子。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:130
+msgctxt "ef44cd005c6fa0dbbe5e5f7d406121f5676e1a765d9eb11d48791cafa3d4fefa"
+msgid "Swap Combat Spade"
+msgstr "换上 Combat Spade"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:131
+msgctxt "40a66e04366d2b9f38bdc471db762dc11ee51583f3b294de3c4404a6b0056681"
+msgid "Moves a Combat Spade to the selected hotbar slot when poisoned."
+msgstr "中毒时将 Combat Spade 移至指定的快捷栏槽位。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:132
+msgctxt "65165ce0f36369a446b5447859cd32cb404209dbe82ef1bec4ebc616798048e0"
+msgid "Skip while wearing Venom"
+msgstr "穿着 Venom 护腿时跳过"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:133
+msgctxt "b9dbc23b9b894226e20eca154bb3cd2f58174d642896739adcb5b0a607cc0b8c"
+msgid "Skips poison swaps while wearing Combo Venom leggings."
+msgstr "穿着 Combo Venom 护腿时，跳过中毒换装。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:134
+msgctxt "505285d8e67f4125934250301155c1742678a25a4b3d8a8b9553dd20901335db"
+msgid "Combat Spade slot"
+msgstr "Combat Spade 槽位"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:135
+msgctxt "f43e098f0279485b6bc402f3e61b44ff61e78381f31aaff4175e4e56950f0cbf"
+msgid "Hotbar slot for the Combat Spade."
+msgstr "Combat Spade 使用的快捷栏槽位。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:137
+msgctxt "d506c2102a8af3bc65a7594c0b116e90fa1ea4ee36ed5d3e7e28883691a2050d"
+msgid "Use Escape Pod"
+msgstr "使用 Escape Pod"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:138
+msgctxt "e818d8cb62aa89c3653001d18419158b7b89c42d53a6a6600dc7489238f07619"
+msgid "Equips Escape Pod leggings at or below their health threshold."
+msgstr "血量不高于设定阈值时，换上 Escape Pod 护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:139
+msgctxt "2e4376aaeb23c4b114e07b2105cf803063cc488346010ceabfaa19d8229cc41b"
+msgid "Escape Pod threshold"
+msgstr "Escape Pod 血量阈值"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:140
+msgctxt "1e82f4e2958da0618f0d483993f4b92108413c163091bd4c09cc5fe19099accf"
+msgid "Health points for Escape Pod swaps. Two points equal one heart."
+msgstr "触发 Escape Pod 换装的生命值，2 点等于 1 颗心。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:142
+msgctxt "df6904e4405357a57709905c23b4ec00ed11632e0d675284280b7853498c736e"
+msgid "Use Phoenix"
+msgstr "使用 Phoenix"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:143
+msgctxt "8c23ba251543d05ea5e7dcdc1f2d5fd13c89cf7b594cc1e9515b05c35a054619"
+msgid "Equips Phoenix leggings at or below their health threshold."
+msgstr "血量不高于设定阈值时，换上 Phoenix 护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:144
+msgctxt "e06235ea13c8a381e91ee9c0cf3e065dbc38dd3618a35b240813900afae31e3f"
+msgid "Phoenix threshold"
+msgstr "Phoenix 血量阈值"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:145
+msgctxt "d675388481631efeae18a21a5bd11b8055c72cf5ce8f740e1347fd4e9e0ba0a7"
+msgid "Health points for Phoenix swaps. Two points equal one heart."
+msgstr "触发 Phoenix 换装的生命值，2 点等于 1 颗心。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:147
+msgctxt "cbc9dd8e2c7bcba71db9017a482a0090ef402379579da861b895c7102e336276"
+msgid "Prefer first"
+msgstr "优先选择"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:147
+msgctxt "5c0327743f5d539022d31518bb05743c22b7e000e307f16a8c965ea825755ee9"
+msgid "Chooses which unused enchantment to equip when both are available and eligible."
+msgstr "两种附魔均可用且满足条件时，选择优先装备哪种尚未触发的附魔。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:151
+msgctxt "c2ef7e41f5bde75d4ffb3024fcf1042c44211f5af4c38fee22041b5c5aa2cc3b"
+msgid "Prefer high Lives"
+msgstr "优先选择高寿命护腿"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:152
+msgctxt "757ad4d1fc1a2023f2162b9e42c50dcea84bb19fcf9e00ebcc537b0c3d5eac4a"
+msgid "Chooses Phoenix leggings with the most remaining Lives."
+msgstr "选择剩余寿命最多的 Phoenix 护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:153
+msgctxt "c4705f02f8c2eb1fed1f739d2f1e895492a0c81ee5bb94e2cdd0d24cd47f3a05"
+msgid "Restore leggings"
+msgstr "换回原护腿"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:177
+msgctxt "43a42c0800c4e7dd5c1ce798207d93f0411838652f8565997a2395a94f481f30"
+msgid "Restore leggings"
+msgstr "换回原护腿"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:154
+msgctxt "11dcc20c58f2e361132ad7a553e8affa964d31210cb38a119e9bc0e9753584b6"
+msgid "Restores the leggings worn before an automatic health swap."
+msgstr "换回因低血量自动换装前穿着的护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:155
+msgctxt "47c9860f42d43ec8ae030c05eed12453e9deca94b10901b7c100a58041180c4f"
+msgid "Restore mode"
+msgstr "换回模式"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:155
+msgctxt "0ee8f48affc049d51f60fc9e409ff520e6adacdd76679ff37cc1368cb11517df"
+msgid "Restores leggings after health recovers or the equipped enchantment triggers."
+msgstr "血量恢复或当前装备的附魔触发后，换回原护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:157
+msgctxt "f9e1ec732cb6d94e5851d42dd8810486042462973712315b65373fc2844e51e0"
+msgid "Health"
+msgstr "血量恢复"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:158
+msgctxt "117d576826c521f9b47e13ee7ebba55ae7c83020fb8532114690c926aecf4c80"
+msgid "Used"
+msgstr "附魔触发"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:160
+msgctxt "060132dab26e1d466aff43017c3378ccd3dc6cf1cadbe262cd622182e142bbfa"
+msgid "Restore threshold"
+msgstr "换回血量阈值"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:181
+msgctxt "a6b4f8fe3802451c845afb923e7ded6d97219aa15bee4be0d08e8edde84fb1f9"
+msgid "Restore threshold"
+msgstr "换回血量阈值"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:161
+msgctxt "223a575d9690e0049f551aa1bfaf8653681701693ac46cf07fef42db8dd6ceef"
+msgid "Health points needed to restore leggings in Health mode. Health must also exceed the trigger threshold."
+msgstr "血量恢复模式下换回原护腿所需的生命值。血量还须高于换装触发阈值。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:163
+msgctxt "c630e8cd406e5c9d977fbc7da53abeeccf3579c12b55c89cf082355ee7ea20f9"
+msgid "Dark"
+msgstr "Dark"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:164
+msgctxt "6ffaebfa38eb0d04530ae863d196034f2cbe6f4f2b7fd0daf28039df614e3dfb"
+msgid "Use dark"
+msgstr "使用 Dark"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:164
+msgctxt "e065ac720319b4d3bd663d7c17c2340ba64647a3649ac812cb971b3fa70145fc"
+msgid "Equips Somber leggings against players with low health wearing Escape Pod or Phoenix."
+msgstr "面对穿着 Escape Pod 或 Phoenix 护腿的低血量玩家时，换上 Somber 护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:167
+msgctxt "19ccf95563d3e7912c0a6720cd561e7d662bd45b6ea4d697ac1c6ea8df662464"
+msgid "Trigger mode"
+msgstr "触发模式"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:167
+msgctxt "0e05da47a70af3ffb20e0425cff55ad49994bb391ab04c071291418b797b0d3d"
+msgid "Checks the last player you attacked or all nearby players within range. Friend and enemy filters apply to both modes."
+msgstr "检查上次攻击的玩家，或范围内的所有玩家。两种模式都遵循好友和敌人的筛选设置。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:169
+msgctxt "cbe3e2b01c0e0b6f71b050f87dc9fc90c6b794847071cee982a492afb47d888f"
+msgid "Last attacked target"
+msgstr "上次攻击的目标"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:170
+msgctxt "83734a66913bdbf0167119d1f9ab4074f0a07a48683b9562412ffa2d22d8c7ab"
+msgid "Nearby players"
+msgstr "附近玩家"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:171
+msgctxt "f7cddff9402bffb7520141b39148ce6572789428db5053356cd07e6b1c3e10d7"
+msgid "Target health threshold"
+msgstr "目标血量阈值"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:172
+msgctxt "3127b9123f37c9f069907d063b27bea756a034f5b3c0a4b1048725c826329ad5"
+msgid "Equips dark when a target's health is at or below this value. Uses entity health without absorption."
+msgstr "目标血量不高于此值时，换上 Dark 护腿。血量不包含伤害吸收提供的额外生命值。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:174
+msgctxt "89f376351b2608c82b40dafaafb1a4e812d440d7fe1281175e31d703a5b1fdb2"
+msgid "Target range"
+msgstr "目标范围"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:175
+msgctxt "ea1bc310abb4b6bceed6777f5b01d366d7c519f8271043454f7d6a02bc6d2342"
+msgid "Maximum straight-line distance to targets in both trigger modes."
+msgstr "两种触发模式下与目标的最大直线距离。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:177
+msgctxt "751f80773716a632424a6d6dffa7acced1955d188b7e44b88c9fd8668862ee2d"
+msgid "Restores the leggings worn before the automatic swap when no targets in the selected mode need dark."
+msgstr "当前模式下没有需要 Dark 的目标时，换回自动换装前穿着的护腿。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:182
+msgctxt "d4c3254a1238af490c12b564d93a6da4c7883ea98324b067a8ba12d027269d9c"
+msgid "Stops tracking a recovered target at or above this value. Health must also exceed the equip threshold."
+msgstr "目标血量恢复到此值或更高时，停止跟踪。血量还须高于换装触发阈值。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:185
+msgctxt "fb9167857688514e9af98daaecf567f6c7d8f5e66889f9fc1e50944fed91fb0e"
+msgid "Skip Escape Pod players below 2 hearts"
+msgstr "跳过血量低于 2 颗心的 Escape Pod 玩家"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:186
+msgctxt "d7601470195992de025e805751773d5bbb0fffdd405df7414d62e128c90b8d23"
+msgid "Skips Escape Pod targets below 2 hearts in both trigger modes. Phoenix still qualifies."
+msgstr "两种触发模式都跳过血量低于 2 颗心的 Escape Pod 目标。Phoenix 目标仍可触发换装。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:188
+msgctxt "e01986d1a97d353b8951d83e961a32310b4282d8c6e5506af51a9ab2bebf2c28"
+msgid "Enemies only"
+msgstr "仅敌人"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:189
+msgctxt "2e1de18205e83dbc9c17304f551a947373b40b0bb97d4e0d47ba3d4e8ae1ce6c"
+msgid "Only checks players in your enemy list."
+msgstr "只检查敌人列表中的玩家。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:190
+msgctxt "fc9a972f1ea6981f013e6f82b50688a4e0ae35eb3f1460933c2a66e02652bf23"
+msgid "Ignore friends"
+msgstr "忽略好友"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:190
+msgctxt "431da181d5f8d5e2815e76f83da0ff2b73ab007c939f9ea4805ed59f60f525bd"
+msgid "Skips friends in both trigger modes. Attacking a friend keeps the previous target."
+msgstr "两种触发模式都跳过好友。攻击好友时保留原目标。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:193
+msgctxt "0cc7427a21be788ec995c0da82a708cd90b2f4257952836aab50428d01e2b501"
+msgid "Swap priority"
+msgstr "换装优先级"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:193
+msgctxt "92d0ee133d4992182efdbd30ba75d99a78b26f119f050aff9c967020cd53716c"
+msgid "Chooses between dark and your own Escape Pod or Phoenix when both are needed. Poison swaps take priority."
+msgstr "同时需要 Dark 和自身的 Escape Pod 或 Phoenix 时，选择优先换上哪种护腿。中毒换装优先。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:195
+msgctxt "b562ad18e61ec85252c6a26f589b988a1a207e50d25dead7f6028f853531ddad"
+msgid "Pod/Phoenix first"
+msgstr "优先 Pod/Phoenix"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:196
+msgctxt "c08cbc6e5e425e1b0af172aea5d897880bfa1679cda41a8262cda46f790e89a9"
+msgid "Dark first"
+msgstr "优先 Dark"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:179
+msgctxt "ded054d649c568d1d8afdc1eb2dd27562ab61b6903e91b521f03ec25746bedac"
+msgid "Unexpected error"
+msgstr "意外错误"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:200
+msgctxt "8aaf8e1f8043d5ecca056f3ae9310bb10850204f066c670f6d35f2ed8f922920"
+msgid "Inventory changed"
+msgstr "背包内容已变化"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:397
+msgctxt "b965b9e3e6a575f597def4cec7c6a3898c8600b9139467364b59c49139b54bab"
+msgid "Inventory changed"
+msgstr "背包内容已变化"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:629
+msgctxt "f66f83725cf2a6011daedbb63261d510b608edf6fa47467a656282e06b2b19c2"
+msgid "Inventory changed"
+msgstr "背包内容已变化"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:241
+msgctxt "dd24af3edfab7c73a8ba2c590c05a37755178c56cf7c5b756f4dc158ae9a0a65"
+msgid "Inventory did not open"
+msgstr "背包未打开"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:286
+msgctxt "b1aafeca79b06b8030c2f3975950e6fcd8541c00f298ec6e7881bce85ec13934"
+msgid "Server rejected the inventory click"
+msgstr "服务器拒绝了背包点击操作"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:333
+msgctxt "babd1b2a53b59458d90c7ef0fdafd76ce79d85559ab1f4b9b5ccadea3f796d46"
+msgid "Missing item: {0}"
+msgstr "找不到物品：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:661
+msgctxt "6e8a3749dbcbbf44b5494976620444a829b156d2d8d204bb4abdcc26c3345138"
+msgid "Missing item: {0}"
+msgstr "找不到物品：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:414
+msgctxt "c6e54b33f06ba11a67d0782bc455479333e3721f40b92d764cbcf8d6bb1b92ea"
+msgid "Swapped {0} with {1} due to {2}"
+msgstr "因{2}，已将 {0} 与 {1} 互换"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:419
+msgctxt "377252e760d8ae3f9780f9f13a5733c6b10589c106d0aa1012621979f3ddd19a"
+msgid "Swapped {0} with {1}"
+msgstr "已将 {0} 与 {1} 互换"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:434
+msgctxt "6e739dfb8e4779980c8ae15eaa23b5892f84782d0aa6be07c3589ea8f44223ce"
+msgid "Helmet slot"
+msgstr "头盔槽位"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:437
+msgctxt "6d3b110345b34c366b5b201e61cbe07a4f8e9db2c092af5e008d1d39d04f6676"
+msgid "Chestplate slot"
+msgstr "胸甲槽位"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:440
+msgctxt "3953ebe4ea99d8f8902749e4b3c16b1997ee5914de01940ebbaa45ec5c55d73e"
+msgid "Leggings slot"
+msgstr "护腿槽位"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:443
+msgctxt "5a91c3808d37a4926382947bd102d18efa0e7e77cfc94483d3ad5ee41d4416f5"
+msgid "Boots slot"
+msgstr "靴子槽位"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:447
+msgctxt "28a8edb0c0f39d76d7af6a9f54ada866792c7ca908f22c9dcfb1649c538ab51a"
+msgid "Hotbar slot {0}"
+msgstr "快捷栏槽位 {0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:448
+msgctxt "8c8781bdaadf429abfe2e7fa20f4c405f13b52d0f3cfba97f2540d80bb9ae079"
+msgid "Inventory slot {0}"
+msgstr "背包槽位 {0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:482
+msgctxt "bbfe346dd0a0ba1dc9b0092d7ba38d16070700b83be34a8bda9a2889b0d3e361"
+msgid "Swap failed: {0}"
+msgstr "换装失败：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:500
+msgctxt "788c893465a2d210c93cf7713c4a0b42559b8c66c4884cf9339d04cb2ae3d72a"
+msgid "Armor could not be equipped"
+msgstr "无法装备盔甲"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:643
+msgctxt "36d07bad0f39f908cbe6b79a3a46c7f4b7f01b2c110eb337d398844eb6119fa5"
+msgid "Armor could not be equipped"
+msgstr "无法装备盔甲"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:539
+msgctxt "7541a898370237eb0c87956ee9e45d79f556dacd60ccf898f854e4680f0bfb1a"
+msgid "Inventory could not be closed"
+msgstr "无法关闭背包"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:620
+msgctxt "4f22d6f7d7ae1a85585a2f74bc4da723bbd3c5b716b8776cc0b1f9feb4e7a69e"
+msgid "Armor could not be moved to the inventory"
+msgstr "无法将盔甲移入背包"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:687
+msgctxt "f5ff6e4f37ee9bd3e8da17b2dd6ac96d34f328952cc35787a0a6433521a1622e"
+msgid "Armor could not be moved to the inventory"
+msgstr "无法将盔甲移入背包"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:622
+msgctxt "0aaf198ad1279891352493e6b36f225276a312971ca3f1f0a3d9efdcdcedeb50"
+msgid "Not enough inventory space to unequip armor"
+msgstr "背包空间不足，无法卸下盔甲"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:638
+msgctxt "5f66f2e5be95fcdb6570a139439873ea5357bc1a2386c9cfab4a8696f1e50597"
+msgid "Transfer slot changed"
+msgstr "中转槽位内容已变化"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:653
+msgctxt "a86eddb5a6fc43198f42b659c621f7cbaf9e8cd197c92d632d5bb54faf2a500a"
+msgid "Transfer slot changed"
+msgstr "中转槽位内容已变化"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:669
+msgctxt "d0e08d48dcea79098b8ef62de1d0dd9aeff4c31dbaf36d87fe4fcf8fc7705b83"
+msgid "Item does not fit: {0}"
+msgstr "物品无法放入目标槽位：{0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:711
+msgctxt "e6fab417231cad9a4ce9c8a813f032ce557dce33ab0a5799d1c9c0de7fd081e9"
+msgid "Not enough inventory space for {0}"
+msgstr "背包空间不足，无法放入 {0}"
+
+#: src/main/java/pit12/feature/swap/SwapController.java:736
+msgctxt "e67cffe4ee1c43cbfadbfc6c16872bf66804f272d3e18ae3ba1459015343c92d"
+msgid "Item could not be swapped: {0}"
+msgstr "无法更换物品：{0}"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:34
+msgctxt "00b79bd0491cd16cb403321c393fd288692fe438905dc31a6c512130790c2aa7"
+msgid "Held Item Tooltip"
+msgstr "手持物品提示"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:36
+msgctxt "b4c94a43cee74f09f047735a71c438f2a2d9b4d0874bd9b4d96fe8c4e880981b"
+msgid "Customizes the held item tooltip above the hotbar."
+msgstr "自定义快捷栏上方的手持物品提示。"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:38
+msgctxt "37e830eb3295582e461186574bd24def721a1e6febab1c596d5c7399726efb32"
+msgid "Show enchantments instead of item name"
+msgstr "用附魔替代物品名称"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:39
+msgctxt "517870210770f12761732168ec47ba72dba674c0e4c8a68dea4535859686d322"
+msgid "Replaces the held item name with known Pit enchantments."
+msgstr "用已识别的 Pit 附魔替代手持物品名称。"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:42
+msgctxt "ea53840f7328a396b2dbd944ae0df25202c2b43a9c809874c8442f5953580702"
+msgid "Move tooltip upward"
+msgstr "提示上移"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:43
+msgctxt "4d3e3348a696d73a5cef50212da195b13daa54033f15dfd6a21c9e53a60185c6"
+msgid "Moves the held item tooltip upward by this many pixels."
+msgstr "手持物品提示向上移动的像素数。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:40
+msgctxt "b24f5ce5bb56fc71b492da4d76312801aec09cf32819410507b9e68377098c3f"
+msgid "Settings"
+msgstr "设置"
+
+#: web-ui/src/App.vue:161:14
+msgctxt "d5c4b5fafe5a85b8ae5e5a253b3c510ff7df9b69231241e3fea9e070ed183524"
+msgid "Settings"
+msgstr "设置"
+
+#: web-ui/src/SettingsPage.vue:63:12
+msgctxt "b0aa75791a087476ce51164d30466515af9e00a9e2eed01f1afc288990491e42"
+msgid "Settings"
+msgstr "设置"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:41
+msgctxt "f2bd9cb3c2fc15da382c2e9215fe13c5f3fe97ad56dfb9ed56e4a53d809c5c3e"
+msgid "Interface"
+msgstr "界面"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:48
+msgctxt "ab88dd8515c9ea4b583e11b128be454432d939be49528b064fa91c5bc5a42aef"
+msgid "Language"
+msgstr "语言"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:49
+msgctxt "ef7e483cb2e4dda92c27f4842191cfc143430d11cf0e79fe2fff9d2921702efb"
+msgid "Sets the language for the interface, commands, and HUD."
+msgstr "设置界面、命令回显和 HUD 的语言。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:50
+msgctxt "2cb77ea8b35d988101f89ea82505611259aab0819835d406aadd64bb28897c17"
+msgid "Accent color"
+msgstr "主题色"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:50
+msgctxt "aa3127a9e72dfed5ac9405d63b6a9843d9070416c818e1fd5a3b606ca1ccf410"
+msgid "Controls the interface accent."
+msgstr "设置界面的主题色。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:52
+msgctxt "cd788ad63d6065632aabe0ee1db3e6a23e00a5940c2fab1a75d23777c7cb132e"
+msgid "Show details"
+msgstr "显示详细说明"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:53
+msgctxt "5a9e8e968e9912235d392a8805ed12a60dacabcd0ca23f8fb9d0b89a7c85e887"
+msgid "Shows descriptions for features and settings."
+msgstr "显示功能和设置的说明。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:54
+msgctxt "40a40462ba4e27e92c8dc63beddae66b9123ceee53e533e63d0181edd44ccb85"
+msgid "Discord RPC"
+msgstr "Discord RPC"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:55
+msgctxt "6696f1f73b67cafe0733559e3244b3afc46188138e2ee2a85c925d8af2570c13"
+msgid "Shows 12pit and elapsed time on your Discord profile."
+msgstr "在 Discord 个人资料中显示 12pit 和本次使用时长。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:56
+msgctxt "5ef4e796a3c21e92297602492d7e102def85f1d8dc5135a78e3d6f2f55be6227"
+msgid "Interface key"
+msgstr "界面快捷键"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:57
+msgctxt "4b70ac5bf41d6e61406c21e9ed2496c92c813438372a9b630ec08062454a5511"
+msgid "Opens the HUD editor. Press again with no HUD selected to open settings."
+msgstr "打开 HUD 编辑器。未选中 HUD 时，再按一次即可打开设置。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:59
+msgctxt "e0f7b8e0ee8cc5b2a5300e7c990d032f70ce5f9ddc66c1f71322a522ca3b1bb0"
+msgid "HUD editor hint"
+msgstr "HUD 编辑器提示"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:60
+msgctxt "d7da78fe05b913d3edaa9c3a091b02499ae11e3b724a92645194f880f3ac75b8"
+msgid "Shows how to open the Web UI from the HUD editor."
+msgstr "显示从 HUD 编辑器打开网页界面的方法。"
+
+#: src/main/java/pit12/feature/webui/WebUiPreferences.java:106
+msgctxt "041b914b0016f1a22d79a329c3b3e3d75b0fb23da4a779baa859fbc16c97f19f"
+msgid "Could not load Web UI settings"
+msgstr "无法加载网页界面设置"
+
+#: src/main/java/pit12/feature/webui/WebUiPreferences.java:113
+msgctxt "f30a363b703fc33af2543f8e620a92db1598a8af668188b69f0ce5836665a5e9"
+msgid "Could not load Web UI settings"
+msgstr "无法加载网页界面设置"
+
+#: src/main/java/pit12/feature/webui/WebUiPreferences.java:286
+msgctxt "8a9d00ba75ed6e76ca7de398037edae49f5a7968493d5df43d4f239a0d1aef8a"
+msgid "Could not save Web UI settings"
+msgstr "无法保存网页界面设置"
+
+#: src/main/java/pit12/feature/webui/WebUiServer.java:260
+msgctxt "5ee77cea9332b36d1fa4e3fb5624f579b9bf7bec6791861ced00bc05246345e6"
+msgid "Web UI settings are unavailable"
+msgstr "网页界面设置不可用"
+
+#: src/main/java/pit12/runtime/command/CommandRegistry.java:43
+msgctxt "b48fd8b808e8433c4984cfb988b255c97345b6f4aa3c70746d04ce13feda0656"
+msgid "12pit commands"
+msgstr "12pit 命令"
+
+#: src/main/java/pit12/runtime/command/CommandRegistry.java:105
+msgctxt "fb0dece935b3f5924eb28a77daf0e96aeb2c9e892a2ca3e4c4b8a37cd15c36a0"
+msgid "Commands are unavailable"
+msgstr "命令不可用"
+
+#: src/main/java/pit12/runtime/command/CommandRegistry.java:133
+msgctxt "11101db398b6fb5fa0d37270a8c0f2841f7e2dca153c22de56fbb0f99925d180"
+msgid "Unknown command: {0}"
+msgstr "未知命令：{0}"
+
+#: src/main/java/pit12/runtime/command/CommandRegistry.java:137
+msgctxt "2e28bd9c4c2659dd7775485e5bfe9902b60f55a4dfc515eb1c9e49e5acc9c482"
+msgid "Usage: {0}"
+msgstr "用法：{0}"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:72
+msgctxt "52727df33096f7b1d8c234f425fffc929c0d86727cabb501dcd7cae3ad4a04ed"
+msgid "Enabled"
+msgstr "启用"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:73
+msgctxt "d518a75780991bcd15b9f9e53277171c3904755eb2c74dc6f2f66b8500741521"
+msgid "Turns this feature on."
+msgstr "开启此功能。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:148
+msgctxt "e7938bb520590972c84540255bb68d33d7e4beaafb50dafeff9210a252398a36"
+msgid "HUD"
+msgstr "HUD"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:191
+msgctxt "5f0da8d0282b9e5505d7a5cd4bcbd54061f6e4526bba7253c0914da3d27e3c8e"
+msgid "HUD"
+msgstr "HUD"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:155
+msgctxt "d7eb389cdc688f0a65e69243d0c939bcbff43f53a5236b1fed2843e9918e8d0c"
+msgid "Text shadow"
+msgstr "文字阴影"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:156
+msgctxt "90bcdfc021e347ca88bb6d37ab3f0a88df338380df38de614a18fba44a1f9f36"
+msgid "Draws a shadow behind HUD text."
+msgstr "在 HUD 文字后绘制阴影。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:158
+msgctxt "53ecf6c5132feb6dc65921e2007cc1a799272e3f51d0d6949755b3c2fe26ae69"
+msgid "Use monospace font"
+msgstr "使用等宽字体"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:159
+msgctxt "554def813bce0189e6ff1d6c6a8e0612317c66d6f975a3126e59c13dda8b9a45"
+msgid "Uses the bundled Monocraft font for HUD text."
+msgstr "HUD 文字使用内置的 Monocraft 字体。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:161
+msgctxt "2b238215e6156929bf905cb655997125febe2a6d5eabc95e23f58d4caf3d4b97"
+msgid "Translate text"
+msgstr "翻译文字"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:162
+msgctxt "dcc688219fa15ca06913f684661949ad928507c285d3c27b1d14863dbdea97a1"
+msgid "Translates HUD text into the selected language."
+msgstr "将 HUD 文字翻译为所选语言。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:163
+msgctxt "376e975a89e41f9a9aced4115cdd8bde6a43484cfcd2e88b6ef7dafb49d0cc84"
+msgid "Anchor"
+msgstr "锚点"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:175
+msgctxt "a2fc9565d74fc390ff4ae9f8bf33ab42ca4d04e0e1f918b6f171f9808a8e19a5"
+msgid "Anchor"
+msgstr "锚点"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:164
+msgctxt "82b0dd36e79701e237b3b92884da150e2cba7457c9a15fb2315b2c534565ecc1"
+msgid "Auto chooses an anchor when the HUD is moved."
+msgstr "选择自动时，移动 HUD 会自动确定锚点。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:165
+msgctxt "098040db56cf64fa4a3b4ae2ffe1a488f8a8ac08347d0bc3f56239ed1f87d6fd"
+msgid "Auto"
+msgstr "自动"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:166
+msgctxt "dc324eb963d8363f3d03428da81c6876d11be2995012196814141de8bf7e83dd"
+msgid "Top left"
+msgstr "左上"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:167
+msgctxt "de40b6e605dfd03934857244e79f6ebd5920afb2e2ed6f66688f93d80d9c1795"
+msgid "Top center"
+msgstr "顶部居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:168
+msgctxt "a7f41a1573502561ad5237e9c1d82ff1f05abe127b03a567da4bcb32c0bedb15"
+msgid "Top right"
+msgstr "右上"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:169
+msgctxt "b2b673232c5253ad7c0adb199870193f57a4cc2dc357a5b485ce164f779f4aa7"
+msgid "Center left"
+msgstr "左侧居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:170
+msgctxt "52ed8bf1ac6a8ec0bada3e61d01382ecbcbc8f5ee1d20ebe44d710d62e65b077"
+msgid "Center"
+msgstr "居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:171
+msgctxt "b6659523e908c8234a61d1d772162e2d3a3ee185dca6e30bd3e029b2c9748162"
+msgid "Center right"
+msgstr "右侧居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:172
+msgctxt "021540cc2ef0a3eb6a43f1a2ee2d0161de1f87004d69c2beed40fe81cc30354e"
+msgid "Bottom left"
+msgstr "左下"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:173
+msgctxt "af92dd3691206b5862eba6b2ef85cb71a92d7d9e4c323e4e36ce79fad8204cfb"
+msgid "Bottom center"
+msgstr "底部居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:174
+msgctxt "341f17c96c76cc2c93505fb1bdad000c937da13476654eea8daf7021ae991038"
+msgid "Bottom right"
+msgstr "右下"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:176
+msgctxt "458be2c8dd498a5c7950815cb28223f07678ef707488a34a25e32168a48ef1a0"
+msgid "Stores the anchor chosen by Auto."
+msgstr "保存自动确定的锚点。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:178
+msgctxt "e093e4386b62d6149fa22871f502fcdb41d2aa5ef61082dccae5d6cd81e8d56b"
+msgid "Horizontal offset"
+msgstr "水平偏移"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:178
+msgctxt "10760ebefb51cc286ed02ecc4a50085315cc0647a6977c8beefcd58bf6dbb944"
+msgid "Offset from the anchor, in GUI pixels."
+msgstr "相对锚点的偏移量，单位为界面像素。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:181
+msgctxt "9be02b78a572c9a793902aae0139447117a3c199032e2e97df4396a76438f10e"
+msgid "Offset from the anchor, in GUI pixels."
+msgstr "相对锚点的偏移量，单位为界面像素。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
+msgctxt "deedfebd2e96b7ac3ea31d1b5e31fc6498f1d9eb23e2c2c8453f44c04b235b11"
+msgid "Vertical offset"
+msgstr "垂直偏移"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:182
+msgctxt "2872993b09394eda7354b805809449274cf6386241db61fb0456bc3ad5f6604a"
+msgid "Scale"
+msgstr "缩放"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
+msgctxt "ac4e94b9a6b1e02869971e7260869be75c080fc3146a637d23c9953c6769927b"
+msgid "HUD size, in percent."
+msgstr "HUD 大小，单位为百分比。"
+
+#: web-ui/src/api.ts:120:56
+msgctxt "17163bee7ab1a60274d780bcd2a098bc42ce0c457d2d6c72fddf3542ef3c8031"
+msgid "Request failed"
+msgstr "请求失败"
+
+#: web-ui/src/useWebUiState.ts:84:60
+msgctxt "16a3b3a1c61eb96305823e8f1b9711f59e3da6faf902680f57d7f498ee90269c"
+msgid "Request failed"
+msgstr "请求失败"
+
+#: web-ui/src/App.vue:130:22
+msgctxt "4974b97720c6e9f25d1e2a7aef172a499e1801404e2adb94b9ab81fb82f965a6"
+msgid "Pages"
+msgstr "页面"
+
+#: web-ui/src/App.vue:139:14
+msgctxt "787f962f60573063f302d3f8b06cae3c024496616b0a0b827b81c940b5b76766"
+msgid "Features"
+msgstr "功能"
+
+#: web-ui/src/FeaturesPage.vue:133:14
+msgctxt "1970973108994d594c0d4d4dd8ec99cbae10d19a301bbbb939dfb0b1e2f45d96"
+msgid "Features"
+msgstr "功能"
+
+#: web-ui/src/FeaturesPage.vue:200:16
+msgctxt "831a8f05b601b395b081c73763d5e806c53456c882b4f8f71cf1bae7d101241a"
+msgid "Features"
+msgstr "功能"
+
+#: web-ui/src/App.vue:146:14
+msgctxt "8f19cb768b24a4bf3e805bb6aa71a5bc110ca72990471264a24f2008c4aacbce"
+msgid "Profiles"
+msgstr "配置方案"
+
+#: web-ui/src/ProfilesPage.vue:156:12
+msgctxt "5ec50e51b57e01a43d5d5acd74530a3498c0a6ff686ce63b9d07dfd55993b105"
+msgid "Profiles"
+msgstr "配置方案"
+
+#: web-ui/src/TransferDialog.vue:382:20
+msgctxt "ed4abf94da454401800355641645a0d25a9717efdde879fbc68c158a06caa564"
+msgid "Profiles"
+msgstr "配置方案"
+
+#: web-ui/src/App.vue:153:14
+msgctxt "b7b2e10aa55e577144c67de22781abed2f51db3473bc132e6f6166acdf6aa8e5"
+msgid "Relations"
+msgstr "玩家关系"
+
+#: web-ui/src/RelationsPage.vue:249:12
+msgctxt "ca307e804e44f44a8737f3b210a97bf58aef3a113df1df25a21752cadc5e815e"
+msgid "Relations"
+msgstr "玩家关系"
+
+#: web-ui/src/TransferDialog.vue:431:20
+msgctxt "7d99d9e548b127705a2cef5e30201ed9762e185aa70891ca41adb799c4678d17"
+msgid "Relations"
+msgstr "玩家关系"
+
+#: web-ui/src/App.vue:263:21
+msgctxt "f59d59413ad1cce55d424b86a61ca81a08ad0a7bede299a5da8da91137e98c6b"
+msgid "Dismiss error"
+msgstr "关闭错误提示"
+
+#: web-ui/src/ColorPicker.vue:167:22
+msgctxt "e5f00e902f70c4d3703dbf00737dbaa6e119b060a70b141e65871bd040239f54"
+msgid "Saturation and brightness"
+msgstr "饱和度与亮度"
+
+#: web-ui/src/ColorPicker.vue:182:24
+msgctxt "5d47ffae396e46d37a11c76404cf417778e0cac78eede84ad99cb2921dc492e7"
+msgid "Saturation"
+msgstr "饱和度"
+
+#: web-ui/src/ColorPicker.vue:194:24
+msgctxt "7a6abe931919467cdbc9f6ed794b38577692af167f73e0a8371c37563cc8537b"
+msgid "Brightness"
+msgstr "亮度"
+
+#: web-ui/src/ColorPicker.vue:205:18
+msgctxt "1e0bbbeb28f7326c9ac76efb6cdca8723db4cee12c789a57cb5bcb82fa0c87d5"
+msgid "Hue"
+msgstr "色相"
+
+#: web-ui/src/ColorPicker.vue:209:24
+msgctxt "e38c18282d1a382c6f61508cc28013baf2f2fc810cfd820389ef022e2ff776a9"
+msgid "Hue"
+msgstr "色相"
+
+#: web-ui/src/ColorPicker.vue:220:18
+msgctxt "5e495dafda5f6ac7ba68d22163a0f3522fdce35d4c8e6bbe6ab16dfe0cbbf861"
+msgid "Opacity"
+msgstr "不透明度"
+
+#: web-ui/src/ColorPicker.vue:224:24
+msgctxt "6168e942b5b4daad21a976ca6dc02f4157c4d6b73cebd430bbc6bb197aabc2ec"
+msgid "Opacity"
+msgstr "不透明度"
+
+#: web-ui/src/ColorPicker.vue:239:22
+msgctxt "2ebc1717d85c373efecc4629be91799da2c982b29dea7216dc6cf7972c0cfdd7"
+msgid "Color format"
+msgstr "颜色格式"
+
+#: web-ui/src/ColorPicker.vue:268:9
+msgctxt "b1d6032cc2cb07febe69ae1905b5f0f27bc347065f2a4c2a8f5ec60159dfabde"
+msgid "Enter a valid Hex, RGBA or HSLA color."
+msgstr "请输入有效的 Hex、RGBA 或 HSLA 颜色。"
+
+#: web-ui/src/FeaturesPage.vue:81:11
+msgctxt "18cf83178d3ce664da289eba64739346c3e1108110efe48ebbc604f8a7c5db8a"
+msgid "All"
+msgstr "全部"
+
+#: web-ui/src/FeaturesPage.vue:134:45
+msgctxt "a867c6b2ad8cfb43131de9c9920b9fdef8e0798a7780405717ab954e73e6df97"
+msgid "Search features"
+msgstr "搜索功能"
+
+#: web-ui/src/FeaturesPage.vue:136:61
+msgctxt "9bb9e80e724bccd7c5b0a20f6b0f2f378272ea2d500128f1b0708e5812f050f5"
+msgid "Category"
+msgstr "分类"
+
+#: web-ui/src/FeaturesPage.vue:171:26
+msgctxt "01390cd0806fbc83773e9cb00fc952ca653db1e3577cd220a0cafc2c87969351"
+msgid "Favorite {0}"
+msgstr "收藏 {0}"
+
+#: web-ui/src/FeaturesPage.vue:175:26
+msgctxt "06eafe3e5f4d3636ac81d5fa09746515f48348ae4e4543484b59a1461ad92cc4"
+msgid "Remove from favorites"
+msgstr "取消收藏"
+
+#: web-ui/src/FeaturesPage.vue:175:55
+msgctxt "dd8b65244a8e3faf87c5204a494d36dd285ce10a0dccd39d554193bc45db59b1"
+msgid "Add to favorites"
+msgstr "添加收藏"
+
+#: web-ui/src/FeaturesPage.vue:184:21
+msgctxt "426b84d8eae5d51599d19e48f9e306f39b43708f918ceba0cdccb54eb653aee7"
+msgid "Enable {0}"
+msgstr "启用 {0}"
+
+#: web-ui/src/FeaturesPage.vue:190:14
+msgctxt "99451b821ac4d8f7eadc164d96cba6f7702fe6aba28397110b41a0225b8ec3cc"
+msgid "No matching features."
+msgstr "没有匹配的功能。"
+
+#: web-ui/src/FeaturesPage.vue:196:61
+msgctxt "351047fc67116cd36f3840024d7d76d10e603cc48fd613b0ad97133d074d3024"
+msgid "Breadcrumb"
+msgstr "导航路径"
+
+#: web-ui/src/FeaturesPage.vue:218:20
+msgctxt "ca2517aafa9815b23a89a739e2e549aae13b0b11bafe50d50d6f96a58424aad9"
+msgid "Subcategory"
+msgstr "子分类"
+
+#: web-ui/src/languages.ts:34:43
+msgctxt "b4c8c3296720d3739159a265fb38a9ce77353681696e50132cf999003ee19042"
+msgid "Could not load language"
+msgstr "无法加载语言"
+
+#: web-ui/src/PageScrollbar.vue:136:18
+msgctxt "7c4e8e945ed98d27035116eb43a1c84cb36035395ef043a2a5717cb400f9d195"
+msgid "Page scroll"
+msgstr "页面滚动"
+
+#: web-ui/src/ProfilesPage.vue:167:25
+msgctxt "5db71e2bcd3399e108078a84c3d92f775a63cd37346b0353df567f4f369f11ea"
+msgid "Profile name"
+msgstr "配置方案名称"
+
+#: web-ui/src/ProfilesPage.vue:256:26
+msgctxt "23285a263aedbff2cfba59041c0d172dc55cb9d6042b3b1c94998b1c17da6ffe"
+msgid "Profile name"
+msgstr "配置方案名称"
+
+#: web-ui/src/ProfilesPage.vue:168:24
+msgctxt "f42b092f41d82476c80e57ab4a86456726686b798930c6fa06485145fa725241"
+msgid "New profile name"
+msgstr "新配置方案名称"
+
+#: web-ui/src/ProfilesPage.vue:191:17
+msgctxt "d87d9d82f626a3eab53381c268c23b808b162d9a66d5784e7b20944da9e9207c"
+msgid "New profile"
+msgstr "新建配置方案"
+
+#: web-ui/src/ProfilesPage.vue:196:17
+msgctxt "aac62592b98946f385d88e3136db7e0b70ad3197f560b815f8bc8d9246f72669"
+msgid "Create"
+msgstr "创建"
+
+#: web-ui/src/ProfilesPage.vue:203:8
+msgctxt "b05caa9ab243c00dd4107414fff90c603db1a55da2dea63394a815fea9d2886d"
+msgid "Loading profiles..."
+msgstr "正在加载配置方案…"
+
+#: web-ui/src/ProfilesPage.vue:227:17
+msgctxt "38203a23d7a84b9f10839a3d31b90a5aa39d0a99bc90a825cccda2d7b7890617"
+msgid "Delete"
+msgstr "删除"
+
+#: web-ui/src/ProfilesPage.vue:247:18
+msgctxt "d720cdbd93792ac0d0d5bd00d8a63fae028b402f4ca5b5d5f1dc355bce7a7609"
+msgid "Delete"
+msgstr "删除"
+
+#: web-ui/src/ProfilesPage.vue:238:18
+msgctxt "ed7847a5e7ae069e41b97026dd4ea0346532408c7853eefb798af5927d62ef22"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/RelationsPage.vue:337:22
+msgctxt "3a401106accf97138aedce52ca2ca8fac97b3e0195a091a1635c9bf7d42f3ead"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/RelationsPage.vue:485:20
+msgctxt "202bc255f446cb1ad422b23839319aed23765193bf2a9cf3cff81fe8f4f38bea"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/TransferDialog.vue:579:14
+msgctxt "e7aa538f95e05d744034a458a679b71f99ef118a91060fbd81cde9d4adf55655"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/ProfilesPage.vue:265:28
+msgctxt "5e601ef4894dd48d563972f455d23025d20b46b688cf6ee6e923c96bd969d4bd"
+msgid "Save name"
+msgstr "保存名称"
+
+#: web-ui/src/ProfilesPage.vue:266:23
+msgctxt "36807e65a2bbc74df67dd4ae7141ab00ca400252d76995739c3b4b82cd7b2ece"
+msgid "Save name"
+msgstr "保存名称"
+
+#: web-ui/src/ProfilesPage.vue:273:28
+msgctxt "b8d2884836cdf245ec2d1490ad8a1f1e604080b01aeb8ebcf351337a418fda7b"
+msgid "Cancel rename"
+msgstr "取消重命名"
+
+#: web-ui/src/ProfilesPage.vue:274:23
+msgctxt "29af909f7891341e76a85fd8d8efc289afc64f8479414ca7a123dae5f2185983"
+msgid "Cancel rename"
+msgstr "取消重命名"
+
+#: web-ui/src/ProfilesPage.vue:300:20
+msgctxt "2d638000bcc45c63f6d2fd60df1a0bdd45eb8e32a93fb07be6709e207b4f1c15"
+msgid "Switch"
+msgstr "切换"
+
+#: web-ui/src/ProfilesPage.vue:306:28
+msgctxt "2b99a82e501ab82ca0d22a9515f5ec45582efd99c27ec52154911324f526b012"
+msgid "Rename {0}"
+msgstr "重命名 {0}"
+
+#: web-ui/src/ProfilesPage.vue:307:23
+msgctxt "2117e9afa34103be70f83897cba0b6bdf6fc531a1964eb82c7aa32a852886d09"
+msgid "Rename {0}"
+msgstr "重命名 {0}"
+
+#: web-ui/src/ProfilesPage.vue:316:21
+msgctxt "dfc8b8e0ab4ea0a957ad37c49a75bcc8b98662707182dac375501e95c53cc97e"
+msgid "The active profile cannot be deleted"
+msgstr "无法删除当前使用的配置方案"
+
+#: web-ui/src/ProfilesPage.vue:325:23
+msgctxt "345cbb6689d831d59903502ca407745da64bbfd1407ee11e93c6c24e218bc4a8"
+msgid "Cannot delete active profile"
+msgstr "无法删除当前使用的配置方案"
+
+#: web-ui/src/ProfilesPage.vue:326:23
+msgctxt "285d0c7282511d0922978b2549ae407e7f5a6415d7178796fd402cdd120f4976"
+msgid "Delete {0}"
+msgstr "删除 {0}"
+
+#: web-ui/src/ProfilesPage.vue:331:23
+msgctxt "245dc6342d1a8afa15c29fffe72e1f930dbde156201ee88b1de09047fab76391"
+msgid "Delete {0}"
+msgstr "删除 {0}"
+
+#: web-ui/src/ProfilesPage.vue:343:10
+msgctxt "0af751dd4ab81a51a405a00d7958c3d4df4e14d5614f20f5b6e8dc770b72c69d"
+msgid "No profiles."
+msgstr "暂无配置方案。"
+
+#: web-ui/src/RelationsPage.vue:257:20
+msgctxt "64955884f093fd4376d10a5d0c782569b3cf6a46d89be1a7ef259e4f33b349fc"
+msgid "Relation type"
+msgstr "关系类型"
+
+#: web-ui/src/RelationsPage.vue:275:45
+msgctxt "2531f04347880708d05e12b1ff74256b94ae99db94b5ff8c7e98dfd6a18fada8"
+msgid "Search MC ID or UUID"
+msgstr "搜索 MC ID 或 UUID"
+
+#: web-ui/src/RelationsPage.vue:288:15
+msgctxt "80ce766f168ebd449ea9e6eeb1cdbc91ca3941483a49385294dc83a4563f2282"
+msgid "Add players"
+msgstr "添加玩家"
+
+#: web-ui/src/RelationsPage.vue:401:21
+msgctxt "a22640cd325572a17a8cf18efb47c3c61dc347a11288647d71f7bcb75e08b22d"
+msgid "Add players"
+msgstr "添加玩家"
+
+#: web-ui/src/RelationsPage.vue:291:15
+msgctxt "4812cd1515c77432bd7368b443170a72c9cb8ed664be36b86f081edb40e8c20c"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/SettingsPage.vue:114:22
+msgctxt "bc5acf65da405255ec8bdc35c5be5f0812bde986b561000b094906b234a8078b"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/SettingsPage.vue:115:17
+msgctxt "2f980cdcd192bedf4c7abd4e21471c42e354ce40696ecd318df0aa1f603b785b"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/TransferDialog.vue:308:24
+msgctxt "f3b4341f56d2dd2062b1eeec32f4ad9a7a0eacbc3513f1f2038b4a87e94ec322"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/TransferDialog.vue:309:19
+msgctxt "ef0b7b337ec2b1bb37547000159411c3aca891c4ad982eafe3992dcceebfb913"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/RelationsPage.vue:297:13
+msgctxt "9dc279698766179675cef85a87e607ebd2d8ca2fdd8c14248b89348337b7d5d1"
+msgid "{0} selected"
+msgstr "已选择 {0} 人"
+
+#: web-ui/src/RelationsPage.vue:302:26
+msgctxt "f82fb2b9d2e118b7355ef4bdd451c6e32ed8e6aab486e88fd51db4f06bbb2123"
+msgid "Clear selection"
+msgstr "清空选择"
+
+#: web-ui/src/RelationsPage.vue:303:21
+msgctxt "60e421954fa6909626a3a398f954bd5a1466ce1052485c7497c7439ffdb72701"
+msgid "Clear selection"
+msgstr "清空选择"
+
+#: web-ui/src/RelationsPage.vue:316:17
+msgctxt "4e42904cd35c08e1b8186a0026f4fc89d0ed0c220bc78ea22290c122f113af41"
+msgid "Remove {0} selected players"
+msgstr "移除选中的 {0} 名玩家"
+
+#: web-ui/src/RelationsPage.vue:320:21
+msgctxt "14ef6f442887ffb5d65433dc3ad246502600ee757a3ab064b3234d38b1f44a1a"
+msgid "Select at most 100 players"
+msgstr "最多选择 100 名玩家"
+
+#: web-ui/src/RelationsPage.vue:321:21
+msgctxt "c21943396b6389abb8bf9dcde7d8e01577a91581bea0b6ab77aea87c706bf7e5"
+msgid "Remove selected players"
+msgstr "移除所选玩家"
+
+#: web-ui/src/RelationsPage.vue:329:20
+msgctxt "48c7557e613c153eac6acd3daafc12191cc4027673b54450ec695a254a35b046"
+msgid "Remove {0} selected players?"
+msgstr "移除选中的 {0} 名玩家？"
+
+#: web-ui/src/RelationsPage.vue:345:22
+msgctxt "62df5c5e627e21d3e7d3b3cf4d6213637cdbda60c46584b855a2d112c454568e"
+msgid "Remove"
+msgstr "移除"
+
+#: web-ui/src/RelationsPage.vue:493:20
+msgctxt "e03e9eebc88cd18c79dac29666cdb22ad87a4baf5b231d2a16417fff4525d2d1"
+msgid "Remove"
+msgstr "移除"
+
+#: web-ui/src/RelationsPage.vue:362:38
+msgctxt "37ea1fc27e3dea95a6c378d2272727fd81d63cab24e9622acec49fc21296f769"
+msgid "Add friends"
+msgstr "添加好友"
+
+#: web-ui/src/RelationsPage.vue:362:57
+msgctxt "d04aa3309c88238715c29e45de02f3ecd7ba9d1b5dababdc11fa06d005b73b23"
+msgid "Add enemies"
+msgstr "添加敌人"
+
+#: web-ui/src/RelationsPage.vue:368:25
+msgctxt "a27f5b0c4851cd743dd4c321b94f22189e3599b476f89d38f7215abb5cf3aff8"
+msgid "MC IDs, separated by commas or new lines"
+msgstr "MC ID，以逗号或换行分隔"
+
+#: web-ui/src/RelationsPage.vue:374:14
+msgctxt "ceb5c45c5f8d0dc6dbeb1d229fdb7f17f6c46d60d34da8cc65665f9e3a490de7"
+msgid "Invalid MC IDs:"
+msgstr "无效的 MC ID："
+
+#: web-ui/src/RelationsPage.vue:378:17
+msgctxt "9d0e5c46f30bce725a703460d9ca0dd1ac702c6078f48e17280253170113442b"
+msgid " and {0} more"
+msgstr "，另有 {0} 个"
+
+#: web-ui/src/RelationsPage.vue:383:14
+msgctxt "7fcbbbc37e7cf83c1b95df52549f3c2b8ebca46f351a8a41e479a5dad57d31c0"
+msgid "Add at most 100 players at a time."
+msgstr "每次最多添加 100 名玩家。"
+
+#: web-ui/src/RelationsPage.vue:387:13
+msgctxt "8119790eaf8991dd9ff061ac597b010b2520171b7ce7fd43fb3c6b95dd1a9d3e"
+msgid "{0} ready to add"
+msgstr "{0} 名玩家待添加"
+
+#: web-ui/src/RelationsPage.vue:398:19
+msgctxt "579a2b129ddd95fced52d0796851d508d345249480b585857e1e72b71b84f615"
+msgid "Add player"
+msgstr "添加玩家"
+
+#: web-ui/src/RelationsPage.vue:400:21
+msgctxt "583a8fba996a2ce0a0b0fef69c38aa5e034d1212f9f3cf77426a1e8dc6b85124"
+msgid "Add {0} players"
+msgstr "添加 {0} 名玩家"
+
+#: web-ui/src/RelationsPage.vue:410:23
+msgctxt "06312451251a1ba931eba13e9c8d585314f323f36c14c672616d7242199e9dd5"
+msgid "Dismiss errors"
+msgstr "关闭错误提示"
+
+#: web-ui/src/RelationsPage.vue:413:18
+msgctxt "46df9bfdc1693e42c7cd74cef899b5e551961f38dd04595eb0320d9818ac843a"
+msgid "Some players could not be updated."
+msgstr "部分玩家信息无法更新。"
+
+#: web-ui/src/RelationsPage.vue:428:19
+msgctxt "6a3dafeda907ddf80dbd47aabcb535a705ad8728052538fa989f013f8ae59430"
+msgid "Deselect visible players"
+msgstr "取消选择当前显示的玩家"
+
+#: web-ui/src/RelationsPage.vue:429:19
+msgctxt "aae2b2ef824a620dbb2f711f34d6f5070a26a98f0d8e9f96444aeaf0e35091cd"
+msgid "Select visible players"
+msgstr "选择当前显示的玩家"
+
+#: web-ui/src/RelationsPage.vue:433:50
+msgctxt "3652b2fb77d4ba10f3f8c6ead64e15e88ae186ebd27d02895cbcd3f133462bd3"
+msgid "MC ID"
+msgstr "MC ID"
+
+#: web-ui/src/RelationsPage.vue:434:50
+msgctxt "b59528ba1704153225e4b64853781347256d0d9bd5d4471abfaea9f685d04bdc"
+msgid "UUID"
+msgstr "UUID"
+
+#: web-ui/src/RelationsPage.vue:447:26
+msgctxt "89252abf78dd400181345bc00dad7d664cd5a7e0dcad4ac1e28cb446b1fe9608"
+msgid "Select {0}"
+msgstr "选择 {0}"
+
+#: web-ui/src/RelationsPage.vue:452:30
+msgctxt "6d44e1e985c8108503b5d909a9b010e8473b2ed134db7f6985f16a78b7e3bf2e"
+msgid "Not yet known"
+msgstr "尚未查询到"
+
+#: web-ui/src/RelationsPage.vue:461:19
+msgctxt "298a490e5e0de85c20dc135b55daba54df83758b0154d2ac9e194dc9a5a55287"
+msgid "Cancel removal of {0}"
+msgstr "取消移除 {0}"
+
+#: web-ui/src/RelationsPage.vue:462:19
+msgctxt "d29cc39c74890b2275394476de80de8c5c5e018018d2e8b36336fdaba9d18fad"
+msgid "Remove {0}"
+msgstr "移除 {0}"
+
+#: web-ui/src/RelationsPage.vue:467:19
+msgctxt "df59887d7f1a03b7f7bfebcccb764c3e6aceedf96709a2356f43d011a9574d23"
+msgid "Remove {0}"
+msgstr "移除 {0}"
+
+#: web-ui/src/RelationsPage.vue:466:19
+msgctxt "213176dfb8ed74a98b325c07c87f3dd20ff9f1f3ee0c2950c6b27cca4361c16a"
+msgid "Cancel removal"
+msgstr "取消移除"
+
+#: web-ui/src/RelationsPage.vue:477:19
+msgctxt "107a9155e26488fc88e577d846d1f1e2ed2d972615fb99a74d91f5e681634397"
+msgid "Remove {0}?"
+msgstr "移除 {0}？"
+
+#: web-ui/src/RelationsPage.vue:501:17
+msgctxt "80ee7b193948ead215d09d469cdfa9e2112e99b07f3099cac8a559ecfd77611d"
+msgid "No matching players."
+msgstr "没有匹配的玩家。"
+
+#: web-ui/src/RelationsPage.vue:503:19
+msgctxt "55e8371ec6449d07b199cf0c5502c973168a8e8040400c92f20a1af9117d3b2d"
+msgid "No friends yet."
+msgstr "暂无好友。"
+
+#: web-ui/src/RelationsPage.vue:504:19
+msgctxt "7cb30c9a69b662a5af23eff1df83ae19949ac11f102c905170df4957fc49c67a"
+msgid "No enemies yet."
+msgstr "暂无敌人。"
+
+#: web-ui/src/SearchField.vue:50:20
+msgctxt "7ce72f2c5317f724ebbfc709e7914fd808d44904d9a7e6e901876e154e9433c6"
+msgid "Clear search"
+msgstr "清空搜索"
+
+#: web-ui/src/SearchField.vue:51:15
+msgctxt "4a344f102edeeb047068db0f1d279011e2b748a7f31041348bd56e5167636393"
+msgid "Clear search"
+msgstr "清空搜索"
+
+#: web-ui/src/SettingRow.vue:136:34
+msgctxt "742ef14c325374eef6f02e392f1dae1db4d98e8073cbd57f638ae84929949959"
+msgid "Right Shift"
+msgstr "右 Shift"
+
+#: web-ui/src/SettingRow.vue:137:34
+msgctxt "4599dbcba89cd6511a0c2e89803283a975d3e9d9faf769c36371186322bb5d24"
+msgid "Left Shift"
+msgstr "左 Shift"
+
+#: web-ui/src/SettingRow.vue:138:29
+msgctxt "a6aa75224073bd5e6ed1a21515fe790c91d5792cdd4e22811d9956c8b80f6f63"
+msgid "Unbound"
+msgstr "未绑定"
+
+#: web-ui/src/SettingRow.vue:176:26
+msgctxt "e1ace26b21ef16dc7b1a74bee92f0a187777e7bf238ec48ede0f5e31549b5a00"
+msgid "Value for {0}"
+msgstr "{0} 的值"
+
+#: web-ui/src/SettingRow.vue:228:24
+msgctxt "e51ee64417ed8bc7be273ee7464d321866c1c105e383ab09de3e02856ed22e8c"
+msgid "Color #{0}"
+msgstr "颜色 #{0}"
+
+#: web-ui/src/SettingRow.vue:251:15
+msgctxt "fb54502657bd155a744d253b3abe82d8239aa3b059bd8531f13a21b483a7934b"
+msgid "Cancel capture for {0}"
+msgstr "取消为 {0} 录入按键"
+
+#: web-ui/src/SettingRow.vue:252:15
+msgctxt "b8fd2f33159b3f7e3078230b172d170bef934bf29a28e01c7d672a4014696837"
+msgid "Change {0}"
+msgstr "更改 {0}"
+
+#: web-ui/src/SettingRow.vue:260:11
+msgctxt "6f4d5fcef769fa5a849b9dc763d0d7ceedd87272fd71b9b0ac4661b9fc11e157"
+msgid "Press a key"
+msgstr "按下按键"
+
+#: web-ui/src/SettingsPage.vue:69:17
+msgctxt "1a76f108b747ef1f207e9ef30c29ebcbebb9e071524406b66f5803df84838781"
+msgid "Replaces the active profile configuration with defaults."
+msgstr "将当前使用的配置方案恢复为默认设置。"
+
+#: web-ui/src/SettingsPage.vue:72:36
+msgctxt "1c455104bec16f3c5747821a6ed7758226e2cfb7fad7af166f3434c6e80f8ec0"
+msgid "Restore defaults"
+msgstr "恢复默认设置"
+
+#: web-ui/src/SettingsPage.vue:80:35
+msgctxt "25d922d6c837eb9858f26a36c48b0237dcca3dcb8d34736af85012055cde6a38"
+msgid "Export"
+msgstr "导出"
+
+#: web-ui/src/TransferDialog.vue:591:35
+msgctxt "75f30d785b08028f18ed79ff7f3f0208f54353d19a396f73f269c2c6eca18478"
+msgid "Export"
+msgstr "导出"
+
+#: web-ui/src/SettingsPage.vue:88:33
+msgctxt "23b6e1666180aac788f1dddcbd4bc4f187f9a4ce6b9fb8823a682665b8b48c4b"
+msgid "Import"
+msgstr "导入"
+
+#: web-ui/src/TransferDialog.vue:591:49
+msgctxt "e7979c647e33fe7b9b50378752f38b62483a5da8f83da03f7576ed393ad59f70"
+msgid "Import"
+msgstr "导入"
+
+#: web-ui/src/SettingsPage.vue:110:37
+msgctxt "3a67358dc8df304d6ce9cd7cbb3bcaf7333c052ae06086ef82326c019ec95326"
+msgid "Help others discover 12pit?"
+msgstr "愿意让更多人认识 12pit 吗？"
+
+#: web-ui/src/SettingsPage.vue:124:11
+msgctxt "3a42e338821a7cea74bb1b9a622c686e4c937aab2b4602a95d5727c6efb479c8"
+msgid "Showing 12pit on Discord helps more players find us. If you’re comfortable sharing it, we’d love for you to keep it on 🥺"
+msgstr "在 Discord 上显示 12pit，能帮更多玩家发现我们。如果你愿意，希望你能保留它 🥺"
+
+#: web-ui/src/SettingsPage.vue:137:12
+msgctxt "2a6c51885697497efa64738ed0bb1e9ce31287a53f3536d042de85feb8741b84"
+msgid "Turn off"
+msgstr "关闭"
+
+#: web-ui/src/SettingsPage.vue:145:12
+msgctxt "5ad6e557b6982f38bbdb1c0cd081a409766168c441a10375956da4718fc4d986"
+msgid "Keep on"
+msgstr "保持开启"
+
+#: web-ui/src/TransferDialog.vue:158:21
+msgctxt "dc4efcc9b6272cd6a553f812142a6088e2bca7e3b4a8cd63bde1bc9f4c2753ff"
+msgid "File is too large"
+msgstr "文件过大"
+
+#: web-ui/src/TransferDialog.vue:163:21
+msgctxt "ed56556b71bc861aff8d186686b267a2d8252b403a78e2a5a9b568b7f8a59c19"
+msgid "File must be a JSON object"
+msgstr "文件内容必须为 JSON 对象"
+
+#: web-ui/src/TransferDialog.vue:170:60
+msgctxt "a0513d910785d279d61c644781346cd0e3b9c8a43af6e9c5b859c106981098f6"
+msgid "Cannot read file"
+msgstr "无法读取文件"
+
+#: web-ui/src/TransferDialog.vue:199:48
+msgctxt "7343abd9ffe90753fb302b350563ffed73cfee7986b70c57ce23e6f354685f5f"
+msgid "Cannot preview file"
+msgstr "无法预览文件"
+
+#: web-ui/src/TransferDialog.vue:242:60
+msgctxt "c8f6299c39f015e9cea0cda9e2166aa507afcdad5d44b6993b4a491a3f934321"
+msgid "Transfer failed"
+msgstr "导入或导出失败"
+
+#: web-ui/src/TransferDialog.vue:249:58
+msgctxt "27ccfb1f3b5b05ccfbaf456e6ef51c25265558f23afed6b0d09ac54b88bb55fb"
+msgid "Friend"
+msgstr "好友"
+
+#: web-ui/src/TransferDialog.vue:249:72
+msgctxt "7c1665ef28c48d27d8ba7567fb4cdbfe14b1659315405d7fff847a3eaaedeafd"
+msgid "Enemy"
+msgstr "敌人"
+
+#: web-ui/src/TransferDialog.vue:254:12
+msgctxt "857941706102990cce7a8019916033ce378da97a44256f606c479840bd98fbad"
+msgid "Different group"
+msgstr "分组不同"
+
+#: web-ui/src/TransferDialog.vue:255:15
+msgctxt "e657722405ee786a59a949678db2a81102304f49755240d15eb812fc6e8bf7f5"
+msgid "Different UUID"
+msgstr "UUID 不同"
+
+#: web-ui/src/TransferDialog.vue:256:11
+msgctxt "efb82e93fcaa6dc668b3405b4e18405bf8a5f6ade2c02a0272f3045a8a4a5e80"
+msgid "Different name"
+msgstr "名称不同"
+
+#: web-ui/src/TransferDialog.vue:299:40
+msgctxt "41cf3784f3b3e2659337b44c0f5d9a4792a600b5b546905cb4280db956ffc877"
+msgid "Export data"
+msgstr "导出数据"
+
+#: web-ui/src/TransferDialog.vue:304:36
+msgctxt "af82991fa4dd42bd7365acef3182217278f237cd0bf9ceb8f2bc843f94ebe6da"
+msgid "Export data"
+msgstr "导出数据"
+
+#: web-ui/src/TransferDialog.vue:299:59
+msgctxt "13efbc3a07be999b709e542c512b7e00bc17ca724af5c2ae7a055f091078b023"
+msgid "Import data"
+msgstr "导入数据"
+
+#: web-ui/src/TransferDialog.vue:304:55
+msgctxt "7aa25d31b8f7daa4a1e6fc45b7549993cabcaafcb47a0a7f8e572ecb5cd55d30"
+msgid "Import data"
+msgstr "导入数据"
+
+#: web-ui/src/TransferDialog.vue:336:16
+msgctxt "e8fb9f789222c509255e5b97674b4d4ca5c85725767691f4cfb5b8833ef10b30"
+msgid "Choose file"
+msgstr "选择文件"
+
+#: web-ui/src/TransferDialog.vue:345:26
+msgctxt "2c358cd732fd9a86a31161c1ba052d0123c1f6f673b002f52733c4205a9ca50b"
+msgid "Refresh preview"
+msgstr "刷新预览"
+
+#: web-ui/src/TransferDialog.vue:346:21
+msgctxt "95e97f1c8ef8a7e8eabb2972073bd741c6bd62f67b0e54b3dda3a4f5b74b66ef"
+msgid "Refresh preview"
+msgstr "刷新预览"
+
+#: web-ui/src/TransferDialog.vue:363:28
+msgctxt "d9284c2660bcc0204a6f3321ea13e5f3fdd1a60f4cd7a58bbe8025f455609cdd"
+msgid "Toggle profiles"
+msgstr "展开或收起配置方案"
+
+#: web-ui/src/TransferDialog.vue:402:17
+msgctxt "323e368b89f44a556e3c81e59f51bb0b14c9ce68126983b5da6c6f959085ea46"
+msgid "No profiles"
+msgstr "暂无配置方案"
+
+#: web-ui/src/TransferDialog.vue:412:28
+msgctxt "4d6f580ef77d5507934aa5829664f803a6e2d77454e5a8623073844bdce8affc"
+msgid "Toggle relations"
+msgstr "展开或收起玩家关系"
+
+#: web-ui/src/TransferDialog.vue:454:17
+msgctxt "f290e18b26e11e46f6cf7faf1c58e72ecbfa1f97568882825815375a6da9d9ce"
+msgid "No relations"
+msgstr "暂无玩家关系"
+
+#: web-ui/src/TransferDialog.vue:464:20
+msgctxt "d70e38398783e9d8e477f4d346485b0c524c5f43cd2388d07b18ef03e79fedc6"
+msgid "Swap bindings"
+msgstr "换装绑定"
+
+#: web-ui/src/TransferDialog.vue:475:26
+msgctxt "b080b36dfcd357791ad2c3d7d06e820ff72247235d1586e79ddf2f95d31ae708"
+msgid "Relation import mode"
+msgstr "玩家关系导入方式"
+
+#: web-ui/src/TransferDialog.vue:484:18
+msgctxt "0c6c4f76f8eff49901a6c13a5ff55a454a780beaa742fa4b6f95eae25d22821f"
+msgid "Merge"
+msgstr "合并"
+
+#: web-ui/src/TransferDialog.vue:493:18
+msgctxt "d87fb1ddde514b5985bc15bcad6dda39f85ac3ae67652f1628909d6c2d93132e"
+msgid "Replace"
+msgstr "替换"
+
+#: web-ui/src/TransferDialog.vue:500:20
+msgctxt "e3b08bee6de805e68f33c14cb64379dec2dcd67872e4c089bf2debf09c251b57"
+msgid "Conflicts"
+msgstr "冲突"
+
+#: web-ui/src/TransferDialog.vue:512:22
+msgctxt "4355281e9874ddf3dd59f861305ccfea48514af3d761914b7a2bf434336d6f2f"
+msgid "Keep local for all"
+msgstr "全部保留本地数据"
+
+#: web-ui/src/TransferDialog.vue:523:22
+msgctxt "6519c464d80559d329e630a7822f15a006a7e6b512189ef3b07ccfc062cac865"
+msgid "Use file for all"
+msgstr "全部使用文件数据"
+
+#: web-ui/src/TransferDialog.vue:536:19
+msgctxt "52ed7ea03e7a00417aae13ebc260975f6f110bf9d679e06fe9d94c5f76d5f435"
+msgid "Local: {0}"
+msgstr "本地：{0}"
+
+#: web-ui/src/TransferDialog.vue:538:27
+msgctxt "82d05952c7d1fbc28c99aca64bf6895161fc8339be4e1b056989d14de75e7482"
+msgid "File: {0}"
+msgstr "文件：{0}"
+
+#: web-ui/src/TransferDialog.vue:542:32
+msgctxt "c789a40af67a9f783d9bbc99598b9c10af449fec8fd048d195644094314dbd2a"
+msgid "Resolve {0}"
+msgstr "处理 {0} 的冲突"
+
+#: web-ui/src/TransferDialog.vue:551:24
+msgctxt "97d03bce21a415888724769d7558f9b685f4bb48112cd7c366b29eec406682ca"
+msgid "Keep local"
+msgstr "保留本地数据"
+
+#: web-ui/src/TransferDialog.vue:560:24
+msgctxt "9fb269b6324f4f3e0b88acfdd2327d624eee372f6c8c2f0b4036130e3a0076e7"
+msgid "Use file"
+msgstr "使用文件数据"
+
+#: web-ui/src/TransferDialog.vue:594:15
+msgctxt "b30aa5f565806ff42c13c9278a70a2f8713f58d853f7fa40389a10d909773b5c"
+msgid "Working..."
+msgstr "正在处理…"
+
+#: web-ui/src/useKeyCapture.ts:54:29
+msgctxt "8278c98f89bd82d331ab96987253f6bf857b150471b1dfcffa97d7e52357e9b1"
+msgid "This key cannot be bound"
+msgstr "此按键无法绑定"
