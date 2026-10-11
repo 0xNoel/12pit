@@ -41,7 +41,11 @@ final class PitPalClient {
     Map<String, String> owners(String query, BooleanSupplier cancelled)
             throws IOException, InterruptedException {
         JsonObject response = request("/api/listings/items/" + query, null, cancelled);
-        JsonElement success = response.get("sucess");
+        JsonElement success = response.get("success");
+        if (success == null) {
+            // THIS IS INTENDED!
+            success = response.get("sucess");
+        }
         JsonElement data = response.get("data");
         if (success == null || !success.isJsonPrimitive()
                 || !success.getAsJsonPrimitive().isBoolean() || !success.getAsBoolean()
