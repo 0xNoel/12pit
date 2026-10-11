@@ -236,9 +236,12 @@ public final class BootstrapLayoutTest {
 
     private static List<Call> calls(String code, String names) {
         List<Call> calls = new ArrayList<>();
-        Matcher matcher = Pattern.compile("\\b(" + names + ")\\s*\\(([^;]*)\\);").matcher(code);
+        Matcher matcher = Pattern
+                .compile("\\b(" + names.replace("\\.", "\\s*\\.\\s*") + ")\\s*\\(([^;]*)\\);")
+                .matcher(code);
         while (matcher.find()) {
-            calls.add(new Call(matcher.group(1), matcher.group(2), matcher.start()));
+            calls.add(new Call(matcher.group(1).replaceAll("\\s+", ""), matcher.group(2),
+                    matcher.start()));
         }
         return calls;
     }
