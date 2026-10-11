@@ -174,9 +174,9 @@ Split translations need Java source filenames and line numbers in compiler debug
 
 Use `Languages.sourceText(...)` when sending marked text through an API field that the frontend passes to `t(...)`. It retains the usage location across JSON.
 
-The extraction script finds Java `source(...)`, `translate(...)`, numbered `format(...)` calls, and frontend `t(...)` calls. After changing these calls, run `python scripts/languages.py sync` to update usage locations in the PO files. Sync preserves translations and leaves new entries empty. `python scripts/languages.py status` shows progress and file errors.
+The extraction script finds Java `source(...)`, `translate(...)`, numbered `format(...)` calls, and frontend `t(...)` calls. CI runs `python scripts/languages.py extract` to generate a temporary POT and upload it to Crowdin.
 
-Each PO entry contains its source, translation, and usage location. Line changes keep its generated identifier. Changing the file or the number of uses changes the affected identifiers. See [Contributing translations](TRANSLATING.md) for translating and requesting a language.
+Each PO entry contains its source, translation, and usage location. Its generated `msgctxt` contains the file path and the order of that source's uses in the file, such as `src/main/java/pit12/feature/autofish/AutoFishConfig.java#1`. The line and column stay in the `#:` reference. Line changes keep the identifier. Moving to another file or adding, removing, or reordering repeated uses can change their translation matches. See [Contributing translations](TRANSLATING.md) for translating and maintaining language files.
 
 ## HUD
 

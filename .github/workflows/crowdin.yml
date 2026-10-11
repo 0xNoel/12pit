@@ -28,7 +28,7 @@ jobs:
           python-version: '3.15'
 
       - name: Extract source text
-        run: python3 scripts/languages.py sync --language en-US
+        run: python3 scripts/languages.py extract
 
       - name: Upload source text
         uses: crowdin/github-action@9c23991700c0ec5256fd41089b9d9d7d540e424e # v3.3.0

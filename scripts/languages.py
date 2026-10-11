@@ -1,11 +1,13 @@
 import argparse
 import ast
 from collections import Counter
-import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sys
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "src/main/resources/assets/pit12/languages"
@@ -24,39 +26,39 @@ def write_changed(path, content):
     path.write_text(content, encoding="utf-8", newline="\n")
 
 
-def read_catalog(path):
+def read_catalog(text, name):
     catalog = {}
     usages = set()
-    fields, locations, comments, flags = {}, [], [], []
+    fields, locations, flags = {}, [], []
     current = None
 
     def finish():
         if not fields:
             return
         if "msgid" not in fields or "msgstr" not in fields:
-            raise ValueError(f"{path}: incomplete PO entry")
+            raise ValueError(f"{name}: incomplete PO entry")
         source, target = fields["msgid"], fields["msgstr"]
         if not source and "msgctxt" not in fields:
             return  # The empty msgid holds the PO header.
-        key = fields.get("msgctxt", "")
-        if not key or not source or not locations:
-            raise ValueError(f"{path}: PO entries need a context, source, and usage location")
+        context = fields.get("msgctxt", "")
+        if not context or not source or not locations:
+            raise ValueError(f"{name}: PO entries need a context, source, and usage location")
+        key = (source, context)
         if key in catalog:
-            raise ValueError(f"{path}: duplicate context: {key}")
+            raise ValueError(f"{name}: duplicate PO entry: {source!r} ({context})")
         for location in locations:
             if not LOCATION.fullmatch(location) or (source, location) in usages:
-                raise ValueError(f"{path}: {key}: invalid or duplicate usage location: {location}")
+                raise ValueError(f"{name}: invalid or duplicate usage location: {location}")
             usages.add((source, location))
         if target and "fuzzy" not in flags and Counter(PARAMETER.findall(source)) != Counter(PARAMETER.findall(target)):
-            raise ValueError(f"{path}: {key}: translation parameters do not match the source")
-        catalog[key] = {"source": source, "translation": target, "locations": locations,
-                        "comments": comments, "flags": flags}
+            raise ValueError(f"{name}: {source!r}: translation parameters do not match the source")
+        catalog[key] = {"translation": target, "flags": flags}
 
-    for number, line in enumerate(path.read_text(encoding="utf-8-sig").splitlines() + [""], 1):
+    for number, line in enumerate(text.lstrip("\ufeff").splitlines() + [""], 1):
         line = line.strip()
         if not line or ("msgstr" in fields and line.startswith(("#", "msgctxt", "msgid"))):
             finish()
-            fields, locations, comments, flags = {}, [], [], []
+            fields, locations, flags = {}, [], []
             current = None
         if not line:
             continue
@@ -66,28 +68,26 @@ def read_catalog(path):
                 locations.extend(line[2:].split())
             elif line.startswith("#,"):
                 flags.extend(flag.strip() for flag in line[2:].split(",") if flag.strip())
-            elif not line.startswith(("#~", "#|")):
-                comments.append(line)
             continue
         if line.startswith('"'):
             value = line
             if current is None:
-                raise ValueError(f"{path}:{number}: unexpected PO continuation")
+                raise ValueError(f"{name}:{number}: unexpected PO continuation")
         else:
             match = re.fullmatch(r'(msgctxt|msgid|msgstr)\s+(".*")', line)
             if not match:
-                raise ValueError(f"{path}:{number}: unsupported PO line")
+                raise ValueError(f"{name}:{number}: unsupported PO line")
             current, value = match.groups()
             if current in fields:
-                raise ValueError(f"{path}:{number}: duplicate PO field: {current}")
+                raise ValueError(f"{name}:{number}: duplicate PO field: {current}")
             fields[current] = ""
         if not PO_STRING.fullmatch(value):
-            raise ValueError(f"{path}:{number}: invalid PO string")
+            raise ValueError(f"{name}:{number}: invalid PO string")
         fields[current] += ast.literal_eval(value)
     return catalog
 
 
-def write_catalog(path, catalog, locale=None):
+def write_catalog(path, catalog):
     def quote(text):
         escapes = {"\\": r"\\", '"': r'\"', "\n": r"\n", "\r": r"\r", "\t": r"\t"}
         return '"' + "".join(escapes.get(character, f"\\{ord(character):03o}"
@@ -95,16 +95,10 @@ def write_catalog(path, catalog, locale=None):
 
     headers = ["Project-Id-Version: 12pit\n", "MIME-Version: 1.0\n",
                "Content-Type: text/plain; charset=UTF-8\n", "Content-Transfer-Encoding: 8bit\n"]
-    if locale:
-        headers.insert(1, f"Language: {locale}\n")
     lines = ['msgid ""', 'msgstr ""', *(quote(header) for header in headers), ""]
-    for key, entry in catalog.items():
-        lines.extend(entry.get("comments", []))
-        lines.append("#: " + " ".join(entry["locations"]))
-        if entry.get("flags"):
-            lines.append("#, " + ", ".join(entry["flags"]))
-        lines.extend(["msgctxt " + quote(key), "msgid " + quote(entry["source"]),
-                      "msgstr " + quote(entry.get("translation", "")), ""])
+    for (source, context), locations in catalog.items():
+        lines.append("#: " + " ".join(locations))
+        lines.extend(["msgctxt " + quote(context), "msgid " + quote(source), 'msgstr ""', ""])
     write_changed(path, "\n".join(lines))
 
 
@@ -179,39 +173,72 @@ def sources():
 def source_catalog(found):
     catalog = {}
     for source, locations in found.items():
-        counts = Counter(location.split(":", 1)[0] for location in locations)
         positions = Counter()
         if len(set(locations)) != len(locations):
             raise ValueError(f"{source!r}: put separate Java uses on separate lines")
         for location in locations:
             file = location.split(":", 1)[0]
             positions[file] += 1
-            # Line changes keep the key; changed usage counts need new translations.
-            identity = f"{source}\0{file}\0{counts[file]}\0{positions[file]}"
-            key = hashlib.sha256(identity.encode("utf-8")).hexdigest()
-            catalog[key] = {"source": source, "locations": [location]}
+            catalog[(source, f"{file}#{positions[file]}")] = [location]
     return catalog
 
 
-def sync(catalog, entry):
-    path = (ROOT / "build/generated/languages/12pit.pot" if entry["value"] == 0
-            else DIRECTORY / (entry["locale"] + ".po"))
-    previous = read_catalog(path) if path.exists() else {}
-    if entry["value"] == 0:
-        updated = catalog
-    else:
-        updated = {}
-        for key, source in catalog.items():
-            old = previous.get(key, {})
-            if old and old["source"] != source["source"]:
-                raise ValueError(f"{path}: {key}: source does not match the code")
-            updated[key] = {**source, "translation": old.get("translation", ""),
-                            "comments": old.get("comments", []), "flags": old.get("flags", [])}
-    write_catalog(path, updated, entry["locale"] if entry["value"] != 0 else None)
-    return len(catalog.keys() - previous.keys()), len(previous.keys() - catalog.keys())
+class Crowdin:
+    def __init__(self):
+        project_id = os.getenv("CROWDIN_PROJECT_ID", "").strip()
+        token = os.getenv("CROWDIN_PERSONAL_TOKEN", "").strip()
+        if not project_id or not token:
+            raise ValueError("Set CROWDIN_PROJECT_ID and CROWDIN_PERSONAL_TOKEN")
+        if not re.fullmatch(r"[1-9][0-9]*", project_id):
+            raise ValueError("CROWDIN_PROJECT_ID must be a positive integer")
+        self.project = f"projects/{project_id}"
+        self.headers = {"Authorization": f"Bearer {token}", "Accept": "application/json",
+                        "Content-Type": "application/json", "User-Agent": "12pit"}
+
+    def request(self, path, method="GET", data=None):
+        body = json.dumps(data).encode("utf-8") if data is not None else None
+        request = Request(f"https://api.crowdin.com/api/v2/{path}", data=body,
+                          headers=self.headers, method=method)
+        try:
+            with urlopen(request, timeout=60) as response:
+                if response.status == 204:
+                    raise ValueError(f"Crowdin {method} {path}: no content was exported")
+                return json.load(response)["data"]
+        except HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace").strip()
+            raise ValueError(f"Crowdin {method} {path}: HTTP {error.code}: {detail or error.reason}") from error
+
+    def list(self, path):
+        rows = []
+        while True:
+            page = self.request(f"{path}?limit=500&offset={len(rows)}")
+            rows.extend(item["data"] for item in page)
+            if len(page) < 500:
+                return rows
+
+    def download(self, file_id, language_id, locale):
+        # PO keeps untranslated entries empty instead of copying the source text.
+        result = self.request(f"{self.project}/translations/builds/files/{file_id}", "POST",
+                              {"targetLanguageId": language_id, "skipUntranslatedStrings": True,
+                               "skipUntranslatedFiles": False})
+        with urlopen(result["url"], timeout=60) as response:
+            text = response.read().decode("utf-8-sig").rstrip("\r\n") + "\n"
+        path = DIRECTORY / (locale + ".po")
+        catalog = read_catalog(text, path.name)
+        if not catalog:
+            raise ValueError(f"{path.name}: Crowdin returned an empty catalog")
+        write_changed(path, text)
+        return len(catalog)
 
 
-def status(found, catalog, entries):
+def find_language(languages, locale):
+    for language in languages:
+        if locale.lower() in {language["id"].lower(), language["locale"].lower()}:
+            return language
+    raise ValueError(f"Crowdin does not support language: {locale}")
+
+
+def status(entries):
     rows, notes = [], []
     failed = False
     for entry in entries:
@@ -221,34 +248,20 @@ def status(found, catalog, entries):
             continue
         path = DIRECTORY / (locale + ".po")
         try:
-            previous = read_catalog(path) if path.exists() else {}
-            for key in catalog.keys() & previous.keys():
-                if previous[key]["source"] != catalog[key]["source"]:
-                    raise ValueError(f"{path}: {key}: source does not match the code")
+            catalog = read_catalog(path.read_text(encoding="utf-8-sig"), path.name)
         except (OSError, ValueError) as error:
             rows.append((locale, "Invalid", "-", name))
             notes.append(f"{locale}: {error}")
             failed = True
             continue
-        translated = sum(bool(previous.get(key, {}).get("translation"))
-                         and "fuzzy" not in previous[key].get("flags", []) for key in catalog)
+        translated = sum(bool(entry["translation"]) and "fuzzy" not in entry["flags"]
+                         for entry in catalog.values())
         slots = len(catalog)
         progress = translated / slots if slots else 1
         rows.append((locale, f"{translated}/{slots}", f"{progress:.1%}", name))
-        missing = len(catalog.keys() - previous.keys())
-        stale = len(previous.keys() - catalog.keys())
-        moved = sum(previous[key]["locations"] != catalog[key]["locations"]
-                    for key in catalog.keys() & previous.keys())
-        if not path.exists():
-            notes.append(f"{locale}: file missing")
-        elif missing or stale:
-            notes.append(f"{locale}: {missing} missing, {stale} obsolete")
-        if moved:
-            notes.append(f"{locale}: {moved} usage locations changed; run sync")
 
     width = max(len("Language"), *(len(row[0]) for row in rows))
     count_width = max(len("Translated"), *(len(row[1]) for row in rows))
-    print(f"{len(found)} source texts, {len(catalog)} usages\n")
     print(f"{'Language':<{width}}  {'Translated':>{count_width}}  {'Progress':>8}  Name")
     for locale, count, progress, name in rows:
         print(f"{locale:<{width}}  {count:>{count_width}}  {progress:>8}  {name}")
@@ -259,43 +272,74 @@ def status(found, catalog, entries):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description="Extract source text and download Crowdin translations")
     commands = parser.add_subparsers(dest="command", required=True)
-    add = commands.add_parser("add", help="Register a Crowdin target language (maintainers)")
+    commands.add_parser("extract", help="Generate build/generated/languages/12pit.pot for CI")
+    add = commands.add_parser("add", help="Enable a Crowdin language, download its PO, and register it locally")
     add.add_argument("language", help="Language tag, for example nl-NL")
     add.add_argument("--name", required=True, help="Native name, for example Nederlands")
-    for name, help_text in (("sync", "Update source text"), ("status", "Show translation progress")):
+    for name, help_text in (("sync", "Download PO files from Crowdin"),
+                            ("status", "Show local translation progress and file errors")):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--language", help="Limit to one language")
     args = parser.parse_args()
     try:
-        entries = read_languages()
-        if args.command == "add":
-            if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", args.language):
-                raise ValueError(f"invalid language tag: {args.language}")
-            if any(entry["locale"].lower() == args.language.lower() for entry in entries):
-                raise ValueError(f"language already exists: {args.language}")
-            if not args.name.strip():
-                raise ValueError("language name cannot be empty")
-            entry = {"value": max(entry["value"] for entry in entries) + 1,
-                     "locale": args.language, "name": args.name.strip()}
+        if args.command == "extract":
             found = sources()
             catalog = source_catalog(found)
-            sync(catalog, entry)
+            write_catalog(ROOT / "build/generated/languages/12pit.pot", catalog)
+            print(f"Extracted {len(found)} source texts, {len(catalog)} usages")
+            return 0
+        entries = read_languages()
+        if args.command == "status":
+            return status(select_languages(entries, args.language))
+        if args.command == "sync":
+            selected = select_languages(entries, args.language)
+            if args.language is not None and selected[0]["value"] == 0:
+                raise ValueError("English is the source language; use extract to generate its POT")
+            selected = [entry for entry in selected if entry["value"] != 0]
+        else:
+            if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", args.language):
+                raise ValueError(f"invalid language tag: {args.language}")
+            if not args.name.strip():
+                raise ValueError("language name cannot be empty")
+
+        api = Crowdin()
+        languages = api.list("languages")
+        project = api.request(api.project)
+        files = [file for file in api.list(f"{api.project}/files") if file["name"] == "12pit.pot"]
+        if len(files) != 1:
+            raise ValueError("Crowdin project must contain one 12pit.pot file; upload it through CI")
+        file_id = files[0]["id"]
+        if args.command == "add":
+            language = find_language(languages, args.language)
+            locale = language["locale"]
+            if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", locale):
+                raise ValueError(f"Crowdin returned an invalid language tag: {locale}")
+            if language["id"] == project["sourceLanguageId"]:
+                raise ValueError("The source language cannot be added as a translation")
+            if any(entry["locale"].lower() == locale.lower() for entry in entries):
+                raise ValueError(f"language already exists locally: {locale}; use sync")
+            targets = project["targetLanguageIds"]
+            if language["id"] not in targets:
+                api.request(api.project, "PATCH", [{"op": "replace", "path": "/targetLanguageIds",
+                                                    "value": targets + [language["id"]]}])
+            count = api.download(file_id, language["id"], locale)
+            entry = {"value": max(entry["value"] for entry in entries) + 1,
+                     "locale": locale, "name": args.name.strip()}
             entries.append(entry)
             write_changed(DIRECTORY / "languages.json", json.dumps(entries, ensure_ascii=False, indent=2) + "\n")
-            print(f"Added {entry['locale']} ({entry['name']}): {len(found)} texts")
+            print(f"Added {locale} ({entry['name']}): {count} entries")
             return 0
-        selected = select_languages(entries, args.language)
-        found = sources()
-        catalog = source_catalog(found)
-        if args.command == "status":
-            return status(found, catalog, selected)
-        if args.language is None:
-            selected = [entry for entry in selected if entry["value"] != 0]
+        downloads = []
         for entry in selected:
-            added, removed = sync(catalog, entry)
-            print(f"Synced {entry['locale']}: {len(catalog)} usages ({added} added, {removed} removed)")
+            language = find_language(languages, entry["locale"])
+            if language["id"] not in project["targetLanguageIds"]:
+                raise ValueError(f"Enable {entry['locale']} in the Crowdin project before syncing")
+            downloads.append((entry, language["id"]))
+        for entry, language_id in downloads:
+            count = api.download(file_id, language_id, entry["locale"])
+            print(f"Synced {entry['locale']}: {count} entries")
     except (OSError, ValueError, KeyError, TypeError) as error:
         print(error, file=sys.stderr)
         return 1
