@@ -16,7 +16,9 @@ TOKEN = re.compile(r'//[^\n]*|/\*[\s\S]*?\*/|"(?:\\.|[^"\\])*"|[A-Za-z_$][\w$]*|
 WEB_STRING = r'''(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')'''
 PO_STRING = re.compile(r'"(?:[^"\\\x00-\x1f]|\\(?:[abfnrtv"\\]|[0-7]{1,3}))*"')
 LOCATION = re.compile(r"(?:src/main/java/.+\.java:[1-9][0-9]*"
-                      r"|web-ui/src/.+\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?)")
+                      r"|web-ui/src/.+\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?"
+                      r"|src/main/resources/assets/pit12/languages/languages\.json:"
+                      r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*)")
 
 
 def write_changed(path, content):
@@ -107,12 +109,15 @@ def read_languages():
     values, locales = set(), set()
     for entry in entries:
         value, locale, name = entry["value"], entry["locale"], entry["name"]
+        display_name = entry["displayName"]
         if type(value) is not int or value < 0 or value in values:
             raise ValueError("languages.json: language values must be unique nonnegative integers")
         if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", locale) or locale.lower() in locales:
             raise ValueError(f"languages.json: invalid or duplicate language tag: {locale}")
         if not isinstance(name, str) or not name.strip():
             raise ValueError(f"languages.json: missing language name: {locale}")
+        if not isinstance(display_name, str) or not display_name.strip():
+            raise ValueError(f"languages.json: missing English display name: {locale}")
         if (value == 0) != (locale.lower() == "en-us"):
             raise ValueError("languages.json: English must keep value 0")
         values.add(value)
@@ -167,6 +172,9 @@ def sources():
                 prefix = content[content.rfind("\n", 0, match.start()) + 1:match.start()]
                 column = len(prefix.encode("utf-16-le")) // 2 + 1
                 found.setdefault(source, []).append(f"{path.relative_to(ROOT).as_posix()}:{line}:{column}")
+    for entry in read_languages():
+        location = f"src/main/resources/assets/pit12/languages/languages.json:{entry['locale']}"
+        found.setdefault(entry["displayName"], []).append(location)
     return found
 
 
@@ -177,9 +185,10 @@ def source_catalog(found):
         if len(set(locations)) != len(locations):
             raise ValueError(f"{source!r}: put separate Java uses on separate lines")
         for location in locations:
-            file = location.split(":", 1)[0]
+            file, position = location.split(":", 1)
             positions[file] += 1
-            catalog[(source, f"{file}#{positions[file]}")] = [location]
+            context = position if file.endswith("languages.json") else positions[file]
+            catalog[(source, f"{file}#{context}")] = [location]
     return catalog
 
 
@@ -278,6 +287,7 @@ def main():
     add = commands.add_parser("add", help="Enable a Crowdin language, download its PO, and register it locally")
     add.add_argument("language", help="Language tag, for example nl-NL")
     add.add_argument("--name", required=True, help="Native name, for example Nederlands")
+    add.add_argument("--display-name", help="English display name; defaults to the Crowdin language name")
     for name, help_text in (("sync", "Download PO files from Crowdin"),
                             ("status", "Show local translation progress and file errors")):
         command = commands.add_parser(name, help=help_text)
@@ -303,6 +313,8 @@ def main():
                 raise ValueError(f"invalid language tag: {args.language}")
             if not args.name.strip():
                 raise ValueError("language name cannot be empty")
+            if args.display_name is not None and not args.display_name.strip():
+                raise ValueError("English display name cannot be empty")
 
         api = Crowdin()
         languages = api.list("languages")
@@ -326,7 +338,8 @@ def main():
                                                     "value": targets + [language["id"]]}])
             count = api.download(file_id, language["id"], locale)
             entry = {"value": max(entry["value"] for entry in entries) + 1,
-                     "locale": locale, "name": args.name.strip()}
+                     "locale": locale, "name": args.name.strip(),
+                     "displayName": args.display_name.strip() if args.display_name is not None else language["name"]}
             entries.append(entry)
             write_changed(DIRECTORY / "languages.json", json.dumps(entries, ensure_ascii=False, indent=2) + "\n")
             print(f"Added {locale} ({entry['name']}): {count} entries")

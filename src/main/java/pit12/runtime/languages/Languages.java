@@ -41,7 +41,9 @@ import pit12.shared.concurrent.ClientThread;
 public final class Languages {
     private static final Pattern PARAMETER = Pattern.compile("\\{([0-9]+)\\}");
     private static final Pattern LOCATION = Pattern.compile("(?:src/main/java/.+\\.java:[1-9][0-9]*"
-            + "|web-ui/src/.+\\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?)");
+            + "|web-ui/src/.+\\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?"
+            + "|src/main/resources/assets/pit12/languages/languages\\.json:"
+            + "[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*)");
     private static final Pattern PO_FIELD = Pattern.compile("(msgctxt|msgid|msgstr)\\s+(\".*\")");
     private static final Map<String, String> MARKED_TEXTS = new HashMap<>();
     private static final Map<String, String> SOURCE_LOCATIONS = new IdentityHashMap<>();
@@ -61,9 +63,10 @@ public final class Languages {
                 int number = id.getAsInt();
                 String code = object.get("locale").getAsString();
                 String name = object.get("name").getAsString();
+                String displayName = object.get("displayName").getAsString();
                 if (!id.getAsJsonPrimitive().isNumber() || number < 0 || id.getAsDouble() != number
                         || !code.matches("[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*")
-                        || name.trim().isEmpty()
+                        || name.trim().isEmpty() || displayName.trim().isEmpty()
                         || (number == 0) != code.equalsIgnoreCase("en-us")) {
                     throw new IllegalArgumentException("Invalid language entry");
                 }
@@ -73,7 +76,7 @@ public final class Languages {
                         throw new IllegalArgumentException("Duplicate language " + code);
                     }
                 }
-                if (entries.put(number, new Entry(code, normalized, name)) != null) {
+                if (entries.put(number, new Entry(code, normalized, name, displayName)) != null) {
                     throw new IllegalArgumentException("Duplicate language value " + number);
                 }
             }
@@ -95,6 +98,19 @@ public final class Languages {
 
     public String locale() {
         return locale;
+    }
+
+    public String locale(int value) {
+        return entries.get(value).locale;
+    }
+
+    public Map<String, String> displayNameSource(int value) {
+        Entry entry = entries.get(value);
+        Map<String, String> source = new HashMap<>();
+        source.put("text", entry.displayName);
+        source.put("location",
+                "src/main/resources/assets/pit12/languages/languages.json:" + entry.file);
+        return source;
     }
 
     // Equal literals share a JVM object, so each marked usage needs its own string.
@@ -429,11 +445,13 @@ public final class Languages {
         private final String file;
         private final String locale;
         private final String name;
+        private final String displayName;
 
-        private Entry(String file, String locale, String name) {
+        private Entry(String file, String locale, String name, String displayName) {
             this.file = file;
             this.locale = locale;
             this.name = name;
+            this.displayName = displayName;
         }
     }
 }

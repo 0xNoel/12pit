@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-import { shallowRef } from 'vue'
+import { shallowRef, unref, type MaybeRef } from 'vue'
+import type { Option } from './api'
 
 export type Catalog = Record<string, string | Record<string, string>>
 export type SourceText = string | { text: string; location: string }
@@ -47,9 +48,15 @@ export function applyLanguage(catalog: Catalog | null) {
   texts.value = catalog
 }
 
-export function t(source: SourceText, ...parameters: unknown[]) {
+export const t = translate.bind(null, texts)
+
+export function translate(
+  catalog: MaybeRef<Catalog | null>,
+  source: SourceText,
+  ...parameters: unknown[]
+) {
   const original = typeof source === 'string' ? source : source.text
-  const values = texts.value
+  const values = unref(catalog)
   if (values === null && parameters.length === 0) return original
   const target = values?.[original]
   const translated =
@@ -67,4 +74,19 @@ export function t(source: SourceText, ...parameters: unknown[]) {
         String(parameters[Number(index)]),
       )
     : translated
+}
+
+export function systemLanguage(option: Option, locale: string) {
+  const exact = option.choices!.find(
+    (choice) => choice.locale === locale.toLowerCase(),
+  )
+  if (exact) return exact
+  const requested = new Intl.Locale(locale).maximize()
+  return option.choices!.find((choice) => {
+    const available = new Intl.Locale(choice.locale!).maximize()
+    return (
+      available.language === requested.language &&
+      available.script === requested.script
+    )
+  })
 }

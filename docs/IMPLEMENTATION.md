@@ -80,7 +80,7 @@ The four-argument `FeatureConfig` constructor adds `enabled` setting with defaul
 
 The following helpers create settings and register their metadata in the feature:
 
-- `booleanSetting` creates a boolean.
+- `booleanSetting` creates a boolean. Use `booleanSetting(id, defaultValue)` for a saved flag that has no interface control.
 - `integerSliderSetting` and `doubleSliderSetting` create a numeric setting with default value, minimum, maximum and step parameters.
 - `keybindSetting` stores the key code from `0` to `255`. The feature is responsible for handling the input.
 - `colorSetting` stores RGB color as `0xRRGGBB`. `colorPickerSetting` stores ARGB color as `0xAARRGGBB`.

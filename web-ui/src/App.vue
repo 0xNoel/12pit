@@ -20,6 +20,7 @@ along with 12pit. If not, see <https://www.gnu.org/licenses/>.
 import { computed, nextTick, ref } from 'vue'
 import { t } from './languages'
 import FeaturesPage from './FeaturesPage.vue'
+import LanguageNotice from './LanguageNotice.vue'
 import PageScrollbar from './PageScrollbar.vue'
 import ProfilesPage from './ProfilesPage.vue'
 import RelationsPage from './RelationsPage.vue'
@@ -41,6 +42,7 @@ const {
   toggleFavorite,
   setting,
   profileAction,
+  hideLanguageHint,
   updateRelations,
   imported,
   reportError,
@@ -56,6 +58,7 @@ const selectedSubcategoryId = ref<string | null>(null)
 const search = ref('')
 const category = ref('all')
 const transferMode = ref<'export' | 'import' | null>(null)
+const requestedLanguage = ref<number | null>(null)
 const navOrder = { features: 0, profiles: 1, relations: 2, settings: 3 }
 const navIndex = computed(() => navOrder[page.value])
 const navIndicatorTop = computed(() =>
@@ -94,6 +97,11 @@ function openFeature(id: string) {
 function resetProfile() {
   cancelCapture()
   profileAction('reset')
+}
+
+function openLanguage(value: number) {
+  selectPage('settings')
+  requestedLanguage.value = value
 }
 
 function openTransfer(mode: 'export' | 'import') {
@@ -236,6 +244,8 @@ function closeTransfer() {
           <SettingsPage
             v-else-if="page === 'settings'"
             :settings="state.webui.settings"
+            :system-locale="state.webui.systemLanguage"
+            :requested-language="requestedLanguage"
             :profiles-loading="state.profiles.loadState === 'LOADING'"
             :busy="busy"
             :pending="pending || !state.webui.ready"
@@ -246,6 +256,7 @@ function closeTransfer() {
             @change="setting"
             @capture="startCapture"
             @cancel="cancelCapture"
+            @language-opened="requestedLanguage = null"
           />
           <ProfilesPage
             v-else
@@ -257,13 +268,25 @@ function closeTransfer() {
       </ResizeTransition>
     </main>
   </div>
-  <UiNotice
-    v-if="error"
-    class="error-notice"
-    :dismiss-label="t('Dismiss error')"
-    @dismiss="error = ''"
-    >{{ error }}</UiNotice
-  >
+  <div class="toast-stack" :inert="transferMode !== null">
+    <Transition name="toast" appear>
+      <UiNotice
+        v-if="error"
+        class="error-notice"
+        :dismiss-label="t('Dismiss error')"
+        @dismiss="error = ''"
+        >{{ error }}</UiNotice
+      >
+    </Transition>
+    <LanguageNotice
+      v-if="state"
+      :state="state"
+      :busy="busy"
+      :disable="hideLanguageHint"
+      @switch="openLanguage"
+      @error="reportError"
+    />
+  </div>
   <PageScrollbar v-if="state" :inert="transferMode !== null" />
   <TransferDialog
     v-if="state && transferMode"

@@ -84,6 +84,13 @@ public abstract class FeatureConfig {
         return setting;
     }
 
+    /** Registers a saved value without an interface control. */
+    protected final BooleanSetting booleanSetting(String id, boolean defaultValue) {
+        BooleanSetting setting = new BooleanSetting(id, "", "", defaultValue);
+        register(setting, null);
+        return setting;
+    }
+
     protected final IntegerSetting keybindSetting(String id, String displayName, String description,
             int defaultValue) {
         IntegerSetting setting =
