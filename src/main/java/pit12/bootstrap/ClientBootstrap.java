@@ -30,6 +30,10 @@ import pit12.feature.autoclick.AutoClickConfig;
 import pit12.feature.autoclick.AutoClickFeature;
 import pit12.feature.autofish.AutoFishConfig;
 import pit12.feature.autofish.AutoFishFeature;
+import pit12.feature.denick.DenickConfig;
+import pit12.feature.denick.DenickFeature;
+import pit12.feature.denick.DenickNamesBinding;
+import pit12.feature.denick.api.DenickNames;
 import pit12.feature.discordrpc.DiscordRpcFeature;
 import pit12.feature.eventlist.EventListConfig;
 import pit12.feature.eventlist.EventListFeature;
@@ -41,6 +45,7 @@ import pit12.feature.itemesp.ItemEspConfig;
 import pit12.feature.itemesp.ItemEspFeature;
 import pit12.feature.nametag.NametagConfig;
 import pit12.feature.nametag.NametagFeature;
+import pit12.feature.nametag.NametagNamesBinding;
 import pit12.feature.playeresp.PlayerEspConfig;
 import pit12.feature.playeresp.PlayerEspFeature;
 import pit12.feature.playerlist.PlayerListConfig;
@@ -130,6 +135,10 @@ public final class ClientBootstrap {
                 playerEquipment, relations, commands,
                 new File(minecraft.mcDataDir, "12pit/swap-bindings.json").toPath(),
                 (SwapHooksBinding) minecraft);
+        // Category: Misc
+        DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
+                playerNames, playerEquipment, commands,
+                new File(minecraft.mcDataDir, "12pit/denick-cache.json").toPath());
         // Category: Interface
         BooleanSetting discordRpc =
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
@@ -148,10 +157,10 @@ public final class ClientBootstrap {
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
-        registerNametag(minecraft, configs, session, playerEquipment);
+        registerNametag(minecraft, configs, session, playerEquipment, denickNames);
         registerPlayerEsp(configs, session, presence, relations);
         registerPlayerList(configs, playerNames, playerEquipment, pitContext, hudRegistry,
-                relations, presence);
+                relations, presence, denickNames);
         registerTooltip(configs);
         // Category: Misc
         registerAutoQuickMath(configs);
@@ -198,6 +207,21 @@ public final class ClientBootstrap {
                 playerEquipment, relations, commands, path, binding, language);
         components.add(swap);
         return swap.bindings();
+    }
+
+    // Category: Misc
+    private DenickNames registerDenick(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, PitContext pitContext, TabPresence presence,
+            PlayerNameCache playerNames, PlayerEquipmentAccess equipment, CommandRegistry commands,
+            Path path) {
+        DenickConfig config = new DenickConfig();
+        configs.register(config);
+        DenickFeature denick = new DenickFeature(minecraft, client, configs, config, session,
+                pitContext, presence, playerNames, equipment, commands, language, path,
+                names -> ((DenickNamesBinding) minecraft.ingameGUI.getTabList())
+                        .pit12$bindDenickNames(names));
+        components.add(denick);
+        return denick;
     }
 
     // Category: Interface
@@ -269,10 +293,14 @@ public final class ClientBootstrap {
     }
 
     private void registerNametag(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
-            PlayerEquipmentAccess equipment) {
+            PlayerEquipmentAccess equipment, DenickNames denickNames) {
         NametagConfig config = new NametagConfig();
         configs.register(config);
-        components.add(new NametagFeature(minecraft, configs, config, session, equipment));
+        components
+                .add(new NametagFeature(minecraft, configs, config, session, equipment, denickNames,
+                        names -> minecraft.getRenderManager().getSkinMap().values()
+                                .forEach(renderer -> ((NametagNamesBinding) renderer)
+                                        .pit12$bindNametagNames(names))));
     }
 
     private void registerPlayerEsp(ConfigCatalog configs, ClientSession session,
@@ -284,11 +312,11 @@ public final class ClientBootstrap {
 
     private void registerPlayerList(ConfigCatalog configs, PlayerNameCache playerNames,
             PlayerEquipmentAccess playerEquipment, PitContext pitContext, HudRegistry hudRegistry,
-            RelationLookup relations, TabPresence presence) {
+            RelationLookup relations, TabPresence presence, DenickNames denickNames) {
         PlayerListConfig config = new PlayerListConfig();
         configs.register(config);
         components.add(new PlayerListFeature(configs, config, playerNames, playerEquipment,
-                pitContext, hudRegistry, relations, presence, language));
+                pitContext, hudRegistry, relations, presence, language, denickNames));
     }
 
     private void registerTooltip(ConfigCatalog configs) {

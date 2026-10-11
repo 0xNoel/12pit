@@ -27,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationListener;
 import pit12.feature.relation.api.RelationLookup;
@@ -55,6 +56,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     private final RelationLookup relations;
     private final TabPresence presence;
     private final PlayerNameCache playerNames;
+    private final DenickNames denickNames;
     private final PlayerListBuilder builder;
     private final PlayerListHud hud;
     private final Languages language;
@@ -71,7 +73,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     public PlayerListFeature(ConfigCatalog configs, PlayerListConfig config,
             PlayerNameCache playerNames, PlayerEquipmentAccess equipment, PitContext pitContext,
             HudRegistry hudRegistry, RelationLookup relations, TabPresence presence,
-            Languages language) {
+            Languages language, DenickNames denickNames) {
         this.language = language;
         this.configs = configs;
         this.config = config;
@@ -79,9 +81,10 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         this.relations = relations;
         this.presence = presence;
         this.playerNames = playerNames;
+        this.denickNames = denickNames;
         this.hudRegistry = hudRegistry;
         builder = new PlayerListBuilder(minecraft, equipment, pitContext, config, relations,
-                playerNames);
+                playerNames, denickNames);
         hud = new PlayerListHud(config, hudRenderer);
         languageListener = () -> hud.localize(language);
     }
@@ -122,6 +125,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             relations.addListener(this);
             presence.addListener(this);
             playerNames.addListener(namesChanged);
+            denickNames.addListener(namesChanged);
             MinecraftForge.EVENT_BUS.register(this);
         } catch (RuntimeException failure) {
             deactivate();
@@ -137,6 +141,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         MinecraftForge.EVENT_BUS.unregister(this);
         presence.removeListener(this);
         playerNames.removeListener(namesChanged);
+        denickNames.removeListener(namesChanged);
         relations.removeListener(this);
         equipment.removeListener(this);
         snapshot = PlayerListSnapshot.empty();
@@ -205,6 +210,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         if (active && (changes.affects("playerlist", "show_held_item")
                 || changes.affects("playerlist", "show_leggings")
                 || changes.affects("playerlist", "enchantment_format")
+                || changes.affects("playerlist", "show_gem")
                 || changes.affects("playerlist", "short_player_names")
                 || changes.affects("playerlist", "show_distance")
                 || changes.affects("playerlist", "show_direction")
@@ -212,6 +218,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 || changes.affects("playerlist", "show_group_name")
                 || changes.affects("playerlist", "show_friend")
                 || changes.affects("playerlist", "show_enemy")
+                || changes.affects("playerlist", "show_nick")
                 || changes.affects("playerlist", "show_regularity")
                 || changes.affects("playerlist", "show_dark")
                 || changes.affects("playerlist", "show_bounty_hunter")

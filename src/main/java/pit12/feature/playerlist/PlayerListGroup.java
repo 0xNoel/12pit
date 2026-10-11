@@ -23,6 +23,7 @@ import static pit12.runtime.languages.Languages.source;
 public enum PlayerListGroup {
     FRIEND(source("§a§lFriend")),
     ENEMY(source("§c§lEnemy")),
+    NICK(source("§c§lNick")),
     REGULARITY("§4§lREG"),
     DARK("§d§lDARK"),
     BOUNTY_HUNTER("§6§lBounty Hunter");

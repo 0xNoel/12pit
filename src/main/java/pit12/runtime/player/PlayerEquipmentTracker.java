@@ -26,6 +26,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -107,7 +108,13 @@ public final class PlayerEquipmentTracker implements ClientLifecycle, PlayerEqui
         WorldClient world = session.world();
         Entity entity = world == null ? null : world.getEntityByID(entityId);
         if (entity instanceof EntityPlayer) {
-            cache.markDirty(entity.getUniqueID(), slots);
+            EntityPlayer player = (EntityPlayer) entity;
+            UUID playerId = player.getUniqueID();
+            cache.markDirty(playerId, slots);
+            ItemStack stack = equipmentSlot == 0 ? player.getHeldItem()
+                    : player.getCurrentArmor(equipmentSlot - 1);
+            Listeners.notify(listeners,
+                    listener -> listener.onPlayerEquipmentReceived(playerId, stack));
         }
     }
 
@@ -243,6 +250,17 @@ public final class PlayerEquipmentTracker implements ClientLifecycle, PlayerEqui
         if (equipmentSlot == 0) {
             return PlayerEquipmentCache.HELD_ITEM;
         }
-        return equipmentSlot == 2 ? PlayerEquipmentCache.LEGGINGS : 0;
+        switch (equipmentSlot) {
+            case 1:
+                return PlayerEquipmentCache.BOOTS;
+            case 2:
+                return PlayerEquipmentCache.LEGGINGS;
+            case 3:
+                return PlayerEquipmentCache.CHESTPLATE;
+            case 4:
+                return PlayerEquipmentCache.HELMET;
+            default:
+                return 0;
+        }
     }
 }

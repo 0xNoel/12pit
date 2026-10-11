@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 1596fd2d6ad227d4f04bc832cdbb136469e6446e -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: 0166a4fe0c95c7a1ee065bb06a10e6ead2d82d30 -->
 
 # 12pit 实现
 
@@ -281,7 +281,11 @@ Bootstrap 为功能提供查询契约。其实时查询和订阅需要客户端�
 
 [PlayerEquipmentAccess](../../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) 提供 `loadedEquipment(UUID)`。如果实体未加载或尚未被观察到，查询返回 `null`。在快照中，将槽位视为空之前，先检查 `heldItemKnown()` 或 `leggingsKnown()`。`copyHeldItem()` 和 `copyLeggings()` 返回防御性副本，`null` 既可能表示未知槽位，也可能表示已知的空槽位。使用 `heldEnchantments()` 或 `leggingsEnchantments()` 获取已解析的数据。
 
-将 [PlayerEquipmentListener](../../src/main/java/pit12/runtime/player/PlayerEquipmentListener.java) 保存为字段。在 `start()` 中调用 `equipment.addListener(equipmentListener)` 注册，再查询功能需要的当前玩家。在 `onPlayerEquipmentChanged(playerId, changedSlots, revision)` 中重新查询 `loadedEquipment(playerId)`，更新功能的数据。`changedSlots` 使用 `PlayerEquipmentCache.HELD_ITEM` 和 `PlayerEquipmentCache.LEGGINGS` 位标记。`onPlayerEquipmentRemoved(playerId)` 移除该玩家的装备数据，`onPlayerEquipmentReset()` 清除派生的装备数据。在 `stop()` 中，调用 `equipment.removeListener(equipmentListener)` 注销同一个监听器。
+`copyEquipment(slot)` 返回槽位 `0` 到 `4` 的副本，依次为手持物品、鞋子、护腿、胸甲和头盔。空槽位和未观察到的槽位都返回 `null`。
+
+将 [PlayerEquipmentListener](../../src/main/java/pit12/runtime/player/PlayerEquipmentListener.java) 保存为字段。在 `start()` 中调用 `equipment.addListener(equipmentListener)` 注册，再查询功能需要的当前玩家。在 `onPlayerEquipmentChanged(playerId, changedSlots, revision)` 中重新查询 `loadedEquipment(playerId)`，更新功能的数据。`changedSlots` 使用 `PlayerEquipmentCache.HELD_ITEM`、`BOOTS`、`LEGGINGS`、`CHESTPLATE` 和 `HELMET` 位标记。`onPlayerEquipmentRemoved(playerId)` 移除该玩家的装备数据，`onPlayerEquipmentReset()` 清除派生的装备数据。在 `stop()` 中，调用 `equipment.removeListener(equipmentListener)` 注销同一个监听器。
+
+`onPlayerEquipmentReceived(playerId, stack)` 在每个装备包处理后执行，不等待 tick 合并变化。`stack` 可能为 `null`，由 Minecraft 持有，只能在回调期间读取。保存或修改它之前先复制。需要保留中间装备时使用这个回调。
 
 [PitContext](../../src/main/java/pit12/runtime/pit/PitContext.java) 提供 `current()`。返回的 `PitSnapshot` 提供地图、Pit 状态、修订号和 `spawnStateAt(x, y, z)`。在地图被识别前，状态为 `UNKNOWN`。快照可以传给工作线程；实时提供者不可以。
 

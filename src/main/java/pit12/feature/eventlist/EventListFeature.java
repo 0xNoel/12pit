@@ -251,7 +251,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         boolean translate = config.hud().translateText().get();
         String message = failed ? language.translate("Could not load events", translate)
                 : loaded ? language.translate("Event schedule has ended", translate)
-                        : language.translate("Loading events\u2026", translate);
+                        : language.translate("Loading events…", translate);
         hud.snapshot(EventListSnapshot.build(events, config, now, message, true, language));
         displayedSecond = now / 1000L;
     }

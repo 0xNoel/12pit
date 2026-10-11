@@ -23,19 +23,22 @@ import java.util.Iterator;
 import net.minecraft.util.EnumChatFormatting;
 
 public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
-    private static final PitEnchantments EMPTY = new PitEnchantments(new Entry[0]);
+    private static final PitEnchantments EMPTY = new PitEnchantments(new Entry[0], false);
     private final Entry[] entries;
+    private final boolean gemmed;
 
-    private PitEnchantments(Entry[] entries) {
+    private PitEnchantments(Entry[] entries, boolean gemmed) {
         this.entries = entries;
+        this.gemmed = gemmed;
     }
 
-    static PitEnchantments create(Entry[] entries, int size) {
-        if (size == 0) {
+    static PitEnchantments create(Entry[] entries, int size, boolean gemmed) {
+        if (size == 0 && !gemmed) {
             return EMPTY;
         }
         // The reader transfers ownership of this array.
-        return new PitEnchantments(size == entries.length ? entries : Arrays.copyOf(entries, size));
+        return new PitEnchantments(size == entries.length ? entries : Arrays.copyOf(entries, size),
+                gemmed);
     }
 
     public static PitEnchantments empty() {
@@ -43,23 +46,27 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
     }
 
     /** Returns null when this result contains no known enchantments. */
-    public String formatDisplayNames() {
-        return formatDisplayNames(false, true, false);
+    public String formatDisplayNames(boolean showGem) {
+        return formatDisplayNames(false, true, false, showGem);
     }
 
     /** Returns null when this result contains no known enchantments. */
-    public String formatBoldDisplayNames() {
-        return formatDisplayNames(true, true, false);
+    public String formatBoldDisplayNames(boolean showGem) {
+        return formatDisplayNames(true, true, false, showGem);
     }
 
     /** Returns null when this result contains no known enchantments. */
-    public String formatBoldDisplayNamesWithoutLevelThree() {
-        return formatDisplayNames(true, true, true);
+    public String formatBoldDisplayNamesWithoutLevelThree(boolean showGem) {
+        return formatDisplayNames(true, true, true, showGem);
     }
 
     /** Returns null when this result contains no known enchantments. */
-    public String formatBoldDisplayNamesWithoutLevels() {
-        return formatDisplayNames(true, false, false);
+    public String formatBoldDisplayNamesWithoutLevels(boolean showGem) {
+        return formatDisplayNames(true, false, false, showGem);
+    }
+
+    public boolean gemmed() {
+        return gemmed;
     }
 
     public boolean contains(PitEnchantment enchantment) {
@@ -75,7 +82,8 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
         return false;
     }
 
-    private String formatDisplayNames(boolean bold, boolean showLevels, boolean hideLevelThree) {
+    private String formatDisplayNames(boolean bold, boolean showLevels, boolean hideLevelThree,
+            boolean showGem) {
         StringBuilder text = null;
         for (Entry entry : entries) {
             PitEnchantment enchantment = entry.enchantment;
@@ -97,7 +105,10 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
                 text.append(entry.level);
             }
         }
-        return text == null ? null : text.toString();
+        if (text == null) {
+            return null;
+        }
+        return showGem && gemmed ? text + " §a♦" : text.toString();
     }
 
     private static void appendDisplayName(StringBuilder text, String displayName, boolean bold) {
@@ -106,7 +117,7 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
             return;
         }
         // Color codes reset styles, so apply bold after the leading color.
-        if (displayName.length() >= 2 && displayName.charAt(0) == '\u00A7') {
+        if (displayName.length() >= 2 && displayName.charAt(0) == '§') {
             text.append(displayName, 0, 2).append(EnumChatFormatting.BOLD).append(displayName, 2,
                     displayName.length());
         } else {

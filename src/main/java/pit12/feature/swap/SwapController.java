@@ -423,7 +423,8 @@ final class SwapController {
     private String itemName(int slot) {
         ItemStack item = stack(slot);
         if (item != null) {
-            String enchantments = PitEnchantmentReader.read(item).formatBoldDisplayNames();
+            String enchantments =
+                    PitEnchantmentReader.read(item).formatBoldDisplayNames(options.showGem);
             return EnumChatFormatting.RESET
                     + (enchantments == null ? item.getDisplayName() : enchantments)
                     + EnumChatFormatting.RESET + EnumChatFormatting.GREEN;

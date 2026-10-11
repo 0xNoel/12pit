@@ -1,0 +1,696 @@
+/*
+ * This file is part of 12pit.
+ *
+ * Copyright (C) 2026 The 12pit Authors and contributors <https://github.com/12src/12pit>
+ *
+ * 12pit is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 12pit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
+ */
+package pit12.feature.denick;
+
+import static pit12.runtime.languages.Languages.source;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import net.minecraft.client.Minecraft;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import pit12.feature.denick.api.DenickNames;
+import pit12.runtime.command.CommandNode;
+import pit12.runtime.command.CommandRegistry;
+import pit12.runtime.config.ConfigCatalog;
+import pit12.runtime.config.ConfigChangeListener;
+import pit12.runtime.config.ConfigChangeSet;
+import pit12.runtime.config.Setting;
+import pit12.runtime.languages.Languages;
+import pit12.runtime.pit.PitContext;
+import pit12.runtime.pit.PitState;
+import pit12.runtime.player.PlayerEquipmentAccess;
+import pit12.runtime.player.PlayerEquipmentCache;
+import pit12.runtime.player.PlayerEquipmentListener;
+import pit12.runtime.player.PlayerEquipmentSnapshot;
+import pit12.runtime.player.PlayerNameCache;
+import pit12.runtime.player.TabPresence;
+import pit12.runtime.player.TabPresenceListener;
+import pit12.runtime.session.ClientSession;
+import pit12.shared.chat.ChatFeedback;
+import pit12.shared.chat.ChatFeedback.Tone;
+import pit12.shared.concurrent.ClientThread;
+import pit12.shared.event.Listeners;
+import pit12.shared.lifecycle.ClientLifecycle;
+import pit12.shared.text.PlayerNameFormatter;
+
+public final class DenickFeature implements ClientLifecycle, DenickNames, TabPresenceListener,
+        PlayerEquipmentListener, ConfigChangeListener {
+    private static final Logger LOGGER = Logger.getLogger(DenickFeature.class.getName());
+    private static final Pattern NPC_TAB_NAME = Pattern.compile("[a-z0-9]{10}(?![A-Za-z0-9_])");
+    private final Minecraft minecraft;
+    private final ClientThread client;
+    private final ConfigCatalog configs;
+    private final DenickConfig config;
+    private final ClientSession session;
+    private final PitContext pit;
+    private final TabPresence presence;
+    private final PlayerNameCache names;
+    private final PlayerEquipmentAccess equipment;
+    private final Languages language;
+    private final DenickNamesBinding binding;
+    private final DenickStore store;
+    private final Set<UUID> checkedPlayers = new HashSet<>();
+    private final Map<UUID, Target> targets = new LinkedHashMap<>();
+    private final Map<String, String> mappings = new LinkedHashMap<>();
+    private final List<Runnable> listeners = new ArrayList<>();
+    private final Runnable sessionChanged = this::resetWorld;
+    private ExecutorService queryWorker;
+    private ExecutorService storageWorker;
+    private PitPalClient api;
+    private boolean ready;
+    private boolean writable;
+    private boolean inPit;
+    private boolean tabVisible;
+    private boolean namesBound;
+    private volatile long generation;
+    private volatile boolean started;
+
+    public DenickFeature(Minecraft minecraft, ClientThread client, ConfigCatalog configs,
+            DenickConfig config, ClientSession session, PitContext pit, TabPresence presence,
+            PlayerNameCache names, PlayerEquipmentAccess equipment, CommandRegistry commands,
+            Languages language, Path path, DenickNamesBinding binding) {
+        this.minecraft = minecraft;
+        this.client = client;
+        this.configs = configs;
+        this.config = config;
+        this.session = session;
+        this.pit = pit;
+        this.presence = presence;
+        this.names = names;
+        this.equipment = equipment;
+        this.language = language;
+        this.binding = binding;
+        store = new DenickStore(path);
+        commands.register(CommandNode.command("denick", source("Find a nicked player's name"))
+                .aliases("dn").arguments("<player> [force]", 1, 2).executes(this::command)
+                .suggests((sender, args) -> args.length == 1
+                        ? new ArrayList<>(presence.players().values())
+                        : Collections.singletonList("force"))
+                .build(), true);
+    }
+
+    @Override
+    public void start() {
+        client.check();
+        if (started) {
+            return;
+        }
+        started = true;
+        ready = false;
+        writable = false;
+        api = new PitPalClient();
+        queryWorker = Executors.newSingleThreadExecutor(task -> {
+            Thread thread = new Thread(task, "12pit-denick-query");
+            thread.setDaemon(true);
+            return thread;
+        });
+        storageWorker = Executors.newSingleThreadExecutor(task -> {
+            Thread thread = new Thread(task, "12pit-denick-cache");
+            thread.setDaemon(true);
+            return thread;
+        });
+        configs.addListener(this);
+        presence.addListener(this);
+        equipment.addListener(this);
+        session.addListener(sessionChanged);
+        MinecraftForge.EVENT_BUS.register(this);
+        resetWorld();
+        ExecutorService loader = storageWorker;
+        loader.execute(() -> {
+            Map<String, String> loaded = null;
+            try {
+                loaded = store.load();
+            } catch (IOException | RuntimeException failure) {
+                LOGGER.log(Level.WARNING, "Cannot load denick cache", failure);
+            }
+            Map<String, String> result = loaded;
+            client.execute(() -> {
+                if (!started || storageWorker != loader) {
+                    return;
+                }
+                mappings.clear();
+                if (result != null) {
+                    mappings.putAll(result);
+                    writable = true;
+                }
+                ready = true;
+            });
+        });
+    }
+
+    @Override
+    public void stop() {
+        client.check();
+        started = false;
+        generation++;
+        if (namesBound) {
+            binding.pit12$bindDenickNames(null);
+            namesBound = false;
+        }
+        MinecraftForge.EVENT_BUS.unregister(this);
+        configs.removeListener(this);
+        session.removeListener(sessionChanged);
+        equipment.removeListener(this);
+        presence.removeListener(this);
+        targets.values().forEach(Target::cancel);
+        targets.clear();
+        checkedPlayers.clear();
+        if (queryWorker != null) {
+            queryWorker.shutdownNow();
+            queryWorker = null;
+        }
+        if (storageWorker != null) {
+            storageWorker.shutdown();
+            try {
+                if (!storageWorker.awaitTermination(2000L, TimeUnit.MILLISECONDS)) {
+                    storageWorker.shutdownNow();
+                    LOGGER.warning("Denick cache worker did not stop");
+                }
+            } catch (InterruptedException interrupted) {
+                storageWorker.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+            storageWorker = null;
+        }
+        ready = false;
+        mappings.clear();
+        listeners.clear();
+    }
+
+    private void command(ICommandSender sender, String[] args) {
+        client.check();
+        if (!config.enabled()) {
+            throw new IllegalArgumentException(source("Denick is disabled"));
+        }
+        if (!ready) {
+            throw new IllegalArgumentException(source("Denick cache is loading"));
+        }
+        if (args.length == 2 && !"force".equalsIgnoreCase(args[1])) {
+            throw new IllegalArgumentException(source("Use force as the second argument"));
+        }
+        if (session.world() == null) {
+            throw new IllegalArgumentException(source("Join a world before using denick"));
+        }
+        Map.Entry<UUID, String> player = presence.players().entrySet().stream()
+                .filter(entry -> entry.getValue().equalsIgnoreCase(args[0])).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(source("Player is not in Tab")));
+        Target target = targets.get(player.getKey());
+        if (args.length == 1 && (target == null || !target.nick)) {
+            throw new IllegalArgumentException(source("Player is not nicked. Use force to query"));
+        }
+        if (target == null) {
+            target = new Target(player.getKey(), player.getValue());
+            targets.put(player.getKey(), target);
+        }
+        begin(target, sender, args.length == 2);
+        ChatFeedback.reply(sender, Tone.INFO, language.format("Querying {0}...", target.name));
+    }
+
+    private void resetWorld() {
+        client.check();
+        generation++;
+        targets.replaceAll((id, previous) -> {
+            previous.cancel();
+            Target target = new Target(id, previous.name);
+            target.nick = previous.nick;
+            return target;
+        });
+        if (config.enabled() && config.automatic.get()) {
+            for (Target target : targets.values()) {
+                if (target.nick) {
+                    begin(target, null, false);
+                }
+            }
+        }
+        inPit = false;
+        tabVisible = false;
+        changed();
+    }
+
+    private boolean isNick(UUID id) {
+        if (id.version() == 4 && id.variant() == 2) {
+            return false;
+        }
+        String display = names.displayName(id);
+        if (display == null) {
+            return false;
+        }
+        String plain = EnumChatFormatting.getTextWithoutFormattingCodes(display).trim();
+        return !plain.contains("[NPC]") && !NPC_TAB_NAME.matcher(display).lookingAt();
+    }
+
+    @Override
+    public void onPlayerSeen(UUID playerId, String name, boolean joined) {
+        if (name == null || !checkedPlayers.add(playerId)) {
+            return;
+        }
+        if (isNick(playerId)) {
+            Target target = targets.computeIfAbsent(playerId, id -> new Target(id, name));
+            target.nick = true;
+            if (config.enabled() && config.automatic.get()) {
+                begin(target, null, false);
+            }
+            changed();
+        }
+    }
+
+    @Override
+    public void onPlayerLeft(UUID playerId) {
+        checkedPlayers.remove(playerId);
+        Target target = targets.remove(playerId);
+        if (target != null) {
+            target.cancel();
+            changed();
+        }
+    }
+
+    @Override
+    public void onPlayerEquipmentReceived(UUID playerId, ItemStack stack) {
+        Target target = targets.get(playerId);
+        if (target != null && target.automatic && target.search != null && config.enabled()
+                && config.monitor.get()) {
+            enqueue(target.search, stack);
+        }
+    }
+
+    @Override
+    public void onPlayerEquipmentChanged(UUID playerId, int changedSlots, long revision) {
+        Target target = targets.get(playerId);
+        if (target == null || !target.automatic || target.search == null || !config.enabled()
+                || !config.monitor.get()) {
+            return;
+        }
+        PlayerEquipmentSnapshot snapshot = equipment.loadedEquipment(playerId);
+        if (snapshot != null) {
+            for (int slot = 0; slot < 5; slot++) {
+                int mask = slot == 0 ? PlayerEquipmentCache.HELD_ITEM
+                        : slot == 1 ? PlayerEquipmentCache.BOOTS
+                                : slot == 2 ? PlayerEquipmentCache.LEGGINGS
+                                        : slot == 3 ? PlayerEquipmentCache.CHESTPLATE
+                                                : PlayerEquipmentCache.HELMET;
+                if ((changedSlots & mask) != 0) {
+                    enqueue(target.search, snapshot.copyEquipment(slot));
+                }
+            }
+        }
+    }
+
+    private void enqueue(Search search, ItemStack stack) {
+        DenickItem item = DenickItem.read(stack);
+        if (item != null) {
+            search.pending.putIfAbsent(item.query, item);
+        }
+    }
+
+    @Override
+    public void onPlayerEquipmentRemoved(UUID playerId) {
+        // Queued equipment remains useful after the entity unloads.
+    }
+
+    @Override
+    public void onPlayerEquipmentReset() {
+        // Session changes discard the queues in resetWorld.
+    }
+
+    @Override
+    public void onConfigChanged(ConfigChangeSet changes) {
+        if (!started) {
+            return;
+        }
+        boolean relevant = false;
+        for (Setting<?> setting : config.settings()) {
+            if (changes.affects("denick", setting.id())) {
+                relevant = true;
+                break;
+            }
+        }
+        if (!relevant) {
+            return;
+        }
+        if (changes.affects("denick", "enabled")) {
+            resetWorld();
+        }
+        if (changes.affects("denick", "automatic") && !config.automatic.get()) {
+            for (Target target : targets.values()) {
+                if (target.automatic && target.search != null) {
+                    target.cancel();
+                    target.attempted = false;
+                }
+            }
+        }
+        if (changes.affects("denick", "monitor")) {
+            for (Target target : targets.values()) {
+                if (!target.automatic || target.confirmed) {
+                    continue;
+                }
+                if (config.monitor.get() && config.enabled() && config.automatic.get()
+                        && target.search == null) {
+                    begin(target, null, false);
+                } else if (!config.monitor.get() && target.search != null
+                        && !target.search.initial) {
+                    target.cancel();
+                }
+            }
+        }
+        changed();
+    }
+
+    @SubscribeEvent
+    public void onTick(ClientTickEvent event) {
+        if (event.phase != Phase.END) {
+            return;
+        }
+        client.check();
+        if (!namesBound) {
+            // Forge initializes mods before Minecraft creates its in-game GUI.
+            binding.pit12$bindDenickNames(this);
+            namesBound = true;
+        }
+        inPit = pit.current().pitState() == PitState.IN_PIT;
+        if (!ready || !config.enabled()) {
+            return;
+        }
+        for (Target target : targets.values()) {
+            if (inPit && config.automatic.get() && target.nick && !target.attempted) {
+                begin(target, null, false);
+            }
+            Search search = target.search;
+            if (search != null && !search.busy && (search.initial || !search.pending.isEmpty())
+                    && (!target.automatic || !search.initial || inPit)) {
+                query(target);
+            }
+        }
+    }
+
+    private List<DenickItem> currentItems(UUID id) {
+        EntityPlayer player =
+                session.world() == null ? null : session.world().getPlayerEntityByUUID(id);
+        Map<String, DenickItem> items = new LinkedHashMap<>();
+        if (player != null) {
+            for (int slot = 0; slot < 5; slot++) {
+                ItemStack stack =
+                        slot == 0 ? player.getHeldItem() : player.getCurrentArmor(slot - 1);
+                DenickItem item = DenickItem.read(stack);
+                if (item != null) {
+                    items.putIfAbsent(item.query, item);
+                }
+            }
+        }
+        return new ArrayList<>(items.values());
+    }
+
+    private void begin(Target target, ICommandSender sender, boolean force) {
+        target.cancel();
+        target.automatic = sender == null;
+        target.attempted = true;
+        target.confirmed = false;
+        target.search = new Search(currentItems(target.id), sender, force);
+    }
+
+    private void query(Target target) {
+        Search search = target.search;
+        boolean first = search.initial;
+        List<DenickItem> items = new ArrayList<>();
+        int count = first ? search.initialCount : search.pending.size();
+        for (DenickItem item : search.pending.values()) {
+            if (items.size() == count) {
+                break;
+            }
+            items.add(item);
+        }
+        items.sort(Comparator.comparingInt(item -> item.nonce >= 10 ? 0 : 1));
+        String cached = mappings.get(target.name.toLowerCase(Locale.ROOT));
+        search.busy = true;
+        long requestGeneration = generation;
+        long request = ++target.request;
+        BooleanSupplier cancelled = () -> !started || generation != requestGeneration
+                || target.request != request || Thread.currentThread().isInterrupted();
+        target.task = queryWorker.submit(() -> {
+            String cachedDisplayName = null;
+            try {
+                if (first && !search.force && cached != null) {
+                    try {
+                        cachedDisplayName = api.displayName(cached, cancelled);
+                        String name = cachedDisplayName;
+                        client.execute(() -> {
+                            if (valid(target, requestGeneration, request)) {
+                                target.realDisplayName = name;
+                                target.owner = cached;
+                                reply(search.sender, Tone.SUCCESS, language
+                                        .format("{0} -> {1} (cached)", displayName(target), name));
+                                changed();
+                            }
+                        });
+                    } catch (IOException | RuntimeException failure) {
+                        LOGGER.warning("Cannot resolve cached denick owner for " + target.name
+                                + ": " + failure);
+                    }
+                }
+                DenickQuery result = DenickQuery.run(api, items, search.force ? null : cached,
+                        cachedDisplayName, cancelled);
+                client.execute(() -> {
+                    if (valid(target, requestGeneration, request)) {
+                        complete(target, search, items, cached, result);
+                    }
+                });
+            } catch (InterruptedException interrupted) {
+                Thread.currentThread().interrupt();
+            }
+        });
+    }
+
+    private boolean valid(Target target, long requestGeneration, long request) {
+        return started && generation == requestGeneration && target.request == request
+                && targets.get(target.id) == target && presence.contains(target.id);
+    }
+
+    private void complete(Target target, Search search, List<DenickItem> items, String cached,
+            DenickQuery result) {
+        boolean first = search.initial;
+        search.initial = false;
+        search.busy = false;
+        target.task = null;
+        items.forEach(item -> search.pending.remove(item.query));
+        if (result.displayName != null) {
+            String previousName = target.realDisplayName;
+            String previousOwner = target.owner;
+            target.owner = result.owner;
+            target.realDisplayName = result.displayName;
+            target.confirmed = true;
+            search.pending.clear();
+            target.search = null;
+            if (search.force || !Objects.equals(previousName, result.displayName)
+                    || !Objects.equals(previousOwner, result.owner)) {
+                boolean corrected = cached != null && !Objects.equals(cached, result.owner);
+                reply(search.sender, Tone.SUCCESS,
+                        language.format(
+                                corrected ? source("{0} -> {1} (updated)") : source("{0} -> {1}"),
+                                displayName(target), result.displayName));
+                changed();
+            }
+            if (!Objects.equals(mappings.put(target.name.toLowerCase(Locale.ROOT), result.owner),
+                    result.owner)) {
+                persist();
+            }
+            return;
+        }
+        if (first && !items.isEmpty() && result.failure == null) {
+            if (mappings.remove(target.name.toLowerCase(Locale.ROOT)) != null) {
+                persist();
+                if (search.sender != null || !config.successOnly.get()) {
+                    reply(search.sender, Tone.WARNING, language
+                            .format("Cached identity for {0} is no longer confirmed", target.name));
+                }
+            }
+            target.realDisplayName = null;
+            target.owner = null;
+            changed();
+        }
+        target.confirmed = false;
+        boolean monitoring = target.automatic && config.monitor.get();
+        if (!monitoring) {
+            search.pending.clear();
+            target.search = null;
+        }
+        if (first && (search.sender != null || !config.successOnly.get())) {
+            String message = items.isEmpty() ? source("No searchable equipment for {0}")
+                    : result.failure != null ? source("Could not query {0}")
+                            : source("No confirmed owner for {0}");
+            String text = language.format(message, target.name);
+            if (monitoring) {
+                text += ". " + language.translate("Waiting for new equipment");
+            }
+            reply(search.sender, Tone.WARNING, text);
+        }
+    }
+
+    private void persist() {
+        if (!writable) {
+            return;
+        }
+        Map<String, String> saved = new LinkedHashMap<>(mappings);
+        storageWorker.execute(() -> {
+            try {
+                store.write(saved);
+            } catch (IOException | RuntimeException failure) {
+                LOGGER.log(Level.WARNING, "Cannot save denick cache", failure);
+            }
+        });
+    }
+
+    private void reply(ICommandSender sender, Tone tone, String message) {
+        ICommandSender recipient = sender == null ? minecraft.thePlayer : sender;
+        if (recipient != null) {
+            ChatFeedback.reply(recipient, tone, message);
+        }
+    }
+
+    private String displayName(Target target) {
+        String displayName = names.displayName(target.id);
+        return displayName == null ? target.name : displayName;
+    }
+
+    @Override
+    public boolean isNicked(UUID playerId) {
+        client.check();
+        Target target = targets.get(playerId);
+        return config.enabled() && target != null && target.nick;
+    }
+
+    @Override
+    public void setTabVisible(boolean visible) {
+        client.check();
+        if (visible != tabVisible) {
+            tabVisible = visible;
+            changed();
+        }
+    }
+
+    @Override
+    public String listName(UUID playerId, String original, boolean shortName) {
+        client.check();
+        Target target = targets.get(playerId);
+        if (!config.enabled() || target == null || !target.nick) {
+            return original;
+        }
+        if (config.tabNames.get() && tabVisible && target.realDisplayName != null) {
+            return shortName ? PlayerNameFormatter.shorten(target.realDisplayName)
+                    : target.realDisplayName;
+        }
+        return config.nickMarker.get() ? original.trim() + " §c§lN" : original;
+    }
+
+    @Override
+    public String realDisplayName(UUID playerId) {
+        client.check();
+        Target target = targets.get(playerId);
+        return config.enabled() && target != null && target.nick ? target.realDisplayName : null;
+    }
+
+    @Override
+    public void addListener(Runnable listener) {
+        client.check();
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeListener(Runnable listener) {
+        client.check();
+        listeners.remove(listener);
+    }
+
+    private void changed() {
+        Listeners.notify(listeners, Runnable::run);
+    }
+
+    private static final class Search {
+        final Map<String, DenickItem> pending = new LinkedHashMap<>();
+        final ICommandSender sender;
+        final boolean force;
+        final int initialCount;
+        boolean initial = true;
+        boolean busy;
+
+        Search(List<DenickItem> items, ICommandSender sender, boolean force) {
+            items.forEach(item -> pending.put(item.query, item));
+            this.sender = sender;
+            this.force = force;
+            // Later equipment must not delay the initial failure message.
+            initialCount = pending.size();
+        }
+    }
+    private static final class Target {
+        final UUID id;
+        final String name;
+        boolean nick;
+        boolean attempted;
+        boolean automatic;
+        boolean confirmed;
+        volatile long request;
+        String owner;
+        String realDisplayName;
+        Search search;
+        Future<?> task;
+
+        Target(UUID id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        void cancel() {
+            request++;
+            if (task != null) {
+                task.cancel(true);
+                task = null;
+            }
+            if (search != null) {
+                search.pending.clear();
+                search = null;
+            }
+        }
+    }
+}

@@ -65,11 +65,7 @@ const runs = computed(() => {
   }
   for (let index = 0; index < props.text.length; index++) {
     const code = props.text[index + 1]?.toLowerCase()
-    if (
-      props.text[index] === '\u00a7' &&
-      code &&
-      /^[0-9a-flmnor]$/.test(code)
-    ) {
+    if (props.text[index] === '§' && code && /^[0-9a-flmnor]$/.test(code)) {
       flush()
       if (code === 'r' || /^[0-9a-f]$/.test(code)) {
         color = code === 'r' ? undefined : colors[parseInt(code, 16)]

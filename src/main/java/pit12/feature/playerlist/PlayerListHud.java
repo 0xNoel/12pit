@@ -91,8 +91,8 @@ final class PlayerListHud implements HudElement {
     void localize(Languages language) {
         boolean translate = hudConfig.translateText().get();
         for (PlayerListGroup group : PlayerListGroup.values()) {
-            groupNames[group.ordinal()] =
-                    group == PlayerListGroup.FRIEND || group == PlayerListGroup.ENEMY
+            groupNames[group.ordinal()] = group == PlayerListGroup.FRIEND
+                    || group == PlayerListGroup.ENEMY || group == PlayerListGroup.NICK
                             ? language.translate(group.displayName(), translate)
                             : group.displayName();
         }
@@ -405,6 +405,7 @@ final class PlayerListHud implements HudElement {
             secondName = PlayerNameFormatter.shorten(secondName);
             darkName = PlayerNameFormatter.shorten(darkName);
         }
+        firstName += " §c§lN";
         Map<PlayerListGroup, List<PlayerListEntry>> groups =
                 new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
         groups.put(PlayerListGroup.REGULARITY,
@@ -422,6 +423,12 @@ final class PlayerListHud implements HudElement {
                 Collections.singletonList(new PlayerListEntry(null, 0, darkName,
                         sampleEnchantments(new PitEnchantment[] {PitEnchantment.Somber}, 1), null,
                         0.0F, 0.0F, false, false, true)));
+        if (config.showGroup(PlayerListGroup.NICK)) {
+            groups.put(PlayerListGroup.NICK,
+                    Collections.singletonList(new PlayerListEntry(null, 0, firstName,
+                            groups.get(PlayerListGroup.REGULARITY).get(0).leggingsText(), null,
+                            45.0F, -135.0F, true, true, false)));
+        }
         return PlayerListSnapshot.create(groups);
     }
 
@@ -440,6 +447,6 @@ final class PlayerListHud implements HudElement {
         ItemStack stack = new ItemStack(Items.leather_leggings);
         stack.setTagCompound(tag);
         return PitEnchantmentFormat.format(PitEnchantmentReader.read(stack),
-                config.enchantmentFormat());
+                config.enchantmentFormat(), config.showGem());
     }
 }

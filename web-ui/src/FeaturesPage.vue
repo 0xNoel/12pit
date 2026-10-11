@@ -94,7 +94,7 @@ const visible = computed(() => {
     .map((feature) => ({
       feature,
       favorite: props.favorites.has(feature.id),
-      sortName: feature.name.replace(/\u00a7[0-9a-flmnor]/gi, ''),
+      sortName: feature.name.replace(/§[0-9a-flmnor]/gi, ''),
       hasDetails: feature.sections.some(
         (section) => section.options.length > 0,
       ),

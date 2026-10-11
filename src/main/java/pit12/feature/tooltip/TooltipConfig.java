@@ -27,6 +27,7 @@ import pit12.runtime.config.IntegerSetting;
 
 public final class TooltipConfig extends FeatureConfig {
     private final BooleanSetting showEnchantments;
+    private final BooleanSetting showGem;
     private final IntegerSetting upwardOffset;
 
     public TooltipConfig() {
@@ -36,12 +37,18 @@ public final class TooltipConfig extends FeatureConfig {
         showEnchantments = booleanSetting("show_enchantments",
                 source("Show enchantments instead of item name"),
                 source("Replaces the held item name with known Pit enchantments."), true);
+        showGem = booleanSetting("show_gem", source("Show gem"),
+                source("Shows a green diamond on gemmed items."), true);
         upwardOffset = integerSliderSetting("upward_offset", source("Move tooltip upward"),
                 source("Moves the held item tooltip upward by this many pixels."), 0, 0, 30, 1);
     }
 
     public boolean showEnchantments() {
         return showEnchantments.get();
+    }
+
+    public boolean showGem() {
+        return showGem.get();
     }
 
     public int upwardOffset() {

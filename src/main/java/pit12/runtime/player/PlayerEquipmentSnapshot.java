@@ -25,19 +25,17 @@ import pit12.runtime.item.PitEnchantments;
 
 public final class PlayerEquipmentSnapshot {
     private final UUID playerId;
-    private final ItemStack heldItem;
-    private final ItemStack leggings;
+    private final ItemStack[] equipment;
     private final PitEnchantments heldEnchantments;
     private final PitEnchantments leggingsEnchantments;
     private final int knownSlots;
     private final long revision;
 
-    PlayerEquipmentSnapshot(UUID playerId, ItemStack heldItem, ItemStack leggings,
-            PitEnchantments heldEnchantments, PitEnchantments leggingsEnchantments, int knownSlots,
-            long revision) {
+    PlayerEquipmentSnapshot(UUID playerId, ItemStack[] equipment, PitEnchantments heldEnchantments,
+            PitEnchantments leggingsEnchantments, int knownSlots, long revision) {
         this.playerId = playerId;
-        this.heldItem = copy(heldItem);
-        this.leggings = copy(leggings);
+        // The cache transfers this array. Its stacks are private snapshot data.
+        this.equipment = equipment;
         this.heldEnchantments = heldEnchantments;
         this.leggingsEnchantments = leggingsEnchantments;
         this.knownSlots = knownSlots;
@@ -45,7 +43,7 @@ public final class PlayerEquipmentSnapshot {
     }
 
     public boolean hasGoldenLeggings() {
-        return leggings != null && leggings.getItem() == Items.golden_leggings;
+        return equipment[2] != null && equipment[2].getItem() == Items.golden_leggings;
     }
 
     public UUID playerId() {
@@ -66,12 +64,21 @@ public final class PlayerEquipmentSnapshot {
 
     /** Empty or unobserved slots return null. {@link #heldItemKnown()} distinguishes them. */
     public ItemStack copyHeldItem() {
-        return copy(heldItem);
+        return copy(equipment[0]);
     }
 
     /** Empty or unobserved slots return null. {@link #leggingsKnown()} distinguishes them. */
     public ItemStack copyLeggings() {
-        return copy(leggings);
+        return copy(equipment[2]);
+    }
+
+    /** Slots are held item, boots, leggings, chestplate and helmet. Empty or unknown slots return null. */
+    public ItemStack copyEquipment(int slot) {
+        return copy(equipment[slot]);
+    }
+
+    int knownSlots() {
+        return knownSlots;
     }
 
     public PitEnchantments heldEnchantments() {
