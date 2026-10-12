@@ -85,6 +85,7 @@ import pit12.runtime.player.PlayerNameCache;
 import pit12.runtime.player.TabPresence;
 import pit12.runtime.player.TabPresenceTracker;
 import pit12.runtime.session.ClientSession;
+import pit12.runtime.usage.DailyUsageReporter;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.MinecraftActions;
 import pit12.shared.lifecycle.ClientLifecycle;
@@ -122,6 +123,7 @@ public final class ClientBootstrap {
         components.add(presence);
         PlayerNameCache playerNames = new PlayerNameCache(minecraft, session, presence);
         components.add(playerNames);
+        components.add(new DailyUsageReporter(client, pitContext));
         HudRegistry hudRegistry = new HudRegistry(client);
         // Feature providers
         // Category: No config
