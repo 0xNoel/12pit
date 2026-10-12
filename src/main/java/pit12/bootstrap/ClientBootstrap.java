@@ -30,6 +30,8 @@ import pit12.feature.autoclick.AutoClickConfig;
 import pit12.feature.autoclick.AutoClickFeature;
 import pit12.feature.autofish.AutoFishConfig;
 import pit12.feature.autofish.AutoFishFeature;
+import pit12.feature.banalert.BanAlertConfig;
+import pit12.feature.banalert.BanAlertFeature;
 import pit12.feature.denick.DenickConfig;
 import pit12.feature.denick.DenickFeature;
 import pit12.feature.denick.DenickNamesBinding;
@@ -166,6 +168,7 @@ public final class ClientBootstrap {
         registerTooltip(configs);
         // Category: Misc
         registerAutoQuickMath(configs);
+        registerBanAlert(minecraft, configs, session, presence);
         // Platform integrations
         OneConfigSupport oneConfig = new OneConfigSupport(configs);
         components.add(oneConfig);
@@ -332,6 +335,14 @@ public final class ClientBootstrap {
         AutoQuickMathConfig config = new AutoQuickMathConfig();
         configs.register(config);
         components.add(new AutoQuickMathFeature(config));
+    }
+
+    private void registerBanAlert(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
+            TabPresence presence) {
+        BanAlertConfig config = new BanAlertConfig();
+        configs.register(config);
+        components
+                .add(new BanAlertFeature(minecraft, configs, config, session, presence, language));
     }
 
     public void start() {
