@@ -73,6 +73,8 @@ public final class BootstrapLayoutTest {
             String name = imported.group(1);
             imports.put(name.substring(name.lastIndexOf('.') + 1), name);
         }
+        List<String> categories =
+                Arrays.asList("", "combat", "player", "render", "misc", "interface");
         Map<String, Registration> registrations = new LinkedHashMap<>();
         Set<String> configTypes = new HashSet<>();
         Matcher declarations = Pattern
@@ -93,6 +95,8 @@ public final class BootstrapLayoutTest {
                             .cast(Class.forName(type).getDeclaredConstructor().newInstance())
                             .category();
                 }
+                assertTrue("Unknown config category in " + name,
+                        categories.contains(category.id()));
                 assertFalse("Multiple configs in " + name, config.find());
             }
             Registration registration =
@@ -145,8 +149,25 @@ public final class BootstrapLayoutTest {
         List<String> componentOrder = new ArrayList<>();
         for (Call call : calls(constructorBody, "register\\w+|components\\.add")) {
             if ("components.add".equals(call.name)) {
-                String component = producers.get(call.arguments.trim());
-                assertNotNull("Unknown component: " + call.arguments, component);
+                String component;
+                Matcher inline = Pattern.compile("new\\s+(\\w+)\\s*\\((.*)\\)", Pattern.DOTALL)
+                        .matcher(call.arguments.trim());
+                if (inline.matches()) {
+                    String type = imports.get(inline.group(1));
+                    assertNotNull("Missing component import: " + inline.group(1), type);
+                    assertTrue("Component must implement ClientLifecycle: " + type,
+                            ClientLifecycle.class.isAssignableFrom(
+                                    Class.forName(type, false, getClass().getClassLoader())));
+                    component = inline.group(1) + "@" + call.offset;
+                    inlineComponents.add(component);
+                    arguments.put(component, inline.group(2));
+                    if (type.startsWith("pit12.platform.")) {
+                        platformComponents.add(component);
+                    }
+                } else {
+                    component = producers.get(call.arguments.trim());
+                    assertNotNull("Unknown component: " + call.arguments, component);
+                }
                 assertEquals("Component registration section",
                         Arrays.asList(
                                 platformComponents.contains(component) ? "Platform integrations"
@@ -212,14 +233,12 @@ public final class BootstrapLayoutTest {
                 }
             }
         }
-        Comparator<String> order =
-                Comparator.comparingInt((String name) -> registrations.get(name).provider ? 0 : 1)
-                        .thenComparingInt(
-                                name -> registrations.get(name).category == null ? Integer.MIN_VALUE
-                                        : registrations.get(name).category.displayOrder())
-                        .thenComparing(name -> registrations.get(name).category == null ? ""
-                                : registrations.get(name).category.id())
-                        .thenComparing(Comparator.naturalOrder());
+        Comparator<String> order = Comparator
+                .comparingInt((String name) -> registrations.get(name).provider ? 0 : 1)
+                .thenComparingInt(
+                        name -> categories.indexOf(registrations.get(name).category == null ? ""
+                                : registrations.get(name).category.id()))
+                .thenComparing(Comparator.naturalOrder());
         Set<String> remaining = new HashSet<>(registrations.keySet());
         Set<String> completed = new HashSet<>();
         for (String name : callOrder) {

@@ -38,8 +38,7 @@ public final class AutoClickConfig extends FeatureConfig {
     final BooleanSetting onlyCake;
 
     public AutoClickConfig() {
-        super("auto_click", source("Auto Click"),
-                new ConfigCategory("combat", source("Combat"), 25),
+        super("auto_click", source("Auto Click"), new ConfigCategory("combat", source("Combat")),
                 source("Clicks repeatedly while holding a mouse button."), true, false);
         subcategory("left", source("Left click"));
         leftEnabled = booleanSetting("left_enabled", source("Left click enabled"),

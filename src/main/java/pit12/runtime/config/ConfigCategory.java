@@ -24,13 +24,11 @@ public final class ConfigCategory {
     private final String id;
     private final String originalDisplayName;
     private String displayName;
-    private final int displayOrder;
 
-    public ConfigCategory(String id, String displayName, int displayOrder) {
+    public ConfigCategory(String id, String displayName) {
         this.id = ConfigNames.requireStableId(id, "category id");
         originalDisplayName = displayName;
         this.displayName = displayName;
-        this.displayOrder = displayOrder;
     }
 
     void localize(Languages language) {
@@ -43,9 +41,5 @@ public final class ConfigCategory {
 
     public String displayName() {
         return displayName;
-    }
-
-    public int displayOrder() {
-        return displayOrder;
     }
 }

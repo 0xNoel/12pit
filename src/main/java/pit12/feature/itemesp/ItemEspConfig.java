@@ -32,7 +32,7 @@ public final class ItemEspConfig extends FeatureConfig {
     private final ColorSetting goldColor;
 
     public ItemEspConfig() {
-        super("itemesp", source("Item ESP"), new ConfigCategory("render", source("Render"), 100),
+        super("itemesp", source("Item ESP"), new ConfigCategory("render", source("Render")),
                 source("Shows dropped raffle tickets and gold ingots through blocks."), true,
                 false);
         subsubcategory("raffle_tickets", source("Raffle tickets"));

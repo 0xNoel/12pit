@@ -8,7 +8,7 @@ This guide covers the shared APIs, calling conventions, and lifecycle rules used
 
 `ClientBootstrap` creates the components in its constructor. Each feature has a private `register...` method that creates and registers its config when needed, creates the feature, and adds it to `components`. Pass dependencies as arguments. Return the feature's API only when a later registration method needs it.
 
-Organize the constructor into shared runtime, feature providers, other features, and platform integrations. Create runtime components and platform adapters directly in their sections. Order feature registration calls and method declarations by `ConfigCategory.displayOrder()`, then `ConfigCategory.id()`, then alphabetically by method name. Put features without config in the first `Category: No config` group. Use matching group and category comments in both places. Dependency order takes priority over category and name. Bootstrap starts components in list order and stops them in reverse. Registration methods only create and register objects. Register listeners and start workers in `start()`.
+Organize the constructor into shared runtime, feature providers, other features, and platform integrations. Create runtime components and platform adapters directly in their sections. Group feature registration calls and method declarations by category in this order: Combat, Player, Render, Misc, Interface. Within each category, order methods alphabetically by name. Put features without config in the first `Category: No config` group. Use matching group and category comments in both places. Dependency order takes priority over category and name. Bootstrap starts components in list order and stops them in reverse. Registration methods only create and register objects. Register listeners and start workers in `start()`.
 
 Bootstrap registers the component and calls its `start()` method. If `start()` causes an exception, then Bootstrap will stop this component and all components that were started before it. `stop()` should release resources in any case, including partial initialization and even if it was called multiple times. An exception thrown by one of the components in `stop()` will be logged but all the others will be stopped.
 
@@ -58,7 +58,7 @@ public final class StatusConfig extends FeatureConfig {
     private final BooleanSetting showNames;
 
     public StatusConfig() {
-        super("status", source("Status"), new ConfigCategory("render", source("Render"), 100),
+        super("status", source("Status"), new ConfigCategory("render", source("Render")),
                 source("Shows player status."));
         subcategory("appearance", source("Appearance"));
         subsubcategory("display", source("Display"));
@@ -72,7 +72,7 @@ public final class StatusConfig extends FeatureConfig {
 }
 ```
 
-`ConfigCategory` defines a category's ID, display name, and order. Reuse the same category for related features.
+`ConfigCategory` defines a category's ID and display name. Reuse the same category for related features.
 
 In the Web UI, `subcategory()` puts the following settings under a button at the top of the feature page. `subsubcategory()` groups settings within that page. Both levels are optional. Without `subcategory()`, groups appear directly on the feature page. Settings without a subsubcategory have no section heading. Settings defined before the first subcategory stay visible under every button. Starting a new subcategory clears the current subsubcategory. Settings and groups follow their definition order.
 
