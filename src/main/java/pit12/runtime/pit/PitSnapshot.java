@@ -29,6 +29,10 @@ public final class PitSnapshot {
         return map == PitMap.UNKNOWN ? PitState.UNKNOWN : PitState.IN_PIT;
     }
 
+    public PitMap map() {
+        return map;
+    }
+
     /** Returns UNKNOWN until the map has been identified. */
     public SpawnState spawnStateAt(double x, double y, double z) {
         return map.spawnStateAt(x, y, z);

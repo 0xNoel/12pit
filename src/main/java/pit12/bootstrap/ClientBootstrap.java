@@ -59,6 +59,8 @@ import pit12.feature.quickmath.AutoQuickMathFeature;
 import pit12.feature.relation.RelationFeature;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.feature.relation.api.Relations;
+import pit12.feature.ringhelper.RingHelperConfig;
+import pit12.feature.ringhelper.RingHelperFeature;
 import pit12.feature.smartblock.SmartBlockBinding;
 import pit12.feature.smartblock.SmartBlockConfig;
 import pit12.feature.smartblock.SmartBlockFeature;
@@ -165,6 +167,7 @@ public final class ClientBootstrap {
         registerPlayerEsp(configs, session, presence, relations);
         registerPlayerList(configs, playerNames, playerEquipment, pitContext, hudRegistry,
                 relations, presence, denickNames);
+        registerRingHelper(minecraft, configs, session, pitContext);
         registerTooltip(configs);
         // Category: Misc
         registerAutoQuickMath(configs);
@@ -322,6 +325,13 @@ public final class ClientBootstrap {
         configs.register(config);
         components.add(new PlayerListFeature(configs, config, playerNames, playerEquipment,
                 pitContext, hudRegistry, relations, presence, language, denickNames));
+    }
+
+    private void registerRingHelper(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, PitContext pitContext) {
+        RingHelperConfig config = new RingHelperConfig();
+        configs.register(config);
+        components.add(new RingHelperFeature(minecraft, configs, config, session, pitContext));
     }
 
     private void registerTooltip(ConfigCatalog configs) {

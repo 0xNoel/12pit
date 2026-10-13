@@ -23,23 +23,25 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
 public enum PitMap {
-    UNKNOWN(0, 0, null, 0),
-    GENESIS(86, 26, Blocks.air, 0),
-    CASTLE(95, 20, Blocks.stained_glass, 11),
-    CORALS(114, 23, Blocks.gold_block, 0),
-    SEASONS(114, 23, Blocks.double_stone_slab, 9),
-    ELEMENTS(114, 23, Blocks.double_wooden_slab, 5);
+    UNKNOWN(0, 0, null, 0, null),
+    GENESIS(86, 26, Blocks.air, 0, PitMid.GENESIS),
+    CASTLE(95, 20, Blocks.stained_glass, 11, PitMid.STANDARD),
+    CORALS(114, 23, Blocks.gold_block, 0, PitMid.STANDARD),
+    SEASONS(114, 23, Blocks.double_stone_slab, 9, PitMid.STANDARD),
+    ELEMENTS(114, 23, Blocks.double_wooden_slab, 5, PitMid.STANDARD);
 
     private final int spawnY;
     private final int spawnRadius;
     private final Block surfaceBlock;
     private final int surfaceMetadata;
+    private final PitMid mid;
 
-    PitMap(int spawnY, int spawnRadius, Block surfaceBlock, int surfaceMetadata) {
+    PitMap(int spawnY, int spawnRadius, Block surfaceBlock, int surfaceMetadata, PitMid mid) {
         this.spawnY = spawnY;
         this.spawnRadius = spawnRadius;
         this.surfaceBlock = surfaceBlock;
         this.surfaceMetadata = surfaceMetadata;
+        this.mid = mid;
     }
 
     public boolean matchesSurface(IBlockState state) {
@@ -49,6 +51,11 @@ public enum PitMap {
 
     public int spawnY() {
         return spawnY;
+    }
+
+    /** Returns null for UNKNOWN. */
+    public PitMid mid() {
+        return mid;
     }
 
     SpawnState spawnStateAt(double x, double y, double z) {
