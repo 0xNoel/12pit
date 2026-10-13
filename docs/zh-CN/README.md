@@ -1,4 +1,4 @@
-<!-- Source: README.md; Based on: fddb5b4f0f5e68619c5b5b26101166901b09b72d -->
+<!-- Source: README.md; Based on: 56a7be6e4d7a33e0e9c3b3916aa4743db94c7611 -->
 
 # 12pit
 
@@ -59,6 +59,5 @@
 - [Vite](https://vite.dev/)，用于 Web UI 模块预加载，MIT。许可证文本：[VITE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VITE-MIT.txt)。
 - [Rolldown](https://rolldown.rs/)，用于 Web UI 模块预加载，MIT。许可证文本：[ROLLDOWN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt)。
 - [Lucide](https://lucide.dev/)，ISC，包含采用 MIT 许可证的 Feather 图标。许可证文本：[LUCIDE-ISC.txt](../../src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt)。
-- [Monocraft](https://github.com/IdreesInc/Monocraft)，SIL Open Font License 1.1。字体：[monocraft.otf](../../src/main/resources/assets/pit12/fonts/monocraft.otf)。许可证文本：[MONOCRAFT-OFL.txt](../../src/main/resources/META-INF/third-party-notices/MONOCRAFT-OFL.txt)。
 
 12pit 基于 [GPL-3.0-or-later](../../LICENSE) 协议开源。
