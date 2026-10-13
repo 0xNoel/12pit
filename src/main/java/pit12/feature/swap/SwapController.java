@@ -277,6 +277,10 @@ final class SwapController {
         pendingClicks.add(actionNumber);
     }
 
+    boolean sendingClick() {
+        return sendingClick;
+    }
+
     void confirmClick(int windowId, short actionNumber, boolean accepted) {
         if (options == null || player != minecraft.thePlayer
                 || windowId != player.inventoryContainer.windowId

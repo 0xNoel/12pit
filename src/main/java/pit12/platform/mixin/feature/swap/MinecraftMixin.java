@@ -52,6 +52,13 @@ public abstract class MinecraftMixin implements SwapHooksBinding {
             callback.cancel();
     }
 
+    @Inject(method = {"clickMouse", "middleClickMouse", "sendClickBlockToController"},
+            at = @At("HEAD"), cancellable = true)
+    private void pit12$blockSwapActions(CallbackInfo callback) {
+        if (pit12$swapHooks != null && pit12$swapHooks.inputLocked())
+            callback.cancel();
+    }
+
     @Inject(method = "runTick",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraftforge/fml/common/FMLCommonHandler;onPreClientTick()V",

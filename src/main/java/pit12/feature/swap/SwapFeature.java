@@ -20,6 +20,7 @@ package pit12.feature.swap;
 
 import java.nio.file.Path;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -161,6 +162,10 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
     private void lockInput() {
         inputLocked = true;
         KeyBinding.unPressAllKeys();
+        minecraft.playerController.resetBlockRemoving();
+        if (minecraft.thePlayer.isUsingItem())
+            minecraft.playerController.onStoppedUsingItem(minecraft.thePlayer);
+        suppressMovement();
     }
 
     private void releaseInput(boolean resume) {
@@ -199,6 +204,26 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
     @Override
     public boolean inputLocked() {
         return inputLocked;
+    }
+
+    @Override
+    public void suppressMovement() {
+        EntityPlayerSP player = minecraft.thePlayer;
+        if (!inputLocked || player == null)
+            return;
+        player.movementInput.moveForward = 0;
+        player.movementInput.moveStrafe = 0;
+        player.movementInput.jump = false;
+        player.movementInput.sneak = false;
+        player.moveForward = 0;
+        player.moveStrafing = 0;
+        player.setJumping(false);
+        player.setSprinting(false);
+    }
+
+    @Override
+    public boolean inventoryClickAllowed() {
+        return !inputLocked || controller.sendingClick();
     }
 
     @Override
