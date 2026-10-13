@@ -30,11 +30,11 @@ import pit12.feature.tooltip.TooltipConfig;
 import pit12.runtime.item.PitEnchantmentReader;
 
 @Mixin(value = GuiIngameForge.class, remap = false)
-public abstract class HeldItemTooltipMixin extends GuiIngame implements HeldItemTooltipBinding {
+public abstract class GuiIngameForgeMixin extends GuiIngame implements HeldItemTooltipBinding {
     @Unique
     private TooltipConfig pit12$tooltipConfig;
 
-    protected HeldItemTooltipMixin(Minecraft minecraft) {
+    protected GuiIngameForgeMixin(Minecraft minecraft) {
         super(minecraft);
     }
 

@@ -16,31 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.lifecycle;
+package pit12.platform.mixin.network;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pit12.shared.lifecycle.ClientShutdownBinding;
+import pit12.runtime.player.PlayerNameBinding;
 
-@Mixin(Minecraft.class)
-public abstract class MinecraftShutdownMixin implements ClientShutdownBinding {
+@Mixin(NetworkPlayerInfo.class)
+public abstract class NetworkPlayerInfoMixin implements PlayerNameBinding {
     @Unique
-    private Runnable pit12$shutdown;
+    private Runnable pit12$nameObserver;
 
     @Override
-    public void bindClientShutdown(Runnable shutdown) {
-        pit12$shutdown = shutdown;
+    public void bindPlayerNameObserver(Runnable observer) {
+        pit12$nameObserver = observer;
     }
 
-    @Inject(method = "shutdownMinecraftApplet", at = @At("HEAD"))
-    private void pit12$beforeShutdown(CallbackInfo ci) {
-        Runnable shutdown = pit12$shutdown;
-        pit12$shutdown = null;
-        if (shutdown != null)
-            shutdown.run();
+    @Inject(method = "setDisplayName", at = @At("TAIL"))
+    private void pit12$afterDisplayName(IChatComponent name, CallbackInfo ci) {
+        if (pit12$nameObserver != null) {
+            pit12$nameObserver.run();
+        }
     }
 }

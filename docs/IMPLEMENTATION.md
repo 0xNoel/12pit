@@ -279,6 +279,12 @@ Keep a [TabPresenceListener](../src/main/java/pit12/runtime/player/TabPresenceLi
 
 Subscribe to name changes with `addListener(Runnable)` in `start()`, then read the current names. In `stop()`, pass the same listener to `removeListener(Runnable)`.
 
+[SidebarCache](../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) provides `lines()` for the server sidebar. It returns an immutable snapshot of up to 15 lines in display order. Lines include footer text and keep formatting codes. The objective title is excluded. Each [SidebarLine](../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) provides the entry ID, text, and sorting score through `entry()`, `text()`, and `score()`.
+
+`formattedText(minecraft.fontRendererObj)` removes formatting codes and characters with a width of zero in the Minecraft font. Call it on the client thread. It computes the text on the first call and caches it for that line. Score changes retain the cache. Text changes create a new line with an empty cache.
+
+Keep a [SidebarListener](../src/main/java/pit12/runtime/scoreboard/SidebarListener.java) in a field. Register it with `sidebar.addListener(listener)` in `start()`, then read `sidebar.lines()`. `onLineChanged(previous, current)` runs after the cache is updated. `previous` is null for an added line, and `current` is null for a removed line. A score change may move other lines, so read `lines()` for the current order. Retained snapshots and lines stay unchanged. Unregister the same listener in `stop()` with `sidebar.removeListener(listener)`.
+
 [PlayerEquipmentAccess](../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) provides `loadedEquipment(UUID)`. It returns `null` if the entity is unloaded or has not been observed yet. In a snapshot, check `heldItemKnown()` or `leggingsKnown()` before treating those slots as empty. Use `heldEnchantments()` or `leggingsEnchantments()` for already parsed data.
 
 `copyEquipment(slot)` returns a copy for slots `0` through `4`: held item, boots, leggings, chestplate, and helmet. Empty and unobserved slots return `null`.

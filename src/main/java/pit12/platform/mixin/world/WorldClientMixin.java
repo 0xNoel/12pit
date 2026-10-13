@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.player;
+package pit12.platform.mixin.world;
 
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -29,7 +29,7 @@ import pit12.runtime.player.PlayerEquipmentWorldBinding;
 import pit12.runtime.player.PlayerEquipmentWorldObserver;
 
 @Mixin(WorldClient.class)
-public abstract class WorldClientEquipmentMixin implements PlayerEquipmentWorldBinding {
+public abstract class WorldClientMixin implements PlayerEquipmentWorldBinding {
     @Unique
     private PlayerEquipmentWorldObserver pit12$playerEquipmentObserver;
 
