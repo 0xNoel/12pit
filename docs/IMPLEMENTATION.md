@@ -203,7 +203,7 @@ hud = hudConfig("status", HudAnchor.TOP_LEFT, 6, 6, true,
 
 Use `HudGroup.AUTO` for a subcategory when the feature declares other subcategories, or a subsubcategory otherwise. `SUBCATEGORY` creates a separate subcategory. `SUBSUBCATEGORY` uses the active subcategory at the call site, or the feature root if there is none. Pass null for the name to use `HUD`. The call preserves the active groups for later settings.
 
-The returned `HudConfig` exposes settings through `textShadow()`, `useMonospaceFont()`, `translateText()`, and `scale()`. Read or change their values with `get()` and `set()`. Scale is a percentage and defaults to `100`.
+The returned `HudConfig` exposes settings through `textShadow()`, `translateText()`, and `scale()`. Read or change their values with `get()` and `set()`. Scale is a percentage and defaults to `100`.
 
 Read the current placement with `placement()`. To change it, pass a [HudPlacement](../src/main/java/pit12/runtime/config/HudPlacement.java) containing the anchor, offsets, and anchor mode:
 
@@ -213,7 +213,7 @@ hud.placement(new HudPlacement(HudAnchor.TOP_RIGHT, -6, 6, true));
 
 The last argument selects Auto when true and a fixed anchor when false. `HudPlacement.anchor()` returns the resolved screen anchor in either mode. `fromOrigin(x, y, elementWidth, elementHeight, screenWidth, screenHeight)` creates an Auto placement from GUI coordinates and the element's scaled dimensions. To restore the default position and Auto mode, call `hud.placement(hud.defaultPlacement())`.
 
-The font switch defaults to off and uses bundled Monocraft when enabled. The translation switch defaults to on. Use `language.translate(text, hud.translateText().get())` when preparing HUD text and refresh cached text and layout when it changes.
+The translation switch defaults to on. Use `language.translate(text, hud.translateText().get())` when preparing HUD text and refresh cached text and layout when it changes.
 
 Keep one [HudRenderer](../src/main/java/pit12/runtime/hud/HudRenderer.java) in a field and pass it to the element for drawing and measuring content:
 
@@ -230,7 +230,7 @@ Implement [HudElement](../src/main/java/pit12/runtime/hud/HudElement.java) with 
 - `width()` and `height()` provide cheap unscaled logical size of the element's content.
 - `render(partialTicks, editing)` draws the element from logical point `0,0` according to the caller's transformation.
 
-Use the renderer's `text`, `textWidth`, and `fontHeight` methods with the same HUD config to draw and measure text. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
+HUD text uses the Minecraft font. Use the renderer's `text` method with the HUD config to draw text, and `textWidth(text)` and `fontHeight()` to measure it. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
 
 For `editing=true`, prepare and render fixed sample content, including for disabled HUDs. Refresh its text and bounds when display settings or the language change. Measured bounds must match the rendered content.
 
@@ -254,16 +254,15 @@ if (!hudRegistry.editing() && element.enabled()) {
 
 `layout` calls `prepare`, applies placement and scaling and keeps the resolved origin inside the screen if the element fits. `render` applies the transform and restores the UI rendering state.
 
-In `stop()`, unregister the same element and release the renderer's resources:
+In `stop()`, unregister the same element:
 
 ```java
 hudRegistry.unregister(element);
-hudRenderer.close();
 ```
 
-Clear the element's cached rendering state before reuse. The renderer can create resources again after `resize`.
+Clear the element's cached rendering state before reuse.
 
-For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides text, rectangles, and textures. Construct it with Minecraft and a font `ResourceLocation`. Keep the renderer for reuse, call `resize(pixelScale)` before measuring or drawing, and call `close()` when its owner releases those resources.
+For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides text measurements, rectangles, and textures. Construct it with Minecraft and call `resize(pixelScale)` before drawing shapes or textures. Use Minecraft's `FontRenderer` to draw text.
 
 Keep the render origin in integer GUI coordinates before applying HUD scale.
 

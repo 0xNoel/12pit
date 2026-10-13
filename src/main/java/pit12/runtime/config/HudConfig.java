@@ -21,7 +21,6 @@ package pit12.runtime.config;
 public final class HudConfig {
     static final int AUTO_ANCHOR = 9;
     private final BooleanSetting textShadow;
-    private final BooleanSetting useMonospaceFont;
     private final BooleanSetting translateText;
     private final ChoiceSetting anchor;
     private final IntegerSetting autoAnchor;
@@ -29,11 +28,10 @@ public final class HudConfig {
     private final IntegerSetting offsetY;
     private final IntegerSetting scale;
 
-    HudConfig(BooleanSetting textShadow, BooleanSetting useMonospaceFont,
-            BooleanSetting translateText, ChoiceSetting anchor, IntegerSetting autoAnchor,
-            IntegerSetting offsetX, IntegerSetting offsetY, IntegerSetting scale) {
+    HudConfig(BooleanSetting textShadow, BooleanSetting translateText, ChoiceSetting anchor,
+            IntegerSetting autoAnchor, IntegerSetting offsetX, IntegerSetting offsetY,
+            IntegerSetting scale) {
         this.textShadow = textShadow;
-        this.useMonospaceFont = useMonospaceFont;
         this.translateText = translateText;
         this.anchor = anchor;
         this.autoAnchor = autoAnchor;
@@ -44,10 +42,6 @@ public final class HudConfig {
 
     public BooleanSetting textShadow() {
         return textShadow;
-    }
-
-    public BooleanSetting useMonospaceFont() {
-        return useMonospaceFont;
     }
 
     public BooleanSetting translateText() {

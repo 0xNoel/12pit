@@ -123,11 +123,6 @@ final class HudEditorController {
         registry.setEditing(false);
     }
 
-    void dispose() {
-        close();
-        renderer.close();
-    }
-
     private void profileChanged() {
         UUID current = profiles.snapshot().activeProfileId();
         if (!Objects.equals(profileId, current)) {
@@ -492,14 +487,14 @@ final class HudEditorController {
         outline(bounds.x, bounds.y, bounds.width, bounds.height, color);
         if (element == primary || hovered && !busy()) {
             String label = element.displayName() + "  " + element.config().scale().get() + "%";
-            int labelX = clamp(bounds.x, 1,
-                    Math.max(1, screenWidth - renderer.textWidth(label, false) - 1));
-            int fontHeight = renderer.fontHeight(label, false);
+            int labelX =
+                    clamp(bounds.x, 1, Math.max(1, screenWidth - renderer.textWidth(label) - 1));
+            int fontHeight = renderer.fontHeight();
             int labelY = clamp(
                     bounds.y >= fontHeight + 3 ? bounds.y - fontHeight - 2
                             : bounds.y + bounds.height + 2,
                     1, Math.max(1, screenHeight - fontHeight - 1));
-            renderer.text(label, labelX, labelY, 0xFFF0F0F0, true, false);
+            minecraft.fontRendererObj.drawString(label, labelX, labelY, 0xFFF0F0F0, true);
         }
     }
 

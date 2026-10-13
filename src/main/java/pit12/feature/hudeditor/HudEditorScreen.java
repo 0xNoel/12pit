@@ -136,14 +136,14 @@ final class HudEditorScreen extends GuiScreen {
                 renderer.rect(0, 0, width, height, 0x70000000);
                 renderer.rect((width - hintWidth) / 2, top, hintWidth, 90, 0xF016191D);
                 String text = interfaceTips[0];
-                int textWidth = renderer.textWidth(text, false);
+                int textWidth = renderer.textWidth(text);
                 float scale = Math.min(1.0F, (hintWidth - 24.0F) / textWidth);
                 GlStateManager.translate(width / 2.0F, top + 24.0F, 0.0F);
                 GlStateManager.scale(scale, scale, 1.0F);
-                renderer.text(text, -textWidth / 2, 0, 0xFFE0E0E0, true, false);
+                fontRendererObj.drawString(text, -textWidth / 2, 0, 0xFFE0E0E0, true);
             } else {
-                renderer.text("?", width - 20, height - 22, helpHovered ? 0xFFFFFFFF : 0xFFB0B0B0,
-                        true, false);
+                fontRendererObj.drawString("?", width - 20, height - 22,
+                        helpHovered ? 0xFFFFFFFF : 0xFFB0B0B0, true);
                 if (helpHovered) {
                     drawHelp(tips, drawHelp(interfaceTips, height - 28));
                 }
@@ -171,9 +171,9 @@ final class HudEditorScreen extends GuiScreen {
     private int drawHelp(String[] lines, int y) {
         for (int index = lines.length - 1; index >= 0; index--) {
             String tip = lines[index];
-            y -= renderer.fontHeight(tip, false) + 2;
-            renderer.text(tip, Math.max(4, width - renderer.textWidth(tip, false) - 8), y,
-                    0xFFF0F0F0, true, false);
+            y -= renderer.fontHeight() + 2;
+            fontRendererObj.drawString(tip, Math.max(4, width - renderer.textWidth(tip) - 8), y,
+                    0xFFF0F0F0, true);
         }
         return y;
     }
@@ -281,7 +281,6 @@ final class HudEditorScreen extends GuiScreen {
     @Override
     public void onGuiClosed() {
         controller.close();
-        renderer.close();
         if (initialized) {
             Keyboard.enableRepeatEvents(previousRepeatEvents);
         }

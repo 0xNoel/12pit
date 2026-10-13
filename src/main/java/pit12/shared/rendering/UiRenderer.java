@@ -18,8 +18,6 @@
  */
 package pit12.shared.rendering;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -28,27 +26,16 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class UiRenderer {
-    private static final Logger LOGGER = Logger.getLogger(UiRenderer.class.getName());
     private final Minecraft minecraft;
-    private final FontRenderer fallbackFont;
-    private final ResourceLocation fontLocation;
-    private UiFont font;
-    private UiTextCache systemText;
-    private boolean fontAttempted;
-    private boolean systemAttempted;
+    protected final FontRenderer fontRenderer;
     private float pixelScale = Float.NaN;
 
-    public UiRenderer(Minecraft minecraft, ResourceLocation fontLocation) {
+    public UiRenderer(Minecraft minecraft) {
         this.minecraft = minecraft;
-        fallbackFont = minecraft.fontRendererObj;
-        this.fontLocation = fontLocation;
+        fontRenderer = minecraft.fontRendererObj;
     }
 
     public void resize(float pixelScale) {
-        if (Float.compare(this.pixelScale, pixelScale) == 0) {
-            return;
-        }
-        releaseFonts();
         this.pixelScale = pixelScale;
     }
 
@@ -80,22 +67,6 @@ public class UiRenderer {
         }
     }
 
-    public void text(String text, int x, int y, int color, boolean shadow, boolean useCustomFont) {
-        FontBackend backend = fontBackend(text, useCustomFont);
-        if (backend == FontBackend.VANILLA) {
-            fallbackFont.drawString(text, x, y, color, shadow);
-            return;
-        }
-        if (backend == FontBackend.CUSTOM) {
-            drawCustomText(text, x, y, color, shadow);
-            return;
-        }
-        if (shadow) {
-            systemText.draw(text, x + 1, y + 1, McFormatting.shadowColor(color), true);
-        }
-        systemText.draw(text, x, y, color, false);
-    }
-
     public void texture(ResourceLocation texture, int x, int y, int width, int height, int color,
             float rotationDegrees) {
         if (width <= 0 || height <= 0 || Float.isNaN(pixelScale)) {
@@ -125,124 +96,36 @@ public class UiRenderer {
         }
     }
 
-    public int textWidth(String text, boolean useCustomFont) {
-        switch (fontBackend(text, useCustomFont)) {
-            case CUSTOM:
-                return (int) Math.ceil(font.width(text) / pixelScale);
-            case SYSTEM:
-                return systemText.width(text);
-            default:
-                // origin didn't measure bold text correctly.
-                StringBuilder measuredText = null;
-                int start = 0;
-                boolean bold = false;
-                for (int index = 0; index + 1 < text.length(); index++) {
-                    if (text.charAt(index) != '§') {
-                        continue;
+    public int textWidth(String text) {
+        // 1.8.9 measures bold text past color codes even though drawing resets the style.
+        StringBuilder measuredText = null;
+        int start = 0;
+        boolean bold = false;
+        for (int index = 0; index + 1 < text.length(); index++) {
+            if (text.charAt(index) != '§') {
+                continue;
+            }
+            char code = Character.toLowerCase(text.charAt(++index));
+            boolean color = code >= '0' && code <= '9' || code >= 'a' && code <= 'f';
+            if (code == 'l') {
+                bold = true;
+            } else if (code == 'r' || color) {
+                if (bold && color) {
+                    if (measuredText == null) {
+                        measuredText = new StringBuilder(text.length() + 2);
                     }
-                    char code = text.charAt(++index);
-                    if (McFormatting.isBold(code)) {
-                        bold = true;
-                    } else if (McFormatting.resetsStyle(code)) {
-                        if (bold && McFormatting.isColor(Character.toLowerCase(code))) {
-                            if (measuredText == null) {
-                                measuredText = new StringBuilder(text.length() + 2);
-                            }
-                            measuredText.append(text, start, index - 1).append("§r");
-                            start = index - 1;
-                        }
-                        bold = false;
-                    }
+                    measuredText.append(text, start, index - 1).append("§r");
+                    start = index - 1;
                 }
-                return fallbackFont.getStringWidth(measuredText == null ? text
-                        : measuredText.append(text, start, text.length()).toString());
-        }
-    }
-
-    public int fontHeight(String text, boolean useCustomFont) {
-        switch (fontBackend(text, useCustomFont)) {
-            case CUSTOM:
-                return (int) Math.ceil(font.height() / pixelScale);
-            case SYSTEM:
-                return systemText.height();
-            default:
-                return fallbackFont.FONT_HEIGHT;
-        }
-    }
-
-    public void close() {
-        releaseFonts();
-        pixelScale = Float.NaN;
-    }
-
-    private FontBackend fontBackend(String text, boolean useCustomFont) {
-        if (Float.isNaN(pixelScale)) {
-            return FontBackend.VANILLA;
-        }
-        if (useCustomFont) {
-            UiFont font = font();
-            if (font != null && font.canRender(text)) {
-                return FontBackend.CUSTOM;
+                bold = false;
             }
         }
-        boolean formatting = false;
-        boolean vanilla = true;
-        for (int index = 0; index < text.length(); index++) {
-            char character = text.charAt(index);
-            if (formatting) {
-                formatting = false;
-            } else if (character == '§') {
-                formatting = true;
-            } else if (fallbackFont.getCharWidth(character) <= 0) {
-                vanilla = false;
-                break;
-            }
-        }
-        // Minecraft reports zero width for missing glyphs.
-        if (vanilla || systemText() == null) {
-            return FontBackend.VANILLA;
-        }
-        return FontBackend.SYSTEM;
+        return fontRenderer.getStringWidth(measuredText == null ? text
+                : measuredText.append(text, start, text.length()).toString());
     }
 
-    private void drawCustomText(String text, int x, int y, int color, boolean shadow) {
-        float inverseScale = 1.0F / pixelScale;
-        int pixelX = Math.round(x * pixelScale);
-        int pixelY = Math.round(y * pixelScale);
-        // Draw in framebuffer pixels to keep glyphs aligned at fractional scales.
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(inverseScale, inverseScale, 1.0F);
-        try {
-            if (shadow) {
-                int offset = Math.max(1, Math.round(pixelScale));
-                font.draw(text, pixelX + offset, pixelY + offset, McFormatting.shadowColor(color),
-                        true);
-            }
-            font.draw(text, pixelX, pixelY, color, false);
-        } finally {
-            GlStateManager.popMatrix();
-        }
-    }
-
-    private void releaseFonts() {
-        fontAttempted = false;
-        systemAttempted = false;
-        if (font == null && systemText == null) {
-            return;
-        }
-        int boundTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        try {
-            if (font != null) {
-                font.close();
-                font = null;
-            }
-            if (systemText != null) {
-                systemText.close();
-                systemText = null;
-            }
-        } finally {
-            GlStateManager.bindTexture(boundTexture);
-        }
+    public int fontHeight() {
+        return fontRenderer.FONT_HEIGHT;
     }
 
     private float snap(float coordinate) {
@@ -253,39 +136,5 @@ public class UiRenderer {
     private static void color(int color) {
         GlStateManager.color((color >>> 16 & 0xFF) / 255.0F, (color >>> 8 & 0xFF) / 255.0F,
                 (color & 0xFF) / 255.0F, (color >>> 24 & 0xFF) / 255.0F);
-    }
-
-    private UiFont font() {
-        if (fontAttempted) {
-            return font;
-        }
-        fontAttempted = true;
-        int boundTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        try {
-            // Monocraft uses nine cells per em. Size nine aligns its grid at integer scales.
-            font = new UiFont(minecraft, fontLocation, 9.0F, pixelScale);
-        } catch (RuntimeException failure) {
-            LOGGER.log(Level.WARNING, "Unable to prepare UI font", failure);
-        } finally {
-            GlStateManager.bindTexture(boundTexture);
-        }
-        return font;
-    }
-
-    private UiTextCache systemText() {
-        if (systemAttempted) {
-            return systemText;
-        }
-        systemAttempted = true;
-        try {
-            systemText = new UiTextCache(8.0F, pixelScale);
-        } catch (RuntimeException failure) {
-            LOGGER.log(Level.WARNING, "Unable to prepare system UI font", failure);
-        }
-        return systemText;
-    }
-
-    private enum FontBackend {
-        CUSTOM, VANILLA, SYSTEM
     }
 }

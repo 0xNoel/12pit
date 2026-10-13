@@ -82,7 +82,7 @@ public final class HudEditorFeature implements ClientLifecycle, HudEditor {
                 && ((HudEditorScreen) minecraft.currentScreen).belongsTo(controller)) {
             minecraft.displayGuiScreen(null);
         }
-        controller.dispose();
+        controller.close();
     }
 
     void requestOpen() {

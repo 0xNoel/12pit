@@ -57,6 +57,5 @@ Install the recommended extensions if prompted. `Ctrl+Shift+B` runs `assemble` t
 - [Vite](https://vite.dev/), used for module preloading in the Web UI, MIT. License text: [VITE-MIT.txt](src/main/resources/META-INF/third-party-notices/VITE-MIT.txt).
 - [Rolldown](https://rolldown.rs/), used for module preloading in the Web UI, MIT. License text: [ROLLDOWN-MIT.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt).
 - [Lucide](https://lucide.dev/), ISC, with Feather icons under MIT. License texts: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt).
-- [Monocraft](https://github.com/IdreesInc/Monocraft), SIL Open Font License 1.1. Font: [monocraft.otf](src/main/resources/assets/pit12/fonts/monocraft.otf). License text: [MONOCRAFT-OFL.txt](src/main/resources/META-INF/third-party-notices/MONOCRAFT-OFL.txt).
 
 12pit is licensed under [GPL-3.0-or-later](LICENSE).
