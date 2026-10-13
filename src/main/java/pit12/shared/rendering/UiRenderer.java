@@ -132,7 +132,30 @@ public class UiRenderer {
             case SYSTEM:
                 return systemText.width(text);
             default:
-                return fallbackFont.getStringWidth(text);
+                // origin didn't measure bold text correctly.
+                StringBuilder measuredText = null;
+                int start = 0;
+                boolean bold = false;
+                for (int index = 0; index + 1 < text.length(); index++) {
+                    if (text.charAt(index) != '§') {
+                        continue;
+                    }
+                    char code = text.charAt(++index);
+                    if (McFormatting.isBold(code)) {
+                        bold = true;
+                    } else if (McFormatting.resetsStyle(code)) {
+                        if (bold && McFormatting.isColor(Character.toLowerCase(code))) {
+                            if (measuredText == null) {
+                                measuredText = new StringBuilder(text.length() + 2);
+                            }
+                            measuredText.append(text, start, index - 1).append("§r");
+                            start = index - 1;
+                        }
+                        bold = false;
+                    }
+                }
+                return fallbackFont.getStringWidth(measuredText == null ? text
+                        : measuredText.append(text, start, text.length()).toString());
         }
     }
 
