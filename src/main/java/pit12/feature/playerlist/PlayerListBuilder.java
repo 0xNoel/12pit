@@ -23,6 +23,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -40,6 +41,7 @@ import pit12.runtime.player.PlayerEquipmentSnapshot;
 import pit12.runtime.player.PlayerNameCache;
 
 final class PlayerListBuilder {
+    private static final Pattern PRESTIGE_PREFIX = Pattern.compile("\\[(?:§.|[IVXLCDM])+-");
     private final Minecraft minecraft;
     private final PlayerEquipmentAccess equipment;
     private final PitContext pitContext;
@@ -60,7 +62,7 @@ final class PlayerListBuilder {
         this.denickNames = denickNames;
     }
 
-    PlayerListSnapshot build() {
+    PlayerListSnapshot build(boolean realNames) {
         WorldClient world = minecraft.theWorld;
         if (world == null || minecraft.getNetHandler() == null) {
             return PlayerListSnapshot.empty();
@@ -102,7 +104,9 @@ final class PlayerListBuilder {
             if (name == null) {
                 continue;
             }
-            name = denickNames.listName(playerId, name, config.shortPlayerNames());
+            String realName = realNames ? denickNames.realDisplayName(playerId) : null;
+            name = realName == null ? denickNames.listName(playerId, name)
+                    : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
             EntityPlayer player = world.getPlayerEntityByUUID(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =

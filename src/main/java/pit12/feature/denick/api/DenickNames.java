@@ -24,7 +24,7 @@ import java.util.UUID;
 public interface DenickNames {
     boolean isNicked(UUID playerId);
 
-    String listName(UUID playerId, String original, boolean shortName);
+    String listName(UUID playerId, String original);
 
     /** Returns null when Denick is disabled or no real name is known. */
     String realDisplayName(UUID playerId);

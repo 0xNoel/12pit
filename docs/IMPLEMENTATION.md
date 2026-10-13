@@ -275,7 +275,7 @@ Keep `Runnable` in a field for session changes. Register it with `session.addLis
 
 Keep a [TabPresenceListener](../src/main/java/pit12/runtime/player/TabPresenceListener.java) in a field. In `start()`, register it with `tabPresence.addListener(tabListener)`, then read the current state. Handle `onPlayerSeen(playerId, name, joined)` for observed players, `onPlayerLeft(playerId)` for departures, and `onTabDisplayChanged(playerId)` for display changes. The name may be null, and `joined=false` means the entry was already present. In `stop()`, call `tabPresence.removeListener(tabListener)` with the same listener.
 
-[PlayerNameCache](../src/main/java/pit12/runtime/player/PlayerNameCache.java) provides `displayName(UUID)` and `shortName(UUID)` for current Tab entries. Both return `null` when the entry is absent or its name is unknown. Display names keep formatting codes. Short names remove Pit Supporter and bounty suffixes. Departed players are removed, and connection changes clear the cache.
+[PlayerNameCache](../src/main/java/pit12/runtime/player/PlayerNameCache.java) provides `displayName(UUID)` and `shortName(UUID)` for current Tab entries. Both return `null` when the entry is absent or its name is unknown. Display names keep formatting codes. Short names remove bounty suffixes and keep the rest of the display name. Departed players are removed, and connection changes clear the cache.
 
 Subscribe to name changes with `addListener(Runnable)` in `start()`, then read the current names. In `stop()`, pass the same listener to `removeListener(Runnable)`.
 

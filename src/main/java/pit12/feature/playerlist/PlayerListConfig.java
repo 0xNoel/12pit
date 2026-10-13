@@ -27,6 +27,7 @@ import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
+import pit12.runtime.config.IntegerSetting;
 import pit12.runtime.item.PitEnchantmentFormat;
 
 public final class PlayerListConfig extends FeatureConfig {
@@ -64,11 +65,8 @@ public final class PlayerListConfig extends FeatureConfig {
         showGem = booleanSetting("show_gem", source("Show gem"),
                 source("Shows a green diamond on gemmed items."), true);
         subsubcategory("player_information", source("Player information"));
-        shortPlayerNames = booleanSetting("short_player_names", source("Short player names"),
-                source("Shows only the level and player name, keeping their formatting."), false);
-        realNamesKey = keybindSetting("real_names_key", source("Real names key"),
-                source("Hold to show nicked players' real names in Player List."),
-                Keyboard.KEY_TAB);
+        shortPlayerNames = booleanSetting("short_player_names", source("Remove bounty suffix"),
+                source("Removes bounty suffixes from player names."), false);
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
@@ -76,6 +74,9 @@ public final class PlayerListConfig extends FeatureConfig {
         showSpawn = booleanSetting("show_spawn", source("Show spawn marker"),
                 source("Shows SPAWN instead of distance and direction for players in spawn."),
                 true);
+        realNamesKey = keybindSetting("real_names_key", source("Real names key"),
+                source("Hold to show nicked players' real names in Player List."),
+                Keyboard.KEY_TAB);
         subcategory("groups", source("Groups"));
         showGroupName = booleanSetting("show_group_name", source("Show group names"),
                 source("Shows the name above each group."), true);

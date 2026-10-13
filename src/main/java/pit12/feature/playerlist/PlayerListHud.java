@@ -43,7 +43,7 @@ import pit12.shared.build.BuildConfig;
 import pit12.shared.text.PlayerNameFormatter;
 
 final class PlayerListHud implements HudElement {
-    private static final int GAP = 10;
+    private static final int GAP = 15;
     private static final int EDGE_PADDING = 5;
     private static final int ARROW_SIZE = 8;
     private static final int MUTED_COLOR = 0xFFB0B0B0;
