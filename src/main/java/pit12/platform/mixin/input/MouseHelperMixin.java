@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.feature.swap;
+package pit12.platform.mixin.input;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.MouseHelper;
@@ -25,8 +25,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pit12.feature.swap.SwapHooks;
-import pit12.feature.swap.SwapHooksBinding;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 
 @Mixin(MouseHelper.class)
 public abstract class MouseHelperMixin {
@@ -37,8 +37,8 @@ public abstract class MouseHelperMixin {
 
     @Inject(method = "mouseXYChange", at = @At("TAIL"))
     private void pit12$blockLookInput(CallbackInfo callback) {
-        SwapHooks hooks = ((SwapHooksBinding) Minecraft.getMinecraft()).pit12$swapHooks();
-        if (hooks != null && hooks.inputLocked()) {
+        InputBlocker blocker = ((InputBlockBinding) Minecraft.getMinecraft()).pit12$inputBlocker();
+        if (blocker != null && blocker.locked()) {
             deltaX = 0;
             deltaY = 0;
         }

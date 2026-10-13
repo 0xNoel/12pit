@@ -47,6 +47,12 @@ Disk I/O, HTTP requests, expensive computations are done on owned workers with a
 
 `ClientThread.current()` captures the calling thread and runs callbacks directly on it. Calling its `execute()` from another thread throws. Use it for tests and code that needs no cross-thread dispatch.
 
+## Input
+
+`InputBlocker` routes key events before Minecraft handles them. Features register an `InputHandler` on start and remove it on stop. `key(...)` returns true when it consumes an event. `consumesKey(...)` identifies keys whose held states must not be restored after blocking ends.
+
+Use `lock(owner)` to block keyboard, mouse, movement, and interactions. Use `unlock(owner, resume)` when the operation finishes or is cancelled. Each operation releases only its own lock. `blockedFor(owner)` reports whether another operation holds a lock. Input resumes only after all locks are released. Buffered presses are discarded. When `resume` is true, held keys are restored if the game has focus.
+
 ## Config
 
 `FeatureConfig` represents the settings of a feature and their interface metadata. Settings are defined in its subclass constructor:

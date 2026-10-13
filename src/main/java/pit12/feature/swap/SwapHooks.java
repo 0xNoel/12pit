@@ -21,13 +21,7 @@ package pit12.feature.swap;
 import net.minecraft.item.ItemStack;
 
 public interface SwapHooks {
-    boolean inputLocked();
-
-    void suppressMovement();
-
     boolean inventoryClickAllowed();
-
-    boolean key(int key, boolean pressed, boolean repeat);
 
     boolean rightClick();
 

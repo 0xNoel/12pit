@@ -16,6 +16,11 @@
     "oneconfig.ModCardMixin",
     "scoreboard.ScoreboardMixin",
     "world.WorldClientMixin",
+    "input.MinecraftMixin",
+    "input.KeyBindingMixin",
+    "input.EntityPlayerSPMixin",
+    "input.PlayerControllerMPMixin",
+    "input.MouseHelperMixin",
     "feature.autoclick.MinecraftMixin",
     "feature.denick.GuiPlayerTabOverlayMixin",
     "feature.gamma.EntityRendererMixin",
@@ -26,11 +31,8 @@
     "feature.smartblock.MinecraftMixin",
     "feature.tooltip.GuiIngameForgeMixin",
     "feature.swap.MinecraftMixin",
-    "feature.swap.KeyBindingMixin",
-    "feature.swap.EntityPlayerSPMixin",
     "feature.swap.PlayerControllerMPMixin",
     "feature.swap.NetHandlerPlayClientMixin",
-    "feature.swap.MouseHelperMixin",
     "feature.swap.GuiContainerMixin",
     "feature.swap.GuiIngameMixin"
   ]

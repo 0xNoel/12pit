@@ -26,10 +26,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pit12.feature.swap.SwapHooks;
 import pit12.feature.swap.SwapHooksBinding;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 
 @Mixin(PlayerControllerMP.class)
 public abstract class PlayerControllerMPMixin {
@@ -37,27 +38,12 @@ public abstract class PlayerControllerMPMixin {
     @Final
     private Minecraft mc;
 
-    @Inject(method = {"clickBlock", "onPlayerDamageBlock", "onPlayerDestroyBlock",
-            "onPlayerRightClick", "sendUseItem", "interactWithEntitySendPacket",
-            "isPlayerRightClickingOnEntity"}, at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapInteraction(CallbackInfoReturnable<Boolean> callback) {
-        SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
-        if (hooks != null && hooks.inputLocked())
-            callback.setReturnValue(false);
-    }
-
-    @Inject(method = {"attackEntity", "sendEnchantPacket", "sendSlotPacket", "sendPacketDropItem"},
-            at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapAction(CallbackInfo callback) {
-        SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
-        if (hooks != null && hooks.inputLocked())
-            callback.cancel();
-    }
-
     @Inject(method = "windowClick", at = @At("HEAD"), cancellable = true)
     private void pit12$blockOtherInventoryClicks(CallbackInfoReturnable<ItemStack> callback) {
         SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
-        if (hooks != null && !hooks.inventoryClickAllowed())
+        InputBlocker blocker = ((InputBlockBinding) mc).pit12$inputBlocker();
+        if (blocker != null && blocker.locked()
+                && (hooks == null || !hooks.inventoryClickAllowed()))
             callback.setReturnValue(null);
     }
 }

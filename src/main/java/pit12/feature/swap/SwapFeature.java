@@ -20,13 +20,10 @@ package pit12.feature.swap;
 
 import java.nio.file.Path;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -34,13 +31,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.feature.swap.api.SwapBindings;
 import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
+import pit12.runtime.input.InputBlocker;
+import pit12.runtime.input.InputHandler;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
@@ -52,7 +50,8 @@ import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-public final class SwapFeature implements ClientLifecycle, ConfigChangeListener, SwapHooks {
+public final class SwapFeature
+        implements ClientLifecycle, ConfigChangeListener, SwapHooks, InputHandler {
     private final Minecraft minecraft;
     private final ConfigCatalog configs;
     private final SwapConfig config;
@@ -62,26 +61,27 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
     private final AutoSwapController automatic;
     private final SwapOverlay overlay;
     private final SwapHooksBinding hookBinding;
+    private final InputBlocker input;
     private final Runnable sessionListener = this::worldChanged;
     private boolean started;
     private boolean listening;
     private boolean rightClickHeld;
     private boolean mouseGrabbed;
-    private boolean inputLocked;
 
     public SwapFeature(Minecraft minecraft, ClientThread client, ConfigCatalog configs,
             SwapConfig config, ClientSession session, PitContext pit,
             PlayerEquipmentAccess equipment, RelationLookup relations, CommandRegistry commands,
-            Path path, SwapHooksBinding hookBinding, Languages language) {
+            Path path, SwapHooksBinding hookBinding, InputBlocker input, Languages language) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
         this.session = session;
         this.hookBinding = hookBinding;
+        this.input = input;
         bindings = new BindingBook(client, path,
                 message -> report(Tone.ERROR, language.translate(message)));
         controller = new SwapController(minecraft, session, config, bindings, this::report,
-                this::lockInput, this::releaseInput, language);
+                () -> input.lock(this), resume -> input.unlock(this, resume), language);
         DarkTargets darkTargets = new DarkTargets(minecraft, config, equipment, relations);
         automatic =
                 new AutoSwapController(minecraft, config, controller, pit, darkTargets, language);
@@ -140,7 +140,9 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
         if (enabled) {
             MinecraftForge.EVENT_BUS.register(this);
             hookBinding.pit12$bindSwapHooks(this);
+            input.addHandler(this);
         } else {
+            input.removeHandler(this);
             hookBinding.pit12$bindSwapHooks(null);
             MinecraftForge.EVENT_BUS.unregister(this);
             automatic.reset();
@@ -159,77 +161,18 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
         updateListening();
     }
 
-    private void lockInput() {
-        inputLocked = true;
-        KeyBinding.unPressAllKeys();
-        minecraft.playerController.resetBlockRemoving();
-        if (minecraft.thePlayer.isUsingItem())
-            minecraft.playerController.onStoppedUsingItem(minecraft.thePlayer);
-        suppressMovement();
-    }
-
-    private void releaseInput(boolean resume) {
-        if (Keyboard.isCreated())
-            while (Keyboard.next()) {
-            }
-        if (Mouse.isCreated()) {
-            while (Mouse.next()) {
-            }
-            Mouse.getDX();
-            Mouse.getDY();
-        }
-        minecraft.mouseHelper.deltaX = 0;
-        minecraft.mouseHelper.deltaY = 0;
-        KeyBinding.unPressAllKeys();
-        inputLocked = false;
-        if (!resume || !minecraft.inGameHasFocus || !Display.isActive())
-            return;
-        // Restore held states without replaying presses buffered while the inventory was open.
-        for (KeyBinding binding : minecraft.gameSettings.keyBindings) {
-            int key = binding.getKeyCode();
-            if (config.enabled() && (key == config.unequipKey.get() || bindings.hasKey(key)))
-                continue;
-            KeyBinding.setKeyBindState(key, physicallyHeld(key));
-        }
-    }
-
-    private static boolean physicallyHeld(int key) {
-        if (key > 0 && key < Keyboard.KEYBOARD_SIZE)
-            return Keyboard.isCreated() && Keyboard.isKeyDown(key);
-        int button = key + 100;
-        return key < 0 && Mouse.isCreated() && button >= 0 && button < Mouse.getButtonCount()
-                && Mouse.isButtonDown(button);
-    }
-
-    @Override
-    public boolean inputLocked() {
-        return inputLocked;
-    }
-
-    @Override
-    public void suppressMovement() {
-        EntityPlayerSP player = minecraft.thePlayer;
-        if (!inputLocked || player == null)
-            return;
-        player.movementInput.moveForward = 0;
-        player.movementInput.moveStrafe = 0;
-        player.movementInput.jump = false;
-        player.movementInput.sneak = false;
-        player.moveForward = 0;
-        player.moveStrafing = 0;
-        player.setJumping(false);
-        player.setSprinting(false);
-    }
-
     @Override
     public boolean inventoryClickAllowed() {
-        return !inputLocked || controller.sendingClick();
+        return controller.sendingClick();
+    }
+
+    @Override
+    public boolean consumesKey(int key) {
+        return config.enabled() && (key == config.unequipKey.get() || bindings.hasKey(key));
     }
 
     @Override
     public boolean key(int key, boolean pressed, boolean repeat) {
-        if (inputLocked())
-            return true;
         if (!pressed || key <= 0 || key >= Keyboard.KEYBOARD_SIZE || !config.enabled()
                 || !controller.acceptsInput())
             return false;
@@ -247,7 +190,7 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
 
     @Override
     public boolean rightClick() {
-        if (inputLocked())
+        if (input.locked())
             return true;
         if (rightClickHeld)
             return true;
@@ -290,9 +233,10 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        if (!physicallyHeld(minecraft.gameSettings.keyBindUseItem.getKeyCode()))
+        if (!InputBlocker.physicallyHeld(minecraft.gameSettings.keyBindUseItem.getKeyCode()))
             rightClickHeld = false;
-        automatic.tick();
+        if (!input.blockedFor(this))
+            automatic.tick();
         updateMouseGrab();
         overlay.refresh();
     }
@@ -314,25 +258,6 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
             Mouse.setGrabbed(false);
         }
         mouseGrabbed = hidden;
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onKeyboard(GuiScreenEvent.KeyboardInputEvent.Pre event) {
-        if (inputLocked)
-            event.setCanceled(true);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onMouse(GuiScreenEvent.MouseInputEvent.Pre event) {
-        if (inputLocked)
-            event.setCanceled(true);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onGameMouse(MouseEvent event) {
-        if (inputLocked()) {
-            event.setCanceled(true);
-        }
     }
 
     @SubscribeEvent

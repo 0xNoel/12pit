@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.feature.swap;
+package pit12.platform.mixin.input;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -26,8 +26,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pit12.feature.swap.SwapHooks;
-import pit12.feature.swap.SwapHooksBinding;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 
 @Mixin(KeyBinding.class)
 public abstract class KeyBindingMixin {
@@ -37,16 +37,16 @@ public abstract class KeyBindingMixin {
     private int pressTime;
 
     @Inject(method = {"setKeyBindState", "onTick"}, at = @At("HEAD"), cancellable = true)
-    private static void pit12$blockSwapKeyState(CallbackInfo callback) {
-        SwapHooks hooks = ((SwapHooksBinding) Minecraft.getMinecraft()).pit12$swapHooks();
-        if (hooks != null && hooks.inputLocked())
+    private static void pit12$blockKeyState(CallbackInfo callback) {
+        InputBlocker blocker = ((InputBlockBinding) Minecraft.getMinecraft()).pit12$inputBlocker();
+        if (blocker != null && blocker.locked())
             callback.cancel();
     }
 
     @Inject(method = {"isKeyDown", "isPressed"}, at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapKeyRead(CallbackInfoReturnable<Boolean> callback) {
-        SwapHooks hooks = ((SwapHooksBinding) Minecraft.getMinecraft()).pit12$swapHooks();
-        if (hooks != null && hooks.inputLocked()) {
+    private void pit12$blockKeyRead(CallbackInfoReturnable<Boolean> callback) {
+        InputBlocker blocker = ((InputBlockBinding) Minecraft.getMinecraft()).pit12$inputBlocker();
+        if (blocker != null && blocker.locked()) {
             pressed = false;
             pressTime = 0;
             callback.setReturnValue(false);

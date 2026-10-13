@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.feature.swap;
+package pit12.platform.mixin.input;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
@@ -34,8 +34,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pit12.feature.swap.SwapHooks;
-import pit12.feature.swap.SwapHooksBinding;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 
 @Mixin(EntityPlayerSP.class)
 public abstract class EntityPlayerSPMixin extends AbstractClientPlayer {
@@ -48,18 +48,18 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer {
 
     @Unique
     private boolean pit12$inputLocked() {
-        SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
-        return hooks != null && hooks.inputLocked();
+        InputBlocker blocker = ((InputBlockBinding) mc).pit12$inputBlocker();
+        return blocker != null && blocker.locked();
     }
 
     @Inject(method = "onLivingUpdate",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/util/MovementInput;updatePlayerMoveState()V",
                     shift = At.Shift.AFTER))
-    private void pit12$suppressSwapMovement(CallbackInfo callback) {
-        SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
-        if (hooks != null)
-            hooks.suppressMovement();
+    private void pit12$suppressMovement(CallbackInfo callback) {
+        InputBlocker blocker = ((InputBlockBinding) mc).pit12$inputBlocker();
+        if (blocker != null)
+            blocker.suppressMovement();
     }
 
     @Override
@@ -104,24 +104,24 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer {
     }
 
     @ModifyVariable(method = "setSprinting", at = @At("HEAD"), argsOnly = true)
-    private boolean pit12$blockSwapSprint(boolean sprinting) {
+    private boolean pit12$blockSprint(boolean sprinting) {
         return sprinting && !pit12$inputLocked();
     }
 
     @Inject(method = "isSneaking", at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapSneak(CallbackInfoReturnable<Boolean> callback) {
+    private void pit12$blockSneak(CallbackInfoReturnable<Boolean> callback) {
         if (pit12$inputLocked())
             callback.setReturnValue(false);
     }
 
     @Inject(method = {"swingItem", "sendHorseJump"}, at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapAction(CallbackInfo callback) {
+    private void pit12$blockAction(CallbackInfo callback) {
         if (pit12$inputLocked())
             callback.cancel();
     }
 
     @Inject(method = "dropOneItem", at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapDrop(CallbackInfoReturnable<EntityItem> callback) {
+    private void pit12$blockDrop(CallbackInfoReturnable<EntityItem> callback) {
         if (pit12$inputLocked())
             callback.setReturnValue(null);
     }

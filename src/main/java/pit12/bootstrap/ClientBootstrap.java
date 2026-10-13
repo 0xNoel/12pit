@@ -32,6 +32,8 @@ import pit12.feature.autofish.AutoFishConfig;
 import pit12.feature.autofish.AutoFishFeature;
 import pit12.feature.banalert.BanAlertConfig;
 import pit12.feature.banalert.BanAlertFeature;
+import pit12.feature.chatmacro.ChatMacroConfig;
+import pit12.feature.chatmacro.ChatMacroFeature;
 import pit12.feature.denick.DenickConfig;
 import pit12.feature.denick.DenickFeature;
 import pit12.feature.denick.DenickNamesBinding;
@@ -80,6 +82,8 @@ import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.hud.HudRegistry;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitContextTracker;
@@ -117,6 +121,8 @@ public final class ClientBootstrap {
         shutdown = (ClientShutdownBinding) minecraft;
         ClientSession session = new ClientSession(minecraft, client);
         components.add(session);
+        InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft);
+        components.add(input);
         CommandRegistry commands =
                 new CommandRegistry(client, ForgeCommandAdapter::register, language);
         components.add(commands);
@@ -143,7 +149,7 @@ public final class ClientBootstrap {
         SwapBindings swapBindings = registerSwap(minecraft, client, configs, session, pitContext,
                 playerEquipment, relations, commands,
                 new File(minecraft.mcDataDir, "12pit/swap-bindings.json").toPath(),
-                (SwapHooksBinding) minecraft);
+                (SwapHooksBinding) minecraft, input);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, playerEquipment, commands,
@@ -162,6 +168,8 @@ public final class ClientBootstrap {
         // Category: Player
         registerAutoFish(configs, session, (MinecraftActions) minecraft);
         registerAutoSprint(configs);
+        registerChatMacro(minecraft, configs, session, sidebar, input, commands,
+                new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
         // Category: Render
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
@@ -211,11 +219,11 @@ public final class ClientBootstrap {
     private SwapBindings registerSwap(Minecraft minecraft, ClientThread client,
             ConfigCatalog configs, ClientSession session, PitContext pitContext,
             PlayerEquipmentAccess playerEquipment, RelationLookup relations,
-            CommandRegistry commands, Path path, SwapHooksBinding binding) {
+            CommandRegistry commands, Path path, SwapHooksBinding binding, InputBlocker input) {
         SwapConfig config = new SwapConfig();
         configs.register(config);
         SwapFeature swap = new SwapFeature(minecraft, client, configs, config, session, pitContext,
-                playerEquipment, relations, commands, path, binding, language);
+                playerEquipment, relations, commands, path, binding, input, language);
         components.add(swap);
         return swap.bindings();
     }
@@ -281,6 +289,15 @@ public final class ClientBootstrap {
         AutoSprintConfig config = new AutoSprintConfig();
         configs.register(config);
         components.add(new AutoSprintFeature(config));
+    }
+
+    private void registerChatMacro(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, SidebarCache sidebar, InputBlocker input,
+            CommandRegistry commands, Path path) {
+        ChatMacroConfig config = new ChatMacroConfig();
+        configs.register(config);
+        components.add(new ChatMacroFeature(minecraft, client, configs, config, session, sidebar,
+                input, commands, language, path));
     }
 
     // Category: Render
