@@ -50,6 +50,9 @@ import pit12.feature.itemesp.ItemEspFeature;
 import pit12.feature.nametag.NametagConfig;
 import pit12.feature.nametag.NametagFeature;
 import pit12.feature.nametag.NametagNamesBinding;
+import pit12.feature.nojumpdelay.NoJumpDelayBinding;
+import pit12.feature.nojumpdelay.NoJumpDelayConfig;
+import pit12.feature.nojumpdelay.NoJumpDelayFeature;
 import pit12.feature.playeresp.PlayerEspConfig;
 import pit12.feature.playeresp.PlayerEspFeature;
 import pit12.feature.playerlist.PlayerListConfig;
@@ -170,6 +173,7 @@ public final class ClientBootstrap {
         registerAutoSprint(configs);
         registerChatMacro(minecraft, configs, session, sidebar, input, commands,
                 new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
+        registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         // Category: Render
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
@@ -298,6 +302,12 @@ public final class ClientBootstrap {
         configs.register(config);
         components.add(new ChatMacroFeature(minecraft, client, configs, config, session, sidebar,
                 input, commands, language, path));
+    }
+
+    private void registerNoJumpDelay(ConfigCatalog configs, NoJumpDelayBinding binding) {
+        NoJumpDelayConfig config = new NoJumpDelayConfig();
+        configs.register(config);
+        components.add(new NoJumpDelayFeature(config, binding));
     }
 
     // Category: Render

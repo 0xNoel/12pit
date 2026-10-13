@@ -26,6 +26,8 @@
     "feature.gamma.EntityRendererMixin",
     "feature.nametag.RendererLivingEntityAccessor",
     "feature.nametag.RendererLivingEntityMixin",
+    "feature.nojumpdelay.EntityLivingBaseMixin",
+    "feature.nojumpdelay.MinecraftMixin",
     "feature.sprint.EntityPlayerSPMixin",
     "feature.smartblock.EntityArrowAccessor",
     "feature.smartblock.MinecraftMixin",
