@@ -386,7 +386,7 @@ final class PlayerListHud implements HudElement {
             secondName = PlayerNameFormatter.shorten(secondName);
             darkName = PlayerNameFormatter.shorten(darkName);
         }
-        firstName += " §c§lN";
+        firstName += " §e§lN";
         Map<PlayerListGroup, List<PlayerListEntry>> groups =
                 new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
         groups.put(PlayerListGroup.REGULARITY,

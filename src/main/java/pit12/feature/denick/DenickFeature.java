@@ -604,7 +604,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         if (!config.enabled() || target == null || !target.nick) {
             return original;
         }
-        return config.nickMarker.get() ? original.trim() + " §c§lN" : original;
+        return config.nickMarker.get() ? original.trim() + " §e§lN" : original;
     }
 
     @Override

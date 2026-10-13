@@ -229,7 +229,7 @@ public final class NametagFeature
         if (!config.enabled()) {
             return original;
         }
-        String name = config.nickMarker() && denickNames.isNicked(playerId) ? original + " §c§lN"
+        String name = config.nickMarker() && denickNames.isNicked(playerId) ? original + " §e§lN"
                 : original;
         if (config.realNames()) {
             String realName = denickNames.realDisplayName(playerId);
