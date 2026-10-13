@@ -27,8 +27,8 @@ public enum PitMap {
     GENESIS(86, 26, Blocks.air, 0),
     CASTLE(95, 20, Blocks.stained_glass, 11),
     CORALS(114, 23, Blocks.gold_block, 0),
-    SEASONS(114, 23, Blocks.sandstone, 2),
-    ELEMENTS(114, 23, Blocks.planks, 5);
+    SEASONS(114, 23, Blocks.double_stone_slab, 9),
+    ELEMENTS(114, 23, Blocks.double_wooden_slab, 5);
 
     private final int spawnY;
     private final int spawnRadius;
