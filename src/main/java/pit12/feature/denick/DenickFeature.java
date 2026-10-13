@@ -73,7 +73,6 @@ import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
-import pit12.shared.text.PlayerNameFormatter;
 
 public final class DenickFeature implements ClientLifecycle, DenickNames, TabPresenceListener,
         PlayerEquipmentListener, ConfigChangeListener {
@@ -102,7 +101,6 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     private boolean ready;
     private boolean writable;
     private boolean inPit;
-    private boolean tabVisible;
     private boolean namesBound;
     private volatile long generation;
     private volatile boolean started;
@@ -265,7 +263,6 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             }
         }
         inPit = false;
-        tabVisible = false;
         changed();
     }
 
@@ -478,8 +475,8 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                             if (valid(target, requestGeneration, request)) {
                                 target.realDisplayName = name;
                                 target.owner = cached;
-                                reply(search.sender, Tone.SUCCESS, language
-                                        .format("{0} -> {1} (cached)", displayName(target), name));
+                                reply(search.sender, Tone.SUCCESS, language.format(
+                                        "{0} §c-> {1} §c(cached)", displayName(target), name));
                                 changed();
                             }
                         });
@@ -526,7 +523,8 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 boolean corrected = cached != null && !Objects.equals(cached, result.owner);
                 reply(search.sender, Tone.SUCCESS,
                         language.format(
-                                corrected ? source("{0} -> {1} (updated)") : source("{0} -> {1}"),
+                                corrected ? source("{0} §c-> {1} §c(updated)")
+                                        : source("{0} §c-> {1}"),
                                 displayName(target), result.displayName));
                 changed();
             }
@@ -600,24 +598,11 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     }
 
     @Override
-    public void setTabVisible(boolean visible) {
-        client.check();
-        if (visible != tabVisible) {
-            tabVisible = visible;
-            changed();
-        }
-    }
-
-    @Override
-    public String listName(UUID playerId, String original, boolean shortName) {
+    public String listName(UUID playerId, String original) {
         client.check();
         Target target = targets.get(playerId);
         if (!config.enabled() || target == null || !target.nick) {
             return original;
-        }
-        if (config.tabNames.get() && tabVisible && target.realDisplayName != null) {
-            return shortName ? PlayerNameFormatter.shorten(target.realDisplayName)
-                    : target.realDisplayName;
         }
         return config.nickMarker.get() ? original.trim() + " §c§lN" : original;
     }

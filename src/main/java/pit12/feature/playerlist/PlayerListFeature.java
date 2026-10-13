@@ -27,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import org.lwjgl.input.Keyboard;
 import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationListener;
@@ -65,6 +66,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     private final HudRenderer hudRenderer = new HudRenderer();
     private PlayerListSnapshot snapshot = PlayerListSnapshot.empty();
     private boolean snapshotDirty = true;
+    private boolean realNamesHeld;
     private final Runnable namesChanged = () -> snapshotDirty = true;
     private int ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
     private boolean started;
@@ -149,6 +151,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         hud.close();
         ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
         snapshotDirty = true;
+        realNamesHeld = false;
     }
 
     @Override
@@ -212,6 +215,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 || changes.affects("playerlist", "enchantment_format")
                 || changes.affects("playerlist", "show_gem")
                 || changes.affects("playerlist", "short_player_names")
+                || changes.affects("playerlist", "real_names_key")
                 || changes.affects("playerlist", "show_distance")
                 || changes.affects("playerlist", "show_direction")
                 || changes.affects("playerlist", "show_spawn")
@@ -236,6 +240,14 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         if (event.phase != Phase.START) {
             return;
         }
+        int key = config.realNamesKey();
+        boolean realNames = key != Keyboard.KEY_NONE && minecraft.currentScreen == null
+                && minecraft.inGameHasFocus && Keyboard.isCreated() && Keyboard.isKeyDown(key);
+        if (realNames != realNamesHeld) {
+            realNamesHeld = realNames;
+            snapshotDirty = true;
+            ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
+        }
         ticksSinceUpdate++;
         if (ticksSinceUpdate < UPDATE_INTERVAL_TICKS) {
             return;
@@ -243,7 +255,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         ticksSinceUpdate = 0;
         boolean movingColumns = config.showDistance() || config.showDirection();
         if (snapshotDirty || movingColumns) {
-            snapshot = builder.build();
+            snapshot = builder.build(realNamesHeld);
             hud.snapshot(snapshot);
             snapshotDirty = false;
         }

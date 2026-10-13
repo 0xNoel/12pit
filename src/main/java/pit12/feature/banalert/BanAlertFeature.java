@@ -179,7 +179,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
                 String offset = (closestDifference < 0 ? "-" : "+")
                         + TimeUnit.NANOSECONDS.toMillis(Math.abs(closestDifference));
                 ChatFeedback.reply(player, Tone.WARNING, language.format(
-                        "Possibly banned player: {0} §e({1} ms)", "§f" + closest.name, offset));
+                        "Possibly banned player: {0} §e({1}ms)", "§f" + closest.name, offset));
             }
         }
         discardExpired(now);

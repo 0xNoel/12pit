@@ -20,6 +20,7 @@ package pit12.feature.playerlist;
 
 import static pit12.runtime.languages.Languages.source;
 
+import org.lwjgl.input.Keyboard;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ChoiceSetting;
 import pit12.runtime.config.ConfigCategory;
@@ -34,6 +35,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final ChoiceSetting enchantmentFormat;
     private final BooleanSetting showGem;
     private final BooleanSetting shortPlayerNames;
+    private final IntegerSetting realNamesKey;
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
     private final BooleanSetting showSpawn;
@@ -64,6 +66,9 @@ public final class PlayerListConfig extends FeatureConfig {
         subsubcategory("player_information", source("Player information"));
         shortPlayerNames = booleanSetting("short_player_names", source("Short player names"),
                 source("Shows only the level and player name, keeping their formatting."), false);
+        realNamesKey = keybindSetting("real_names_key", source("Real names key"),
+                source("Hold to show nicked players' real names in Player List."),
+                Keyboard.KEY_TAB);
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
@@ -106,6 +111,10 @@ public final class PlayerListConfig extends FeatureConfig {
 
     public boolean shortPlayerNames() {
         return shortPlayerNames.get();
+    }
+
+    public int realNamesKey() {
+        return realNamesKey.get();
     }
 
     public boolean showDistance() {

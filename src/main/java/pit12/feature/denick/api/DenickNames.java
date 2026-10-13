@@ -29,9 +29,6 @@ public interface DenickNames {
     /** Returns null when Denick is disabled or no real name is known. */
     String realDisplayName(UUID playerId);
 
-    /** The Tab rendering adapter reports visibility here. */
-    void setTabVisible(boolean visible);
-
     void addListener(Runnable listener);
 
     void removeListener(Runnable listener);

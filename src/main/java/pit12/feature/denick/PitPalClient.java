@@ -93,8 +93,9 @@ final class PitPalClient {
                 || name.getAsString().trim().isEmpty()) {
             throw new IOException("PitPal returned an invalid owner name");
         }
-        return level.getAsString().isEmpty() ? name.getAsString()
-                : level.getAsString() + " " + name.getAsString();
+        String displayName = name.getAsString().replaceFirst("\\[[^]]*\\] *", "");
+        return level.getAsString().isEmpty() ? displayName
+                : level.getAsString() + " " + displayName;
     }
 
     private JsonObject request(String path, String body, BooleanSupplier cancelled)
