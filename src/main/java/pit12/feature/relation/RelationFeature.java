@@ -148,7 +148,8 @@ public final class RelationFeature implements ClientLifecycle, Relations, TabPre
         presence.removeListener(this);
         if (installAdapters)
             MinecraftForge.EVENT_BUS.unregister(this);
-        lookups.clear();
+        if (lookups != null)
+            lookups.clear();
         ExecutorService closingLookups = lookupWorker;
         if (closingLookups != null)
             closingLookups.shutdownNow();

@@ -94,7 +94,7 @@ public final class ProfileCodec {
                 ? featuresElement.getAsJsonObject()
                 : new JsonObject();
         if (featuresElement != null && !featuresElement.isJsonObject()) {
-            warnings.add("$.features must be an object; known settings use defaults");
+            warnings.add("$.features must be an object. Known settings use defaults");
         }
         for (Map.Entry<String, Map<String, Setting.StorageType>> featureEntry : schema.features()
                 .entrySet()) {
@@ -124,7 +124,7 @@ public final class ProfileCodec {
                         } catch (NumberFormatException failure) {
                             warnings.add("$.features." + featureEntry.getKey() + "."
                                     + settingEntry.getKey()
-                                    + " must be an integer; the default is used");
+                                    + " must be an integer. The default is used");
                         }
                     } else if (settingEntry.getValue() == Setting.StorageType.DECIMAL
                             && value.isJsonPrimitive() && value.getAsJsonPrimitive().isNumber()) {
@@ -137,12 +137,12 @@ public final class ProfileCodec {
                         } catch (NumberFormatException failure) {
                             warnings.add("$.features." + featureEntry.getKey() + "."
                                     + settingEntry.getKey()
-                                    + " must be a finite decimal; the default is used");
+                                    + " must be a finite decimal. The default is used");
                         }
                     } else {
                         warnings.add(
                                 "$.features." + featureEntry.getKey() + "." + settingEntry.getKey()
-                                        + " has the wrong value type; the default is used");
+                                        + " has the wrong value type. The default is used");
                     }
                 }
             }

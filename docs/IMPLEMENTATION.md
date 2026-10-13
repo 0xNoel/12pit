@@ -140,7 +140,7 @@ Use `register(command)` to make `/12pit message` available. If `/message` is sup
 
 A node with children is a group. Without arguments it displays auto-generated help, even if there's a handler. Leaf with a handler executes it, if the argument number is correct. Child's name or alias matches case-insensitively and overrides group's handler. Group handler can accept extra unmatched arguments. Adding a single `help` argument will show group help unless there's an explicit `help` child.
 
-`requires(Predicate<ICommandSender>)` restricts use of a node. Help and completion hide children that cannot be used by the sender. Suggestion callback gets the arguments after the command path, including the current word. Return the complete set of suggestions; the registry filters it by the current prefix case-insensitively and removes duplicates. Returning null or empty list results in no suggestions.
+`requires(Predicate<ICommandSender>)` restricts use of a node. Help and completion hide children that cannot be used by the sender. The suggestion callback gets the arguments after the command path, including the current word. Return the complete set of suggestions. The registry filters it by the current prefix case-insensitively and removes duplicates. Return an empty list for no suggestions.
 
 Bootstrap provides [ForgeCommandAdapter](../src/main/java/pit12/platform/command/ForgeCommandAdapter.java) through the `Registrar` of the registry. Features don't register Forge command classes manually. There's no way to unregister commands in Forge. `stop()` disallows execution and completion and `start()` will reuse existing entry points. Registration is closed after the first start.
 
@@ -279,7 +279,7 @@ Keep a [TabPresenceListener](../src/main/java/pit12/runtime/player/TabPresenceLi
 
 Subscribe to name changes with `addListener(Runnable)` in `start()`, then read the current names. In `stop()`, pass the same listener to `removeListener(Runnable)`.
 
-[PlayerEquipmentAccess](../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) provides `loadedEquipment(UUID)`. It returns `null` if the entity is unloaded or has not been observed yet. In a snapshot, check `heldItemKnown()` or `leggingsKnown()` before treating a slot as empty. `copyHeldItem()` and `copyLeggings()` return defensive copies. A `null` result may mean an unknown slot or a known empty slot. Use `heldEnchantments()` or `leggingsEnchantments()` for already parsed data.
+[PlayerEquipmentAccess](../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) provides `loadedEquipment(UUID)`. It returns `null` if the entity is unloaded or has not been observed yet. In a snapshot, check `heldItemKnown()` or `leggingsKnown()` before treating those slots as empty. Use `heldEnchantments()` or `leggingsEnchantments()` for already parsed data.
 
 `copyEquipment(slot)` returns a copy for slots `0` through `4`: held item, boots, leggings, chestplate, and helmet. Empty and unobserved slots return `null`.
 
@@ -287,7 +287,7 @@ Keep a [PlayerEquipmentListener](../src/main/java/pit12/runtime/player/PlayerEqu
 
 `onPlayerEquipmentReceived(playerId, stack)` runs for each equipment packet before the tick combines changes. The stack may be `null` and belongs to Minecraft. Only read it during the callback. Copy it before retaining or changing it. Use this callback when intermediate equipment must be kept.
 
-[PitContext](../src/main/java/pit12/runtime/pit/PitContext.java) provides `current()`. The returned `PitSnapshot` provides the map, Pit state, revision and `spawnStateAt(x, y, z)`. The state is `UNKNOWN` until the map is identified. The snapshots can be passed to the workers; live providers cannot.
+[PitContext](../src/main/java/pit12/runtime/pit/PitContext.java) provides `current()`. The returned `PitSnapshot` provides the Pit state and `spawnStateAt(x, y, z)`. The state is `UNKNOWN` until the map is identified. Pass snapshots to workers. Read live providers on the client thread.
 
 [PitEnchantmentReader](../src/main/java/pit12/runtime/item/PitEnchantmentReader.java) reads the arbitrary item stacks with `read`, `contains` and `levelOf`. The missing data causes an empty result or level `0`. The entries with missing keys or non-positive levels are ignored. Use the equipment snapshot's parsed enchantments if they are already available.
 

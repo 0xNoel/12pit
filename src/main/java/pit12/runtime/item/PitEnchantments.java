@@ -70,10 +70,6 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
     }
 
     public boolean contains(PitEnchantment enchantment) {
-        // Unknown entries also have null enchantments.
-        if (enchantment == null) {
-            return false;
-        }
         for (Entry entry : entries) {
             if (entry.enchantment == enchantment) {
                 return true;

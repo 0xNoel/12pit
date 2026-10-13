@@ -20,15 +20,9 @@ package pit12.runtime.pit;
 
 public final class PitSnapshot {
     private final PitMap map;
-    private final long revision;
 
-    public PitSnapshot(PitMap map, long revision) {
+    PitSnapshot(PitMap map) {
         this.map = map;
-        this.revision = revision;
-    }
-
-    public PitMap map() {
-        return map;
     }
 
     public PitState pitState() {
@@ -38,9 +32,5 @@ public final class PitSnapshot {
     /** Returns UNKNOWN until the map has been identified. */
     public SpawnState spawnStateAt(double x, double y, double z) {
         return map.spawnStateAt(x, y, z);
-    }
-
-    public long revision() {
-        return revision;
     }
 }

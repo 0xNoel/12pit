@@ -155,7 +155,7 @@ final class DiscordRpcConnection implements Closeable {
         while (true) {
             int opcode = Integer.reverseBytes(input.readInt());
             int length = Integer.reverseBytes(input.readInt());
-            // Discord limits IPC frames to 64 KiB, including the eight-byte header.
+            // Match the Discord RPC SDK's 64 KiB frame buffer, including the header.
             if (length < 0 || length > 65528) {
                 throw new IOException("Invalid Discord RPC frame length: " + length);
             }

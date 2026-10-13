@@ -84,7 +84,7 @@ final class BindingBook implements SwapBindings {
                         return;
                     loading = false;
                     problem = source(
-                            "Swap bindings could not be loaded; import a file or use /swap clear");
+                            "Swap bindings could not be loaded. Import a file or use /swap clear");
                     report.accept(problem);
                     changed();
                 });

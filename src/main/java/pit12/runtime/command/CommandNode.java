@@ -77,7 +77,7 @@ public final class CommandNode {
     }
     @FunctionalInterface
     public interface Suggestions {
-        /** Arguments include the current word. Return unfiltered candidates, or null for no suggestions. */
+        /** Arguments include the current word. Return unfiltered candidates. */
         List<String> suggest(ICommandSender sender, String[] args);
     }
     public static final class Builder {

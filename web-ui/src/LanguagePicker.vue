@@ -53,7 +53,7 @@ const choices = computed(() => {
     .filter(
       (choice) =>
         choice.name.toLowerCase().includes(query) ||
-        choice.displayName?.toLowerCase().includes(query) ||
+        choice.displayName.toLowerCase().includes(query) ||
         choice.locale!.includes(query),
     )
 })

@@ -65,7 +65,6 @@ final class EventListSnapshot {
                 break;
             }
         }
-        // Matches the tracker's ten-second offset for the Pit day cycle.
         long cycle = Math.floorMod(now / 1000L + 10L, 2160L);
         boolean day = cycle < 1440L;
         return new EventListSnapshot(rows,

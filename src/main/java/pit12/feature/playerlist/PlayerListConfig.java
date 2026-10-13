@@ -124,26 +124,6 @@ public final class PlayerListConfig extends FeatureConfig {
         return showGroupName.get();
     }
 
-    public boolean showFriend() {
-        return showFriend.get();
-    }
-
-    public boolean showEnemy() {
-        return showEnemy.get();
-    }
-
-    public boolean showRegularity() {
-        return showRegularity.get();
-    }
-
-    public boolean showDark() {
-        return showDark.get();
-    }
-
-    public boolean showBountyHunter() {
-        return showBountyHunter.get();
-    }
-
     public HudConfig hud() {
         return hud;
     }
@@ -151,17 +131,17 @@ public final class PlayerListConfig extends FeatureConfig {
     public boolean showGroup(PlayerListGroup group) {
         switch (group) {
             case FRIEND:
-                return showFriend();
+                return showFriend.get();
             case ENEMY:
-                return showEnemy();
+                return showEnemy.get();
             case NICK:
                 return showNick.get();
             case REGULARITY:
-                return showRegularity();
+                return showRegularity.get();
             case DARK:
-                return showDark();
+                return showDark.get();
             case BOUNTY_HUNTER:
-                return showBountyHunter();
+                return showBountyHunter.get();
             default:
                 throw new IllegalStateException("Unknown player list group: " + group);
         }

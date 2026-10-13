@@ -62,16 +62,6 @@ public final class PlayerEquipmentSnapshot {
         return (knownSlots & PlayerEquipmentCache.LEGGINGS) != 0;
     }
 
-    /** Empty or unobserved slots return null. {@link #heldItemKnown()} distinguishes them. */
-    public ItemStack copyHeldItem() {
-        return copy(equipment[0]);
-    }
-
-    /** Empty or unobserved slots return null. {@link #leggingsKnown()} distinguishes them. */
-    public ItemStack copyLeggings() {
-        return copy(equipment[2]);
-    }
-
     /** Slots are held item, boots, leggings, chestplate and helmet. Empty or unknown slots return null. */
     public ItemStack copyEquipment(int slot) {
         return copy(equipment[slot]);

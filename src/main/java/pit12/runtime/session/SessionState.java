@@ -21,6 +21,7 @@ package pit12.runtime.session;
 final class SessionState<C, W> {
     private C connection;
     private W world;
+    // Disconnect and unload events can precede Minecraft clearing its references.
     private C disconnected;
     private W unloaded;
     private long revision;

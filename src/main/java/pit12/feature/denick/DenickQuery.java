@@ -55,7 +55,7 @@ final class DenickQuery {
                                 ? cachedDisplayName
                                 : owner.getValue();
                 return query;
-            } catch (IOException | RuntimeException failure) {
+            } catch (IOException failure) {
                 LOGGER.warning("Denick item query failed for " + item.query + ": " + failure);
                 query.failure = failure;
             }

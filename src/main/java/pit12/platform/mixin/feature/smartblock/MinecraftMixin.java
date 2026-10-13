@@ -41,7 +41,7 @@ public abstract class MinecraftMixin implements SmartBlockBinding {
         pit12$smartBlock = feature;
     }
 
-    // Key bindings and hotbar input are ready here; attacks and item use follow.
+    // Key bindings and hotbar input are ready here. Attacks and item use follow.
     @Inject(method = "runTick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/entity/EntityPlayerSP;isUsingItem()Z", ordinal = 0))
     private void pit12$smartBlockInput(CallbackInfo callback) {

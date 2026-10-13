@@ -1,3 +1,4 @@
+import dev.architectury.pack200.java.Pack200Adapter
 import net.fabricmc.loom.task.RemapJarTask
 import org.apache.commons.lang3.SystemUtils
 
@@ -47,7 +48,7 @@ loom {
     }
 
     forge {
-        pack200Provider.set(dev.architectury.pack200.java.Pack200Adapter())
+        pack200Provider.set(Pack200Adapter())
         mixinConfig("mixins.$modId.json")
     }
 

@@ -245,7 +245,7 @@ public final class ProfilesFeature
             if (apply)
                 controller.importProfiles(decoded);
             else
-                controller.validateImported(decoded);
+                controller.prepareImported(decoded);
             return ProfileMutationResult.success();
         } catch (JsonParseException | IllegalArgumentException failure) {
             return ProfileMutationResult.failure(ProfileMutationResult.Status.INVALID_VALUE,

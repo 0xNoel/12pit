@@ -119,7 +119,7 @@ final class SettingsTransfer {
         if (includeSwap && bundle.swapBindings == null)
             throw new IllegalArgumentException("File has no swap bindings");
         if (!string(request, "fingerprint").equals(fingerprint())) {
-            throw new IllegalArgumentException("Settings changed; preview the file again");
+            throw new IllegalArgumentException("Settings changed. Preview the file again");
         }
         String mode = string(request, "mode");
         if (!"merge".equals(mode) && !"replace".equals(mode)) {

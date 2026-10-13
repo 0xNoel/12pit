@@ -162,10 +162,7 @@ public final class CommandRegistry implements ClientLifecycle {
             }
         }
         if (command.suggestions != null && args.length <= command.maximumArguments) {
-            List<String> suggestions = command.suggestions.suggest(sender, args);
-            if (suggestions != null) {
-                options.addAll(suggestions);
-            }
+            options.addAll(command.suggestions.suggest(sender, args));
         }
         List<String> matches = new ArrayList<>();
         String prefix = args[args.length - 1];

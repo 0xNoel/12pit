@@ -35,6 +35,6 @@ public final class GammaConfig extends FeatureConfig {
     }
 
     public float gamma() {
-        return gamma.get().floatValue();
+        return gamma.get();
     }
 }

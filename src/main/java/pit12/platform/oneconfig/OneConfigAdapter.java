@@ -31,7 +31,6 @@ import cc.polyfrost.oneconfig.events.EventManager;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigColorElement;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigDropdown;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigKeyBind;
-import cc.polyfrost.oneconfig.gui.elements.config.ConfigNumber;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigSlider;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigSwitch;
 import cc.polyfrost.oneconfig.internal.config.core.ConfigCore;
@@ -268,23 +267,9 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
         NumberSetting<?> number = (NumberSetting<?>) setting;
         float minimum = (float) number.minimumValue();
         float maximum = (float) number.maximumValue();
-        if (kind == ConfigOption.Kind.NUMBER) {
-            int step = number.decimalPlaces() == 0 ? (int) number.stepValue() : 0;
-            return new ConfigSlider(null, null, title, setting.originalDescription(), category,
-                    subcategory, minimum, maximum, step, true) {
-                @Override
-                public Object get() {
-                    return readNumber(number);
-                }
-
-                @Override
-                protected void set(Object value) {
-                    writeNumber(number, value);
-                }
-            };
-        }
-        return new ConfigNumber(null, null, title, setting.originalDescription(), category,
-                subcategory, minimum, maximum, Math.max(1, (int) number.stepValue()), 2) {
+        int step = number.decimalPlaces() == 0 ? (int) number.stepValue() : 0;
+        return new ConfigSlider(null, null, title, setting.originalDescription(), category,
+                subcategory, minimum, maximum, step, true) {
             @Override
             public Object get() {
                 return readNumber(number);

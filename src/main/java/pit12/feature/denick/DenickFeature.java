@@ -483,7 +483,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                                 changed();
                             }
                         });
-                    } catch (IOException | RuntimeException failure) {
+                    } catch (IOException failure) {
                         LOGGER.warning("Cannot resolve cached denick owner for " + target.name
                                 + ": " + failure);
                     }

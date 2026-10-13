@@ -88,7 +88,7 @@ public final class HudConfig {
         offsetX.set(placement.offsetX());
         offsetY.set(placement.offsetY());
         autoAnchor.set(placement.anchor().id());
-        // Set the offsets and resolved anchor before changing the anchor mode.
+        // Anchor listeners must see the updated offsets.
         anchor.set(placement.automatic() ? AUTO_ANCHOR : placement.anchor().id());
     }
 

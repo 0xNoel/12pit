@@ -146,7 +146,7 @@ final class PlayerListHud implements HudElement {
         this.pixelScale = pixelScale;
         this.monospaceFont = monospaceFont;
         renderer.resize(pixelScale);
-        recalculateLayout();
+        recalculateLayout(sampleLayout ? sample : snapshot);
     }
 
     @Override
@@ -294,10 +294,6 @@ final class PlayerListHud implements HudElement {
         if (text != null && !text.isEmpty()) {
             renderer.text(text, x, y, 0xFFD8D8D8, hudConfig);
         }
-    }
-
-    private void recalculateLayout() {
-        recalculateLayout(sampleLayout ? sample : snapshot);
     }
 
     private void recalculateLayout(PlayerListSnapshot content) {
