@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: dd6aa45aee9a0560274b21f22e61fc3ff99e01e2 -->
 
 # 12pit 实现
 
@@ -53,7 +53,7 @@ public void stop() {
 
 `InputBlocker` 在 Minecraft 处理按键事件前分派事件。功能在启动时注册 `InputHandler`，停止时注销。`key(...)` 返回 true 表示已处理该事件。`consumesKey(...)` 指定输入阻止结束后不应恢复按住状态的按键。
 
-使用 `lock(owner)` 阻止键盘、鼠标、移动和交互。操作完成或取消时，调用 `unlock(owner, resume)`。每个操作只释放自己的锁。`blockedFor(owner)` 判断是否有其他操作持有锁。所有锁释放后才恢复输入。缓冲的按键事件会被丢弃。`resume` 为 true 且游戏有焦点时，恢复按住的按键状态。
+使用 `lock(owner)` 阻止键盘和鼠标输入。平台提供的 `InputDevice` 屏蔽 LWJGL 事件和轮询状态。开始阻止时，清除一次 Minecraft 的按键、移动和平滑视角状态。操作完成或取消时，调用 `unlock(owner, resume)`。每个操作只释放自己的锁。`blockedFor(owner)` 判断是否有其他操作持有锁。所有锁释放后才恢复输入。恢复输入后端前，丢弃缓冲事件。`resume` 为 true 且游戏有焦点时，恢复按住的按键状态。`held(key)` 读取当前 LWJGL 状态，阻止期间返回 false。
 
 ## 配置
 
@@ -277,6 +277,10 @@ Bootstrap 为功能提供查询契约。其实时查询和订阅需要客户端�
 [ClientSession](../../src/main/java/pit12/runtime/session/ClientSession.java) 提供 `connection()`、`world()` 和 `revision()`。连接和世界可以为 `null`。两个身份标识都会在监听器运行前更新。
 
 在字段中保留用于会话变化的 `Runnable`。在 `start()` 中通过 `session.addListener(sessionListener)` 注册它，并读取一次当前状态。在 `stop()` 中通过 `session.removeListener(sessionListener)` 注销它。按状态的归属重置状态：连接数据的存续期与连接一致，世界数据的存续期与世界一致。
+
+[PlayerEntityTracker](../../src/main/java/pit12/runtime/player/PlayerEntityTracker.java) 提供 `loadedPlayer(UUID)`。它返回当前已加载的玩家实体，实体不存在或已移除时返回 `null`。实体由 Minecraft 持有，只能在客户端线程使用。UUID 索引随实体加入、移除和替换更新，世界变化时从已加载的玩家重新建立索引。直接从实体读取 ID 或坐标，按 ID 查询时使用 `world.getEntityByID(id)`。
+
+将 [PlayerEntityListener](../../src/main/java/pit12/runtime/player/PlayerEntityListener.java) 保存为字段。在 `start()` 中调用 `players.addListener(listener)` 注册，再查询需要的玩家。回调在索引更新后于客户端线程执行。实体替换时，先调用 `onPlayerEntityRemoved(previous)`，再调用 `onPlayerEntityAdded(current)`，此时索引已指向新实体。通过 `onPlayerEntitiesReset()` 清除派生的实体数据，再查询当前玩家。在 `stop()` 中调用 `players.removeListener(listener)` 注销同一个监听器。
 
 [TabPresence](../../src/main/java/pit12/runtime/player/TabPresence.java) 将成员关系与已知名称分开。使用 `contains(UUID)` 检查成员关系，使用 `players()` 获取当前 UUID 到档案名称的映射。名称未知的玩家可能存在，但不在该映射中。
 
