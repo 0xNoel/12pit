@@ -251,7 +251,8 @@ final class WebUiServer {
             }
             if ("/api/language-hint/dismiss".equals(path)) {
                 if (!preferences.ready())
-                    throw new IllegalArgumentException(source("Web UI settings are unavailable"));
+                    throw new IllegalArgumentException(
+                            source("Configuration interface settings are unavailable"));
                 config.languageHint().set(false);
                 return state();
             }
@@ -264,7 +265,8 @@ final class WebUiServer {
                         || !favorite.getAsJsonPrimitive().isBoolean())
                     throw new IllegalArgumentException("Expected a boolean");
                 if (!preferences.ready())
-                    throw new IllegalArgumentException(source("Web UI settings are unavailable"));
+                    throw new IllegalArgumentException(
+                            source("Configuration interface settings are unavailable"));
                 preferences.setFavorite(id, favorite.getAsBoolean());
             } else if ("/api/setting".equals(path)) {
                 changeSetting(request);
@@ -330,7 +332,7 @@ final class WebUiServer {
             throw new IllegalArgumentException("Unknown feature");
         }
         if (feature == config && !preferences.ready())
-            throw new IllegalArgumentException("Web UI settings are unavailable");
+            throw new IllegalArgumentException("Configuration interface settings are unavailable");
         JsonElement value = request.get("value");
         if (value == null || !value.isJsonPrimitive()) {
             throw new IllegalArgumentException("Expected a setting value");

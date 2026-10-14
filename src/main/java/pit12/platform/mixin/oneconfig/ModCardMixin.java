@@ -43,7 +43,7 @@ public abstract class ModCardMixin {
     @Shadow
     private boolean active;
 
-    // Profiles and the Web UI can change the enabled state after OneConfig caches it.
+    // Profiles and the configuration interface can change the enabled state after OneConfig caches it.
     @Inject(method = "draw", at = @At("HEAD"), remap = false)
     private void pit12$syncEnabled(CallbackInfo callback) {
         if (modData.config instanceof OneConfigAdapter.View && active != modData.config.enabled) {

@@ -84,9 +84,9 @@ final class HudEditorScreen extends GuiScreen {
                 language.translate("R to restore selection. Shift+R to restore all."),
                 language.translate("Hold Space to preview live HUDs.")};
         if (interfaceKey.getAsInt() != Keyboard.KEY_NONE) {
-            interfaceTips = new String[] {
-                    language.format("When no HUD is selected, press {0} again to open the Web UI.",
-                            Keyboard.getKeyName(interfaceKey.getAsInt()))};
+            interfaceTips = new String[] {language.format(
+                    "When no HUD is selected, press {0} again to open the configuration interface.",
+                    Keyboard.getKeyName(interfaceKey.getAsInt()))};
         } else {
             interfaceTips = new String[0];
             hintVisible = false;

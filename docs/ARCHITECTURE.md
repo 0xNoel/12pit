@@ -16,7 +16,7 @@ Each package immediately under `feature` owns one user-facing capability. Its se
 
 Commands definitions and actions are owned by features. `runtime.command` owns routing, help, completion, and availability of commands. `platform.command` owns Forge registration.
 
-`feature.webui` owns the local HTTP server and connects the browser interface to config and feature APIs. `web-ui` owns the browser pages.
+`feature.webui` owns the local HTTP server and connects the configuration interface to config and feature APIs. `web-ui` owns the browser pages.
 
 ## Dependencies
 
