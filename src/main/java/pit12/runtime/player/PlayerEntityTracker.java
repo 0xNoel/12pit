@@ -30,7 +30,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-/** Queries and subscriptions require the client thread. Returned entities belong to Minecraft. */
+/** Use this API on the client thread. Returned entities are live. */
 public final class PlayerEntityTracker implements ClientLifecycle, PlayerEntityWorldObserver {
     private final ClientSession session;
     private final Runnable sessionChanged = this::onSessionChanged;
@@ -74,7 +74,7 @@ public final class PlayerEntityTracker implements ClientLifecycle, PlayerEntityW
         return player == null || player.isDead ? null : player;
     }
 
-    /** Listeners run after the index changes. Remove them when their owner stops. */
+    /** Listeners run after the index is updated. Remove them when their owner stops. */
     public void addListener(PlayerEntityListener listener) {
         session.checkThread();
         if (!listeners.contains(listener)) {
@@ -112,7 +112,7 @@ public final class PlayerEntityTracker implements ClientLifecycle, PlayerEntityW
             return;
         }
         UUID playerId = player.getUniqueID();
-        // A delayed removal must not discard a replacement with the same UUID.
+        // The old entity may be removed after its replacement was indexed.
         if (players.get(playerId) != player) {
             return;
         }

@@ -46,7 +46,7 @@ public final class SidebarLine {
         return text;
     }
 
-    /** Uses the Minecraft font on the client thread. The result is cached for this line. */
+    /** Call on the client thread. This line keeps the first result. */
     public String formattedText(FontRenderer font) {
         if (formattedText == null) {
             String plain = EnumChatFormatting.getTextWithoutFormattingCodes(text);

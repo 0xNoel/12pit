@@ -203,7 +203,7 @@ public final class SwapFeature
                 || PitEnchantmentReader.contains(held, PitEnchantment.Trash_Panda))
             return false;
         MovingObjectPosition hit = minecraft.objectMouseOver;
-        // Server-side entity interactions may succeed even when the client reports no result.
+        // An entity interaction can succeed on the server even if the client thinks nothing happened.
         if (hit != null && hit.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY)
             return false;
         controller.enqueueArmor(SwapBinding.create(1, held, 0));

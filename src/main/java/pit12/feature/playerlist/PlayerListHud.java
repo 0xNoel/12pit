@@ -247,7 +247,7 @@ final class PlayerListHud implements HudElement {
             return entry.direction();
         }
         Entity entity = world.getEntityByID(entry.entityId());
-        // Keep interpolation on the entity used for the distance and spawn state.
+        // The entity must still match the one used for distance and spawn state.
         if (!(entity instanceof EntityPlayer) || entity.isDead
                 || !entry.playerId().equals(entity.getUniqueID())) {
             return entry.direction();

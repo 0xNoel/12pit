@@ -55,7 +55,7 @@ const rangeFill = computed(() => {
     max === min
       ? 0
       : Math.max(0, Math.min(100, ((draft.value - min) / (max - min)) * 100))
-  // The thumb center starts 7px inside the track, so the fill must follow it.
+  // The thumb starts 7px inside the track. Keep the fill lined up with its center.
   return `calc(${percent}% + ${7 - percent * 0.14}px)`
 })
 watch(

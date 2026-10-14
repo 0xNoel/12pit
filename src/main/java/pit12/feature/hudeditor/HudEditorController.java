@@ -270,7 +270,7 @@ final class HudEditorController {
         if (minecraft.thePlayer != null && !minecraft.gameSettings.hideGUI
                 && GuiIngameForge.renderHotbar && !minecraft.playerController.isSpectator()
                 && minecraft.getRenderViewEntity() instanceof EntityPlayer) {
-            // Match GuiIngame's hotbar background in scaled GUI coordinates.
+            // Same bounds as the hotbar background, in GUI pixels.
             others.add(new HudEditorSnap.Box(screenWidth / 2 - 91, screenHeight - 22, 182, 22));
         }
         snap.prepare(group, screenWidth, screenHeight, others);

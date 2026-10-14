@@ -215,7 +215,7 @@ public final class NametagFeature
         }
         session.checkThread();
         if (!namesBound) {
-            // Bind after Minecraft has created its player renderers.
+            // The player renderers don't exist yet during start().
             binding.pit12$bindNametagNames(this::displayName);
             namesBound = true;
         }
@@ -262,7 +262,7 @@ public final class NametagFeature
             return;
         }
         NametagText text = texts.get(player.getUniqueID());
-        // Forge posts this event even when the renderer hides the nametag.
+        // Forge fires this even if the renderer hides the nametag.
         if (text != null && ((NametagVisibility) event.renderer).pit12$canRenderName(player)) {
             renderer.render(minecraft, player, text, event.x, event.y, event.z, distanceSquared,
                     config.upwardOffset());

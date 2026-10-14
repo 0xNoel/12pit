@@ -76,7 +76,7 @@ public final class PitEnchantmentReader {
             return null;
         }
         NBTTagCompound itemTag = stack.getTagCompound();
-        // Check keys first because Vanilla creates empty tags for missing compounds and lists.
+        // Missing compounds and lists return empty tags, so check the keys first.
         if (!itemTag.hasKey("ExtraAttributes", Constants.NBT.TAG_COMPOUND)) {
             return null;
         }

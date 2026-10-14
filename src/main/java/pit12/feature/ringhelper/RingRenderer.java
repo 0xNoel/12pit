@@ -49,7 +49,7 @@ final class RingRenderer {
             compiledRevision = revision;
             compiledColor = color;
         }
-        // Raw GL calls keep Minecraft's cached flags in sync after glPopAttrib.
+        // Stick to raw GL here. glPopAttrib won't update GlStateManager's cache.
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_LINE_BIT | GL11.GL_CURRENT_BIT | GL11.GL_TEXTURE_BIT);
         try {

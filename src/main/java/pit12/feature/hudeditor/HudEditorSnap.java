@@ -101,7 +101,7 @@ final class HudEditorSnap {
                 active = null;
                 return value;
             }
-            // Reaching a screen edge must break the previous snap.
+            // Let go of the old snap when we hit the screen edge.
             if (active != null && value > 0 && value < maximum
                     && Math.abs(value - active.origin) <= 4) {
                 return active.origin;

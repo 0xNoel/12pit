@@ -36,7 +36,7 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
         if (size == 0 && !gemmed) {
             return EMPTY;
         }
-        // The reader transfers ownership of this array.
+        // The reader is done with this array. It's ours now.
         return new PitEnchantments(size == entries.length ? entries : Arrays.copyOf(entries, size),
                 gemmed);
     }
@@ -112,7 +112,7 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
             text.append(displayName);
             return;
         }
-        // Color codes reset styles, so apply bold after the leading color.
+        // Color codes clear bold, so add it after the color.
         if (displayName.length() >= 2 && displayName.charAt(0) == '§') {
             text.append(displayName, 0, 2).append(EnumChatFormatting.BOLD).append(displayName, 2,
                     displayName.length());

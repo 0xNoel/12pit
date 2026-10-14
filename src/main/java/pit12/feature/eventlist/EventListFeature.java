@@ -193,7 +193,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
 
     private void fetch() {
         if (worker != null && worker.isShutdown()) {
-            // Wait for canceled requests to release their connections before restarting.
+            // The old requests need to close their connections before we start again.
             if (!worker.isTerminated()) {
                 return;
             }
@@ -271,7 +271,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
                 event.partialTicks, false);
     }
 
-    // Forge's generated event handler requires a public listener class.
+    // Forge needs this listener class to be public.
     public final class FontListener {
         @SubscribeEvent
         public void onTextureStitch(TextureStitchEvent.Post event) {

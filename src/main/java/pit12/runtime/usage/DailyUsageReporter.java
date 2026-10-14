@@ -162,7 +162,7 @@ public final class DailyUsageReporter implements ClientLifecycle {
                 busy = true;
             }
             try {
-                // Do not count an earlier date after a clock or time zone change.
+                // Clock or time zone changes can move the date back.
                 if (savedDay != null && !day.isAfter(savedDay)) {
                     return;
                 }
@@ -172,7 +172,7 @@ public final class DailyUsageReporter implements ClientLifecycle {
                         : Paths.get(localAppData, "12pit");
                 Files.createDirectories(directory);
                 Path path = directory.resolve("dau-date.txt");
-                // Keep the lock separate because AtomicFile replaces the date file.
+                // AtomicFile replaces the date file, so lock a separate file.
                 try (FileChannel channel = FileChannel.open(directory.resolve("dau.lock"),
                         StandardOpenOption.CREATE, StandardOpenOption.WRITE);
                         FileLock lock = channel.tryLock()) {
@@ -194,7 +194,7 @@ public final class DailyUsageReporter implements ClientLifecycle {
                         if (!send(day)) {
                             return;
                         }
-                        // A failed file write must not send another report from this process.
+                        // Remember we sent it, even if saving the date fails. No duplicate reports.
                         reportedDay = day;
                     }
                     AtomicFile.write(path, reportedDay + "\n");
@@ -238,7 +238,7 @@ public final class DailyUsageReporter implements ClientLifecycle {
                     ZonedDateTime now;
                     synchronized (this) {
                         now = ZonedDateTime.now();
-                        // Leaving Pit does not erase activity already observed on this date.
+                        // We already saw activity today, so leaving Pit doesn't stop retries.
                         if (stopped || !day.equals(observedDay) || !day.equals(now.toLocalDate())) {
                             break;
                         }

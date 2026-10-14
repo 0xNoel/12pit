@@ -38,7 +38,7 @@ final class DarkTargets {
     private final SwapConfig config;
     private final PlayerEquipmentAccess equipment;
     private final RelationLookup relations;
-    // Keep triggered players until they recover to avoid swapping near the equip threshold.
+    // Wait for players to recover so we don't keep swapping around the equip threshold.
     private final Map<UUID, EntityPlayer> targets = new HashMap<>();
     private UUID lastAttackedId;
     private int lastAttackedEntityId;

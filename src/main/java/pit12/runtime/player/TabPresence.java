@@ -21,11 +21,11 @@ package pit12.runtime.player;
 import java.util.Map;
 import java.util.UUID;
 
-/** Queries and subscriptions require the client thread. */
+/** Use this API on the client thread. */
 public interface TabPresence {
     boolean contains(UUID playerId);
 
-    /** Lists Tab entries with known names. {@link #contains(UUID)} also includes unnamed entries. */
+    /** Only includes known names. {@link #contains(UUID)} also finds unnamed entries. */
     Map<UUID, String> players();
 
     void addListener(TabPresenceListener listener);

@@ -398,7 +398,7 @@ public final class ClientBootstrap {
         }
         try {
             for (ClientLifecycle component : components) {
-                // A failed start may leave resources that stop() must release.
+                // Add it first so we can clean up even if start() fails.
                 startedComponents.add(component);
                 component.start();
             }
@@ -418,7 +418,7 @@ public final class ClientBootstrap {
     }
 
     private void stopStartedComponents() {
-        // Dependencies must remain available until their consumers have stopped.
+        // Consumers still need their dependencies during stop().
         for (int index = startedComponents.size() - 1; index >= 0; index--) {
             ClientLifecycle component = startedComponents.get(index);
             try {

@@ -97,7 +97,7 @@ public class UiRenderer {
     }
 
     public int textWidth(String text) {
-        // 1.8.9 measures bold text past color codes even though drawing resets the style.
+        // Color codes clear bold when drawing, but FontRenderer forgets that when measuring.
         StringBuilder measuredText = null;
         int start = 0;
         boolean bold = false;

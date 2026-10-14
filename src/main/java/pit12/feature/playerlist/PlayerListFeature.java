@@ -282,7 +282,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 event.partialTicks, false);
     }
 
-    // Forge's generated event handler requires a public listener class.
+    // Forge needs this listener class to be public.
     public final class FontListener {
         @SubscribeEvent
         public void onTextureStitch(TextureStitchEvent.Post event) {

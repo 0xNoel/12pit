@@ -73,7 +73,7 @@ public final class DiscordRpcFeature implements ClientLifecycle, ConfigChangeLis
 
     private static final class RpcWorker extends Thread {
         private static final Logger LOGGER = Logger.getLogger(RpcWorker.class.getName());
-        // The monitor protects settings and the connection from client-thread shutdown.
+        // The client thread also uses these during shutdown, so keep them under the monitor.
         private boolean enabled;
         private boolean stopping;
         private DiscordRpcConnection connection;
@@ -112,7 +112,7 @@ public final class DiscordRpcFeature implements ClientLifecycle, ConfigChangeLis
         public void run() {
             try {
                 RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
-                // HotSpot exposes the Minecraft process ID as pid@hostname on Java 8.
+                // Java 8 HotSpot gives us pid@hostname here.
                 String process = runtime.getName();
                 int pid = Integer.parseInt(process.substring(0, process.indexOf('@')));
                 long startedAt = runtime.getStartTime() / 1000L;

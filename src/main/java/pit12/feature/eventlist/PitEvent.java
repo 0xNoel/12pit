@@ -33,7 +33,7 @@ final class PitEvent {
         this.type = type;
         this.timestamp = timestamp;
         this.major = major;
-        // The feed timestamps major announcements, three minutes before play begins.
+        // The feed gives us the major event's announcement time, three minutes before it starts.
         startsAt = timestamp + (major ? 180_000L : 0L);
         endsAt = startsAt + type.durationSeconds * 1000L;
     }

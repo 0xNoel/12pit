@@ -262,7 +262,7 @@ public final class SmartBlockFeature implements ClientLifecycle, ConfigChangeLis
         if (player.inventory.currentItem == slot) {
             return;
         }
-        // Keep item use intact so vanilla decides whether to discard this tick's clicks.
+        // Leave item use alone. The normal input code decides which clicks to discard.
         player.inventory.currentItem = slot;
         selectedSlot = slot;
     }

@@ -20,7 +20,7 @@ package pit12.feature.denick.api;
 
 import java.util.UUID;
 
-/** Queries and subscriptions require the client thread. */
+/** Use this API on the client thread. */
 public interface DenickNames {
     boolean isNicked(UUID playerId);
 

@@ -82,7 +82,7 @@ final class EventListSnapshot {
     }
 
     static EventListSnapshot sample(EventListConfig config, Languages language) {
-        // Keep countdowns and local times fixed while arranging the HUD.
+        // Freeze the times so they don't move while editing.
         long now = 1_791_460_800_000L;
         return build(
                 Arrays.asList(new PitEvent(EventType.SQUADS, now - 240_000L, true),

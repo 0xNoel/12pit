@@ -85,7 +85,7 @@ final class SwapOverlay {
         if (stack == null || identities.containsKey(stack))
             return;
         CachedIdentity cached = cache.get(stack);
-        // NBT can change in place, so compare with a copy before reusing an identity.
+        // NBT can change on the same stack. Compare with our copy before reusing its identity.
         if (cached == null || stack.getItem() != cached.snapshot.getItem()
                 || stack.getItem().getHasSubtypes()
                         && stack.getMetadata() != cached.snapshot.getMetadata()
@@ -102,7 +102,7 @@ final class SwapOverlay {
         if (label == null || !config.highlight.get())
             return;
         int textX = label.equipment ? x + 14 - label.width : x + 2;
-        // Vanilla expects lighting and depth to be enabled when this overlay returns.
+        // The rest of the overlay needs lighting and depth back on when we're done.
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         GlStateManager.disableBlend();

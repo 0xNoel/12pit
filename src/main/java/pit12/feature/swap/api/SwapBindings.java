@@ -20,7 +20,7 @@ package pit12.feature.swap.api;
 
 import pit12.shared.result.OperationResult;
 
-/** Access this API on the client thread. */
+/** Use this API on the client thread. */
 public interface SwapBindings {
     String readinessProblem();
 

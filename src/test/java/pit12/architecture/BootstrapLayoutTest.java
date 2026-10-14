@@ -284,7 +284,7 @@ public final class BootstrapLayoutTest {
     }
 
     private static String maskCommentsAndStrings(String source) {
-        // Spaces keep source offsets valid for the section lookups.
+        // Replace with spaces so section offsets still line up with the source.
         char[] code = source.toCharArray();
         Matcher matcher = Pattern.compile(
                 "\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'|//[^\\r\\n]*|/\\*[\\s\\S]*?\\*/")

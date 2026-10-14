@@ -43,7 +43,7 @@ public abstract class ModCardMixin {
     @Shadow
     private boolean active;
 
-    // Profiles and the configuration interface can change the enabled state after OneConfig caches it.
+    // OneConfig's cached state can lag behind profiles and the Web UI.
     @Inject(method = "draw", at = @At("HEAD"), remap = false)
     private void pit12$syncEnabled(CallbackInfo callback) {
         if (modData.config instanceof OneConfigAdapter.View && active != modData.config.enabled) {

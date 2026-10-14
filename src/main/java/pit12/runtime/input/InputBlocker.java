@@ -141,7 +141,7 @@ public final class InputBlocker implements ClientLifecycle {
         KeyBinding.unPressAllKeys();
         if (!resume || !minecraft.inGameHasFocus || !Display.isActive())
             return;
-        // Restore held states without replaying presses buffered while input was blocked.
+        // Held keys can come back, but don't replay presses made while blocked.
         for (KeyBinding keyBinding : minecraft.gameSettings.keyBindings) {
             int key = keyBinding.getKeyCode();
             boolean consumed = false;

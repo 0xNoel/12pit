@@ -80,7 +80,7 @@ public final class CommandRegistry implements ClientLifecycle {
             root = rootBuilder.build();
             entryPoints.add(0, root);
         }
-        // Forge cannot unregister commands. Reuse installed entry points after a restart or partial startup.
+        // Forge won't let us unregister these. Reuse them if start() runs again.
         while (installed < entryPoints.size()) {
             registrar.register(this, entryPoints.get(installed));
             installed++;

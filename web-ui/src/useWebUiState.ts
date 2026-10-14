@@ -93,7 +93,7 @@ export function useWebUiState() {
   }
 
   function applySetting(next: State, edit: SettingEdit) {
-    // The server freezes the catalog before starting the UI.
+    // The catalog can't change once the UI is running.
     const feature =
       next.webui.settings.id === edit.featureId
         ? next.webui.settings

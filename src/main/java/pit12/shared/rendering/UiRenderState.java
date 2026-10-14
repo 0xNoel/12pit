@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
 public final class UiRenderState {
-    // LWJGL 2 requires space for 16 values even when glGet reads a four-component color.
+    // LWJGL 2 wants 16 slots here, even though a color only uses four.
     private final FloatBuffer currentColor = BufferUtils.createFloatBuffer(16);
     private final float[] color = new float[4];
     private boolean active;

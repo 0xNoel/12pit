@@ -49,7 +49,7 @@ public final class PitMid {
         edgeColumns = Collections.unmodifiableList(columns);
     }
 
-    /** Only X and Z identify the columns. Y is always zero. */
+    /** Only X and Z matter here. Y is always zero. */
     public List<BlockPos> edgeColumns() {
         return edgeColumns;
     }

@@ -132,7 +132,7 @@ watch(
       </header>
       <div class="transfer-body">
         <div class="language-help">
-          <!-- English keeps value 0 in the language registry. -->
+          <!-- 0 is English in the language registry. -->
           <a
             v-if="option.value === 0"
             href="https://github.com/12src/12pit/issues/new"

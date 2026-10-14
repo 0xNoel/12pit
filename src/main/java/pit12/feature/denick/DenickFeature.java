@@ -346,12 +346,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     @Override
     public void onPlayerEquipmentRemoved(UUID playerId) {
-        // Queued equipment remains useful after the entity unloads.
+        // We can still query the queued equipment after the entity unloads.
     }
 
     @Override
     public void onPlayerEquipmentReset() {
-        // Session changes discard the queues in resetWorld.
+        // resetWorld clears the queues when the session changes.
     }
 
     @Override
@@ -404,7 +404,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         }
         client.check();
         if (!namesBound) {
-            // Forge initializes mods before Minecraft creates its in-game GUI.
+            // The in-game GUI doesn't exist yet during start().
             binding.pit12$bindDenickNames(this);
             namesBound = true;
         }
@@ -646,7 +646,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             items.forEach(item -> pending.put(item.query, item));
             this.sender = sender;
             this.force = force;
-            // Later equipment must not delay the initial failure message.
+            // New equipment shouldn't hold up the initial failure message.
             initialCount = pending.size();
         }
     }

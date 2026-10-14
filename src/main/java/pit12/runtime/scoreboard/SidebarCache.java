@@ -39,7 +39,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-/** Queries and subscriptions require the client thread. */
+/** Use this API on the client thread. */
 public final class SidebarCache implements ClientLifecycle {
     private final Minecraft minecraft;
     private final ClientSession session;
@@ -86,7 +86,7 @@ public final class SidebarCache implements ClientLifecycle {
         listeners.clear();
     }
 
-    /** Returns a stable snapshot in display order, without the title. */
+    /** Display order, no title. Later changes won't affect this snapshot. */
     public List<SidebarLine> lines() {
         session.checkThread();
         return lines;

@@ -297,7 +297,7 @@ final class AutoSwapController {
         if (root == null || !root.hasKey("ExtraAttributes", Constants.NBT.TAG_COMPOUND))
             return -1;
         NBTTagCompound extra = root.getCompoundTag("ExtraAttributes");
-        // Missing numeric NBT reads as zero. Use -1 to rank unknown Lives below known values.
+        // Missing numeric NBT reads as 0. Use -1 so unknown Lives rank below known values.
         return extra.hasKey("Lives", Constants.NBT.TAG_ANY_NUMERIC)
                 ? Math.max(-1, extra.getInteger("Lives"))
                 : -1;
@@ -407,7 +407,7 @@ final class AutoSwapController {
             reset();
             player = current;
         }
-        // Server sounds signal enchantment use and rearming even when audio is muted.
+        // These sounds still tell us about enchantment use and rearming when audio is muted.
         if ("note.pling".equals(name) && near(volume, 8) && near(pitch, 4.05f)) {
             if (automaticPending)
                 swaps.cancel();

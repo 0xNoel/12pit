@@ -113,7 +113,7 @@ final class HudEditorScreen extends GuiScreen {
     }
 
     private void updatePreview() {
-        // Normal overlay callbacks own the live display conditions and content.
+        // Let the normal overlay callbacks draw the live preview.
         controller.preview(!hintVisible && Keyboard.isKeyDown(Keyboard.KEY_SPACE)
                 && (interfaceKey.getAsInt() != Keyboard.KEY_SPACE || controller.hasSelection()
                         || controller.busy()));
@@ -225,7 +225,7 @@ final class HudEditorScreen extends GuiScreen {
     @Override
     public void handleKeyboardInput() throws IOException {
         super.handleKeyboardInput();
-        // keyTyped can close this screen before the base handler returns.
+        // keyTyped may have closed us already.
         if (mc.currentScreen != this) {
             return;
         }

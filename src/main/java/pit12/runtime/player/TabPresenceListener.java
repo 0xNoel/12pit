@@ -21,7 +21,7 @@ package pit12.runtime.player;
 import java.util.UUID;
 
 public interface TabPresenceListener {
-    /** The name can be null. A repeated ADD packet sets joined to false. */
+    /** name can be null. joined is false if an ADD packet repeats an existing entry. */
     void onPlayerSeen(UUID playerId, String name, boolean joined);
 
     void onPlayerLeft(UUID playerId);

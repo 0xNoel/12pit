@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
-/** Used only by the feature's serial query worker. */
+/** Only the serial query worker uses this. */
 final class PitPalClient {
     private long nextRequest;
 
@@ -120,7 +120,7 @@ final class PitPalClient {
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json");
         }
-        // Request properties cannot be read after the connection opens.
+        // Grab these now. We can't read them once the connection opens.
         Map<String, List<String>> requestHeaders = connection.getRequestProperties();
         int status = -1;
         try {

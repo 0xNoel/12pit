@@ -212,7 +212,7 @@ final class SwapController {
                 current = queue.removeFirst();
                 prepare();
             }
-            // Readiness can change during the open delay. Once started, finish the transfer.
+            // Recheck after the open delay, but finish the transfer once it's started.
             if (current.ready != null && !current.started && !current.ready.getAsBoolean()) {
                 cancel();
                 return;
@@ -320,7 +320,7 @@ final class SwapController {
         for (int slot = 5; slot <= 8; slot++)
             addLocation(locations, slot);
         if (current.automatic != null) {
-            // Keep the selected source when identical enchantments have different Lives.
+            // Same enchantments can have different Lives. Keep the source we picked.
             for (Target target : current.automatic)
                 if (target.binding.identity.matches(stack(target.source)))
                     locations.put(target.binding.identity, target.source);
@@ -339,7 +339,7 @@ final class SwapController {
                 selected.put(binding.guiTarget(), binding);
             }
         }
-        // Armor swaps can move an item out of an already satisfied slot.
+        // An armor swap can move something we already put in the right slot.
         for (SwapBinding binding : satisfiedSlots.values())
             selected.putIfAbsent(binding.guiTarget(), binding);
         List<Action> ordered = new ArrayList<>();
@@ -532,7 +532,7 @@ final class SwapController {
                     }
                 } finally {
                     if (owns(minecraft.currentScreen)) {
-                        // GUI listeners can cancel closing. Detach our screen before restoring input.
+                        // A listener may have canceled closing. Drop our screen before restoring input.
                         minecraft.currentScreen = null;
                         if (minecraft.thePlayer != null && minecraft.theWorld != null)
                             minecraft.setIngameFocus();

@@ -164,7 +164,7 @@ public final class ChatMacroFeature
         if (pending == null || input.blockedFor(this))
             return;
         if (!armed) {
-            // Wait until the next tick ends so a player update sends stopped movement first.
+            // Give the player update one more tick to send stopped movement first.
             armed = true;
             return;
         }

@@ -320,7 +320,6 @@ final class WebUiServer {
     }
 
     private <T> T onClient(Callable<T> action) throws ExecutionException, InterruptedException {
-        // ConfigCatalog and Profiles require Minecraft's client thread.
         return minecraft.addScheduledTask(action).get();
     }
 

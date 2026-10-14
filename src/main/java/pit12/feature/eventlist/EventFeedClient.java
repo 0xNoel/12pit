@@ -111,7 +111,7 @@ final class EventFeedClient {
                 Result result = completed.take().get();
                 retryAt = Math.min(retryAt, result.retryAt);
                 if (result.events != null) {
-                    // A stale mirror must not shorten a schedule we already loaded.
+                    // Don't let a stale mirror shorten the schedule we already have.
                     if (latestTimestamp(result.events) >= loadedThrough) {
                         return result;
                     }
@@ -266,7 +266,7 @@ final class EventFeedClient {
         final List<PitEvent> events;
         final long retryAt;
 
-        // The worker gives up ownership of events when returning this result.
+        // The worker is done with this list when it returns the result.
         Result(List<PitEvent> events, long retryAt) {
             this.events = events;
             this.retryAt = retryAt;

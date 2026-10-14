@@ -52,7 +52,7 @@ final class DiscordRpcConnection implements Closeable {
         this.output = new DataOutputStream(output);
     }
 
-    /** Returns null when no local Discord IPC endpoint is available. */
+    /** Returns null if there's no local Discord IPC endpoint. */
     static DiscordRpcConnection open() throws IOException {
         if (System.getProperty("os.name").toLowerCase(Locale.ROOT).startsWith("windows")) {
             for (int index = 0; index < 10; index++) {
@@ -155,7 +155,7 @@ final class DiscordRpcConnection implements Closeable {
         while (true) {
             int opcode = Integer.reverseBytes(input.readInt());
             int length = Integer.reverseBytes(input.readInt());
-            // Match the Discord RPC SDK's 64 KiB frame buffer, including the header.
+            // Discord's 64 KiB limit includes the 8-byte header.
             if (length < 0 || length > 65528) {
                 throw new IOException("Invalid Discord RPC frame length: " + length);
             }

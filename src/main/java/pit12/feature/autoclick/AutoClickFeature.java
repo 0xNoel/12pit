@@ -174,7 +174,6 @@ public final class AutoClickFeature implements ClientLifecycle, ConfigChangeList
     private static double delay(IntegerSetting minimum, IntegerSetting maximum) {
         int first = minimum.get();
         int second = maximum.get();
-        // Keep fractional ticks for accurate CPS.
         return 20.0 / ThreadLocalRandom.current().nextInt(Math.min(first, second),
                 Math.max(first, second) + 1);
     }

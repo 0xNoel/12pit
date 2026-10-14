@@ -120,7 +120,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
     @Override
     public void onPlayerLeft(UUID playerId) {
         session.checkThread();
-        // Tab resets notify departures before this feature's session listener runs.
+        // Tab reports departures on reset before our session listener runs.
         if (!config.enabled() || sessionRevision != session.revision()) {
             return;
         }
@@ -199,7 +199,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
     private void discardExpired(long now) {
         long cutoff = pendingMessages.isEmpty() ? now - WINDOW_NANOS
                 : pendingMessages.peekFirst() - WINDOW_NANOS;
-        // Keep the oldest message's candidates until its observation window closes.
+        // The oldest message still needs its candidates until its window closes.
         Iterator<Departure> iterator = departures.values().iterator();
         while (iterator.hasNext()) {
             if (iterator.next().time >= cutoff) {

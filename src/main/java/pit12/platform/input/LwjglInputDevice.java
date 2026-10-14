@@ -39,7 +39,7 @@ public final class LwjglInputDevice implements InputDevice {
 
     public LwjglInputDevice() {
         try {
-            // LaunchWrapper loads LWJGL in its parent, outside Mixin's transformer.
+            // LWJGL lives in LaunchWrapper's parent, out of Mixin's reach.
             Class<?> access = Class.forName("org.lwjgl.input.OpenGLPackageAccess", true,
                     Keyboard.class.getClassLoader());
             Field globalLock = access.getDeclaredField("global_lock");
@@ -85,7 +85,7 @@ public final class LwjglInputDevice implements InputDevice {
     public void unblock() {
         synchronized (lock) {
             try {
-                // Drain native events before restoring the backend so they cannot be replayed.
+                // Don't replay blocked events when input comes back.
                 try {
                     pollAndDrain();
                 } finally {

@@ -309,7 +309,7 @@ public final class ProfilesFeature
 
         @Override
         public void loaded(LoadedProfiles profiles) {
-            // The scheduled task runs after dependent features have started.
+            // By the time this task runs, the features using these settings have started too.
             dispatchToClient(taskGeneration, () -> controller.applyLoaded(profiles));
         }
 

@@ -50,7 +50,7 @@ public final class BoxRenderer {
         if (frustum == null) {
             frustum = new Frustum(ClippingHelperImpl.getInstance());
         } else {
-            // getInstance() refreshes the shared clipping planes from the current matrices.
+            // getInstance() also updates the clipping planes from the current matrices.
             ClippingHelperImpl.getInstance();
         }
         frustum.setPosition(cameraX, cameraY, cameraZ);
@@ -91,7 +91,7 @@ public final class BoxRenderer {
         if (tessellator == null) {
             tessellator = new Tessellator(16384);
         }
-        // Raw GL calls let the attribute stack restore state without changing Minecraft's cached flags.
+        // Stick to raw GL here. glPopAttrib won't update GlStateManager's cache.
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_LINE_BIT | GL11.GL_CURRENT_BIT | GL11.GL_POLYGON_BIT
                 | GL11.GL_TEXTURE_BIT);
