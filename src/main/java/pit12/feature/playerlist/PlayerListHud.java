@@ -247,14 +247,12 @@ final class PlayerListHud implements HudElement {
             return entry.direction();
         }
         Entity entity = world.getEntityByID(entry.entityId());
-        // A respawn can replace the entity ID before the next snapshot update.
-        EntityPlayer player =
-                entity instanceof EntityPlayer && entry.playerId().equals(entity.getUniqueID())
-                        ? (EntityPlayer) entity
-                        : world.getPlayerEntityByUUID(entry.playerId());
-        if (player == null) {
+        // Keep interpolation on the entity used for the distance and spawn state.
+        if (!(entity instanceof EntityPlayer) || entity.isDead
+                || !entry.playerId().equals(entity.getUniqueID())) {
             return entry.direction();
         }
+        EntityPlayer player = (EntityPlayer) entity;
         double playerX = interpolate(player.prevPosX, player.posX, partialTicks);
         double playerZ = interpolate(player.prevPosZ, player.posZ, partialTicks);
         double dx = playerX - renderLocalX;

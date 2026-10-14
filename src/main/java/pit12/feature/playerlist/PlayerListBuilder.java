@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
@@ -90,6 +89,13 @@ final class PlayerListBuilder {
         }
         EnumMap<PlayerListGroup, List<PlayerListEntry>> groups =
                 new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
+        Map<UUID, EntityPlayer> players = new HashMap<>();
+        for (EntityPlayer player : world.playerEntities) {
+            if (!player.isDead) {
+                // A replacement may arrive before the old entity is removed.
+                players.put(player.getUniqueID(), player);
+            }
+        }
         PitSnapshot pitSnapshot = pitContext.current();
         for (NetworkPlayerInfo info : minecraft.getNetHandler().getPlayerInfoMap()) {
             UUID playerId = info.getGameProfile().getId();
@@ -120,11 +126,7 @@ final class PlayerListBuilder {
                 name = realName == null ? denickNames.listName(playerId, name)
                         : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
             }
-            Entity entity = previous == null ? null : world.getEntityByID(previous.entityId());
-            EntityPlayer player =
-                    entity instanceof EntityPlayer && playerId.equals(entity.getUniqueID())
-                            ? (EntityPlayer) entity
-                            : world.getPlayerEntityByUUID(playerId);
+            EntityPlayer player = players.get(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =
                     config.showDirection() && localPlayer != null && player != null;
