@@ -22,4 +22,8 @@ public interface InputHandler {
     boolean key(int key, boolean pressed, boolean repeat);
 
     boolean consumesKey(int key);
+
+    default boolean blockedKey(int key, int modifiers) {
+        return false;
+    }
 }

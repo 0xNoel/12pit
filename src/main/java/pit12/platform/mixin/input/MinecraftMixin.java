@@ -23,7 +23,9 @@ import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
 
@@ -40,6 +42,19 @@ public abstract class MinecraftMixin implements InputBlockBinding {
     @Override
     public InputBlocker pit12$inputBlocker() {
         return pit12$inputBlocker;
+    }
+
+    // Block interaction packets are sent before Forge's right-click-air event.
+    @Inject(method = "rightClickMouse", at = @At("HEAD"), cancellable = true)
+    private void pit12$blockRightClick(CallbackInfo callback) {
+        if (pit12$inputBlocker != null && pit12$inputBlocker.blocksActions())
+            callback.cancel();
+    }
+
+    @Inject(method = "setIngameFocus", at = @At("HEAD"), cancellable = true)
+    private void pit12$keepCursorFree(CallbackInfo callback) {
+        if (pit12$inputBlocker != null && pit12$inputBlocker.blocksFocus())
+            callback.cancel();
     }
 
     @Redirect(method = "runTick",

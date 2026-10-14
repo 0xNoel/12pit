@@ -43,7 +43,6 @@ public abstract class MinecraftMixin implements SwapHooksBinding {
         return pit12$swapHooks;
     }
 
-    // Block interaction packets are sent before Forge's right-click-air event.
     @Inject(method = "rightClickMouse", at = @At("HEAD"), cancellable = true)
     private void pit12$swapRightClick(CallbackInfo callback) {
         if (pit12$swapHooks != null && pit12$swapHooks.rightClick())

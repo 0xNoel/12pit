@@ -25,6 +25,10 @@ import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -38,6 +42,8 @@ public final class InputBlocker implements ClientLifecycle {
     private final InputDevice device;
     private final Set<Object> owners = new HashSet<>();
     private final List<InputHandler> handlers = new ArrayList<>();
+    private Object actionOwner;
+    private boolean cursorReleased;
     private boolean started;
 
     public InputBlocker(Minecraft minecraft, ClientThread client, InputBlockBinding binding,
@@ -86,7 +92,8 @@ public final class InputBlocker implements ClientLifecycle {
         owners.add(owner);
         if (alreadyLocked)
             return;
-        device.block();
+        device.block(this::blockedKey, this::focusOnClick);
+        MinecraftForge.EVENT_BUS.register(this);
         KeyBinding.unPressAllKeys();
         if (minecraft.playerController != null) {
             minecraft.playerController.resetBlockRemoving();
@@ -124,6 +131,41 @@ public final class InputBlocker implements ClientLifecycle {
         return locked() && (owners.size() != 1 || !owners.contains(owner));
     }
 
+    public boolean blocksActions() {
+        return locked() && (actionOwner == null || blockedFor(actionOwner));
+    }
+
+    public void releaseCursor() {
+        client.check();
+        cursorReleased = true;
+        minecraft.setIngameNotInFocus();
+    }
+
+    public boolean blocksFocus() {
+        return locked() && cursorReleased;
+    }
+
+    private void focusOnClick() {
+        if (!cursorReleased || !Display.isActive())
+            return;
+        cursorReleased = false;
+        // setIngameFocus closes the current menu.
+        if (minecraft.currentScreen == null)
+            minecraft.setIngameFocus();
+    }
+
+    public void runAction(Object owner, Runnable action) {
+        client.check();
+        // Let the lock owner use vanilla interaction hooks without restoring physical input.
+        Object previous = actionOwner;
+        actionOwner = owner;
+        try {
+            action.run();
+        } finally {
+            actionOwner = previous;
+        }
+    }
+
     public boolean key(int key, boolean pressed, boolean repeat) {
         if (locked())
             return true;
@@ -134,7 +176,22 @@ public final class InputBlocker implements ClientLifecycle {
         return false;
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.START)
+            device.dispatchEvents();
+    }
+
+    private void blockedKey(int key, int modifiers) {
+        for (Object owner : owners) {
+            if (owner instanceof InputHandler && ((InputHandler) owner).blockedKey(key, modifiers))
+                return;
+        }
+    }
+
     private void release(boolean resume) {
+        MinecraftForge.EVENT_BUS.unregister(this);
+        cursorReleased = false;
         device.unblock();
         minecraft.mouseHelper.deltaX = 0;
         minecraft.mouseHelper.deltaY = 0;

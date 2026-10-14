@@ -34,6 +34,8 @@ import pit12.feature.banalert.BanAlertConfig;
 import pit12.feature.banalert.BanAlertFeature;
 import pit12.feature.chatmacro.ChatMacroConfig;
 import pit12.feature.chatmacro.ChatMacroFeature;
+import pit12.feature.contractreroll.ContractRerollConfig;
+import pit12.feature.contractreroll.ContractRerollFeature;
 import pit12.feature.denick.DenickConfig;
 import pit12.feature.denick.DenickFeature;
 import pit12.feature.denick.DenickNamesBinding;
@@ -178,6 +180,8 @@ public final class ClientBootstrap {
         registerAutoSprint(configs);
         registerChatMacro(minecraft, configs, session, sidebar, input, commands,
                 new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
+        registerContractReroll(minecraft, configs, session, pitContext, sidebar, input,
+                (MinecraftActions) minecraft);
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         // Category: Render
         registerEventList(configs, hudRegistry, commands);
@@ -307,6 +311,15 @@ public final class ClientBootstrap {
         configs.register(config);
         components.add(new ChatMacroFeature(minecraft, client, configs, config, session, sidebar,
                 input, commands, language, path));
+    }
+
+    private void registerContractReroll(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, PitContext pitContext, SidebarCache sidebar, InputBlocker input,
+            MinecraftActions actions) {
+        ContractRerollConfig config = new ContractRerollConfig();
+        configs.register(config);
+        components.add(new ContractRerollFeature(minecraft, configs, config, session, pitContext,
+                sidebar, input, actions, language));
     }
 
     private void registerNoJumpDelay(ConfigCatalog configs, NoJumpDelayBinding binding) {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.feature.swap;
+package pit12.platform.mixin.input;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pit12.feature.swap.SwapHooks;
-import pit12.feature.swap.SwapHooksBinding;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
 
@@ -39,11 +37,9 @@ public abstract class PlayerControllerMPMixin {
     private Minecraft mc;
 
     @Inject(method = "windowClick", at = @At("HEAD"), cancellable = true)
-    private void pit12$blockOtherInventoryClicks(CallbackInfoReturnable<ItemStack> callback) {
-        SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
+    private void pit12$blockInventoryClicks(CallbackInfoReturnable<ItemStack> callback) {
         InputBlocker blocker = ((InputBlockBinding) mc).pit12$inputBlocker();
-        if (blocker != null && blocker.locked()
-                && (hooks == null || !hooks.inventoryClickAllowed()))
+        if (blocker != null && blocker.blocksActions())
             callback.setReturnValue(null);
     }
 }

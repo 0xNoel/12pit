@@ -19,7 +19,13 @@
 package pit12.runtime.input;
 
 public interface InputDevice {
-    void block();
+    interface KeyPressHandler {
+        void key(int key, int modifiers);
+    }
+
+    void block(KeyPressHandler handler, Runnable mousePressHandler);
+
+    void dispatchEvents();
 
     void unblock();
 }
