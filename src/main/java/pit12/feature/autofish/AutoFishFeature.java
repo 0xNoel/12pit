@@ -143,7 +143,7 @@ public final class AutoFishFeature implements ClientLifecycle, ConfigChangeListe
             reset();
             return;
         }
-        // Minecraft clears this reference when the hook dies.
+        // fishEntity goes null when the hook dies.
         EntityFishHook current = player.fishEntity;
         if (current != hook) {
             boolean recast = state == State.WAITING_FOR_REMOVAL && current == null
@@ -169,7 +169,7 @@ public final class AutoFishFeature implements ClientLifecycle, ConfigChangeListe
                 delayTicks--;
                 return;
             }
-            // Reset first to prevent retries if the cast is canceled or the hook spawns later.
+            // Reset first so a canceled cast or a late hook doesn't make us retry.
             reset();
             rightClick();
             return;
@@ -212,7 +212,7 @@ public final class AutoFishFeature implements ClientLifecycle, ConfigChangeListe
                 break;
             case WAITING_FOR_RECOVERY:
             case EMPTY_REEL_DELAY:
-                // A hook can pause below the surface during a bite. Wait for it to rise too.
+                // The hook can stop moving underwater during a bite. Wait for it to come back up too.
                 stableTicks =
                         floatingY - hook.posY <= STABLE_MOTION && Math.abs(dy) <= STABLE_MOTION
                                 ? stableTicks + 1
@@ -266,7 +266,7 @@ public final class AutoFishFeature implements ClientLifecycle, ConfigChangeListe
         automaticClick = true;
         try {
             actions.pit12$rightClick();
-            // Read after dispatch so later listeners can still cancel the click.
+            // Other listeners may cancel the click, so check after they have all run.
             return clickEvent != null && !clickEvent.isCanceled();
         } finally {
             automaticClick = false;

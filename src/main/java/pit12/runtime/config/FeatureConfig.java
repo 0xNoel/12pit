@@ -84,7 +84,7 @@ public abstract class FeatureConfig {
         return setting;
     }
 
-    /** Registers a saved value without an interface control. */
+    /** Saved, but doesn't get a UI control. */
     protected final BooleanSetting booleanSetting(String id, boolean defaultValue) {
         BooleanSetting setting = new BooleanSetting(id, "", "", defaultValue);
         register(setting, null);
@@ -161,9 +161,6 @@ public abstract class FeatureConfig {
         BooleanSetting textShadow =
                 new BooleanSetting(prefix + "text_shadow", source("Text shadow"),
                         source("Draws a shadow behind HUD text."), defaultTextShadow);
-        BooleanSetting useMonospaceFont =
-                new BooleanSetting(prefix + "use_monospace_font", source("Use monospace font"),
-                        source("Uses the bundled Monocraft font for HUD text."), false);
         BooleanSetting translateText =
                 new BooleanSetting(prefix + "translate_text", source("Translate text"),
                         source("Translates HUD text into the selected language."), true);
@@ -190,7 +187,6 @@ public abstract class FeatureConfig {
                 source("HUD size, in percent."), 100, 25, 300);
         int firstOption = options.size();
         register(textShadow, ConfigOption.Kind.BOOLEAN);
-        register(useMonospaceFont, ConfigOption.Kind.BOOLEAN);
         register(translateText, ConfigOption.Kind.BOOLEAN);
         register(anchor, ConfigOption.Kind.CHOICE);
         int lastOption = options.size();
@@ -208,12 +204,12 @@ public abstract class FeatureConfig {
         register(offsetX, null);
         register(offsetY, null);
         register(scale, null);
-        return new HudConfig(textShadow, useMonospaceFont, translateText, anchor, autoAnchor,
-                offsetX, offsetY, scale);
+        return new HudConfig(textShadow, translateText, anchor, autoAnchor, offsetX, offsetY,
+                scale);
     }
 
     void completeHudGroups() {
-        // A feature can declare more subcategories after its HUD settings.
+        // More subcategories may come after the HUD, so decide where it goes later.
         for (Runnable group : hudGroups) {
             group.run();
         }

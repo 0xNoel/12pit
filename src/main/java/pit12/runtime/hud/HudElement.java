@@ -24,30 +24,30 @@ public interface HudElement {
     /** Keep this ID stable while registered. */
     String id();
 
-    /** The name and {@link #config()} must stay non-null while registered. */
+    /** Keep the name and {@link #config()} non-null while registered. */
     String displayName();
 
     boolean enabled();
 
     HudConfig config();
 
-    /** Pixel scale includes both Minecraft GUI scale and this HUD's configured scale. */
+    /** pixelScale combines GUI scale and this HUD's scale. */
     void resize(float pixelScale);
 
-    /** Prepare the current or sample content before its bounds are read. */
+    /** Prepare live or sample content before the caller reads its bounds. */
     default void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
     }
 
-    /** Return the unscaled render width. Keep this query cheap enough for every frame. */
+    /** Unscaled width. This gets called every frame, so keep it cheap. */
     int width();
 
-    /** Return the unscaled render height. Keep this query cheap enough for every frame. */
+    /** Unscaled height. This gets called every frame, so keep it cheap. */
     int height();
 
     /**
-     * Render at (0, 0). The caller manages the transform and GL state. Always show sample content while editing, including
-     * disabled HUDs. Live previews use the normal overlay callbacks instead.
+     * Draw at (0, 0). The caller handles transforms and GL state. Show samples while editing, even for disabled HUDs. Live
+     * previews use the normal overlay callbacks.
      */
     void render(float partialTicks, boolean editing);
 }

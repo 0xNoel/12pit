@@ -47,7 +47,7 @@ public abstract class NetHandlerPlayClientMixin {
         }
     }
 
-    // Vanilla handles rejected clicks first and schedules this handler on the client thread.
+    // Rejected clicks are handled by now, and we're on the client thread.
     @Inject(method = "handleConfirmTransaction", at = @At("TAIL"))
     private void pit12$afterInventoryConfirmation(S32PacketConfirmTransaction packet,
             CallbackInfo callback) {
@@ -55,13 +55,12 @@ public abstract class NetHandlerPlayClientMixin {
         if ((Object) this != minecraft.getNetHandler())
             return;
         SwapHooks hooks = ((SwapHooksBinding) minecraft).pit12$swapHooks();
-        // MCP 22 leaves the acceptance getter unmapped.
         if (hooks != null)
             hooks.confirmClick(packet.getWindowId(), packet.getActionNumber(),
                     packet.func_148888_e());
     }
 
-    // Vanilla schedules this handler on the client thread. Sound packets reach TAIL even with audio muted.
+    // We're on the client thread here. Muted sounds still reach TAIL!
     @Inject(method = "handleSoundEffect", at = @At("TAIL"))
     private void pit12$afterSoundEffect(S29PacketSoundEffect packet, CallbackInfo callback) {
         Minecraft minecraft = Minecraft.getMinecraft();

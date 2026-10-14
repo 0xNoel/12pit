@@ -65,7 +65,6 @@ final class EventListSnapshot {
                 break;
             }
         }
-        // Matches the tracker's ten-second offset for the Pit day cycle.
         long cycle = Math.floorMod(now / 1000L + 10L, 2160L);
         boolean day = cycle < 1440L;
         return new EventListSnapshot(rows,
@@ -83,7 +82,7 @@ final class EventListSnapshot {
     }
 
     static EventListSnapshot sample(EventListConfig config, Languages language) {
-        // Keep countdowns and local times fixed while arranging the HUD.
+        // Freeze the times so they don't move while editing.
         long now = 1_791_460_800_000L;
         return build(
                 Arrays.asList(new PitEvent(EventType.SQUADS, now - 240_000L, true),

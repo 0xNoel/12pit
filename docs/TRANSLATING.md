@@ -6,7 +6,7 @@ We recommend translating only into your native language.
 
 ## Contribute interface translations
 
-The same files include translations for the Web UI, configuration text, command messages, and HUD labels. The OneConfig settings view uses the original English text. Check translated settings in the Web UI.
+The same files include translations for the configuration interface, configuration text, command messages, and HUD labels. The OneConfig settings view uses the original English text. Check translated settings in the configuration interface.
 
 Interface translations use [Crowdin](https://crowdin.com/project/12pit). Each use of a string has its own entry, so the same English text can have different translations. The entry's context shows its source file and location.
 

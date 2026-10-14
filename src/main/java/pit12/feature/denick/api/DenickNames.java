@@ -20,17 +20,14 @@ package pit12.feature.denick.api;
 
 import java.util.UUID;
 
-/** Queries and subscriptions require the client thread. */
+/** Use this API on the client thread. */
 public interface DenickNames {
     boolean isNicked(UUID playerId);
 
-    String listName(UUID playerId, String original, boolean shortName);
+    String listName(UUID playerId, String original);
 
     /** Returns null when Denick is disabled or no real name is known. */
     String realDisplayName(UUID playerId);
-
-    /** The Tab rendering adapter reports visibility here. */
-    void setTabVisible(boolean visible);
 
     void addListener(Runnable listener);
 

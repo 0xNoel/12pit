@@ -1,3 +1,4 @@
+import dev.architectury.pack200.java.Pack200Adapter
 import net.fabricmc.loom.task.RemapJarTask
 import org.apache.commons.lang3.SystemUtils
 
@@ -47,13 +48,13 @@ loom {
     }
 
     forge {
-        pack200Provider.set(dev.architectury.pack200.java.Pack200Adapter())
+        pack200Provider.set(Pack200Adapter())
         mixinConfig("mixins.$modId.json")
     }
 
     mixin {
         defaultRefmapName.set("mixins.$modId.refmap.json")
-        // Mixin needs Loom's legacy annotation processor to read MCP mappings on Forge 1.8.9.
+        // Mixin needs the legacy processor to read MCP mappings here.
         useLegacyMixinAp.set(true)
     }
 }
@@ -92,7 +93,7 @@ val generateBuildInfo =
 
 tasks.compileJava { dependsOn(generateBuildConfig) }
 
-// Layout checks need the section comments from the source file.
+// BootstrapLayoutTest reads the comments in ClientBootstrap.java.
 tasks.test {
     inputs.file("src/main/java/pit12/bootstrap/ClientBootstrap.java")
 }
@@ -118,7 +119,7 @@ dependencies {
     forge("net.minecraftforge:forge:$minecraftVersion-$forgeVersion")
 
     compileOnly("com.google.code.gson:gson:$minecraftGsonVersion")
-    // The development bundle exposes the registry used to unregister the view on shutdown.
+    // full-dev gives us the registry we need to remove the view on shutdown.
     compileOnly("cc.polyfrost:oneconfig-1.8.9-forge:$oneConfigVersion:full-dev") { isTransitive = false }
     shaded("org.spongepowered:mixin:$mixinRuntimeVersion") { isTransitive = false }
     annotationProcessor("org.spongepowered:mixin:$mixinProcessorVersion:processor")

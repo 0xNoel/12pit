@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 9228ce1d7f225363569041019f27aa3a450fe194 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: dd6aa45aee9a0560274b21f22e61fc3ff99e01e2 -->
 
 # 12pit 实现
 
@@ -10,7 +10,7 @@
 
 `ClientBootstrap` 在构造器中创建共享 runtime 组件。每个功能有一个私有的 `register...` 方法，负责按需创建和注册配置、创建功能并加入 `components`。依赖通过参数传入。只有后续装配方法需要使用时，才返回功能的 API。
 
-构造器分为共享 runtime、功能提供方、其余功能和平台适配四段。runtime 组件和平台适配器在各自的段内直接创建。功能调用和方法声明依次按 `ConfigCategory.displayOrder()`、`ConfigCategory.id()` 和方法名 A–Z 排列。没有配置的功能放在最前面的 `Category: No config` 段。两处使用一致的组别和分类注释。依赖先后优先于分类和名称顺序。Bootstrap 按列表顺序启动组件，并按逆序停止。装配方法只创建和注册对象；监听器和工作线程放在 `start()` 中。
+构造器分为共享 runtime、功能提供方、其余功能和平台适配四段。runtime 组件和平台适配器在各自的段内直接创建。功能调用和方法声明按分类分组，分类顺序为 Combat、Player、Render、Misc、Interface。每个分类内按方法名 A–Z 排列。没有配置的功能放在最前面的 `Category: No config` 段。两处使用一致的组别和分类注释。依赖先后优先于分类和名称顺序。Bootstrap 按列表顺序启动组件，并按逆序停止。装配方法只创建和注册对象；监听器和工作线程放在 `start()` 中。
 
 Bootstrap 注册组件并调用其 `start()` 方法。如果 `start()` 引发异常，Bootstrap 会停止此组件和之前已启动的所有组件。`stop()` 应在任何情况下释放资源，包括仅完成部分初始化或被调用多次的情况。如果某个组件在 `stop()` 中抛出异常，该异常会被记录，但其他所有组件仍会停止。
 
@@ -49,6 +49,12 @@ public void stop() {
 
 `ClientThread.current()` 获取调用线程，并直接在该线程上执行回调。从另一个线程调用它的 `execute()` 会抛出异常。它适用于测试和不需要跨线程分派的代码。
 
+## 输入
+
+`InputBlocker` 在 Minecraft 处理按键事件前分派事件。功能在启动时注册 `InputHandler`，停止时注销。`key(...)` 返回 true 表示已处理该事件。`consumesKey(...)` 指定输入阻止结束后不应恢复按住状态的按键。
+
+使用 `lock(owner)` 阻止键盘和鼠标输入。平台提供的 `InputDevice` 屏蔽 LWJGL 事件和轮询状态。开始阻止时，清除一次 Minecraft 的按键、移动和平滑视角状态。操作完成或取消时，调用 `unlock(owner, resume)`。每个操作只释放自己的锁。`blockedFor(owner)` 判断是否有其他操作持有锁。所有锁释放后才恢复输入。恢复输入后端前，丢弃缓冲事件。`resume` 为 true 且游戏有焦点时，恢复按住的按键状态。`held(key)` 读取当前 LWJGL 状态，阻止期间返回 false。
+
 ## 配置
 
 `FeatureConfig` 表示功能的设置及其界面元数据。在其子类构造器中定义设置：
@@ -60,7 +66,7 @@ public final class StatusConfig extends FeatureConfig {
     private final BooleanSetting showNames;
 
     public StatusConfig() {
-        super("status", source("Status"), new ConfigCategory("render", source("Render"), 100),
+        super("status", source("Status"), new ConfigCategory("render", source("Render")),
                 source("Shows player status."));
         subcategory("appearance", source("Appearance"));
         subsubcategory("display", source("Display"));
@@ -74,20 +80,20 @@ public final class StatusConfig extends FeatureConfig {
 }
 ```
 
-`ConfigCategory` 定义分类 ID、显示名称和顺序。相关功能复用同一分类。
+`ConfigCategory` 定义分类 ID 和显示名称。相关功能复用同一分类。
 
-在 Web UI 中，`subcategory()` 将其后的设置放到功能页顶部的切换按钮下。`subsubcategory()` 在页面内分组。两层都可省略。不调用 `subcategory()` 时，分组直接显示在功能页中。未设置 subsubcategory 的选项不显示分组标题。第一个 subcategory 之前的设置在切换按钮后仍然可见。开始新的 subcategory 会清除当前 subsubcategory。设置和分组按定义顺序排列。
+在配置界面中，`subcategory()` 将其后的设置放到功能页顶部的切换按钮下。`subsubcategory()` 在页面内分组。两层都可省略。不调用 `subcategory()` 时，分组直接显示在功能页中。未设置 subsubcategory 的选项不显示分组标题。第一个 subcategory 之前的设置在切换按钮后仍然可见。开始新的 subcategory 会清除当前 subsubcategory。设置和分组按定义顺序排列。
 
 四参数的 `FeatureConfig` 构造器会添加默认值为 `true` 的 `enabled` 设置。带有 `toggleable` 参数的构造器允许不添加 `enabled` 设置；在这种情况下，查询功能是否启用时，它始终返回 true。带有 `defaultEnabled` 参数的构造器选择初始值。`setEnabled` 方法改变设置，而非生命周期。
 
 以下辅助方法创建设置，并在功能中注册其元数据：
 
-- `booleanSetting` 创建布尔值。
+- `booleanSetting` 创建布尔值。使用 `booleanSetting(id, defaultValue)` 创建需要保存但没有界面控件的布尔标志。
 - `integerSliderSetting` 和 `doubleSliderSetting` 创建数值设置，参数包括默认值、最小值、最大值和步长。
 - `keybindSetting` 存储从 `0` 到 `255` 的按键代码。功能负责处理输入。
 - `colorSetting` 将 RGB 颜色存储为 `0xRRGGBB`。`colorPickerSetting` 将 ARGB 颜色存储为 `0xAARRGGBB`。
 - `choiceSetting` 使用默认 ID 和具有稳定 ID 的 `ChoiceSetting.Choice` 实例创建选项设置。
-- `hudConfig` 为 HUD 添加分组后的锚点、文字阴影、字体和翻译选项，并存储 HUD 编辑器使用的位置和缩放。分组和存储细节见 [HUD](#hud)。
+- `hudConfig` 为 HUD 添加分组后的锚点、文字阴影和翻译选项，并存储 HUD 编辑器使用的位置和缩放。分组和存储细节见 [HUD](#hud)。
 
 功能 ID 在目录中唯一。设置和 HUD 配置的 ID 在其功能中唯一。ID 以小写 ASCII 字母或数字开头，其余字符还可以是 `.`、`-` 或 `_`。改变显示名称时，保留已保存的 ID。HUD 配置会占用其前缀下的设置 ID，例如 `status.offset_x`，不要定义与它们冲突的设置。
 
@@ -142,7 +148,7 @@ commands.register(command);
 
 有子节点的节点是分组。没有参数时，它显示自动生成的帮助，即使存在处理器。带有处理器的叶节点在参数数量正确时执行处理器。子节点的名称或别名匹配不区分大小写，并覆盖分组的处理器。分组处理器可以接收额外的未匹配参数。添加单个 `help` 参数会显示分组帮助，除非存在显式的 `help` 子节点。
 
-`requires(Predicate<ICommandSender>)` 限制节点的使用。帮助和补全会隐藏发送者无法使用的子节点。补全回调接收命令路径之后的参数，包括当前单词。返回完整的补全建议集合；注册表按当前前缀过滤，不区分大小写，并去除重复项。返回 null 或空列表表示没有建议。
+`requires(Predicate<ICommandSender>)` 限制节点的使用。帮助和补全会隐藏发送者无法使用的子节点。补全回调接收命令路径之后的参数，包括当前单词。返回完整的补全建议集合。注册表按当前前缀过滤，不区分大小写，并去除重复项。没有建议时返回空列表。
 
 Bootstrap 通过注册表的 `Registrar` 提供 [ForgeCommandAdapter](../../src/main/java/pit12/platform/command/ForgeCommandAdapter.java)。功能不手动注册 Forge 命令类。Forge 无法注销命令。`stop()` 禁止执行和补全，`start()` 会复用现有入口。首次启动后关闭注册。
 
@@ -199,7 +205,7 @@ hud = hudConfig("status", HudAnchor.TOP_LEFT, 6, 6, true,
 
 使用 `HudGroup.AUTO` 时，功能声明了其他 subcategory 就使用 subcategory，否则使用 subsubcategory。`SUBCATEGORY` 创建单独的 subcategory。`SUBSUBCATEGORY` 放在调用时的当前 subcategory 内，没有时直接放在功能根级。名称传 null 时使用 `HUD`。调用后保留后续设置的当前分组。
 
-返回的 `HudConfig` 通过 `textShadow()`、`useMonospaceFont()`、`translateText()` 和 `scale()` 提供设置对象，使用 `get()` 和 `set()` 读写其值。缩放使用百分比，默认值为 `100`。
+返回的 `HudConfig` 通过 `textShadow()`、`translateText()` 和 `scale()` 提供设置对象，使用 `get()` 和 `set()` 读写其值。缩放使用百分比，默认值为 `100`。
 
 使用 `placement()` 读取当前位置。修改时，传入包含锚点、偏移和锚点模式的 [HudPlacement](../../src/main/java/pit12/runtime/config/HudPlacement.java)：
 
@@ -209,7 +215,7 @@ hud.placement(new HudPlacement(HudAnchor.TOP_RIGHT, -6, 6, true));
 
 最后一个参数为 true 时使用 Auto，为 false 时使用固定锚点。两种模式下，`HudPlacement.anchor()` 都返回实际使用的屏幕锚点。`fromOrigin(x, y, elementWidth, elementHeight, screenWidth, screenHeight)` 使用 GUI 坐标和元素缩放后的尺寸创建 Auto 位置。需要恢复默认位置和 Auto 模式时，调用 `hud.placement(hud.defaultPlacement())`。
 
-字体开关默认关闭，开启后使用内置的 Monocraft。翻译开关默认开启。准备 HUD 文字时使用 `language.translate(text, hud.translateText().get())`，切换后更新文字缓存和布局。
+翻译开关默认开启。准备 HUD 文字时使用 `language.translate(text, hud.translateText().get())`，切换后更新文字缓存和布局。
 
 在字段中保留一个 [HudRenderer](../../src/main/java/pit12/runtime/hud/HudRenderer.java)，并传给元素，用于绘制和测量内容：
 
@@ -226,7 +232,7 @@ private final HudRenderer hudRenderer = new HudRenderer();
 - `width()` 和 `height()` 以低开销提供元素内容未经缩放的逻辑尺寸。
 - `render(partialTicks, editing)` 根据调用者的变换，从逻辑点 `0,0` 开始绘制元素。
 
-使用渲染器的 `text`、`textWidth` 和 `fontHeight` 方法，并传入同一个 HUD 配置来绘制和测量文字。根据输入变化准备显示快照，不要在渲染回调中执行开销大的解析、IO 操作和大范围世界扫描。
+HUD 文字使用 Minecraft 字体。使用渲染器的 `text` 方法并传入 HUD 配置来绘制文字，使用 `textWidth(text)` 和 `fontHeight()` 测量文字。根据输入变化准备显示快照，不要在渲染回调中执行开销大的解析、IO 操作和大范围世界扫描。
 
 `editing=true` 时，准备并绘制固定示例内容，包括已禁用的 HUD。显示设置或语言变化后，更新示例文字和边界。测量的边界必须与实际绘制内容一致。
 
@@ -250,16 +256,15 @@ if (!hudRegistry.editing() && element.enabled()) {
 
 `layout` 调用 `prepare`，应用位置和缩放，并在元素能放入屏幕时将计算得到的原点保持在屏幕内。`render` 应用变换，并恢复 UI 渲染状态。
 
-在 `stop()` 中注销同一个元素，并释放渲染器资源：
+在 `stop()` 中注销同一个元素：
 
 ```java
 hudRegistry.unregister(element);
-hudRenderer.close();
 ```
 
-复用前清除元素缓存的渲染状态。渲染器可以在 `resize` 后重新创建资源。
+复用前清除元素缓存的渲染状态。
 
-自定义 UI 使用 [UiRenderer](../../src/main/java/pit12/shared/rendering/UiRenderer.java) 绘制文字、矩形和纹理。构造时传入 Minecraft 和字体的 `ResourceLocation`。保留渲染器以供复用，测量或绘制前调用 `resize(pixelScale)`，所有者释放这些资源时调用 `close()`。
+自定义 UI 使用 [UiRenderer](../../src/main/java/pit12/shared/rendering/UiRenderer.java) 测量文字、绘制矩形和纹理。构造时传入 Minecraft，绘制图形或纹理前调用 `resize(pixelScale)`。使用 Minecraft 的 `FontRenderer` 绘制文字。
 
 绘制原点使用整数 GUI 坐标，再应用 HUD 缩放。
 
@@ -273,15 +278,25 @@ Bootstrap 为功能提供查询契约。其实时查询和订阅需要客户端�
 
 在字段中保留用于会话变化的 `Runnable`。在 `start()` 中通过 `session.addListener(sessionListener)` 注册它，并读取一次当前状态。在 `stop()` 中通过 `session.removeListener(sessionListener)` 注销它。按状态的归属重置状态：连接数据的存续期与连接一致，世界数据的存续期与世界一致。
 
+[PlayerEntityTracker](../../src/main/java/pit12/runtime/player/PlayerEntityTracker.java) 提供 `loadedPlayer(UUID)`。它返回当前已加载的玩家实体，实体不存在或已移除时返回 `null`。实体由 Minecraft 持有，只能在客户端线程使用。UUID 索引随实体加入、移除和替换更新，世界变化时从已加载的玩家重新建立索引。直接从实体读取 ID 或坐标，按 ID 查询时使用 `world.getEntityByID(id)`。
+
+将 [PlayerEntityListener](../../src/main/java/pit12/runtime/player/PlayerEntityListener.java) 保存为字段。在 `start()` 中调用 `players.addListener(listener)` 注册，再查询需要的玩家。回调在索引更新后于客户端线程执行。实体替换时，先调用 `onPlayerEntityRemoved(previous)`，再调用 `onPlayerEntityAdded(current)`，此时索引已指向新实体。通过 `onPlayerEntitiesReset()` 清除派生的实体数据，再查询当前玩家。在 `stop()` 中调用 `players.removeListener(listener)` 注销同一个监听器。
+
 [TabPresence](../../src/main/java/pit12/runtime/player/TabPresence.java) 将成员关系与已知名称分开。使用 `contains(UUID)` 检查成员关系，使用 `players()` 获取当前 UUID 到档案名称的映射。名称未知的玩家可能存在，但不在该映射中。
 
 将 [TabPresenceListener](../../src/main/java/pit12/runtime/player/TabPresenceListener.java) 保存为字段。在 `start()` 中调用 `tabPresence.addListener(tabListener)` 注册，再读取当前状态。通过 `onPlayerSeen(playerId, name, joined)` 处理观察到的玩家，通过 `onPlayerLeft(playerId)` 处理离开，通过 `onTabDisplayChanged(playerId)` 处理显示变化。名称可能为 null，`joined=false` 表示条目之前已存在。在 `stop()` 中，将同一个监听器传给 `tabPresence.removeListener(tabListener)` 注销。
 
-[PlayerNameCache](../../src/main/java/pit12/runtime/player/PlayerNameCache.java) 通过 `displayName(UUID)` 和 `shortName(UUID)` 查询当前 Tab 条目的显示名和简洁名。条目不存在或名称未知时，两者都返回 `null`。显示名保留格式化代码。简洁名去除 Pit Supporter 和赏金后缀。玩家离开时移除条目，连接变化时清空缓存。
+[PlayerNameCache](../../src/main/java/pit12/runtime/player/PlayerNameCache.java) 通过 `displayName(UUID)` 和 `shortName(UUID)` 查询当前 Tab 条目的显示名和简洁名。条目不存在或名称未知时，两者都返回 `null`。显示名保留格式化代码。简洁名仅去除赏金后缀，保留其他显示内容。玩家离开时移除条目，连接变化时清空缓存。
 
 在 `start()` 中通过 `addListener(Runnable)` 订阅名称变化，再读取当前名称。在 `stop()` 中通过 `removeListener(Runnable)` 注销同一个监听器。
 
-[PlayerEquipmentAccess](../../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) 提供 `loadedEquipment(UUID)`。如果实体未加载或尚未被观察到，查询返回 `null`。在快照中，将槽位视为空之前，先检查 `heldItemKnown()` 或 `leggingsKnown()`。`copyHeldItem()` 和 `copyLeggings()` 返回防御性副本，`null` 既可能表示未知槽位，也可能表示已知的空槽位。使用 `heldEnchantments()` 或 `leggingsEnchantments()` 获取已解析的数据。
+[SidebarCache](../../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) 通过 `lines()` 查询服务器侧栏。它返回按显示顺序排列的不可变快照，最多包含 15 行。内容保留底部文字和格式化代码，不包含目标标题。每个 [SidebarLine](../../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) 通过 `entry()`、`text()` 和 `score()` 提供条目标识、文字和排序分数。
+
+`formattedText(minecraft.fontRendererObj)` 会去掉格式化代码，以及 Minecraft 字体中宽度为 0 的字符。请在客户端线程调用。它在首次调用时计算结果，并为这一行缓存结果。分数变化时保留缓存。文本变化时创建新行，并清空缓存。
+
+将 [SidebarListener](../../src/main/java/pit12/runtime/scoreboard/SidebarListener.java) 保存为字段。在 `start()` 中调用 `sidebar.addListener(listener)` 注册，再读取 `sidebar.lines()`。`onLineChanged(previous, current)` 在缓存更新后执行。新增行的 `previous` 为 null，删除行的 `current` 为 null。分数变化可能移动其他行，需要当前顺序时读取 `lines()`。已保存的快照和行不会改变。在 `stop()` 中调用 `sidebar.removeListener(listener)` 注销同一个监听器。
+
+[PlayerEquipmentAccess](../../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) 提供 `loadedEquipment(UUID)`。如果实体未加载或尚未被观察到，查询返回 `null`。在快照中，将手持槽位或护腿槽位视为空之前，先检查 `heldItemKnown()` 或 `leggingsKnown()`。使用 `heldEnchantments()` 或 `leggingsEnchantments()` 获取已解析的数据。
 
 `copyEquipment(slot)` 返回槽位 `0` 到 `4` 的副本，依次为手持物品、鞋子、护腿、胸甲和头盔。空槽位和未观察到的槽位都返回 `null`。
 
@@ -289,7 +304,7 @@ Bootstrap 为功能提供查询契约。其实时查询和订阅需要客户端�
 
 `onPlayerEquipmentReceived(playerId, stack)` 在每个装备包处理后执行，不等待 tick 合并变化。`stack` 可能为 `null`，由 Minecraft 持有，只能在回调期间读取。保存或修改它之前先复制。需要保留中间装备时使用这个回调。
 
-[PitContext](../../src/main/java/pit12/runtime/pit/PitContext.java) 提供 `current()`。返回的 `PitSnapshot` 提供地图、Pit 状态、修订号和 `spawnStateAt(x, y, z)`。在地图被识别前，状态为 `UNKNOWN`。快照可以传给工作线程；实时提供者不可以。
+[PitContext](../../src/main/java/pit12/runtime/pit/PitContext.java) 提供 `current()`。返回的 `PitSnapshot` 提供 Pit 状态和 `spawnStateAt(x, y, z)`。在地图被识别前，状态为 `UNKNOWN`。工作线程使用快照。实时提供者在客户端线程上读取。
 
 [PitEnchantmentReader](../../src/main/java/pit12/runtime/item/PitEnchantmentReader.java) 使用 `read`、`contains` 和 `levelOf` 读取任意物品堆叠。缺失数据会产生空结果或等级 `0`。缺少键或等级为非正数的条目会被忽略。如果装备快照的已解析附魔已经可用，就使用它们。
 

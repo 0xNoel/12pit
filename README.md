@@ -2,7 +2,9 @@
 
 English | [简体中文](docs/zh-CN/README.md)
 
-12pit is a lightweight, open-source Forge mod for The Pit on Minecraft 1.8.9, with its own control interface and [OneConfig](https://github.com/Polyfrost/OneConfig) support.
+12pit is a lightweight, open-source Forge mod for The Pit on Minecraft 1.8.9, with a configuration interface and [OneConfig](https://github.com/Polyfrost/OneConfig) support.
+
+We recommend using 12pit with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home) for better performance and a smoother experience.
 
 You can join our Discord [here](https://discord.gg/e9PRKMUenc) and seek help or discuss development related matters on the `#developer` channel.
 
@@ -10,7 +12,7 @@ You can join our Discord [here](https://discord.gg/e9PRKMUenc) and seek help or 
 
 Use JDK 21 to run Gradle. Compiling the mod requires a Java 8 toolchain. Gradle will find or download it automatically. The Minecraft client also runs on Java 8.
 
-Node.js and npm are required for `assemble` and `runClient` because of the bundled web interface that those tasks build. Java tests require it as well. Node.js 24 is used in CI.
+Node.js and npm are required for `assemble` and `runClient` because those tasks build the configuration interface. Java tests require them as well. Node.js 24 is used in CI.
 
 ## Building
 
@@ -29,6 +31,8 @@ On Linux/macOS, run:
 Output jar file will be located at `build/libs/`.
 
 ## Development
+
+Use PolyPatcher and OptiFine during development. At a minimum, ensure compatibility with their default settings.
 
 ### IntelliJ IDEA
 
@@ -54,9 +58,8 @@ Install the recommended extensions if prompted. `Ctrl+Shift+B` runs `assemble` t
 - [SpongePowered Mixin](https://github.com/SpongePowered/Mixin), MIT. License text: [MIXIN-MIT.txt](src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt).
 - [ASM](https://asm.ow2.io/), bundled with Mixin, BSD 3-Clause. License text: [ASM-BSD-3-CLAUSE.txt](src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt).
 - [Vue](https://vuejs.org/), MIT. License text: [VUE-MIT.txt](src/main/resources/META-INF/third-party-notices/VUE-MIT.txt).
-- [Vite](https://vite.dev/), used for module preloading in the Web UI, MIT. License text: [VITE-MIT.txt](src/main/resources/META-INF/third-party-notices/VITE-MIT.txt).
-- [Rolldown](https://rolldown.rs/), used for module preloading in the Web UI, MIT. License text: [ROLLDOWN-MIT.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt).
+- [Vite](https://vite.dev/), used for module preloading in the configuration interface, MIT. License text: [VITE-MIT.txt](src/main/resources/META-INF/third-party-notices/VITE-MIT.txt).
+- [Rolldown](https://rolldown.rs/), used for module preloading in the configuration interface, MIT. License text: [ROLLDOWN-MIT.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt).
 - [Lucide](https://lucide.dev/), ISC, with Feather icons under MIT. License texts: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt).
-- [Monocraft](https://github.com/IdreesInc/Monocraft), SIL Open Font License 1.1. Font: [monocraft.otf](src/main/resources/assets/pit12/fonts/monocraft.otf). License text: [MONOCRAFT-OFL.txt](src/main/resources/META-INF/third-party-notices/MONOCRAFT-OFL.txt).
 
 12pit is licensed under [GPL-3.0-or-later](LICENSE).

@@ -45,7 +45,7 @@ final class NametagRenderer {
         boolean alphaEnabled = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
         boolean textureEnabled = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
         int boundTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        // Raw GL changes leave Minecraft's cached flags unchanged.
+        // Use raw GL here so GlStateManager's cache stays untouched.
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_CURRENT_BIT | GL11.GL_TEXTURE_BIT);
         GlStateManager.pushMatrix();
@@ -88,7 +88,7 @@ final class NametagRenderer {
                 drawText(font, text, heldItemY, 0xFFFFFFFF);
             }
         } finally {
-            // FontRenderer changes cached alpha, texture and color state.
+            // FontRenderer does change the cached state, so put it back too.
             GlStateManager.bindTexture(boundTexture);
             if (textureEnabled) {
                 GlStateManager.enableTexture2D();

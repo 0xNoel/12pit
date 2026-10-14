@@ -85,9 +85,10 @@ final class ProfileController {
         return exported;
     }
 
-    void validateImported(List<StoredProfile> imported) {
+    List<ProfileRecord> prepareImported(List<StoredProfile> imported) {
         Set<UUID> ids = new HashSet<UUID>();
         Set<String> names = new HashSet<String>();
+        List<ProfileRecord> records = new ArrayList<>();
         for (StoredProfile profile : imported) {
             if (!ids.add(profile.id()) || !names.add(profile.name().toLowerCase(Locale.ROOT))) {
                 throw new IllegalArgumentException("Duplicate profile in file");
@@ -97,27 +98,27 @@ final class ProfileController {
                 throw new IllegalArgumentException(
                         "Profile UUID already belongs to " + existing.name());
             }
-            catalog.normalize(profile.config());
+            records.add(new ProfileRecord(profile, catalog.normalize(profile.config())));
         }
+        return records;
     }
 
     void importProfiles(List<StoredProfile> imported) {
-        validateImported(imported);
+        List<ProfileRecord> records = prepareImported(imported);
         ArrayList<UUID> removed = new ArrayList<UUID>();
         boolean activeReplaced = false;
-        for (StoredProfile profile : imported) {
-            ProfileRecord old = findByName(profile.name(), null);
+        for (ProfileRecord record : records) {
+            ProfileRecord old = findByName(record.name(), null);
             int position = old == null ? profiles.size() : profiles.indexOf(old);
             if (old != null) {
                 profiles.remove(old);
                 profilesById.remove(old.id());
                 removed.add(old.id());
                 if (old.id().equals(activeProfileId)) {
-                    activeProfileId = profile.id();
+                    activeProfileId = record.id();
                     activeReplaced = true;
                 }
             }
-            ProfileRecord record = new ProfileRecord(profile, catalog.normalize(profile.config()));
             markChanged(record);
             profiles.add(position, record);
             profilesById.put(record.id(), record);
@@ -232,7 +233,7 @@ final class ProfileController {
         }
         ProfileRecord target = profilesById.get(profileId);
         if (target == null) {
-            return failure(Status.NOT_FOUND, "Profile was not found");
+            return ProfileMutationResult.failure(Status.NOT_FOUND, "Profile was not found");
         }
         if (target.id().equals(activeProfileId)) {
             return ProfileMutationResult.success();
@@ -291,14 +292,16 @@ final class ProfileController {
             return ready;
         ProfileRecord record = profilesById.get(profileId);
         if (record == null) {
-            return failure(Status.NOT_FOUND, "Profile was not found");
+            return ProfileMutationResult.failure(Status.NOT_FOUND, "Profile was not found");
         }
         String validated = validatedName(requestedName);
         if (validated == null) {
-            return failure(Status.INVALID_NAME, "Name must contain 1 to 48 characters");
+            return ProfileMutationResult.failure(Status.INVALID_NAME,
+                    "Name must contain 1 to 48 characters");
         }
         if (findByName(validated, profileId) != null) {
-            return failure(Status.DUPLICATE_NAME, "Another profile already uses that name");
+            return ProfileMutationResult.failure(Status.DUPLICATE_NAME,
+                    "Another profile already uses that name");
         }
         if (record.name().equals(validated)) {
             return ProfileMutationResult.success();
@@ -316,10 +319,11 @@ final class ProfileController {
             return ready;
         ProfileRecord record = profilesById.get(profileId);
         if (record == null) {
-            return failure(Status.NOT_FOUND, "Profile was not found");
+            return ProfileMutationResult.failure(Status.NOT_FOUND, "Profile was not found");
         }
         if (profileId.equals(activeProfileId)) {
-            return failure(Status.ACTIVE_PROFILE_PROTECTED, "The active profile cannot be deleted");
+            return ProfileMutationResult.failure(Status.ACTIVE_PROFILE_PROTECTED,
+                    "The active profile cannot be deleted");
         }
         profiles.remove(record);
         profilesById.remove(profileId);
@@ -335,16 +339,18 @@ final class ProfileController {
             return ready;
         String name = validatedName(operation.name());
         if (name == null) {
-            return failure(Status.INVALID_NAME, "Name must contain 1 to 48 characters");
+            return ProfileMutationResult.failure(Status.INVALID_NAME,
+                    "Name must contain 1 to 48 characters");
         }
         if (findByName(name, null) != null) {
-            return failure(Status.DUPLICATE_NAME, "Another profile already uses that name");
+            return ProfileMutationResult.failure(Status.DUPLICATE_NAME,
+                    "Another profile already uses that name");
         }
         ConfigSnapshot config;
         try {
             config = catalog.normalize(operation.config());
         } catch (IllegalArgumentException failure) {
-            return failure(Status.INVALID_VALUE, failure.getMessage());
+            return ProfileMutationResult.failure(Status.INVALID_VALUE, failure.getMessage());
         }
         ProfileRecord previous = profilesById.get(activeProfileId);
         previous.config(catalog.snapshot());
@@ -446,7 +452,7 @@ final class ProfileController {
 
     private ProfileMutationResult requireLoaded() {
         return loadState == LoadState.LOADING
-                ? failure(Status.LOADING, "Profiles are still loading")
+                ? ProfileMutationResult.failure(Status.LOADING, "Profiles are still loading")
                 : null;
     }
 
@@ -467,9 +473,5 @@ final class ProfileController {
         }
         String trimmed = name.trim();
         return trimmed.isEmpty() || trimmed.length() > 48 ? null : trimmed;
-    }
-
-    private static ProfileMutationResult failure(Status status, String message) {
-        return ProfileMutationResult.failure(status, message);
     }
 }

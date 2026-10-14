@@ -50,12 +50,19 @@ final class DenickQuery {
                 }
                 Map.Entry<String, String> owner = owners.entrySet().iterator().next();
                 query.owner = owner.getKey();
+                String displayName = owner.getValue();
+                int rankStart = displayName.indexOf('[', displayName.indexOf('[') + 1);
+                int rankEnd = displayName.indexOf(']', rankStart);
+                if (rankStart >= 0 && rankEnd >= 0) {
+                    displayName = displayName.substring(0, rankStart)
+                            + displayName.substring(rankEnd + 1).trim();
+                }
                 query.displayName =
                         Objects.equals(cachedOwner, owner.getKey()) && cachedDisplayName != null
                                 ? cachedDisplayName
-                                : owner.getValue();
+                                : displayName;
                 return query;
-            } catch (IOException | RuntimeException failure) {
+            } catch (IOException failure) {
                 LOGGER.warning("Denick item query failed for " + item.query + ": " + failure);
                 query.failure = failure;
             }

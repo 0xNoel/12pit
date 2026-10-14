@@ -23,9 +23,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.feature.denick.DenickNamesBinding;
 import pit12.feature.denick.api.DenickNames;
 
@@ -39,18 +37,11 @@ public abstract class GuiPlayerTabOverlayMixin implements DenickNamesBinding {
         pit12$denickNames = names;
     }
 
-    @Inject(method = "updatePlayerList", at = @At("HEAD"))
-    private void pit12$tabVisible(boolean visible, CallbackInfo callback) {
-        if (pit12$denickNames != null) {
-            pit12$denickNames.setTabVisible(visible);
-        }
-    }
-
     @Redirect(method = "renderPlayerlist", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;getPlayerName(Lnet/minecraft/client/network/NetworkPlayerInfo;)Ljava/lang/String;"))
     private String pit12$displayName(GuiPlayerTabOverlay overlay, NetworkPlayerInfo player) {
         String original = overlay.getPlayerName(player);
         return pit12$denickNames == null ? original
-                : pit12$denickNames.listName(player.getGameProfile().getId(), original, false);
+                : pit12$denickNames.listName(player.getGameProfile().getId(), original);
     }
 }

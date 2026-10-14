@@ -31,7 +31,7 @@ public final class HudPlacement {
         this.automatic = automatic;
     }
 
-    /** The resolved screen point, including when automatic selection is enabled. */
+    /** The actual anchor picked, even in Auto mode. */
     public HudAnchor anchor() {
         return anchor;
     }

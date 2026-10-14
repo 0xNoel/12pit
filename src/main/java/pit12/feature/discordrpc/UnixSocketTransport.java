@@ -40,9 +40,9 @@ final class UnixSocketTransport implements Closeable {
     private static final int EAGAIN = MAC ? 35 : 11;
     private static final short POLLOUT = 4;
     private static final int SOL_SOCKET = MAC ? 0xffff : 1;
-    // TODO: Support ARM64 Java when the launcher supplies JNA 3.4.0 without ARM64 natives.
+    // TODO: ARM64 support for launchers that bundle JNA 3.4.0 without ARM64 natives.
     private static final LibC LIBC = (LibC) Native.loadLibrary("c", LibC.class);
-    // The worker owns the I/O buffers. Only close may run on the client thread.
+    // These buffers belong to the worker. Only close can run on the client thread.
     private final Memory buffer = new Memory(8192);
     private final Memory pollDescriptor = new Memory(8);
     private final int descriptor;
@@ -99,7 +99,7 @@ final class UnixSocketTransport implements Closeable {
                 try {
                     synchronized (UnixSocketTransport.this) {
                         checkOpen();
-                        // Suppress SIGPIPE so a closed peer reports a write error to Java.
+                        // Suppress SIGPIPE so writing to a closed socket gives us a Java error.
                         count = (int) LIBC
                                 .send(descriptor, buffer, new NativeLong(count), MAC ? 0 : 0x4000)
                                 .longValue();
@@ -123,7 +123,7 @@ final class UnixSocketTransport implements Closeable {
     };
 
     UnixSocketTransport(File endpoint) throws IOException {
-        // TODO: Add BSD socket layouts. This transport currently supports Linux and macOS.
+        // TODO: BSD socket layouts. Only Linux and macOS work here for now.
         if (!MAC && !Platform.isLinux()) {
             throw new IOException("Discord IPC sockets require Linux or macOS");
         }
@@ -148,9 +148,9 @@ final class UnixSocketTransport implements Closeable {
         }
         try {
             pollDescriptor.setInt(0, descriptor);
-            // FD_CLOEXEC keeps the socket out of child processes.
+            // FD_CLOEXEC stops child processes from inheriting the socket.
             LIBC.fcntl(descriptor, 2, 1);
-            // recv and send hold the monitor, so they must never block client-thread close.
+            // recv and send hold the monitor. Don't let them block close on the client thread.
             LIBC.fcntl(descriptor, 4, MAC ? 4 : 0x800);
             if (MAC) {
                 LIBC.setsockopt(descriptor, SOL_SOCKET, 0x1022, new IntByReference(1), 4);
@@ -163,7 +163,7 @@ final class UnixSocketTransport implements Closeable {
                             failure);
                 }
                 awaitReady(POLLOUT, 2000);
-                // Writability also signals a failed connection. SO_ERROR tells us which occurred.
+                // A failed connection can also look writable. Check SO_ERROR to tell the difference.
                 IntByReference error = new IntByReference();
                 LIBC.getsockopt(descriptor, SOL_SOCKET, MAC ? 0x1007 : 4, error,
                         new IntByReference(4));
@@ -197,7 +197,7 @@ final class UnixSocketTransport implements Closeable {
             if (remaining <= 0) {
                 throw new IOException("Discord IPC socket timed out");
             }
-            // Poll may outlive close. recv and send recheck closed before using the descriptor.
+            // poll can finish after close. recv and send check closed again before using the descriptor.
             try {
                 int ready = MAC ? LIBC.poll(pollDescriptor, 1, remaining)
                         : LIBC.poll(pollDescriptor, new NativeLong(1), remaining);
@@ -244,14 +244,14 @@ final class UnixSocketTransport implements Closeable {
         int getsockopt(int descriptor, int level, int option, IntByReference value,
                 IntByReference length) throws LastErrorException;
 
-        // size_t and ssize_t have the native long width on Linux and macOS.
+        // size_t and ssize_t use native long on Linux and macOS.
         NativeLong recv(int descriptor, Pointer buffer, NativeLong length, int flags)
                 throws LastErrorException;
 
         NativeLong send(int descriptor, Pointer buffer, NativeLong length, int flags)
                 throws LastErrorException;
 
-        // nfds_t is 32-bit on macOS and native-long-sized on Linux.
+        // nfds_t uses int on macOS and native long on Linux.
         int poll(Pointer descriptors, int count, int timeout) throws LastErrorException;
 
         int poll(Pointer descriptors, NativeLong count, int timeout) throws LastErrorException;

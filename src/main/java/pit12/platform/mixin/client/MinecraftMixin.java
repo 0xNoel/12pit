@@ -16,33 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.player;
+package pit12.platform.mixin.client;
 
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.network.play.server.S38PacketPlayerListItem;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pit12.runtime.player.TabPacketBinding;
-import pit12.runtime.player.TabPacketObserver;
+import pit12.shared.lifecycle.ClientShutdownBinding;
 
-@Mixin(NetHandlerPlayClient.class)
-public abstract class NetHandlerPlayClientTabMixin implements TabPacketBinding {
+@Mixin(Minecraft.class)
+public abstract class MinecraftMixin implements ClientShutdownBinding {
     @Unique
-    private TabPacketObserver pit12$tabObserver;
+    private Runnable pit12$shutdown;
 
     @Override
-    public void bindTabObserver(TabPacketObserver observer) {
-        pit12$tabObserver = observer;
+    public void bindClientShutdown(Runnable shutdown) {
+        pit12$shutdown = shutdown;
     }
 
-    @Inject(method = "handlePlayerListItem", at = @At("TAIL"))
-    private void pit12$afterPlayerListItem(S38PacketPlayerListItem packet, CallbackInfo ci) {
-        TabPacketObserver observer = pit12$tabObserver;
-        if (observer != null) {
-            observer.onTabPacket(packet);
-        }
+    @Inject(method = "shutdownMinecraftApplet", at = @At("HEAD"))
+    private void pit12$beforeShutdown(CallbackInfo ci) {
+        Runnable shutdown = pit12$shutdown;
+        pit12$shutdown = null;
+        if (shutdown != null)
+            shutdown.run();
     }
 }

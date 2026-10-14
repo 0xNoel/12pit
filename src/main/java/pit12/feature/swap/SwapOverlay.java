@@ -33,6 +33,7 @@ final class SwapOverlay {
     private final SwapConfig config;
     private final IdentityHashMap<ItemStack, Label> labels = new IdentityHashMap<>();
     private final IdentityHashMap<ItemStack, CachedIdentity> cache = new IdentityHashMap<>();
+    private final IdentityHashMap<ItemStack, ItemIdentity> identities = new IdentityHashMap<>();
 
     SwapOverlay(Minecraft minecraft, BindingBook bindings, SwapConfig config) {
         this.minecraft = minecraft;
@@ -43,25 +44,26 @@ final class SwapOverlay {
     void clear() {
         labels.clear();
         cache.clear();
+        identities.clear();
     }
 
     void refresh() {
         labels.clear();
+        identities.clear();
         if (!config.highlight.get() || bindings.readinessProblem() != null || bindings.count() == 0
                 || minecraft.thePlayer == null) {
             cache.clear();
             return;
         }
-        IdentityHashMap<ItemStack, ItemIdentity> identities = new IdentityHashMap<>();
         boolean containerScreen = minecraft.currentScreen instanceof GuiContainer;
         for (Slot slot : minecraft.thePlayer.inventoryContainer.inventorySlots) {
             if (containerScreen || slot.slotNumber >= 36
                     || slot.slotNumber >= 5 && slot.slotNumber <= 8)
-                addIdentity(identities, slot.getStack());
+                addIdentity(slot.getStack());
         }
         if (containerScreen) {
             for (Slot slot : minecraft.thePlayer.openContainer.inventorySlots) {
-                addIdentity(identities, slot.getStack());
+                addIdentity(slot.getStack());
             }
         }
         cache.keySet().retainAll(identities.keySet());
@@ -79,11 +81,11 @@ final class SwapOverlay {
         }
     }
 
-    private void addIdentity(IdentityHashMap<ItemStack, ItemIdentity> identities, ItemStack stack) {
+    private void addIdentity(ItemStack stack) {
         if (stack == null || identities.containsKey(stack))
             return;
         CachedIdentity cached = cache.get(stack);
-        // NBT can change in place, so compare with a copy before reusing an identity.
+        // NBT can change on the same stack. Compare with our copy before reusing its identity.
         if (cached == null || stack.getItem() != cached.snapshot.getItem()
                 || stack.getItem().getHasSubtypes()
                         && stack.getMetadata() != cached.snapshot.getMetadata()
@@ -100,7 +102,7 @@ final class SwapOverlay {
         if (label == null || !config.highlight.get())
             return;
         int textX = label.equipment ? x + 14 - label.width : x + 2;
-        // Vanilla expects lighting and depth to be enabled when this overlay returns.
+        // The rest of the overlay needs lighting and depth back on when we're done.
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         GlStateManager.disableBlend();

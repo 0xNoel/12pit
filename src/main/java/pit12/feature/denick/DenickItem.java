@@ -18,6 +18,7 @@
  */
 package pit12.feature.denick;
 
+import java.util.regex.Pattern;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
 final class DenickItem {
+    private static final Pattern ENCHANTMENT_KEY = Pattern.compile("[a-z_]+");
     final long nonce;
     final String query;
 
@@ -68,7 +70,7 @@ final class DenickItem {
             NBTTagCompound enchantment = enchantments.getCompoundTagAt(index);
             String key = enchantment.getString("Key");
             int level = enchantment.getInteger("Level");
-            if (!key.matches("[a-z_]+") || level <= 0) {
+            if (!ENCHANTMENT_KEY.matcher(key).matches() || level <= 0) {
                 return null;
             }
             if (index > 0) {

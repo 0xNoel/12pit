@@ -22,7 +22,7 @@ import java.util.UUID;
 import net.minecraft.item.ItemStack;
 
 public interface PlayerEquipmentListener {
-    /** Called for each equipment packet. Read the live stack only during this callback. */
+    /** Called for each equipment packet. The live stack is only valid during this call. */
     default void onPlayerEquipmentReceived(UUID playerId, ItemStack stack) {}
 
     void onPlayerEquipmentChanged(UUID playerId, int changedSlots, long revision);

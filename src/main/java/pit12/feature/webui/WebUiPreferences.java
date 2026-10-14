@@ -103,14 +103,15 @@ final class WebUiPreferences implements ConfigChangeListener {
             } catch (IOException | JsonParseException | IllegalArgumentException
                     | SecurityException failure) {
                 dispatch(activeGeneration,
-                        () -> failed(source("Could not load Web UI settings"), failure));
+                        () -> failed(source("Could not load configuration interface settings"),
+                                failure));
                 return;
             }
             dispatch(activeGeneration, () -> {
                 try {
                     applyLoaded(loaded);
                 } catch (IllegalArgumentException failure) {
-                    failed(source("Could not load Web UI settings"), failure);
+                    failed(source("Could not load configuration interface settings"), failure);
                     return;
                 }
                 ready = true;
@@ -139,12 +140,14 @@ final class WebUiPreferences implements ConfigChangeListener {
             if (!worker.awaitTermination(2000L, TimeUnit.MILLISECONDS)) {
                 worker.shutdownNow();
                 if (!worker.awaitTermination(2000L, TimeUnit.MILLISECONDS))
-                    throw new IllegalStateException("Web UI settings worker did not stop");
+                    throw new IllegalStateException(
+                            "Configuration interface settings worker did not stop");
             }
         } catch (InterruptedException failure) {
             worker.shutdownNow();
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("Interrupted while saving Web UI settings", failure);
+            throw new IllegalStateException(
+                    "Interrupted while saving configuration interface settings", failure);
         }
         worker = null;
         pendingWrite = null;
@@ -188,7 +191,8 @@ final class WebUiPreferences implements ConfigChangeListener {
         JsonElement version = root.get("schemaVersion");
         if (version == null || !version.isJsonPrimitive()
                 || !version.getAsJsonPrimitive().isNumber() || !"1".equals(version.getAsString()))
-            throw new IllegalArgumentException("Unsupported Web UI settings version");
+            throw new IllegalArgumentException(
+                    "Unsupported configuration interface settings version");
         Set<String> loadedFavorites = new LinkedHashSet<>();
         JsonElement entries = root.get("favorites");
         if (entries != null) {
@@ -203,7 +207,7 @@ final class WebUiPreferences implements ConfigChangeListener {
         }
         JsonElement settings = root.get("settings");
         if (settings != null && !settings.isJsonObject())
-            throw new IllegalArgumentException("Expected Web UI settings");
+            throw new IllegalArgumentException("Expected configuration interface settings");
         Map<String, Object> values = new LinkedHashMap<>();
         for (Setting<?> setting : config.settings()) {
             if (editedWhileLoading.contains(setting.id())) {
@@ -215,14 +219,16 @@ final class WebUiPreferences implements ConfigChangeListener {
             if (value == null)
                 continue;
             if (!value.isJsonPrimitive())
-                throw new IllegalArgumentException("Invalid Web UI setting: " + setting.id());
+                throw new IllegalArgumentException(
+                        "Invalid configuration interface setting: " + setting.id());
             JsonPrimitive primitive = value.getAsJsonPrimitive();
             if (setting.storageType() == Setting.StorageType.BOOLEAN && primitive.isBoolean())
                 values.put(setting.id(), primitive.getAsBoolean());
             else if (setting.storageType() == Setting.StorageType.INTEGER && primitive.isNumber())
                 values.put(setting.id(), Integer.parseInt(primitive.getAsString()));
             else
-                throw new IllegalArgumentException("Invalid Web UI setting: " + setting.id());
+                throw new IllegalArgumentException(
+                        "Invalid configuration interface setting: " + setting.id());
         }
         applying = true;
         try {
@@ -281,9 +287,10 @@ final class WebUiPreferences implements ConfigChangeListener {
                 }
             });
         } catch (IOException | SecurityException failure) {
-            LOGGER.log(Level.WARNING, "Could not save Web UI settings to " + path, failure);
+            LOGGER.log(Level.WARNING, "Could not save configuration interface settings to " + path,
+                    failure);
             dispatch(activeGeneration, () -> {
-                problem = source("Could not save Web UI settings");
+                problem = source("Could not save configuration interface settings");
                 changed.run();
             });
         }

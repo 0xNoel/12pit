@@ -1,4 +1,4 @@
-<!-- Source: docs/TRANSLATING.md; Based on: 1cc8c8c1a8a4520218eb448773741617c4a6e1e8 -->
+<!-- Source: docs/TRANSLATING.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
 
 # 贡献翻译
 
@@ -8,7 +8,7 @@
 
 ## 贡献界面翻译
 
-Web UI、配置文字、命令回显和 HUD 标签使用同一套语言文件。OneConfig 设置界面使用英文原文。核对设置的译文时，使用 Web UI。
+配置界面、配置文字、命令回显和 HUD 标签使用同一套语言文件。OneConfig 设置界面使用英文原文。核对设置的译文时，使用配置界面。
 
 界面翻译使用 [Crowdin](https://crowdin.com/project/12pit)。每个使用位置都有独立条目，所以同一句英文可以有不同译文。条目的上下文会显示源文件和使用位置。
 

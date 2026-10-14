@@ -72,12 +72,12 @@ public final class CommandNode {
 
     @FunctionalInterface
     public interface Handler {
-        /** Arguments exclude the command path. Their count is checked before execution. */
+        /** args starts after the command path. We've already checked the count. */
         void execute(ICommandSender sender, String[] args) throws CommandException;
     }
     @FunctionalInterface
     public interface Suggestions {
-        /** Arguments include the current word. Return unfiltered candidates, or null for no suggestions. */
+        /** args includes the word being typed. We'll filter the candidates for you. */
         List<String> suggest(ICommandSender sender, String[] args);
     }
     public static final class Builder {
@@ -117,7 +117,7 @@ public final class CommandNode {
             return this;
         }
 
-        /** Groups use this handler for unmatched arguments and show help when called without arguments. */
+        /** Groups call this for unmatched arguments. With no arguments, they show help. */
         public Builder executes(Handler handler) {
             this.handler = handler;
             return this;

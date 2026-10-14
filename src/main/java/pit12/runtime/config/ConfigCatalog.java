@@ -102,7 +102,7 @@ public final class ConfigCatalog {
         listeners.remove(listener);
     }
 
-    /** After features start, read and change catalog values on the client thread. */
+    /** Once features are running, stick to the client thread for catalog values. */
     public ConfigSnapshot snapshot() {
         client.check();
         LinkedHashMap<String, Map<String, Object>> values =
@@ -168,7 +168,7 @@ public final class ConfigCatalog {
         return new ConfigSnapshot(values);
     }
 
-    /** Invalid values leave all live settings unchanged. Missing values reset to defaults. */
+    /** A bad value cancels the whole update. Missing values go back to defaults. */
     public ConfigChangeSet apply(ConfigSnapshot snapshot) {
         client.check();
         ConfigSnapshot normalized = normalize(snapshot);

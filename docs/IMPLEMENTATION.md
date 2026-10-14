@@ -8,7 +8,7 @@ This guide covers the shared APIs, calling conventions, and lifecycle rules used
 
 `ClientBootstrap` creates the components in its constructor. Each feature has a private `register...` method that creates and registers its config when needed, creates the feature, and adds it to `components`. Pass dependencies as arguments. Return the feature's API only when a later registration method needs it.
 
-Organize the constructor into shared runtime, feature providers, other features, and platform integrations. Create runtime components and platform adapters directly in their sections. Order feature registration calls and method declarations by `ConfigCategory.displayOrder()`, then `ConfigCategory.id()`, then alphabetically by method name. Put features without config in the first `Category: No config` group. Use matching group and category comments in both places. Dependency order takes priority over category and name. Bootstrap starts components in list order and stops them in reverse. Registration methods only create and register objects. Register listeners and start workers in `start()`.
+Organize the constructor into shared runtime, feature providers, other features, and platform integrations. Create runtime components and platform adapters directly in their sections. Group feature registration calls and method declarations by category in this order: Combat, Player, Render, Misc, Interface. Within each category, order methods alphabetically by name. Put features without config in the first `Category: No config` group. Use matching group and category comments in both places. Dependency order takes priority over category and name. Bootstrap starts components in list order and stops them in reverse. Registration methods only create and register objects. Register listeners and start workers in `start()`.
 
 Bootstrap registers the component and calls its `start()` method. If `start()` causes an exception, then Bootstrap will stop this component and all components that were started before it. `stop()` should release resources in any case, including partial initialization and even if it was called multiple times. An exception thrown by one of the components in `stop()` will be logged but all the others will be stopped.
 
@@ -47,6 +47,12 @@ Disk I/O, HTTP requests, expensive computations are done on owned workers with a
 
 `ClientThread.current()` captures the calling thread and runs callbacks directly on it. Calling its `execute()` from another thread throws. Use it for tests and code that needs no cross-thread dispatch.
 
+## Input
+
+`InputBlocker` routes key events before Minecraft handles them. Features register an `InputHandler` on start and remove it on stop. `key(...)` returns true when it consumes an event. `consumesKey(...)` identifies keys whose held states must not be restored after blocking ends.
+
+Use `lock(owner)` to block keyboard and mouse input. The platform supplies an `InputDevice` that masks LWJGL events and polled states. Minecraft's key, movement, and smooth camera states are cleared once when blocking starts. Use `unlock(owner, resume)` when the operation finishes or is cancelled. Each operation releases only its own lock. `blockedFor(owner)` reports whether another operation holds a lock. Input resumes only after all locks are released. Buffered events are discarded before restoring the input backend. When `resume` is true, held keys are restored if the game has focus. `held(key)` reads the current LWJGL state, which is false while blocked.
+
 ## Config
 
 `FeatureConfig` represents the settings of a feature and their interface metadata. Settings are defined in its subclass constructor:
@@ -58,7 +64,7 @@ public final class StatusConfig extends FeatureConfig {
     private final BooleanSetting showNames;
 
     public StatusConfig() {
-        super("status", source("Status"), new ConfigCategory("render", source("Render"), 100),
+        super("status", source("Status"), new ConfigCategory("render", source("Render")),
                 source("Shows player status."));
         subcategory("appearance", source("Appearance"));
         subsubcategory("display", source("Display"));
@@ -72,9 +78,9 @@ public final class StatusConfig extends FeatureConfig {
 }
 ```
 
-`ConfigCategory` defines a category's ID, display name, and order. Reuse the same category for related features.
+`ConfigCategory` defines a category's ID and display name. Reuse the same category for related features.
 
-In the Web UI, `subcategory()` puts the following settings under a button at the top of the feature page. `subsubcategory()` groups settings within that page. Both levels are optional. Without `subcategory()`, groups appear directly on the feature page. Settings without a subsubcategory have no section heading. Settings defined before the first subcategory stay visible under every button. Starting a new subcategory clears the current subsubcategory. Settings and groups follow their definition order.
+In the configuration interface, `subcategory()` puts the following settings under a button at the top of the feature page. `subsubcategory()` groups settings within that page. Both levels are optional. Without `subcategory()`, groups appear directly on the feature page. Settings without a subsubcategory have no section heading. Settings defined before the first subcategory stay visible under every button. Starting a new subcategory clears the current subsubcategory. Settings and groups follow their definition order.
 
 The four-argument `FeatureConfig` constructor adds `enabled` setting with default value `true`. Constructor with `toggleable` parameter allows to not add `enabled` setting; in this case the feature always returns true when asked whether it is enabled. Constructor with `defaultEnabled` parameter chooses the initial value. Method `setEnabled` changes the setting, not the lifecycle.
 
@@ -85,7 +91,7 @@ The following helpers create settings and register their metadata in the feature
 - `keybindSetting` stores the key code from `0` to `255`. The feature is responsible for handling the input.
 - `colorSetting` stores RGB color as `0xRRGGBB`. `colorPickerSetting` stores ARGB color as `0xAARRGGBB`.
 - `choiceSetting` creates a choice with default id and `ChoiceSetting.Choice` instances with stable ids.
-- `hudConfig` adds grouped anchor, text shadow, font, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
+- `hudConfig` adds grouped anchor, text shadow, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
 
 Feature IDs are unique in the catalog. Setting and HUD config IDs are unique within their feature. An ID starts with a lowercase ASCII letter or digit; the remaining characters can also include `.`, `-`, or `_`. Preserve saved IDs when changing display names. A HUD config reserves setting IDs under its prefix, such as `status.offset_x`; do not define settings with conflicting IDs.
 
@@ -140,7 +146,7 @@ Use `register(command)` to make `/12pit message` available. If `/message` is sup
 
 A node with children is a group. Without arguments it displays auto-generated help, even if there's a handler. Leaf with a handler executes it, if the argument number is correct. Child's name or alias matches case-insensitively and overrides group's handler. Group handler can accept extra unmatched arguments. Adding a single `help` argument will show group help unless there's an explicit `help` child.
 
-`requires(Predicate<ICommandSender>)` restricts use of a node. Help and completion hide children that cannot be used by the sender. Suggestion callback gets the arguments after the command path, including the current word. Return the complete set of suggestions; the registry filters it by the current prefix case-insensitively and removes duplicates. Returning null or empty list results in no suggestions.
+`requires(Predicate<ICommandSender>)` restricts use of a node. Help and completion hide children that cannot be used by the sender. The suggestion callback gets the arguments after the command path, including the current word. Return the complete set of suggestions. The registry filters it by the current prefix case-insensitively and removes duplicates. Return an empty list for no suggestions.
 
 Bootstrap provides [ForgeCommandAdapter](../src/main/java/pit12/platform/command/ForgeCommandAdapter.java) through the `Registrar` of the registry. Features don't register Forge command classes manually. There's no way to unregister commands in Forge. `stop()` disallows execution and completion and `start()` will reuse existing entry points. Registration is closed after the first start.
 
@@ -197,7 +203,7 @@ hud = hudConfig("status", HudAnchor.TOP_LEFT, 6, 6, true,
 
 Use `HudGroup.AUTO` for a subcategory when the feature declares other subcategories, or a subsubcategory otherwise. `SUBCATEGORY` creates a separate subcategory. `SUBSUBCATEGORY` uses the active subcategory at the call site, or the feature root if there is none. Pass null for the name to use `HUD`. The call preserves the active groups for later settings.
 
-The returned `HudConfig` exposes settings through `textShadow()`, `useMonospaceFont()`, `translateText()`, and `scale()`. Read or change their values with `get()` and `set()`. Scale is a percentage and defaults to `100`.
+The returned `HudConfig` exposes settings through `textShadow()`, `translateText()`, and `scale()`. Read or change their values with `get()` and `set()`. Scale is a percentage and defaults to `100`.
 
 Read the current placement with `placement()`. To change it, pass a [HudPlacement](../src/main/java/pit12/runtime/config/HudPlacement.java) containing the anchor, offsets, and anchor mode:
 
@@ -207,7 +213,7 @@ hud.placement(new HudPlacement(HudAnchor.TOP_RIGHT, -6, 6, true));
 
 The last argument selects Auto when true and a fixed anchor when false. `HudPlacement.anchor()` returns the resolved screen anchor in either mode. `fromOrigin(x, y, elementWidth, elementHeight, screenWidth, screenHeight)` creates an Auto placement from GUI coordinates and the element's scaled dimensions. To restore the default position and Auto mode, call `hud.placement(hud.defaultPlacement())`.
 
-The font switch defaults to off and uses bundled Monocraft when enabled. The translation switch defaults to on. Use `language.translate(text, hud.translateText().get())` when preparing HUD text and refresh cached text and layout when it changes.
+The translation switch defaults to on. Use `language.translate(text, hud.translateText().get())` when preparing HUD text and refresh cached text and layout when it changes.
 
 Keep one [HudRenderer](../src/main/java/pit12/runtime/hud/HudRenderer.java) in a field and pass it to the element for drawing and measuring content:
 
@@ -224,7 +230,7 @@ Implement [HudElement](../src/main/java/pit12/runtime/hud/HudElement.java) with 
 - `width()` and `height()` provide cheap unscaled logical size of the element's content.
 - `render(partialTicks, editing)` draws the element from logical point `0,0` according to the caller's transformation.
 
-Use the renderer's `text`, `textWidth`, and `fontHeight` methods with the same HUD config to draw and measure text. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
+HUD text uses the Minecraft font. Use the renderer's `text` method with the HUD config to draw text, and `textWidth(text)` and `fontHeight()` to measure it. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
 
 For `editing=true`, prepare and render fixed sample content, including for disabled HUDs. Refresh its text and bounds when display settings or the language change. Measured bounds must match the rendered content.
 
@@ -248,16 +254,15 @@ if (!hudRegistry.editing() && element.enabled()) {
 
 `layout` calls `prepare`, applies placement and scaling and keeps the resolved origin inside the screen if the element fits. `render` applies the transform and restores the UI rendering state.
 
-In `stop()`, unregister the same element and release the renderer's resources:
+In `stop()`, unregister the same element:
 
 ```java
 hudRegistry.unregister(element);
-hudRenderer.close();
 ```
 
-Clear the element's cached rendering state before reuse. The renderer can create resources again after `resize`.
+Clear the element's cached rendering state before reuse.
 
-For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides text, rectangles, and textures. Construct it with Minecraft and a font `ResourceLocation`. Keep the renderer for reuse, call `resize(pixelScale)` before measuring or drawing, and call `close()` when its owner releases those resources.
+For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides text measurements, rectangles, and textures. Construct it with Minecraft and call `resize(pixelScale)` before drawing shapes or textures. Use Minecraft's `FontRenderer` to draw text.
 
 Keep the render origin in integer GUI coordinates before applying HUD scale.
 
@@ -271,15 +276,25 @@ Bootstrap provides query contracts to features. Their live queries and subscript
 
 Keep `Runnable` in a field for session changes. Register it with `session.addListener(sessionListener)` in `start()` and read the current state once. Unregister it with `session.removeListener(sessionListener)` in `stop()`. Reset the state according to what it belongs to: the connection data lives for the connection, and the world data lives for the world.
 
+[PlayerEntityTracker](../src/main/java/pit12/runtime/player/PlayerEntityTracker.java) provides `loadedPlayer(UUID)`. It returns the current loaded player entity, or `null` if the entity is absent or removed. Entities belong to Minecraft and must stay on the client thread. The UUID index updates when entities join, leave, or replace one another. World changes rebuild it from loaded players. Read the entity's ID or coordinates directly. Use `world.getEntityByID(id)` for ID queries.
+
+Keep a [PlayerEntityListener](../src/main/java/pit12/runtime/player/PlayerEntityListener.java) in a field. Register it with `players.addListener(listener)` in `start()`, then query the players you need. Callbacks run on the client thread after the index changes. A replacement calls `onPlayerEntityRemoved(previous)` before `onPlayerEntityAdded(current)`, with the new entity already indexed. Handle `onPlayerEntitiesReset()` by clearing derived entity data and querying current players again. Unregister the same listener with `players.removeListener(listener)` in `stop()`.
+
 [TabPresence](../src/main/java/pit12/runtime/player/TabPresence.java) separates membership from known names. Use `contains(UUID)` to check membership and `players()` to get the current UUID-to-profile-name map. A player with an unknown name may be present without appearing in that map.
 
 Keep a [TabPresenceListener](../src/main/java/pit12/runtime/player/TabPresenceListener.java) in a field. In `start()`, register it with `tabPresence.addListener(tabListener)`, then read the current state. Handle `onPlayerSeen(playerId, name, joined)` for observed players, `onPlayerLeft(playerId)` for departures, and `onTabDisplayChanged(playerId)` for display changes. The name may be null, and `joined=false` means the entry was already present. In `stop()`, call `tabPresence.removeListener(tabListener)` with the same listener.
 
-[PlayerNameCache](../src/main/java/pit12/runtime/player/PlayerNameCache.java) provides `displayName(UUID)` and `shortName(UUID)` for current Tab entries. Both return `null` when the entry is absent or its name is unknown. Display names keep formatting codes. Short names remove Pit Supporter and bounty suffixes. Departed players are removed, and connection changes clear the cache.
+[PlayerNameCache](../src/main/java/pit12/runtime/player/PlayerNameCache.java) provides `displayName(UUID)` and `shortName(UUID)` for current Tab entries. Both return `null` when the entry is absent or its name is unknown. Display names keep formatting codes. Short names remove bounty suffixes and keep the rest of the display name. Departed players are removed, and connection changes clear the cache.
 
 Subscribe to name changes with `addListener(Runnable)` in `start()`, then read the current names. In `stop()`, pass the same listener to `removeListener(Runnable)`.
 
-[PlayerEquipmentAccess](../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) provides `loadedEquipment(UUID)`. It returns `null` if the entity is unloaded or has not been observed yet. In a snapshot, check `heldItemKnown()` or `leggingsKnown()` before treating a slot as empty. `copyHeldItem()` and `copyLeggings()` return defensive copies. A `null` result may mean an unknown slot or a known empty slot. Use `heldEnchantments()` or `leggingsEnchantments()` for already parsed data.
+[SidebarCache](../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) provides `lines()` for the server sidebar. It returns an immutable snapshot of up to 15 lines in display order. Lines include footer text and keep formatting codes. The objective title is excluded. Each [SidebarLine](../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) provides the entry ID, text, and sorting score through `entry()`, `text()`, and `score()`.
+
+`formattedText(minecraft.fontRendererObj)` removes formatting codes and characters with a width of zero in the Minecraft font. Call it on the client thread. It computes the text on the first call and caches it for that line. Score changes retain the cache. Text changes create a new line with an empty cache.
+
+Keep a [SidebarListener](../src/main/java/pit12/runtime/scoreboard/SidebarListener.java) in a field. Register it with `sidebar.addListener(listener)` in `start()`, then read `sidebar.lines()`. `onLineChanged(previous, current)` runs after the cache is updated. `previous` is null for an added line, and `current` is null for a removed line. A score change may move other lines, so read `lines()` for the current order. Retained snapshots and lines stay unchanged. Unregister the same listener in `stop()` with `sidebar.removeListener(listener)`.
+
+[PlayerEquipmentAccess](../src/main/java/pit12/runtime/player/PlayerEquipmentAccess.java) provides `loadedEquipment(UUID)`. It returns `null` if the entity is unloaded or has not been observed yet. In a snapshot, check `heldItemKnown()` or `leggingsKnown()` before treating those slots as empty. Use `heldEnchantments()` or `leggingsEnchantments()` for already parsed data.
 
 `copyEquipment(slot)` returns a copy for slots `0` through `4`: held item, boots, leggings, chestplate, and helmet. Empty and unobserved slots return `null`.
 
@@ -287,7 +302,7 @@ Keep a [PlayerEquipmentListener](../src/main/java/pit12/runtime/player/PlayerEqu
 
 `onPlayerEquipmentReceived(playerId, stack)` runs for each equipment packet before the tick combines changes. The stack may be `null` and belongs to Minecraft. Only read it during the callback. Copy it before retaining or changing it. Use this callback when intermediate equipment must be kept.
 
-[PitContext](../src/main/java/pit12/runtime/pit/PitContext.java) provides `current()`. The returned `PitSnapshot` provides the map, Pit state, revision and `spawnStateAt(x, y, z)`. The state is `UNKNOWN` until the map is identified. The snapshots can be passed to the workers; live providers cannot.
+[PitContext](../src/main/java/pit12/runtime/pit/PitContext.java) provides `current()`. The returned `PitSnapshot` provides the Pit state and `spawnStateAt(x, y, z)`. The state is `UNKNOWN` until the map is identified. Pass snapshots to workers. Read live providers on the client thread.
 
 [PitEnchantmentReader](../src/main/java/pit12/runtime/item/PitEnchantmentReader.java) reads the arbitrary item stacks with `read`, `contains` and `levelOf`. The missing data causes an empty result or level `0`. The entries with missing keys or non-positive levels are ignored. Use the equipment snapshot's parsed enchantments if they are already available.
 

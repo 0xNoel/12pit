@@ -116,7 +116,7 @@ final class WindowsPipeTransport implements Closeable {
             throw new IOException("Failed to open Discord IPC pipe: " + endpoint
                     + " (Windows error " + Native.getLastError() + ")");
         }
-        // Nonblocking I/O lets shutdown close the pipe without waiting for Discord.
+        // Don't wait on Discord while shutdown is trying to close the pipe.
         if (!KERNEL32.SetNamedPipeHandleState(handle, new IntByReference(PIPE_NOWAIT), null,
                 null)) {
             int error = Native.getLastError();

@@ -18,7 +18,7 @@
  */
 package pit12.shared.lifecycle;
 
-/** stop() must release resources after partial startup and be safe to call more than once. */
+/** stop() still needs to clean up if start() failed. Calling it twice must be OK too. */
 public interface ClientLifecycle {
     void start();
 

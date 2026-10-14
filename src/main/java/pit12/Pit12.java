@@ -29,11 +29,9 @@ import pit12.shared.build.BuildConfig;
 public final class Pit12 {
     public static final String MOD_ID = BuildConfig.MOD_ID;
     public static final String VERSION = BuildConfig.VERSION;
-    private ClientBootstrap bootstrap;
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
-        bootstrap = new ClientBootstrap();
-        bootstrap.start();
+        new ClientBootstrap().start();
     }
 }

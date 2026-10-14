@@ -148,7 +148,8 @@ public final class RelationFeature implements ClientLifecycle, Relations, TabPre
         presence.removeListener(this);
         if (installAdapters)
             MinecraftForge.EVENT_BUS.unregister(this);
-        lookups.clear();
+        if (lookups != null)
+            lookups.clear();
         ExecutorService closingLookups = lookupWorker;
         if (closingLookups != null)
             closingLookups.shutdownNow();
@@ -280,7 +281,8 @@ public final class RelationFeature implements ClientLifecycle, Relations, TabPre
     @Override
     public void onPlayerSeen(UUID playerId, String name, boolean joined) {
         client.check();
-        if (!ready)
+        if (!ready || book.relationOf(playerId) == Relation.NONE
+                && (name == null || book.pending(name) == null))
             return;
         List<RelationEntry> previous = book.entries();
         finish(previous, book.observe(playerId, name), false);
@@ -379,6 +381,8 @@ public final class RelationFeature implements ClientLifecycle, Relations, TabPre
     }
 
     private void finish(List<RelationEntry> previous, boolean changed, boolean loaded) {
+        if (!changed && !loaded)
+            return;
         List<RelationEntry> current = book.entries();
         if (changed) {
             dirty = true;

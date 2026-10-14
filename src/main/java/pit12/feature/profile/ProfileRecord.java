@@ -90,7 +90,7 @@ final class ProfileRecord {
 
     void resetConfig(ConfigSnapshot defaults) {
         config = defaults;
-        // Pending writes still reference the old root.
+        // Pending writes still use the old root, so leave it alone.
         JsonObject root = new JsonObject();
         for (Map.Entry<String, JsonElement> entry : preservedRoot.entrySet()) {
             if (!"features".equals(entry.getKey())) {
@@ -111,7 +111,7 @@ final class ProfileRecord {
     }
 
     void persisted(long persistedRevision) {
-        // An older write can finish while a newer revision is still unsaved.
+        // This write may have finished after we made more changes.
         if (revision == persistedRevision) {
             dirty = false;
         }

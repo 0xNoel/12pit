@@ -60,6 +60,7 @@ import pit12.runtime.config.Setting;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitState;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentCache;
 import pit12.runtime.player.PlayerEquipmentListener;
@@ -73,7 +74,6 @@ import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
-import pit12.shared.text.PlayerNameFormatter;
 
 public final class DenickFeature implements ClientLifecycle, DenickNames, TabPresenceListener,
         PlayerEquipmentListener, ConfigChangeListener {
@@ -87,6 +87,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     private final PitContext pit;
     private final TabPresence presence;
     private final PlayerNameCache names;
+    private final PlayerEntityTracker players;
     private final PlayerEquipmentAccess equipment;
     private final Languages language;
     private final DenickNamesBinding binding;
@@ -102,15 +103,14 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     private boolean ready;
     private boolean writable;
     private boolean inPit;
-    private boolean tabVisible;
     private boolean namesBound;
     private volatile long generation;
     private volatile boolean started;
 
     public DenickFeature(Minecraft minecraft, ClientThread client, ConfigCatalog configs,
             DenickConfig config, ClientSession session, PitContext pit, TabPresence presence,
-            PlayerNameCache names, PlayerEquipmentAccess equipment, CommandRegistry commands,
-            Languages language, Path path, DenickNamesBinding binding) {
+            PlayerNameCache names, PlayerEntityTracker players, PlayerEquipmentAccess equipment,
+            CommandRegistry commands, Languages language, Path path, DenickNamesBinding binding) {
         this.minecraft = minecraft;
         this.client = client;
         this.configs = configs;
@@ -119,6 +119,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         this.pit = pit;
         this.presence = presence;
         this.names = names;
+        this.players = players;
         this.equipment = equipment;
         this.language = language;
         this.binding = binding;
@@ -265,7 +266,6 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             }
         }
         inPit = false;
-        tabVisible = false;
         changed();
     }
 
@@ -346,12 +346,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     @Override
     public void onPlayerEquipmentRemoved(UUID playerId) {
-        // Queued equipment remains useful after the entity unloads.
+        // We can still query the queued equipment after the entity unloads.
     }
 
     @Override
     public void onPlayerEquipmentReset() {
-        // Session changes discard the queues in resetWorld.
+        // resetWorld clears the queues when the session changes.
     }
 
     @Override
@@ -404,7 +404,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         }
         client.check();
         if (!namesBound) {
-            // Forge initializes mods before Minecraft creates its in-game GUI.
+            // The in-game GUI doesn't exist yet during start().
             binding.pit12$bindDenickNames(this);
             namesBound = true;
         }
@@ -425,8 +425,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     }
 
     private List<DenickItem> currentItems(UUID id) {
-        EntityPlayer player =
-                session.world() == null ? null : session.world().getPlayerEntityByUUID(id);
+        EntityPlayer player = players.loadedPlayer(id);
         Map<String, DenickItem> items = new LinkedHashMap<>();
         if (player != null) {
             for (int slot = 0; slot < 5; slot++) {
@@ -478,12 +477,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                             if (valid(target, requestGeneration, request)) {
                                 target.realDisplayName = name;
                                 target.owner = cached;
-                                reply(search.sender, Tone.SUCCESS, language
-                                        .format("{0} -> {1} (cached)", displayName(target), name));
+                                reply(search.sender, Tone.SUCCESS, language.format(
+                                        "{0} §c-> {1} §c(cached)", displayName(target), name));
                                 changed();
                             }
                         });
-                    } catch (IOException | RuntimeException failure) {
+                    } catch (IOException failure) {
                         LOGGER.warning("Cannot resolve cached denick owner for " + target.name
                                 + ": " + failure);
                     }
@@ -526,7 +525,8 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 boolean corrected = cached != null && !Objects.equals(cached, result.owner);
                 reply(search.sender, Tone.SUCCESS,
                         language.format(
-                                corrected ? source("{0} -> {1} (updated)") : source("{0} -> {1}"),
+                                corrected ? source("{0} §c-> {1} §c(updated)")
+                                        : source("{0} §c-> {1}"),
                                 displayName(target), result.displayName));
                 changed();
             }
@@ -600,26 +600,13 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     }
 
     @Override
-    public void setTabVisible(boolean visible) {
-        client.check();
-        if (visible != tabVisible) {
-            tabVisible = visible;
-            changed();
-        }
-    }
-
-    @Override
-    public String listName(UUID playerId, String original, boolean shortName) {
+    public String listName(UUID playerId, String original) {
         client.check();
         Target target = targets.get(playerId);
         if (!config.enabled() || target == null || !target.nick) {
             return original;
         }
-        if (config.tabNames.get() && tabVisible && target.realDisplayName != null) {
-            return shortName ? PlayerNameFormatter.shorten(target.realDisplayName)
-                    : target.realDisplayName;
-        }
-        return config.nickMarker.get() ? original.trim() + " §c§lN" : original;
+        return config.nickMarker.get() ? original.trim() + " §e§lN" : original;
     }
 
     @Override
@@ -659,7 +646,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             items.forEach(item -> pending.put(item.query, item));
             this.sender = sender;
             this.force = force;
-            // Later equipment must not delay the initial failure message.
+            // New equipment shouldn't hold up the initial failure message.
             initialCount = pending.size();
         }
     }

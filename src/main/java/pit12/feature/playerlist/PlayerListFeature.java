@@ -23,10 +23,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import org.lwjgl.input.Keyboard;
 import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationListener;
@@ -39,6 +41,7 @@ import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentListener;
 import pit12.runtime.player.PlayerNameCache;
@@ -59,21 +62,24 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     private final DenickNames denickNames;
     private final PlayerListBuilder builder;
     private final PlayerListHud hud;
+    private final FontListener fontListener = new FontListener();
     private final Languages language;
     private final Runnable languageListener;
     private final HudRegistry hudRegistry;
     private final HudRenderer hudRenderer = new HudRenderer();
     private PlayerListSnapshot snapshot = PlayerListSnapshot.empty();
     private boolean snapshotDirty = true;
+    private boolean realNamesHeld;
     private final Runnable namesChanged = () -> snapshotDirty = true;
     private int ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
     private boolean started;
     private boolean active;
 
     public PlayerListFeature(ConfigCatalog configs, PlayerListConfig config,
-            PlayerNameCache playerNames, PlayerEquipmentAccess equipment, PitContext pitContext,
-            HudRegistry hudRegistry, RelationLookup relations, TabPresence presence,
-            Languages language, DenickNames denickNames) {
+            PlayerNameCache playerNames, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment, PitContext pitContext, HudRegistry hudRegistry,
+            RelationLookup relations, TabPresence presence, Languages language,
+            DenickNames denickNames) {
         this.language = language;
         this.configs = configs;
         this.config = config;
@@ -83,8 +89,8 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         this.playerNames = playerNames;
         this.denickNames = denickNames;
         this.hudRegistry = hudRegistry;
-        builder = new PlayerListBuilder(minecraft, equipment, pitContext, config, relations,
-                playerNames, denickNames);
+        builder = new PlayerListBuilder(minecraft, players, equipment, pitContext, config,
+                relations, playerNames, denickNames);
         hud = new PlayerListHud(config, hudRenderer);
         languageListener = () -> hud.localize(language);
     }
@@ -95,6 +101,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             return;
         }
         started = true;
+        MinecraftForge.EVENT_BUS.register(fontListener);
         language.addListener(languageListener);
         hudRegistry.register(hud);
         configs.addListener(this);
@@ -109,6 +116,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             return;
         }
         started = false;
+        MinecraftForge.EVENT_BUS.unregister(fontListener);
         configs.removeListener(this);
         language.removeListener(languageListener);
         deactivate();
@@ -145,10 +153,12 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         relations.removeListener(this);
         equipment.removeListener(this);
         snapshot = PlayerListSnapshot.empty();
+        builder.clear();
         hud.snapshot(snapshot);
         hud.close();
         ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
         snapshotDirty = true;
+        realNamesHeld = false;
     }
 
     @Override
@@ -212,6 +222,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 || changes.affects("playerlist", "enchantment_format")
                 || changes.affects("playerlist", "show_gem")
                 || changes.affects("playerlist", "short_player_names")
+                || changes.affects("playerlist", "real_names_key")
                 || changes.affects("playerlist", "show_distance")
                 || changes.affects("playerlist", "show_direction")
                 || changes.affects("playerlist", "show_spawn")
@@ -236,6 +247,14 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         if (event.phase != Phase.START) {
             return;
         }
+        int key = config.realNamesKey();
+        boolean realNames = key != Keyboard.KEY_NONE && minecraft.currentScreen == null
+                && minecraft.inGameHasFocus && Keyboard.isCreated() && Keyboard.isKeyDown(key);
+        if (realNames != realNamesHeld) {
+            realNamesHeld = realNames;
+            snapshotDirty = true;
+            ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
+        }
         ticksSinceUpdate++;
         if (ticksSinceUpdate < UPDATE_INTERVAL_TICKS) {
             return;
@@ -243,9 +262,10 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         ticksSinceUpdate = 0;
         boolean movingColumns = config.showDistance() || config.showDirection();
         if (snapshotDirty || movingColumns) {
-            snapshot = builder.build();
-            hud.snapshot(snapshot);
+            boolean rebuildText = snapshotDirty;
             snapshotDirty = false;
+            snapshot = builder.build(realNamesHeld, rebuildText);
+            hud.snapshot(snapshot);
         }
     }
 
@@ -260,5 +280,13 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 hud, HudRenderer.layout(hud, resolution.getScaledWidth(),
                         resolution.getScaledHeight(), resolution.getScaleFactor(), false),
                 event.partialTicks, false);
+    }
+
+    // Forge needs this listener class to be public.
+    public final class FontListener {
+        @SubscribeEvent
+        public void onTextureStitch(TextureStitchEvent.Post event) {
+            hud.configurationChanged();
+        }
     }
 }

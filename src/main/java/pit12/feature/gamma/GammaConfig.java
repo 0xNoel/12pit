@@ -28,13 +28,13 @@ public final class GammaConfig extends FeatureConfig {
     private final IntegerSetting gamma;
 
     public GammaConfig() {
-        super("gamma", source("Gamma"), new ConfigCategory("render", source("Render"), 100),
+        super("gamma", source("Gamma"), new ConfigCategory("render", source("Render")),
                 source("Adjusts world brightness with a custom gamma value."));
         gamma = integerSliderSetting("gamma", source("Gamma value"),
                 source("Controls brightness. Minecraft's normal range is 0 to 1."), 100, 0, 100, 1);
     }
 
     public float gamma() {
-        return gamma.get().floatValue();
+        return gamma.get();
     }
 }

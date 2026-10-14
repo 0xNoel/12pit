@@ -19,28 +19,31 @@
 package pit12.platform.mixin.feature.swap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.MouseHelper;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import pit12.feature.swap.SwapHooks;
 import pit12.feature.swap.SwapHooksBinding;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 
-@Mixin(MouseHelper.class)
-public abstract class MouseHelperMixin {
+@Mixin(PlayerControllerMP.class)
+public abstract class PlayerControllerMPMixin {
     @Shadow
-    public int deltaX;
-    @Shadow
-    public int deltaY;
+    @Final
+    private Minecraft mc;
 
-    @Inject(method = "mouseXYChange", at = @At("TAIL"))
-    private void pit12$blockLookInput(CallbackInfo callback) {
-        SwapHooks hooks = ((SwapHooksBinding) Minecraft.getMinecraft()).pit12$swapHooks();
-        if (hooks != null && hooks.inputLocked()) {
-            deltaX = 0;
-            deltaY = 0;
-        }
+    @Inject(method = "windowClick", at = @At("HEAD"), cancellable = true)
+    private void pit12$blockOtherInventoryClicks(CallbackInfoReturnable<ItemStack> callback) {
+        SwapHooks hooks = ((SwapHooksBinding) mc).pit12$swapHooks();
+        InputBlocker blocker = ((InputBlockBinding) mc).pit12$inputBlocker();
+        if (blocker != null && blocker.locked()
+                && (hooks == null || !hooks.inventoryClickAllowed()))
+            callback.setReturnValue(null);
     }
 }

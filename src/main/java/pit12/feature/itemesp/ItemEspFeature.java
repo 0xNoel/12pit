@@ -182,8 +182,8 @@ public final class ItemEspFeature implements ClientLifecycle, ConfigChangeListen
                 targetsDirty = true;
                 continue;
             }
-            // Watcher 10 holds the 1.8.9 item stack and can be null before metadata arrives.
-            // getEntityItem() allocates a stone stack when that value is missing.
+            // Watcher 10 can be null before metadata arrives.
+            // getEntityItem() would make up a stone stack instead!
             ItemStack stack = entity.getDataWatcher().getWatchableObjectItemStack(10);
             Item item = stack == null || stack.stackSize <= 0 ? null : stack.getItem();
             if (target.item != item) {

@@ -18,8 +18,8 @@
  */
 package pit12.runtime.pit;
 
-/** Queries require the client thread. Returned snapshots can be passed to workers. */
+/** Query on the client thread. Snapshots are fine to pass to workers. */
 public interface PitContext {
-    /** The map stays UNKNOWN until the world's center chunk matches a known Pit map. */
+    /** The map stays UNKNOWN until the center chunk matches a known map. */
     PitSnapshot current();
 }

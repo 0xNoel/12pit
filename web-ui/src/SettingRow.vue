@@ -45,17 +45,17 @@ const numericInput = ref<HTMLInputElement | null>(null)
 const menu = ref<InstanceType<typeof PickerMenu> | null>(null)
 const selectedChoice = computed(
   () =>
-    props.option.choices?.find((choice) => choice.value === props.option.value)
-      ?.name ?? String(props.option.value),
+    props.option.choices!.find((choice) => choice.value === props.option.value)!
+      .name,
 )
 const rangeFill = computed(() => {
-  const min = props.option.min ?? 0
-  const max = props.option.max ?? 0
+  const min = props.option.min!
+  const max = props.option.max!
   const percent =
     max === min
       ? 0
       : Math.max(0, Math.min(100, ((draft.value - min) / (max - min)) * 100))
-  // The thumb center starts 7px inside the track, so the fill must follow it.
+  // The thumb starts 7px inside the track. Keep the fill lined up with its center.
   return `calc(${percent}% + ${7 - percent * 0.14}px)`
 })
 watch(
@@ -82,8 +82,8 @@ function commitNumber(event: Event) {
   if (
     !input.value ||
     !Number.isFinite(value) ||
-    value < (props.option.min ?? value) ||
-    value > (props.option.max ?? value)
+    value < props.option.min! ||
+    value > props.option.max!
   ) {
     input.value = String(draft.value)
     return
@@ -254,7 +254,7 @@ function keyLabel(value: string) {
         @click="capturing ? emit('cancel') : emit('capture')"
       >
         <span :class="{ 'is-hidden': capturing }" :aria-hidden="capturing">{{
-          keyLabel(option.keyName ?? 'NONE')
+          keyLabel(option.keyName!)
         }}</span>
         <span :class="{ 'is-hidden': !capturing }" :aria-hidden="!capturing">{{
           t('Press a key')

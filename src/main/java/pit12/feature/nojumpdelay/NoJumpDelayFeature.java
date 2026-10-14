@@ -16,10 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.runtime.player;
+package pit12.feature.nojumpdelay;
 
-import net.minecraft.entity.Entity;
+import pit12.shared.lifecycle.ClientLifecycle;
 
-public interface PlayerEquipmentWorldObserver {
-    void onEntityRemoved(Entity entity);
+public final class NoJumpDelayFeature implements ClientLifecycle {
+    private final NoJumpDelayConfig config;
+    private final NoJumpDelayBinding binding;
+
+    public NoJumpDelayFeature(NoJumpDelayConfig config, NoJumpDelayBinding binding) {
+        this.config = config;
+        this.binding = binding;
+    }
+
+    @Override
+    public void start() {
+        binding.pit12$bindNoJumpDelayConfig(config);
+    }
+
+    @Override
+    public void stop() {
+        binding.pit12$bindNoJumpDelayConfig(null);
+    }
 }

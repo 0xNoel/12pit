@@ -29,17 +29,18 @@ public final class AutoClickConfig extends FeatureConfig {
     final BooleanSetting leftEnabled;
     final IntegerSetting leftCpsMin;
     final IntegerSetting leftCpsMax;
-    final BooleanSetting weaponOnly;
-    final BooleanSetting onlyFist;
+    final BooleanSetting allowWeapons;
+    final BooleanSetting allowFist;
+    final BooleanSetting leftAllowDragonEgg;
     final BooleanSetting rightEnabled;
     final IntegerSetting rightCpsMin;
     final IntegerSetting rightCpsMax;
-    final BooleanSetting onlyBlocks;
-    final BooleanSetting onlyCake;
+    final BooleanSetting allowBlocks;
+    final BooleanSetting allowCake;
+    final BooleanSetting rightAllowDragonEgg;
 
     public AutoClickConfig() {
-        super("auto_click", source("Auto Click"),
-                new ConfigCategory("combat", source("Combat"), 25),
+        super("auto_click", source("Auto Click"), new ConfigCategory("combat", source("Combat")),
                 source("Clicks repeatedly while holding a mouse button."), true, false);
         subcategory("left", source("Left click"));
         leftEnabled = booleanSetting("left_enabled", source("Left click enabled"),
@@ -48,11 +49,13 @@ public final class AutoClickConfig extends FeatureConfig {
                 source("Lowest left click rate, in clicks per second."), 8, 1, 20, 1);
         leftCpsMax = integerSliderSetting("left_cps_max", source("Maximum CPS"),
                 source("Highest left click rate, in clicks per second."), 12, 1, 20, 1);
-        weaponOnly = booleanSetting("weapon_only", source("Weapon only"), source(
-                "Allows left clicks with swords and tools. Turn off both filters to allow any item."),
+        allowWeapons = booleanSetting("weapon_only", source("Allow weapons"), source(
+                "Allows left clicks with swords and tools. Turn off all filters to allow any item."),
                 true);
-        onlyFist = booleanSetting("only_fist", source("Only fist"),
+        allowFist = booleanSetting("only_fist", source("Allow fist"),
                 source("Allows left clicks with an empty hand."), true);
+        leftAllowDragonEgg = booleanSetting("left_allow_dragon_egg", source("Allow dragon egg"),
+                source("Allows left clicks while pointing at a dragon egg."), true);
         subcategory("right", source("Right click"));
         rightEnabled = booleanSetting("right_enabled", source("Right click enabled"),
                 source("Repeats right clicks while holding the use button."), true);
@@ -60,10 +63,12 @@ public final class AutoClickConfig extends FeatureConfig {
                 source("Lowest right click rate, in clicks per second."), 8, 1, 20, 1);
         rightCpsMax = integerSliderSetting("right_cps_max", source("Maximum CPS"),
                 source("Highest right click rate, in clicks per second."), 12, 1, 20, 1);
-        onlyBlocks = booleanSetting("only_blocks", source("Only blocks"), source(
-                "Allows right clicks while holding a block. Turn off both filters to allow any item."),
+        allowBlocks = booleanSetting("only_blocks", source("Allow blocks"), source(
+                "Allows right clicks while holding a block. Turn off all filters to allow any item."),
                 true);
-        onlyCake = booleanSetting("only_cake", source("Only cake"),
+        allowCake = booleanSetting("only_cake", source("Allow cake"),
                 source("Allows right clicks while pointing at cake."), true);
+        rightAllowDragonEgg = booleanSetting("right_allow_dragon_egg", source("Allow dragon egg"),
+                source("Allows right clicks while pointing at a dragon egg."), true);
     }
 }

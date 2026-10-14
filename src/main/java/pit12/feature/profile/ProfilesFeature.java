@@ -245,7 +245,7 @@ public final class ProfilesFeature
             if (apply)
                 controller.importProfiles(decoded);
             else
-                controller.validateImported(decoded);
+                controller.prepareImported(decoded);
             return ProfileMutationResult.success();
         } catch (JsonParseException | IllegalArgumentException failure) {
             return ProfileMutationResult.failure(ProfileMutationResult.Status.INVALID_VALUE,
@@ -309,7 +309,7 @@ public final class ProfilesFeature
 
         @Override
         public void loaded(LoadedProfiles profiles) {
-            // The scheduled task runs after dependent features have started.
+            // By the time this task runs, the features using these settings have started too.
             dispatchToClient(taskGeneration, () -> controller.applyLoaded(profiles));
         }
 

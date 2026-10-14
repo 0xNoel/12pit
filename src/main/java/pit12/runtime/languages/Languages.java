@@ -113,7 +113,7 @@ public final class Languages {
         return source;
     }
 
-    // Equal literals share a JVM object, so each marked usage needs its own string.
+    // Give each usage its own string so shared literals can have different locations.
     public static String source(String text) {
         String location = location();
         String key = location + '\0' + text;
@@ -128,7 +128,7 @@ public final class Languages {
         }
     }
 
-    /** Returns plain text or a text/location object for frontend translation. */
+    /** Returns plain text or an object with text and location for the Web UI. */
     public static Object sourceText(String text) {
         String location;
         synchronized (SOURCE_LOCATIONS) {
@@ -296,7 +296,7 @@ public final class Languages {
                 }
                 current.append(decode(quoted));
             }
-            // Shared translations keep the direct lookup and avoid caller lookups.
+            // Same translation everywhere, so we can skip the caller lookup.
             Iterator<Map.Entry<String, Map<String, String>>> iterator =
                     values.contextual.entrySet().iterator();
             while (iterator.hasNext()) {

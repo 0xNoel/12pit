@@ -18,7 +18,7 @@
  */
 package pit12.runtime.config;
 
-/** Colors are stored as signed ARGB integers (0xAARRGGBB). */
+/** Colors use ARGB (0xAARRGGBB). */
 public final class ColorSetting extends Setting<Integer> {
     ColorSetting(String id, String displayName, String description, int defaultValue) {
         super(id, displayName, description, defaultValue, StorageType.INTEGER);

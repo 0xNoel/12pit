@@ -73,12 +73,12 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
         try {
             server.start();
         } catch (IOException failure) {
-            LOGGER.log(Level.WARNING, "Web UI is unavailable", failure);
+            LOGGER.log(Level.WARNING, "Configuration interface is unavailable", failure);
             return;
         }
         MinecraftForge.EVENT_BUS.register(this);
         started = true;
-        LOGGER.info("Web UI available at " + server.address());
+        LOGGER.info("Configuration interface available at " + server.address());
     }
 
     @Override

@@ -30,6 +30,10 @@ import pit12.feature.autoclick.AutoClickConfig;
 import pit12.feature.autoclick.AutoClickFeature;
 import pit12.feature.autofish.AutoFishConfig;
 import pit12.feature.autofish.AutoFishFeature;
+import pit12.feature.banalert.BanAlertConfig;
+import pit12.feature.banalert.BanAlertFeature;
+import pit12.feature.chatmacro.ChatMacroConfig;
+import pit12.feature.chatmacro.ChatMacroFeature;
 import pit12.feature.denick.DenickConfig;
 import pit12.feature.denick.DenickFeature;
 import pit12.feature.denick.DenickNamesBinding;
@@ -46,6 +50,9 @@ import pit12.feature.itemesp.ItemEspFeature;
 import pit12.feature.nametag.NametagConfig;
 import pit12.feature.nametag.NametagFeature;
 import pit12.feature.nametag.NametagNamesBinding;
+import pit12.feature.nojumpdelay.NoJumpDelayBinding;
+import pit12.feature.nojumpdelay.NoJumpDelayConfig;
+import pit12.feature.nojumpdelay.NoJumpDelayFeature;
 import pit12.feature.playeresp.PlayerEspConfig;
 import pit12.feature.playeresp.PlayerEspFeature;
 import pit12.feature.playerlist.PlayerListConfig;
@@ -57,6 +64,8 @@ import pit12.feature.quickmath.AutoQuickMathFeature;
 import pit12.feature.relation.RelationFeature;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.feature.relation.api.Relations;
+import pit12.feature.ringhelper.RingHelperConfig;
+import pit12.feature.ringhelper.RingHelperFeature;
 import pit12.feature.smartblock.SmartBlockBinding;
 import pit12.feature.smartblock.SmartBlockConfig;
 import pit12.feature.smartblock.SmartBlockFeature;
@@ -71,20 +80,26 @@ import pit12.feature.tooltip.TooltipFeature;
 import pit12.feature.webui.WebUiConfig;
 import pit12.feature.webui.WebUiFeature;
 import pit12.platform.command.ForgeCommandAdapter;
+import pit12.platform.input.LwjglInputDevice;
 import pit12.platform.oneconfig.OneConfigSupport;
 import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.hud.HudRegistry;
+import pit12.runtime.input.InputBlockBinding;
+import pit12.runtime.input.InputBlocker;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitContextTracker;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentTracker;
 import pit12.runtime.player.PlayerNameCache;
 import pit12.runtime.player.TabPresence;
 import pit12.runtime.player.TabPresenceTracker;
+import pit12.runtime.scoreboard.SidebarCache;
 import pit12.runtime.session.ClientSession;
+import pit12.runtime.usage.DailyUsageReporter;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.MinecraftActions;
 import pit12.shared.lifecycle.ClientLifecycle;
@@ -111,17 +126,25 @@ public final class ClientBootstrap {
         shutdown = (ClientShutdownBinding) minecraft;
         ClientSession session = new ClientSession(minecraft, client);
         components.add(session);
+        InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
+                new LwjglInputDevice());
+        components.add(input);
         CommandRegistry commands =
                 new CommandRegistry(client, ForgeCommandAdapter::register, language);
         components.add(commands);
         PitContextTracker pitContext = new PitContextTracker(session);
         components.add(pitContext);
-        PlayerEquipmentTracker playerEquipment = new PlayerEquipmentTracker(session);
+        PlayerEntityTracker players = new PlayerEntityTracker(session);
+        components.add(players);
+        PlayerEquipmentTracker playerEquipment = new PlayerEquipmentTracker(session, players);
         components.add(playerEquipment);
         TabPresenceTracker presence = new TabPresenceTracker(session);
         components.add(presence);
         PlayerNameCache playerNames = new PlayerNameCache(minecraft, session, presence);
         components.add(playerNames);
+        SidebarCache sidebar = new SidebarCache(minecraft, session);
+        components.add(sidebar);
+        components.add(new DailyUsageReporter(client, pitContext));
         HudRegistry hudRegistry = new HudRegistry(client);
         // Feature providers
         // Category: No config
@@ -134,10 +157,10 @@ public final class ClientBootstrap {
         SwapBindings swapBindings = registerSwap(minecraft, client, configs, session, pitContext,
                 playerEquipment, relations, commands,
                 new File(minecraft.mcDataDir, "12pit/swap-bindings.json").toPath(),
-                (SwapHooksBinding) minecraft);
+                (SwapHooksBinding) minecraft, input);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
-                playerNames, playerEquipment, commands,
+                playerNames, players, playerEquipment, commands,
                 new File(minecraft.mcDataDir, "12pit/denick-cache.json").toPath());
         // Category: Interface
         BooleanSetting discordRpc =
@@ -153,17 +176,22 @@ public final class ClientBootstrap {
         // Category: Player
         registerAutoFish(configs, session, (MinecraftActions) minecraft);
         registerAutoSprint(configs);
+        registerChatMacro(minecraft, configs, session, sidebar, input, commands,
+                new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
+        registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         // Category: Render
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
         registerNametag(minecraft, configs, session, playerEquipment, denickNames);
         registerPlayerEsp(configs, session, presence, relations);
-        registerPlayerList(configs, playerNames, playerEquipment, pitContext, hudRegistry,
+        registerPlayerList(configs, playerNames, players, playerEquipment, pitContext, hudRegistry,
                 relations, presence, denickNames);
+        registerRingHelper(minecraft, configs, session, pitContext);
         registerTooltip(configs);
         // Category: Misc
         registerAutoQuickMath(configs);
+        registerBanAlert(minecraft, configs, session, presence);
         // Platform integrations
         OneConfigSupport oneConfig = new OneConfigSupport(configs);
         components.add(oneConfig);
@@ -200,11 +228,11 @@ public final class ClientBootstrap {
     private SwapBindings registerSwap(Minecraft minecraft, ClientThread client,
             ConfigCatalog configs, ClientSession session, PitContext pitContext,
             PlayerEquipmentAccess playerEquipment, RelationLookup relations,
-            CommandRegistry commands, Path path, SwapHooksBinding binding) {
+            CommandRegistry commands, Path path, SwapHooksBinding binding, InputBlocker input) {
         SwapConfig config = new SwapConfig();
         configs.register(config);
         SwapFeature swap = new SwapFeature(minecraft, client, configs, config, session, pitContext,
-                playerEquipment, relations, commands, path, binding, language);
+                playerEquipment, relations, commands, path, binding, input, language);
         components.add(swap);
         return swap.bindings();
     }
@@ -212,12 +240,12 @@ public final class ClientBootstrap {
     // Category: Misc
     private DenickNames registerDenick(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, PitContext pitContext, TabPresence presence,
-            PlayerNameCache playerNames, PlayerEquipmentAccess equipment, CommandRegistry commands,
-            Path path) {
+            PlayerNameCache playerNames, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment, CommandRegistry commands, Path path) {
         DenickConfig config = new DenickConfig();
         configs.register(config);
         DenickFeature denick = new DenickFeature(minecraft, client, configs, config, session,
-                pitContext, presence, playerNames, equipment, commands, language, path,
+                pitContext, presence, playerNames, players, equipment, commands, language, path,
                 names -> ((DenickNamesBinding) minecraft.ingameGUI.getTabList())
                         .pit12$bindDenickNames(names));
         components.add(denick);
@@ -272,6 +300,21 @@ public final class ClientBootstrap {
         components.add(new AutoSprintFeature(config));
     }
 
+    private void registerChatMacro(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, SidebarCache sidebar, InputBlocker input,
+            CommandRegistry commands, Path path) {
+        ChatMacroConfig config = new ChatMacroConfig();
+        configs.register(config);
+        components.add(new ChatMacroFeature(minecraft, client, configs, config, session, sidebar,
+                input, commands, language, path));
+    }
+
+    private void registerNoJumpDelay(ConfigCatalog configs, NoJumpDelayBinding binding) {
+        NoJumpDelayConfig config = new NoJumpDelayConfig();
+        configs.register(config);
+        components.add(new NoJumpDelayFeature(config, binding));
+    }
+
     // Category: Render
     private void registerEventList(ConfigCatalog configs, HudRegistry hudRegistry,
             CommandRegistry commands) {
@@ -311,12 +354,20 @@ public final class ClientBootstrap {
     }
 
     private void registerPlayerList(ConfigCatalog configs, PlayerNameCache playerNames,
-            PlayerEquipmentAccess playerEquipment, PitContext pitContext, HudRegistry hudRegistry,
-            RelationLookup relations, TabPresence presence, DenickNames denickNames) {
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment,
+            PitContext pitContext, HudRegistry hudRegistry, RelationLookup relations,
+            TabPresence presence, DenickNames denickNames) {
         PlayerListConfig config = new PlayerListConfig();
         configs.register(config);
-        components.add(new PlayerListFeature(configs, config, playerNames, playerEquipment,
+        components.add(new PlayerListFeature(configs, config, playerNames, players, playerEquipment,
                 pitContext, hudRegistry, relations, presence, language, denickNames));
+    }
+
+    private void registerRingHelper(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, PitContext pitContext) {
+        RingHelperConfig config = new RingHelperConfig();
+        configs.register(config);
+        components.add(new RingHelperFeature(minecraft, configs, config, session, pitContext));
     }
 
     private void registerTooltip(ConfigCatalog configs) {
@@ -332,6 +383,14 @@ public final class ClientBootstrap {
         components.add(new AutoQuickMathFeature(config));
     }
 
+    private void registerBanAlert(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
+            TabPresence presence) {
+        BanAlertConfig config = new BanAlertConfig();
+        configs.register(config);
+        components
+                .add(new BanAlertFeature(minecraft, configs, config, session, presence, language));
+    }
+
     public void start() {
         client.check();
         if (started) {
@@ -339,7 +398,7 @@ public final class ClientBootstrap {
         }
         try {
             for (ClientLifecycle component : components) {
-                // A failed start may leave resources that stop() must release.
+                // Add it first so we can clean up even if start() fails.
                 startedComponents.add(component);
                 component.start();
             }
@@ -359,7 +418,7 @@ public final class ClientBootstrap {
     }
 
     private void stopStartedComponents() {
-        // Dependencies must remain available until their consumers have stopped.
+        // Consumers still need their dependencies during stop().
         for (int index = startedComponents.size() - 1; index >= 0; index--) {
             ClientLifecycle component = startedComponents.get(index);
             try {

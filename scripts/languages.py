@@ -226,7 +226,7 @@ class Crowdin:
                 return rows
 
     def download(self, file_id, language_id, locale):
-        # PO keeps untranslated entries empty instead of copying the source text.
+        # Keep untranslated PO entries empty.
         result = self.request(f"{self.project}/translations/builds/files/{file_id}", "POST",
                               {"targetLanguageId": language_id, "skipUntranslatedStrings": True,
                                "skipUntranslatedFiles": False})
@@ -287,7 +287,7 @@ def main():
     add = commands.add_parser("add", help="Enable a Crowdin language, download its PO, and register it locally")
     add.add_argument("language", help="Language tag, for example nl-NL")
     add.add_argument("--name", required=True, help="Native name, for example Nederlands")
-    add.add_argument("--display-name", help="English display name; defaults to the Crowdin language name")
+    add.add_argument("--display-name", help="English display name (default: Crowdin language name)")
     for name, help_text in (("sync", "Download PO files from Crowdin"),
                             ("status", "Show local translation progress and file errors")):
         command = commands.add_parser(name, help=help_text)
@@ -306,7 +306,7 @@ def main():
         if args.command == "sync":
             selected = select_languages(entries, args.language)
             if args.language is not None and selected[0]["value"] == 0:
-                raise ValueError("English is the source language; use extract to generate its POT")
+                raise ValueError("Use extract to generate the English source POT")
             selected = [entry for entry in selected if entry["value"] != 0]
         else:
             if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", args.language):
@@ -321,7 +321,7 @@ def main():
         project = api.request(api.project)
         files = [file for file in api.list(f"{api.project}/files") if file["name"] == "12pit.pot"]
         if len(files) != 1:
-            raise ValueError("Crowdin project must contain one 12pit.pot file; upload it through CI")
+            raise ValueError("Crowdin project must contain one 12pit.pot file. Upload sources through CI")
         file_id = files[0]["id"]
         if args.command == "add":
             language = find_language(languages, args.language)
@@ -331,7 +331,7 @@ def main():
             if language["id"] == project["sourceLanguageId"]:
                 raise ValueError("The source language cannot be added as a translation")
             if any(entry["locale"].lower() == locale.lower() for entry in entries):
-                raise ValueError(f"language already exists locally: {locale}; use sync")
+                raise ValueError(f"Use sync to update the existing language: {locale}")
             targets = project["targetLanguageIds"]
             if language["id"] not in targets:
                 api.request(api.project, "PATCH", [{"op": "replace", "path": "/targetLanguageIds",

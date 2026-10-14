@@ -27,7 +27,7 @@ import net.minecraft.item.ItemStack;
 import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.item.PitEnchantments;
 
-/** Call these methods on the client thread because they read live player entities. */
+/** Use this cache on the client thread. It reads live entities. */
 public final class PlayerEquipmentCache {
     public static final int HELD_ITEM = 1;
     public static final int LEGGINGS = 1 << 1;
@@ -44,7 +44,7 @@ public final class PlayerEquipmentCache {
         dirty.put(playerId, (previous == null ? 0 : previous) | slots);
     }
 
-    /** Draining once per tick combines equipment changes for each player. */
+    /** Call once per tick to group each player's equipment changes. */
     public Map<UUID, Integer> drainDirty() {
         if (dirty.isEmpty()) {
             return Collections.emptyMap();
@@ -58,7 +58,7 @@ public final class PlayerEquipmentCache {
         UUID playerId = player.getUniqueID();
         PlayerEquipmentSnapshot previous = entries.get(playerId);
         int knownSlots = previous == null ? 0 : previous.knownSlots();
-        ItemStack[] equipment = new ItemStack[5];
+        ItemStack[] equipment = previous == null ? new ItemStack[5] : previous.equipmentForUpdate();
         for (int slot = 0; slot < equipment.length; slot++) {
             int mask = slot == 0 ? HELD_ITEM
                     : slot == 1 ? BOOTS : slot == 2 ? LEGGINGS : slot == 3 ? CHESTPLATE : HELMET;
@@ -66,8 +66,6 @@ public final class PlayerEquipmentCache {
                 ItemStack stack =
                         slot == 0 ? player.getHeldItem() : player.getCurrentArmor(slot - 1);
                 equipment[slot] = stack == null ? null : stack.copy();
-            } else {
-                equipment[slot] = previous == null ? null : previous.copyEquipment(slot);
             }
         }
         PitEnchantments heldEnchantments =

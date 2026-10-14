@@ -35,7 +35,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-/** All queries, subscriptions and packet observations run on the client thread. */
+/** Use this API and deliver packets on the client thread. */
 public final class TabPresenceTracker implements ClientLifecycle, TabPresence, TabPacketObserver {
     private final ClientSession session;
     private final Runnable sessionChanged = this::onSessionChanged;

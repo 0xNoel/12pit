@@ -19,12 +19,10 @@
 package pit12.platform.mixin.feature.swap;
 
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.feature.swap.SwapHooks;
@@ -85,29 +83,5 @@ public abstract class MinecraftMixin implements SwapHooksBinding {
     private void pit12$afterInput(CallbackInfo callback) {
         if (pit12$swapHooks != null)
             pit12$swapHooks.inventoryTick(3);
-    }
-
-    @Redirect(method = "runTick",
-            at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;next()Z", remap = false))
-    private boolean pit12$nextKeyboardEvent() {
-        while (Keyboard.next()) {
-            if (pit12$swapHooks == null || !pit12$swapHooks.key(Keyboard.getEventKey(),
-                    Keyboard.getEventKeyState(), Keyboard.isRepeatEvent()))
-                return true;
-        }
-        return false;
-    }
-
-    @Redirect(method = "runTick", at = @At(value = "INVOKE",
-            target = "Lorg/lwjgl/input/Keyboard;isKeyDown(I)Z", remap = false))
-    private boolean pit12$heldKeyboardKey(int key) {
-        return (pit12$swapHooks == null || !pit12$swapHooks.inputLocked())
-                && Keyboard.isKeyDown(key);
-    }
-
-    @Inject(method = "dispatchKeypresses", at = @At("HEAD"), cancellable = true)
-    private void pit12$blockSwapKeypresses(CallbackInfo callback) {
-        if (pit12$swapHooks != null && pit12$swapHooks.inputLocked())
-            callback.cancel();
     }
 }

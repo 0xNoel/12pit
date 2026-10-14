@@ -20,12 +20,14 @@ package pit12.feature.playerlist;
 
 import static pit12.runtime.languages.Languages.source;
 
+import org.lwjgl.input.Keyboard;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ChoiceSetting;
 import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
+import pit12.runtime.config.IntegerSetting;
 import pit12.runtime.item.PitEnchantmentFormat;
 
 public final class PlayerListConfig extends FeatureConfig {
@@ -34,6 +36,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final ChoiceSetting enchantmentFormat;
     private final BooleanSetting showGem;
     private final BooleanSetting shortPlayerNames;
+    private final IntegerSetting realNamesKey;
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
     private final BooleanSetting showSpawn;
@@ -47,8 +50,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final HudConfig hud;
 
     public PlayerListConfig() {
-        super("playerlist", source("Player List"),
-                new ConfigCategory("render", source("Render"), 100),
+        super("playerlist", source("Player List"), new ConfigCategory("render", source("Render")),
                 source("Shows loaded player equipment and direction in a compact HUD."));
         subcategory("display", source("Display"));
         hud = hudConfig("player_list", HudAnchor.TOP_LEFT, 6, 6, true);
@@ -63,8 +65,8 @@ public final class PlayerListConfig extends FeatureConfig {
         showGem = booleanSetting("show_gem", source("Show gem"),
                 source("Shows a green diamond on gemmed items."), true);
         subsubcategory("player_information", source("Player information"));
-        shortPlayerNames = booleanSetting("short_player_names", source("Short player names"),
-                source("Shows only the level and player name, keeping their formatting."), false);
+        shortPlayerNames = booleanSetting("short_player_names", source("Remove bounty suffix"),
+                source("Removes bounty suffixes from player names."), false);
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
@@ -72,6 +74,9 @@ public final class PlayerListConfig extends FeatureConfig {
         showSpawn = booleanSetting("show_spawn", source("Show spawn marker"),
                 source("Shows SPAWN instead of distance and direction for players in spawn."),
                 true);
+        realNamesKey = keybindSetting("real_names_key", source("Real names key"),
+                source("Hold to show nicked players' real names in Player List."),
+                Keyboard.KEY_TAB);
         subcategory("groups", source("Groups"));
         showGroupName = booleanSetting("show_group_name", source("Show group names"),
                 source("Shows the name above each group."), true);
@@ -109,6 +114,10 @@ public final class PlayerListConfig extends FeatureConfig {
         return shortPlayerNames.get();
     }
 
+    public int realNamesKey() {
+        return realNamesKey.get();
+    }
+
     public boolean showDistance() {
         return showDistance.get();
     }
@@ -125,26 +134,6 @@ public final class PlayerListConfig extends FeatureConfig {
         return showGroupName.get();
     }
 
-    public boolean showFriend() {
-        return showFriend.get();
-    }
-
-    public boolean showEnemy() {
-        return showEnemy.get();
-    }
-
-    public boolean showRegularity() {
-        return showRegularity.get();
-    }
-
-    public boolean showDark() {
-        return showDark.get();
-    }
-
-    public boolean showBountyHunter() {
-        return showBountyHunter.get();
-    }
-
     public HudConfig hud() {
         return hud;
     }
@@ -152,17 +141,17 @@ public final class PlayerListConfig extends FeatureConfig {
     public boolean showGroup(PlayerListGroup group) {
         switch (group) {
             case FRIEND:
-                return showFriend();
+                return showFriend.get();
             case ENEMY:
-                return showEnemy();
+                return showEnemy.get();
             case NICK:
                 return showNick.get();
             case REGULARITY:
-                return showRegularity();
+                return showRegularity.get();
             case DARK:
-                return showDark();
+                return showDark.get();
             case BOUNTY_HUNTER:
-                return showBountyHunter();
+                return showBountyHunter.get();
             default:
                 throw new IllegalStateException("Unknown player list group: " + group);
         }

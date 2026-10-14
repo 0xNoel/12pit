@@ -30,11 +30,11 @@ import pit12.feature.tooltip.TooltipConfig;
 import pit12.runtime.item.PitEnchantmentReader;
 
 @Mixin(value = GuiIngameForge.class, remap = false)
-public abstract class HeldItemTooltipMixin extends GuiIngame implements HeldItemTooltipBinding {
+public abstract class GuiIngameForgeMixin extends GuiIngame implements HeldItemTooltipBinding {
     @Unique
     private TooltipConfig pit12$tooltipConfig;
 
-    protected HeldItemTooltipMixin(Minecraft minecraft) {
+    protected GuiIngameForgeMixin(Minecraft minecraft) {
         super(minecraft);
     }
 
@@ -55,7 +55,7 @@ public abstract class HeldItemTooltipMixin extends GuiIngame implements HeldItem
         return enchantments == null ? originalName : enchantments;
     }
 
-    // Forge stores the shared tooltip Y coordinate in slot 4 before either font-renderer branch.
+    // Slot 4 holds the tooltip Y coordinate before either font renderer is chosen.
     @ModifyVariable(method = "renderToolHightlight", remap = false, at = @At("STORE"), index = 4,
             require = 0)
     private int pit12$moveHeldItemTooltipUp(int originalY) {

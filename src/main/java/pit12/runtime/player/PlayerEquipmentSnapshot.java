@@ -34,7 +34,7 @@ public final class PlayerEquipmentSnapshot {
     PlayerEquipmentSnapshot(UUID playerId, ItemStack[] equipment, PitEnchantments heldEnchantments,
             PitEnchantments leggingsEnchantments, int knownSlots, long revision) {
         this.playerId = playerId;
-        // The cache transfers this array. Its stacks are private snapshot data.
+        // This array and its stack copies are ours now.
         this.equipment = equipment;
         this.heldEnchantments = heldEnchantments;
         this.leggingsEnchantments = leggingsEnchantments;
@@ -62,19 +62,14 @@ public final class PlayerEquipmentSnapshot {
         return (knownSlots & PlayerEquipmentCache.LEGGINGS) != 0;
     }
 
-    /** Empty or unobserved slots return null. {@link #heldItemKnown()} distinguishes them. */
-    public ItemStack copyHeldItem() {
-        return copy(equipment[0]);
-    }
-
-    /** Empty or unobserved slots return null. {@link #leggingsKnown()} distinguishes them. */
-    public ItemStack copyLeggings() {
-        return copy(equipment[2]);
-    }
-
-    /** Slots are held item, boots, leggings, chestplate and helmet. Empty or unknown slots return null. */
+    /** Slots 0-4 are held item, boots, leggings, chestplate and helmet. Empty or unknown slots return null. */
     public ItemStack copyEquipment(int slot) {
         return copy(equipment[slot]);
+    }
+
+    ItemStack[] equipmentForUpdate() {
+        // Unchanged stacks are still private, so sharing them is fine.
+        return equipment.clone();
     }
 
     int knownSlots() {

@@ -38,8 +38,8 @@ public final class WebUiConfig extends FeatureConfig {
     private final BooleanSetting discordRpc;
 
     public WebUiConfig(Languages languages) {
-        super("webui", source("Settings"),
-                new ConfigCategory("interface", source("Interface"), Integer.MAX_VALUE), "", false);
+        super("webui", source("Settings"), new ConfigCategory("interface", source("Interface")), "",
+                false);
         Map<Integer, String> names = languages.names();
         Choice[] choices = new Choice[names.size()];
         int index = 0;

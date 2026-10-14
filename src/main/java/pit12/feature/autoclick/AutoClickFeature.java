@@ -22,6 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -121,23 +122,25 @@ public final class AutoClickFeature implements ClientLifecycle, ConfigChangeList
             return;
         }
         ItemStack held = player.getHeldItem();
+        Block targetBlock = target.typeOfHit == MovingObjectType.BLOCK
+                ? minecraft.theWorld.getBlockState(target.getBlockPos()).getBlock()
+                : null;
         leftClicking = config.leftEnabled.get() && minecraft.gameSettings.keyBindAttack.isKeyDown()
-                && ((!config.weaponOnly.get() && !config.onlyFist.get())
-                        || (config.onlyFist.get() && held == null)
-                        || (config.weaponOnly.get() && held != null && held.stackSize > 0
+                && ((!config.allowWeapons.get() && !config.allowFist.get()
+                        && !config.leftAllowDragonEgg.get())
+                        || (config.allowFist.get() && held == null)
+                        || (config.allowWeapons.get() && held != null && held.stackSize > 0
                                 && (held.getItem() instanceof ItemSword
-                                        || held.getItem() instanceof ItemTool)));
-        rightClicking =
-                config.rightEnabled.get() && minecraft.gameSettings.keyBindUseItem.isKeyDown()
-                        && ((!config.onlyBlocks.get() && !config.onlyCake.get())
-                                || (config.onlyBlocks.get() && held != null && held.stackSize > 0
-                                        && held.getItem() instanceof ItemBlock)
-                                // Cake ID = 92
-                                || (config.onlyCake.get()
-                                        && target.typeOfHit == MovingObjectType.BLOCK
-                                        && Block.getIdFromBlock(minecraft.theWorld
-                                                .getBlockState(target.getBlockPos())
-                                                .getBlock()) == 92));
+                                        || held.getItem() instanceof ItemTool))
+                        || (config.leftAllowDragonEgg.get() && targetBlock == Blocks.dragon_egg));
+        rightClicking = config.rightEnabled.get()
+                && minecraft.gameSettings.keyBindUseItem.isKeyDown()
+                && ((!config.allowBlocks.get() && !config.allowCake.get()
+                        && !config.rightAllowDragonEgg.get())
+                        || (config.allowBlocks.get() && held != null && held.stackSize > 0
+                                && held.getItem() instanceof ItemBlock)
+                        || (config.allowCake.get() && targetBlock == Blocks.cake)
+                        || (config.rightAllowDragonEgg.get() && targetBlock == Blocks.dragon_egg));
         if (leftClicking) {
             if (leftDelayTicks <= 0.0) {
                 // Keep CPS after misses.
@@ -171,7 +174,6 @@ public final class AutoClickFeature implements ClientLifecycle, ConfigChangeList
     private static double delay(IntegerSetting minimum, IntegerSetting maximum) {
         int first = minimum.get();
         int second = maximum.get();
-        // Keep fractional ticks for accurate CPS.
         return 20.0 / ThreadLocalRandom.current().nextInt(Math.min(first, second),
                 Math.max(first, second) + 1);
     }

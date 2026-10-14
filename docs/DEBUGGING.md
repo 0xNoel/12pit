@@ -18,13 +18,13 @@ On Linux/macOS, run:
 ./gradlew runClient
 ```
 
-The development game directory is `run/`. Look into `run/logs/latest.log` for any client errors and Web UI address.
+The development game directory is `run/`. Look into `run/logs/latest.log` for any client errors and the configuration interface address.
 
 [DevAuth](https://github.com/DJtheRedstoner/DevAuth) is provided in the development environment. To test with an authenticated account, enable the `devauth.enabled` JVM property and follow the [DevAuth configuration guide](https://github.com/DJtheRedstoner/DevAuth#configuration).
 
-## Develop the web interface
+## Develop the configuration interface
 
-Start the game, then press Right Shift (the default key) to open the HUD editor. Press it again with no HUD selected to open the web interface. Click empty space to clear a selection. If the key does not open the browser, use the URL from the log.
+Start the game, then press Right Shift (the default key) to open the HUD editor. Press it again with no HUD selected to open the configuration interface. Click empty space to clear a selection. If the key does not open the browser, use the URL from the log.
 
 By default, the server listens to `http://127.0.0.1:60916/`. In case the port is already occupied, the server uses some other available port. The current address is shown in the log.
 
@@ -54,7 +54,7 @@ On Windows, run the following commands from the repository root. On Linux or mac
 npm run format:check --prefix web-ui
 ```
 
-The command `check` runs the Java tests, including `ArchitectureTest`. The command `assemble` builds the web interface and produces the jar file in `build/libs/`.
+The command `check` runs the Java tests, including `ArchitectureTest`. The command `assemble` builds the configuration interface and produces the jar file in `build/libs/`.
 
 Install dependencies with `npm ci --prefix web-ui` before running the npm check.
 
@@ -62,7 +62,7 @@ Install dependencies with `npm ci --prefix web-ui` before running the npm check.
 
 If Gradle sync fails or reports a toolchain error, check that Gradle uses JDK 21 and can find or download the Java 8 toolchain.
 
-In case the Vite page is opened, but the requests fail, make sure that the game is launched and the `WEB_UI_TARGET` matches the current address of the game. If the Web UI fails to launch, look for the "Web UI is unavailable" message in the game log.
+In case the Vite page is opened, but the requests fail, make sure that the game is launched and the `WEB_UI_TARGET` matches the current address of the game. If the configuration interface fails to launch, look for the "Configuration interface is unavailable" message in the game log.
 
 While reporting a failure, provide the relevant log messages and steps to reproduce it.
 

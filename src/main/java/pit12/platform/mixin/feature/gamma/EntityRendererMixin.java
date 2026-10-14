@@ -41,7 +41,7 @@ public abstract class EntityRendererMixin implements GammaBinding {
         lightmapUpdateNeeded = true;
     }
 
-    // Override the render value so Minecraft still saves the user's own brightness.
+    // Leave the saved brightness alone. We only need a different value while rendering.
     @Redirect(method = "updateLightmap",
             at = @At(value = "FIELD",
                     target = "Lnet/minecraft/client/settings/GameSettings;gammaSetting:F"),

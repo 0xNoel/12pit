@@ -251,7 +251,8 @@ final class WebUiServer {
             }
             if ("/api/language-hint/dismiss".equals(path)) {
                 if (!preferences.ready())
-                    throw new IllegalArgumentException(source("Web UI settings are unavailable"));
+                    throw new IllegalArgumentException(
+                            source("Configuration interface settings are unavailable"));
                 config.languageHint().set(false);
                 return state();
             }
@@ -264,7 +265,8 @@ final class WebUiServer {
                         || !favorite.getAsJsonPrimitive().isBoolean())
                     throw new IllegalArgumentException("Expected a boolean");
                 if (!preferences.ready())
-                    throw new IllegalArgumentException(source("Web UI settings are unavailable"));
+                    throw new IllegalArgumentException(
+                            source("Configuration interface settings are unavailable"));
                 preferences.setFavorite(id, favorite.getAsBoolean());
             } else if ("/api/setting".equals(path)) {
                 changeSetting(request);
@@ -277,12 +279,16 @@ final class WebUiServer {
 
     private void serveEvents(HttpExchange exchange) throws IOException {
         BlockingQueue<Boolean> signal = new ArrayBlockingQueue<Boolean>(1);
+        boolean accepted;
         synchronized (streams) {
-            if (streams.size() >= MAX_STREAMS) {
-                sendJson(exchange, 503, object("error", "Too many open pages"));
-                return;
+            accepted = streams.size() < MAX_STREAMS;
+            if (accepted) {
+                streams.add(signal);
             }
-            streams.add(signal);
+        }
+        if (!accepted) {
+            sendJson(exchange, 503, object("error", "Too many open pages"));
+            return;
         }
         try {
             exchange.getResponseHeaders().set("Content-Type", "text/event-stream; charset=utf-8");
@@ -314,7 +320,6 @@ final class WebUiServer {
     }
 
     private <T> T onClient(Callable<T> action) throws ExecutionException, InterruptedException {
-        // ConfigCatalog and Profiles require Minecraft's client thread.
         return minecraft.addScheduledTask(action).get();
     }
 
@@ -326,7 +331,7 @@ final class WebUiServer {
             throw new IllegalArgumentException("Unknown feature");
         }
         if (feature == config && !preferences.ready())
-            throw new IllegalArgumentException("Web UI settings are unavailable");
+            throw new IllegalArgumentException("Configuration interface settings are unavailable");
         JsonElement value = request.get("value");
         if (value == null || !value.isJsonPrimitive()) {
             throw new IllegalArgumentException("Expected a setting value");

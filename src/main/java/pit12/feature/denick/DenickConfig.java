@@ -29,10 +29,9 @@ public final class DenickConfig extends FeatureConfig {
     final BooleanSetting successOnly;
     final BooleanSetting monitor;
     final BooleanSetting nickMarker;
-    final BooleanSetting tabNames;
 
     public DenickConfig() {
-        super("denick", source("Denick"), new ConfigCategory("misc", source("Misc"), 150),
+        super("denick", source("Denick"), new ConfigCategory("misc", source("Misc")),
                 source("Finds nicked players using their current equipment."));
         subsubcategory("queries", source("Queries"));
         automatic = booleanSetting("automatic", source("Auto Denick"),
@@ -44,8 +43,5 @@ public final class DenickConfig extends FeatureConfig {
         subsubcategory("display", source("Display"));
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
                 source("Adds N to nicked players' names in Tab and Player List."), true);
-        tabNames = booleanSetting("tab_names", source("Show real names while Tab is open"), source(
-                "Replaces nicked names in Tab and Player List with real names while Tab is open."),
-                true);
     }
 }

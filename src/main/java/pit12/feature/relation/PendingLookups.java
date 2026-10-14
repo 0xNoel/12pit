@@ -107,7 +107,7 @@ final class PendingLookups {
         for (Request request : requests.values()) {
             if (request.state == IdentityLookupState.FAILED)
                 problems.add("UUID lookup failed for " + request.entry.name()
-                        + "; add the player again to retry");
+                        + ". Add the player again to retry");
             if (request.state == IdentityLookupState.NOT_FOUND)
                 problems.add("Player was not found: " + request.entry.name());
         }

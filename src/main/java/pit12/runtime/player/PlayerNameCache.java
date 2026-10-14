@@ -41,7 +41,7 @@ import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
 import pit12.shared.text.PlayerNameFormatter;
 
-/** Queries and subscriptions require the client thread. */
+/** Use this API on the client thread. */
 public final class PlayerNameCache
         implements ClientLifecycle, TabPresenceListener, PlayerTeamObserver {
     private final Minecraft minecraft;
@@ -156,7 +156,7 @@ public final class PlayerNameCache
     @Override
     public void onTeamChanged(ScorePlayerTeam team) {
         session.checkThread();
-        // Removing a team keeps its member collection after clearing scoreboard membership.
+        // The scoreboard forgets the members on removal, but the team still has them.
         for (String name : team.getMembershipCollection()) {
             onTeamMemberChanged(name);
         }
@@ -257,7 +257,7 @@ public final class PlayerNameCache
         if (info.getDisplayName() == null && info.getGameProfile().getName() == null) {
             name = null;
         } else if (minecraft.theWorld == null) {
-            // Vanilla's team lookup needs a world, but explicit Tab names do not.
+            // Reading team names needs a world. Explicit Tab names do not.
             name = info.getDisplayName() == null ? info.getGameProfile().getName()
                     : info.getDisplayName().getFormattedText();
         } else {

@@ -45,7 +45,7 @@ public abstract class EntityPlayerSPMixin extends AbstractClientPlayer
         pit12$sprintConfig = config;
     }
 
-    // Both sprint-key checks use this override, so vanilla still decides when sprinting is allowed.
+    // Override both key checks while leaving the normal sprint rules in place.
     @Redirect(method = "onLivingUpdate", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/settings/KeyBinding;isKeyDown()Z"))
     private boolean pit12$sprintAutomatically(KeyBinding key) {

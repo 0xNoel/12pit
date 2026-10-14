@@ -35,8 +35,7 @@ public final class PitContextTracker implements ClientLifecycle, PitContext {
     private final ClientSession session;
     private final Runnable sessionChanged = this::onSessionChanged;
     private WorldClient boundWorld;
-    private PitSnapshot snapshot = new PitSnapshot(PitMap.UNKNOWN, 0L);
-    private long revision;
+    private PitSnapshot snapshot = new PitSnapshot(PitMap.UNKNOWN);
     private boolean detectionComplete;
     private boolean started;
 
@@ -135,6 +134,6 @@ public final class PitContextTracker implements ClientLifecycle, PitContext {
     }
 
     private void replaceSnapshot(PitMap map) {
-        snapshot = new PitSnapshot(map, ++revision);
+        snapshot = new PitSnapshot(map);
     }
 }

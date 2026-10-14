@@ -40,7 +40,7 @@ public final class HudRegistry {
         client.check();
     }
 
-    /** After features start, register and query elements on the client thread. */
+    /** Once features are running, register and query HUDs on the client thread. */
     public void register(HudElement element) {
         client.check();
         String id = element.id();

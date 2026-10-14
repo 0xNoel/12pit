@@ -35,7 +35,7 @@ public final class PlayerListSnapshot {
         return EMPTY;
     }
 
-    /** The snapshot takes ownership of the map and its lists. */
+    /** The map and its lists belong to this snapshot now. */
     static PlayerListSnapshot create(Map<PlayerListGroup, List<PlayerListEntry>> entries) {
         return entries.isEmpty() ? EMPTY : new PlayerListSnapshot(entries);
     }

@@ -32,7 +32,7 @@ public final class TooltipConfig extends FeatureConfig {
 
     public TooltipConfig() {
         super("tooltip", source("Held Item Tooltip"),
-                new ConfigCategory("render", source("Render"), 100),
+                new ConfigCategory("render", source("Render")),
                 source("Customizes the held item tooltip above the hotbar."));
         showEnchantments = booleanSetting("show_enchantments",
                 source("Show enchantments instead of item name"),

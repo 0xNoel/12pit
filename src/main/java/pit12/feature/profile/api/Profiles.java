@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 import pit12.shared.result.OperationResult;
 
-/** Live operations and subscriptions require the client thread. Snapshots can be passed to workers. */
+/** Use this API on the client thread. Snapshots are fine to pass to workers. */
 public interface Profiles {
     ProfilesSnapshot snapshot();
 
