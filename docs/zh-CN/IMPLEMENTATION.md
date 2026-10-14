@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: dd6aa45aee9a0560274b21f22e61fc3ff99e01e2 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: 3c4d7c14a06f45298605bab87c2b6adeed866195 -->
 
 # 12pit 实现
 
@@ -90,7 +90,7 @@ public final class StatusConfig extends FeatureConfig {
 
 - `booleanSetting` 创建布尔值。使用 `booleanSetting(id, defaultValue)` 创建需要保存但没有界面控件的布尔标志。
 - `integerSliderSetting` 和 `doubleSliderSetting` 创建数值设置，参数包括默认值、最小值、最大值和步长。
-- `keybindSetting` 存储从 `0` 到 `255` 的按键代码。功能负责处理输入。
+- `keybindSetting` 创建一个 `KeybindSetting`，支持一个主键和一个可选的 Shift、Ctrl、Alt 或 Meta 修饰键。主键也可以是修饰键。保存的整数用低字节存主键，下一字节存修饰键。现有单键值仍然有效。功能用 `Keybind.matches` 匹配按键事件，用 `Keybind.held` 判断按住状态。
 - `colorSetting` 将 RGB 颜色存储为 `0xRRGGBB`。`colorPickerSetting` 将 ARGB 颜色存储为 `0xAARRGGBB`。
 - `choiceSetting` 使用默认 ID 和具有稳定 ID 的 `ChoiceSetting.Choice` 实例创建选项设置。
 - `hudConfig` 为 HUD 添加分组后的锚点、文字阴影和翻译选项，并存储 HUD 编辑器使用的位置和缩放。分组和存储细节见 [HUD](#hud)。
