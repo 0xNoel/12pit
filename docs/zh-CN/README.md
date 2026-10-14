@@ -1,10 +1,12 @@
-<!-- Source: README.md; Based on: 56a7be6e4d7a33e0e9c3b3916aa4743db94c7611 -->
+<!-- Source: README.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
 
 # 12pit
 
 [English](../../README.md) | 简体中文
 
-12pit 是一款基于 Forge、专为 Minecraft 1.8.9 The Pit 打造的轻量级开源模组，自带控制界面，并兼容 [OneConfig](https://github.com/Polyfrost/OneConfig)。
+12pit 是一款基于 Forge、专为 Minecraft 1.8.9 The Pit 打造的轻量级开源模组，提供配置界面，并兼容 [OneConfig](https://github.com/Polyfrost/OneConfig)。
+
+建议搭配 [PolyPatcher](https://modrinth.com/mod/patcher) 和 [OptiFine](https://optifine.net/home) 使用，以获得更好的体验和性能。
 
 你可以点[这里](https://discord.gg/e9PRKMUenc)加入我们的 Discord，并在 `#developer` 频道求助或讨论开发相关话题。
 
@@ -12,7 +14,7 @@
 
 请使用 JDK 21 运行 Gradle。编译模组需要 Java 8 工具链，Gradle 会自动查找或下载。Minecraft 客户端也使用 Java 8。
 
-此外，由于需要构建内置的网页界面，执行 `assemble`、`runClient` 以及相关 Java 测试时均依赖 Node.js 和 npm（CI 环境使用的是 Node.js 24）。
+此外，由于需要构建配置界面，执行 `assemble`、`runClient` 以及相关 Java 测试时均依赖 Node.js 和 npm（CI 环境使用的是 Node.js 24）。
 
 ## 构建
 
@@ -31,6 +33,8 @@
 输出的 jar 文件位于 `build/libs/`。
 
 ## 开发
+
+开发时也应使用 PolyPatcher 和 OptiFine，至少确保 12pit 兼容两者的默认配置。
 
 ### IntelliJ IDEA
 
@@ -56,8 +60,8 @@
 - [SpongePowered Mixin](https://github.com/SpongePowered/Mixin)，MIT。许可证文本：[MIXIN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt)。
 - [ASM](https://asm.ow2.io/)，随 Mixin 打包，BSD 3-Clause。许可证文本：[ASM-BSD-3-CLAUSE.txt](../../src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt)。
 - [Vue](https://vuejs.org/)，MIT。许可证文本：[VUE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VUE-MIT.txt)。
-- [Vite](https://vite.dev/)，用于 Web UI 模块预加载，MIT。许可证文本：[VITE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VITE-MIT.txt)。
-- [Rolldown](https://rolldown.rs/)，用于 Web UI 模块预加载，MIT。许可证文本：[ROLLDOWN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt)。
+- [Vite](https://vite.dev/)，用于配置界面的模块预加载，MIT。许可证文本：[VITE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VITE-MIT.txt)。
+- [Rolldown](https://rolldown.rs/)，用于配置界面的模块预加载，MIT。许可证文本：[ROLLDOWN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt)。
 - [Lucide](https://lucide.dev/)，ISC，包含采用 MIT 许可证的 Feather 图标。许可证文本：[LUCIDE-ISC.txt](../../src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt)。
 
 12pit 基于 [GPL-3.0-or-later](../../LICENSE) 协议开源。

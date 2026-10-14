@@ -1,4 +1,4 @@
-<!-- Source: docs/DEBUGGING.md; Based on: 34a888df7feca272ebc35bb6225ea3e57f0edfd9 -->
+<!-- Source: docs/DEBUGGING.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
 
 # 运行和调试 12pit
 
@@ -20,13 +20,13 @@
 ./gradlew runClient
 ```
 
-开发游戏目录为 `run/`。查看 `run/logs/latest.log`，获取客户端错误和 Web UI 地址。
+开发游戏目录为 `run/`。查看 `run/logs/latest.log`，获取客户端错误和配置界面地址。
 
 开发客户端基于 [DevAuth](https://github.com/DJtheRedstoner/DevAuth)。要使用正版账号测试，启用 `devauth.enabled` JVM 属性，并遵循 [DevAuth 配置指南](https://github.com/DJtheRedstoner/DevAuth#configuration)。
 
-## 开发网页界面
+## 开发配置界面
 
-启动游戏后，按右 Shift 键（默认按键）打开 HUD 编辑器。在没有选中 HUD 时再按一次，即可打开网页界面。点击空白处可取消选择。如果该按键没有打开浏览器，请打开日志中的 URL。
+启动游戏后，按右 Shift 键（默认按键）打开 HUD 编辑器。在没有选中 HUD 时再按一次，即可打开配置界面。点击空白处可取消选择。如果该按键没有打开浏览器，请打开日志中的 URL。
 
 默认情况下，服务器监听 `http://127.0.0.1:60916/`。如果端口已被占用，服务器会使用其他可用端口。当前地址会显示在日志中。
 
@@ -56,7 +56,7 @@ npm run dev --prefix web-ui
 npm run format:check --prefix web-ui
 ```
 
-`check` 命令运行 Java 测试，包括 `ArchitectureTest`。`assemble` 命令构建网页界面，并在 `build/libs/` 中生成 jar 文件。
+`check` 命令运行 Java 测试，包括 `ArchitectureTest`。`assemble` 命令构建配置界面，并在 `build/libs/` 中生成 jar 文件。
 
 在运行 npm 检查前，使用 `npm ci --prefix web-ui` 安装所需依赖。
 
@@ -64,7 +64,7 @@ npm run format:check --prefix web-ui
 
 如果发生 Gradle 同步或工具链错误，检查 Gradle 是否使用 JDK 21，并能找到或下载 Java 8 工具链。
 
-如果 Vite 页面已打开，但请求失败，确保游戏已启动，且 `WEB_UI_TARGET` 与游戏当前地址一致。如果 Web UI 无法启动，在游戏日志中查找 "Web UI is unavailable" 消息。
+如果 Vite 页面已打开，但请求失败，确保游戏已启动，且 `WEB_UI_TARGET` 与游戏当前地址一致。如果配置界面无法启动，在游戏日志中查找 "Configuration interface is unavailable" 消息。
 
 报告故障时，提供相关日志消息和复现步骤。
 

@@ -1,4 +1,4 @@
-<!-- Source: docs/ARCHITECTURE.md; Based on: d04a7ca1216285f12f66c013303f500f98080369 -->
+<!-- Source: docs/ARCHITECTURE.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
 
 # 12pit 架构
 
@@ -18,7 +18,7 @@
 
 命令定义和操作由功能拥有。`runtime.command` 拥有命令的路由、帮助、补全和可用性。`platform.command` 拥有 Forge 注册。
 
-`feature.webui` 拥有本地 HTTP 服务器，并将浏览器界面连接到配置和功能 API。`web-ui` 拥有浏览器页面。
+`feature.webui` 拥有本地 HTTP 服务器，并将配置界面连接到配置和功能 API。`web-ui` 拥有浏览器页面。
 
 ## 依赖
 
