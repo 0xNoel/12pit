@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 4d64e449a6fbe6c418a8ae05077b7a2c30327a60 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: f12f00d52de6f34fb6cd0d9679d6ccce66bf0fbf -->
 
 # 12pit 实现
 
@@ -295,6 +295,8 @@ Bootstrap 为功能提供查询契约。其实时查询和订阅需要客户端�
 [PlayerNameCache](../../src/main/java/pit12/runtime/player/PlayerNameCache.java) 通过 `displayName(UUID)` 和 `shortName(UUID)` 查询当前 Tab 条目的显示名和简洁名。条目不存在或名称未知时，两者都返回 `null`。显示名保留格式化代码。简洁名仅去除赏金后缀，保留其他显示内容。玩家离开时移除条目，连接变化时清空缓存。
 
 在 `start()` 中通过 `addListener(Runnable)` 订阅名称变化，再读取当前名称。在 `stop()` 中通过 `removeListener(Runnable)` 注销同一个监听器。
+
+通过 `bindDisplayNameObserver(UUID, Consumer<String>)` 监听一个当前 Tab 条目。每个条目只能绑定一个监听器，显示名变化后在客户端线程上调用。名称查询也可能刷新条目并调用监听器。名称保留格式化代码，也可能为 `null`。将监听器设为 `null` 可取消绑定。条目离开 Tab 或连接变化时，订阅结束。
 
 [SidebarCache](../../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) 通过 `lines()` 查询服务器侧栏。它返回按显示顺序排列的不可变快照，最多包含 15 行。内容保留底部文字和格式化代码，不包含目标标题。每个 [SidebarLine](../../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) 通过 `entry()`、`text()` 和 `score()` 提供条目标识、文字和排序分数。
 
