@@ -18,29 +18,34 @@
  */
 package pit12.platform.mixin.input;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.MouseHelper;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.util.MouseFilter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pit12.runtime.input.InputBlockBinding;
-import pit12.runtime.input.InputBlocker;
+import pit12.runtime.input.MouseInputBinding;
 
-@Mixin(MouseHelper.class)
-public abstract class MouseHelperMixin {
+@Mixin(EntityRenderer.class)
+public abstract class EntityRendererMixin implements MouseInputBinding {
     @Shadow
-    public int deltaX;
+    private MouseFilter mouseFilterXAxis;
     @Shadow
-    public int deltaY;
+    private MouseFilter mouseFilterYAxis;
+    @Shadow
+    private float smoothCamYaw;
+    @Shadow
+    private float smoothCamPitch;
+    @Shadow
+    private float smoothCamFilterX;
+    @Shadow
+    private float smoothCamFilterY;
 
-    @Inject(method = "mouseXYChange", at = @At("TAIL"))
-    private void pit12$blockLookInput(CallbackInfo callback) {
-        InputBlocker blocker = ((InputBlockBinding) Minecraft.getMinecraft()).pit12$inputBlocker();
-        if (blocker != null && blocker.locked()) {
-            deltaX = 0;
-            deltaY = 0;
-        }
+    @Override
+    public void pit12$clearMouseInput() {
+        smoothCamYaw = 0;
+        smoothCamPitch = 0;
+        smoothCamFilterX = 0;
+        smoothCamFilterY = 0;
+        mouseFilterXAxis.reset();
+        mouseFilterYAxis.reset();
     }
 }

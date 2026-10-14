@@ -51,7 +51,7 @@ Disk I/O, HTTP requests, expensive computations are done on owned workers with a
 
 `InputBlocker` routes key events before Minecraft handles them. Features register an `InputHandler` on start and remove it on stop. `key(...)` returns true when it consumes an event. `consumesKey(...)` identifies keys whose held states must not be restored after blocking ends.
 
-Use `lock(owner)` to block keyboard, mouse, movement, and interactions. Use `unlock(owner, resume)` when the operation finishes or is cancelled. Each operation releases only its own lock. `blockedFor(owner)` reports whether another operation holds a lock. Input resumes only after all locks are released. Buffered presses are discarded. When `resume` is true, held keys are restored if the game has focus.
+Use `lock(owner)` to block keyboard and mouse input. The platform supplies an `InputDevice` that masks LWJGL events and polled states. Minecraft's key, movement, and smooth camera states are cleared once when blocking starts. Use `unlock(owner, resume)` when the operation finishes or is cancelled. Each operation releases only its own lock. `blockedFor(owner)` reports whether another operation holds a lock. Input resumes only after all locks are released. Buffered events are discarded before restoring the input backend. When `resume` is true, held keys are restored if the game has focus. `held(key)` reads the current LWJGL state, which is false while blocked.
 
 ## Config
 

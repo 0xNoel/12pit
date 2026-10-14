@@ -23,9 +23,7 @@ import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
 
@@ -44,14 +42,6 @@ public abstract class MinecraftMixin implements InputBlockBinding {
         return pit12$inputBlocker;
     }
 
-    @Inject(method = {"clickMouse", "rightClickMouse", "middleClickMouse",
-            "sendClickBlockToController", "dispatchKeypresses"}, at = @At("HEAD"),
-            cancellable = true)
-    private void pit12$blockActions(CallbackInfo callback) {
-        if (pit12$inputBlocker != null && pit12$inputBlocker.locked())
-            callback.cancel();
-    }
-
     @Redirect(method = "runTick",
             at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;next()Z", remap = false))
     private boolean pit12$nextKeyboardEvent() {
@@ -61,12 +51,5 @@ public abstract class MinecraftMixin implements InputBlockBinding {
                 return true;
         }
         return false;
-    }
-
-    @Redirect(method = "runTick", at = @At(value = "INVOKE",
-            target = "Lorg/lwjgl/input/Keyboard;isKeyDown(I)Z", remap = false))
-    private boolean pit12$heldKeyboardKey(int key) {
-        return (pit12$inputBlocker == null || !pit12$inputBlocker.locked())
-                && Keyboard.isKeyDown(key);
     }
 }

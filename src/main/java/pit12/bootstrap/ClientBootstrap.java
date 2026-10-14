@@ -80,6 +80,7 @@ import pit12.feature.tooltip.TooltipFeature;
 import pit12.feature.webui.WebUiConfig;
 import pit12.feature.webui.WebUiFeature;
 import pit12.platform.command.ForgeCommandAdapter;
+import pit12.platform.input.LwjglInputDevice;
 import pit12.platform.oneconfig.OneConfigSupport;
 import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.BooleanSetting;
@@ -124,7 +125,8 @@ public final class ClientBootstrap {
         shutdown = (ClientShutdownBinding) minecraft;
         ClientSession session = new ClientSession(minecraft, client);
         components.add(session);
-        InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft);
+        InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
+                new LwjglInputDevice());
         components.add(input);
         CommandRegistry commands =
                 new CommandRegistry(client, ForgeCommandAdapter::register, language);

@@ -25,11 +25,6 @@ import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -40,14 +35,17 @@ public final class InputBlocker implements ClientLifecycle {
     private final Minecraft minecraft;
     private final ClientThread client;
     private final InputBlockBinding binding;
+    private final InputDevice device;
     private final Set<Object> owners = new HashSet<>();
     private final List<InputHandler> handlers = new ArrayList<>();
     private boolean started;
 
-    public InputBlocker(Minecraft minecraft, ClientThread client, InputBlockBinding binding) {
+    public InputBlocker(Minecraft minecraft, ClientThread client, InputBlockBinding binding,
+            InputDevice device) {
         this.minecraft = minecraft;
         this.client = client;
         this.binding = binding;
+        this.device = device;
     }
 
     @Override
@@ -57,7 +55,6 @@ public final class InputBlocker implements ClientLifecycle {
             return;
         started = true;
         binding.pit12$bindInputBlocker(this);
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -69,7 +66,6 @@ public final class InputBlocker implements ClientLifecycle {
         }
         handlers.clear();
         binding.pit12$bindInputBlocker(null);
-        MinecraftForge.EVENT_BUS.unregister(this);
         started = false;
     }
 
@@ -90,13 +86,28 @@ public final class InputBlocker implements ClientLifecycle {
         owners.add(owner);
         if (alreadyLocked)
             return;
+        device.block();
         KeyBinding.unPressAllKeys();
         if (minecraft.playerController != null) {
             minecraft.playerController.resetBlockRemoving();
             if (minecraft.thePlayer != null && minecraft.thePlayer.isUsingItem())
                 minecraft.playerController.onStoppedUsingItem(minecraft.thePlayer);
         }
-        suppressMovement();
+        EntityPlayerSP player = minecraft.thePlayer;
+        if (player != null) {
+            player.movementInput.moveForward = 0;
+            player.movementInput.moveStrafe = 0;
+            player.movementInput.jump = false;
+            player.movementInput.sneak = false;
+            player.moveForward = 0;
+            player.moveStrafing = 0;
+            player.setJumping(false);
+            player.setSprinting(false);
+        }
+        minecraft.mouseHelper.deltaX = 0;
+        minecraft.mouseHelper.deltaY = 0;
+        if (minecraft.entityRenderer != null)
+            ((MouseInputBinding) minecraft.entityRenderer).pit12$clearMouseInput();
     }
 
     public void unlock(Object owner, boolean resume) {
@@ -123,30 +134,8 @@ public final class InputBlocker implements ClientLifecycle {
         return false;
     }
 
-    public void suppressMovement() {
-        EntityPlayerSP player = minecraft.thePlayer;
-        if (!locked() || player == null)
-            return;
-        player.movementInput.moveForward = 0;
-        player.movementInput.moveStrafe = 0;
-        player.movementInput.jump = false;
-        player.movementInput.sneak = false;
-        player.moveForward = 0;
-        player.moveStrafing = 0;
-        player.setJumping(false);
-        player.setSprinting(false);
-    }
-
     private void release(boolean resume) {
-        if (Keyboard.isCreated())
-            while (Keyboard.next()) {
-            }
-        if (Mouse.isCreated()) {
-            while (Mouse.next()) {
-            }
-            Mouse.getDX();
-            Mouse.getDY();
-        }
+        device.unblock();
         minecraft.mouseHelper.deltaX = 0;
         minecraft.mouseHelper.deltaY = 0;
         KeyBinding.unPressAllKeys();
@@ -163,33 +152,15 @@ public final class InputBlocker implements ClientLifecycle {
                 }
             }
             if (!consumed)
-                KeyBinding.setKeyBindState(key, physicallyHeld(key));
+                KeyBinding.setKeyBindState(key, held(key));
         }
     }
 
-    public static boolean physicallyHeld(int key) {
+    public static boolean held(int key) {
         if (key > 0 && key < Keyboard.KEYBOARD_SIZE)
             return Keyboard.isCreated() && Keyboard.isKeyDown(key);
         int button = key + 100;
         return key < 0 && Mouse.isCreated() && button >= 0 && button < Mouse.getButtonCount()
                 && Mouse.isButtonDown(button);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onKeyboard(GuiScreenEvent.KeyboardInputEvent.Pre event) {
-        if (locked())
-            event.setCanceled(true);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onMouse(GuiScreenEvent.MouseInputEvent.Pre event) {
-        if (locked())
-            event.setCanceled(true);
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onGameMouse(MouseEvent event) {
-        if (locked())
-            event.setCanceled(true);
     }
 }

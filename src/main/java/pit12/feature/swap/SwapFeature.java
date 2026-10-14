@@ -233,7 +233,8 @@ public final class SwapFeature
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        if (!InputBlocker.physicallyHeld(minecraft.gameSettings.keyBindUseItem.getKeyCode()))
+        if (!input.locked()
+                && !InputBlocker.held(minecraft.gameSettings.keyBindUseItem.getKeyCode()))
             rightClickHeld = false;
         if (!input.blockedFor(this))
             automatic.tick();
