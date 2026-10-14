@@ -18,8 +18,6 @@
  */
 package pit12.runtime.player;
 
-import net.minecraft.entity.Entity;
-
-public interface PlayerEquipmentWorldObserver {
-    void onEntityRemoved(Entity entity);
+public interface PlayerEntityWorldBinding {
+    void bindPlayerEntityObserver(PlayerEntityWorldObserver observer);
 }

@@ -20,30 +20,38 @@ package pit12.platform.mixin.world;
 
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import pit12.runtime.player.PlayerEquipmentWorldBinding;
-import pit12.runtime.player.PlayerEquipmentWorldObserver;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import pit12.runtime.player.PlayerEntityWorldBinding;
+import pit12.runtime.player.PlayerEntityWorldObserver;
 
 @Mixin(WorldClient.class)
-public abstract class WorldClientMixin implements PlayerEquipmentWorldBinding {
+public abstract class WorldClientMixin implements PlayerEntityWorldBinding {
     @Unique
-    private PlayerEquipmentWorldObserver pit12$playerEquipmentObserver;
+    private PlayerEntityWorldObserver pit12$playerEntityObserver;
 
     @Override
-    public void bindPlayerEquipmentObserver(PlayerEquipmentWorldObserver observer) {
-        pit12$playerEquipmentObserver = observer;
+    public void bindPlayerEntityObserver(PlayerEntityWorldObserver observer) {
+        pit12$playerEntityObserver = observer;
     }
 
-    @Inject(method = "removeEntityFromWorld", at = @At("RETURN"))
-    private void pit12$afterEntityRemoved(int entityId, CallbackInfoReturnable<Entity> cir) {
-        PlayerEquipmentWorldObserver observer = pit12$playerEquipmentObserver;
-        Entity removed = cir.getReturnValue();
-        if (observer != null && removed != null) {
-            observer.onEntityRemoved(removed);
+    @Inject(method = "onEntityAdded", at = @At("RETURN"))
+    private void pit12$afterEntityAdded(Entity entity, CallbackInfo ci) {
+        PlayerEntityWorldObserver observer = pit12$playerEntityObserver;
+        if (observer != null && entity instanceof EntityPlayer) {
+            observer.onPlayerAdded((EntityPlayer) entity);
+        }
+    }
+
+    @Inject(method = "onEntityRemoved", at = @At("RETURN"))
+    private void pit12$afterEntityRemoved(Entity entity, CallbackInfo ci) {
+        PlayerEntityWorldObserver observer = pit12$playerEntityObserver;
+        if (observer != null && entity instanceof EntityPlayer) {
+            observer.onPlayerRemoved((EntityPlayer) entity);
         }
     }
 }

@@ -37,6 +37,7 @@ import pit12.runtime.item.PitEnchantmentFormat;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitSnapshot;
 import pit12.runtime.pit.SpawnState;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentSnapshot;
 import pit12.runtime.player.PlayerNameCache;
@@ -45,6 +46,7 @@ final class PlayerListBuilder {
     private static final Pattern PRESTIGE_PREFIX = Pattern.compile("\\[(?:§.|[IVXLCDM])+-");
     private final Minecraft minecraft;
     private final PlayerEquipmentAccess equipment;
+    private final PlayerEntityTracker players;
     private final PitContext pitContext;
     private final PlayerListConfig config;
     private final RelationLookup relations;
@@ -53,10 +55,11 @@ final class PlayerListBuilder {
     private final Map<UUID, PlayerListEntry> previousEntries = new HashMap<>();
     private WorldClient previousWorld;
 
-    PlayerListBuilder(Minecraft minecraft, PlayerEquipmentAccess equipment, PitContext pitContext,
-            PlayerListConfig config, RelationLookup relations, PlayerNameCache playerNames,
-            DenickNames denickNames) {
+    PlayerListBuilder(Minecraft minecraft, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment, PitContext pitContext, PlayerListConfig config,
+            RelationLookup relations, PlayerNameCache playerNames, DenickNames denickNames) {
         this.minecraft = minecraft;
+        this.players = players;
         this.equipment = equipment;
         this.pitContext = pitContext;
         this.config = config;
@@ -89,13 +92,6 @@ final class PlayerListBuilder {
         }
         EnumMap<PlayerListGroup, List<PlayerListEntry>> groups =
                 new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
-        Map<UUID, EntityPlayer> players = new HashMap<>();
-        for (EntityPlayer player : world.playerEntities) {
-            if (!player.isDead) {
-                // A replacement may arrive before the old entity is removed.
-                players.put(player.getUniqueID(), player);
-            }
-        }
         PitSnapshot pitSnapshot = pitContext.current();
         for (NetworkPlayerInfo info : minecraft.getNetHandler().getPlayerInfoMap()) {
             UUID playerId = info.getGameProfile().getId();
@@ -126,7 +122,7 @@ final class PlayerListBuilder {
                 name = realName == null ? denickNames.listName(playerId, name)
                         : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
             }
-            EntityPlayer player = players.get(playerId);
+            EntityPlayer player = players.loadedPlayer(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =
                     config.showDirection() && localPlayer != null && player != null;

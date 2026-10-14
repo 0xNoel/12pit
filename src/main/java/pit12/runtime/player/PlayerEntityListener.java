@@ -18,6 +18,12 @@
  */
 package pit12.runtime.player;
 
-public interface PlayerEquipmentWorldBinding {
-    void bindPlayerEquipmentObserver(PlayerEquipmentWorldObserver observer);
+import net.minecraft.entity.player.EntityPlayer;
+
+public interface PlayerEntityListener {
+    void onPlayerEntityAdded(EntityPlayer player);
+
+    void onPlayerEntityRemoved(EntityPlayer player);
+
+    void onPlayerEntitiesReset();
 }

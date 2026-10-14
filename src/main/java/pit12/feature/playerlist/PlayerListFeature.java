@@ -41,6 +41,7 @@ import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentListener;
 import pit12.runtime.player.PlayerNameCache;
@@ -75,9 +76,10 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     private boolean active;
 
     public PlayerListFeature(ConfigCatalog configs, PlayerListConfig config,
-            PlayerNameCache playerNames, PlayerEquipmentAccess equipment, PitContext pitContext,
-            HudRegistry hudRegistry, RelationLookup relations, TabPresence presence,
-            Languages language, DenickNames denickNames) {
+            PlayerNameCache playerNames, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment, PitContext pitContext, HudRegistry hudRegistry,
+            RelationLookup relations, TabPresence presence, Languages language,
+            DenickNames denickNames) {
         this.language = language;
         this.configs = configs;
         this.config = config;
@@ -87,8 +89,8 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         this.playerNames = playerNames;
         this.denickNames = denickNames;
         this.hudRegistry = hudRegistry;
-        builder = new PlayerListBuilder(minecraft, equipment, pitContext, config, relations,
-                playerNames, denickNames);
+        builder = new PlayerListBuilder(minecraft, players, equipment, pitContext, config,
+                relations, playerNames, denickNames);
         hud = new PlayerListHud(config, hudRenderer);
         languageListener = () -> hud.localize(language);
     }

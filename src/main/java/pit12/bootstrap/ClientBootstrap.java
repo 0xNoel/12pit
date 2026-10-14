@@ -91,6 +91,7 @@ import pit12.runtime.input.InputBlocker;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitContextTracker;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentTracker;
 import pit12.runtime.player.PlayerNameCache;
@@ -133,7 +134,9 @@ public final class ClientBootstrap {
         components.add(commands);
         PitContextTracker pitContext = new PitContextTracker(session);
         components.add(pitContext);
-        PlayerEquipmentTracker playerEquipment = new PlayerEquipmentTracker(session);
+        PlayerEntityTracker players = new PlayerEntityTracker(session);
+        components.add(players);
+        PlayerEquipmentTracker playerEquipment = new PlayerEquipmentTracker(session, players);
         components.add(playerEquipment);
         TabPresenceTracker presence = new TabPresenceTracker(session);
         components.add(presence);
@@ -157,7 +160,7 @@ public final class ClientBootstrap {
                 (SwapHooksBinding) minecraft, input);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
-                playerNames, playerEquipment, commands,
+                playerNames, players, playerEquipment, commands,
                 new File(minecraft.mcDataDir, "12pit/denick-cache.json").toPath());
         // Category: Interface
         BooleanSetting discordRpc =
@@ -182,7 +185,7 @@ public final class ClientBootstrap {
         registerItemEsp(configs, session);
         registerNametag(minecraft, configs, session, playerEquipment, denickNames);
         registerPlayerEsp(configs, session, presence, relations);
-        registerPlayerList(configs, playerNames, playerEquipment, pitContext, hudRegistry,
+        registerPlayerList(configs, playerNames, players, playerEquipment, pitContext, hudRegistry,
                 relations, presence, denickNames);
         registerRingHelper(minecraft, configs, session, pitContext);
         registerTooltip(configs);
@@ -237,12 +240,12 @@ public final class ClientBootstrap {
     // Category: Misc
     private DenickNames registerDenick(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, PitContext pitContext, TabPresence presence,
-            PlayerNameCache playerNames, PlayerEquipmentAccess equipment, CommandRegistry commands,
-            Path path) {
+            PlayerNameCache playerNames, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment, CommandRegistry commands, Path path) {
         DenickConfig config = new DenickConfig();
         configs.register(config);
         DenickFeature denick = new DenickFeature(minecraft, client, configs, config, session,
-                pitContext, presence, playerNames, equipment, commands, language, path,
+                pitContext, presence, playerNames, players, equipment, commands, language, path,
                 names -> ((DenickNamesBinding) minecraft.ingameGUI.getTabList())
                         .pit12$bindDenickNames(names));
         components.add(denick);
@@ -351,11 +354,12 @@ public final class ClientBootstrap {
     }
 
     private void registerPlayerList(ConfigCatalog configs, PlayerNameCache playerNames,
-            PlayerEquipmentAccess playerEquipment, PitContext pitContext, HudRegistry hudRegistry,
-            RelationLookup relations, TabPresence presence, DenickNames denickNames) {
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment,
+            PitContext pitContext, HudRegistry hudRegistry, RelationLookup relations,
+            TabPresence presence, DenickNames denickNames) {
         PlayerListConfig config = new PlayerListConfig();
         configs.register(config);
-        components.add(new PlayerListFeature(configs, config, playerNames, playerEquipment,
+        components.add(new PlayerListFeature(configs, config, playerNames, players, playerEquipment,
                 pitContext, hudRegistry, relations, presence, language, denickNames));
     }
 

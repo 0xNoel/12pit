@@ -60,6 +60,7 @@ import pit12.runtime.config.Setting;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitState;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentCache;
 import pit12.runtime.player.PlayerEquipmentListener;
@@ -86,6 +87,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     private final PitContext pit;
     private final TabPresence presence;
     private final PlayerNameCache names;
+    private final PlayerEntityTracker players;
     private final PlayerEquipmentAccess equipment;
     private final Languages language;
     private final DenickNamesBinding binding;
@@ -107,8 +109,8 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     public DenickFeature(Minecraft minecraft, ClientThread client, ConfigCatalog configs,
             DenickConfig config, ClientSession session, PitContext pit, TabPresence presence,
-            PlayerNameCache names, PlayerEquipmentAccess equipment, CommandRegistry commands,
-            Languages language, Path path, DenickNamesBinding binding) {
+            PlayerNameCache names, PlayerEntityTracker players, PlayerEquipmentAccess equipment,
+            CommandRegistry commands, Languages language, Path path, DenickNamesBinding binding) {
         this.minecraft = minecraft;
         this.client = client;
         this.configs = configs;
@@ -117,6 +119,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         this.pit = pit;
         this.presence = presence;
         this.names = names;
+        this.players = players;
         this.equipment = equipment;
         this.language = language;
         this.binding = binding;
@@ -422,8 +425,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     }
 
     private List<DenickItem> currentItems(UUID id) {
-        EntityPlayer player =
-                session.world() == null ? null : session.world().getPlayerEntityByUUID(id);
+        EntityPlayer player = players.loadedPlayer(id);
         Map<String, DenickItem> items = new LinkedHashMap<>();
         if (player != null) {
             for (int slot = 0; slot < 5; slot++) {
