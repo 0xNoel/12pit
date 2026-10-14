@@ -18,8 +18,6 @@
  */
 package pit12.feature.swap;
 
-import static pit12.runtime.languages.Languages.source;
-
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -82,29 +80,29 @@ final class BindingStore {
     static List<SwapBinding> decode(String text) {
         JsonElement parsed = new JsonParser().parse(text);
         if (!parsed.isJsonObject()) {
-            throw new IllegalArgumentException(source("Swap bindings must be an object"));
+            throw new IllegalArgumentException("Swap bindings must be an object");
         }
         JsonObject root = parsed.getAsJsonObject();
         if (integer(root, "schemaVersion") != 1) {
-            throw new IllegalArgumentException(source("Unsupported swap binding version"));
+            throw new IllegalArgumentException("Unsupported swap binding version");
         }
         JsonElement entries = root.get("bindings");
         if (entries == null || !entries.isJsonArray()) {
-            throw new IllegalArgumentException(source("Expected swap binding list"));
+            throw new IllegalArgumentException("Expected swap binding list");
         }
         List<SwapBinding> result = new ArrayList<>();
         Set<ItemIdentity> identities = new HashSet<>();
         for (JsonElement value : entries.getAsJsonArray()) {
             if (!value.isJsonObject())
-                throw new IllegalArgumentException(source("Invalid swap binding"));
+                throw new IllegalArgumentException("Invalid swap binding");
             JsonObject entry = value.getAsJsonObject();
             String type = string(entry, "type");
             if (!"EQUIPMENT".equals(type) && !"SLOT".equals(type)) {
-                throw new IllegalArgumentException(source("Unknown swap binding type"));
+                throw new IllegalArgumentException("Unknown swap binding type");
             }
             JsonElement identityValue = entry.get("identity");
             if (identityValue == null || !identityValue.isJsonObject()) {
-                throw new IllegalArgumentException(source("Expected item identity"));
+                throw new IllegalArgumentException("Expected item identity");
             }
             JsonObject identityData = identityValue.getAsJsonObject();
             String item = string(identityData, "item");
@@ -114,23 +112,23 @@ final class BindingStore {
             if (item.isEmpty() || kind != ItemIdentity.Kind.NAME && signature.isEmpty()
                     || variant < 0
                     || kind == ItemIdentity.Kind.NONCE && Long.parseLong(signature) < 10) {
-                throw new IllegalArgumentException(source("Invalid item identity"));
+                throw new IllegalArgumentException("Invalid item identity");
             }
             ItemIdentity identity = new ItemIdentity(item, variant, kind, signature);
             if (!identities.add(identity))
-                throw new IllegalArgumentException(source("Duplicate bound item"));
+                throw new IllegalArgumentException("Duplicate bound item");
             int key = integer(entry, "key");
             boolean equipment = "EQUIPMENT".equals(type);
             int target = integer(entry, "target");
             String name = string(entry, "name");
             if (key <= 0 || key >= Keyboard.KEYBOARD_SIZE || Keyboard.getKeyName(key) == null
                     || target < 1 || target > (equipment ? 4 : 9) || name.isEmpty()) {
-                throw new IllegalArgumentException(source("Invalid swap binding"));
+                throw new IllegalArgumentException("Invalid swap binding");
             }
             JsonElement gemmed = entry.get("gemmed");
             if (gemmed != null
                     && (!gemmed.isJsonPrimitive() || !gemmed.getAsJsonPrimitive().isBoolean())) {
-                throw new IllegalArgumentException(source("Invalid gem state"));
+                throw new IllegalArgumentException("Invalid gem state");
             }
             result.add(new SwapBinding(key, identity, equipment, target, name,
                     string(entry, "details"), gemmed != null && gemmed.getAsBoolean()));

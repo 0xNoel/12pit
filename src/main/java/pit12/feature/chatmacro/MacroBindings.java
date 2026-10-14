@@ -178,15 +178,15 @@ final class MacroBindings {
     private static Map<Integer, String> decode(String text) {
         JsonElement parsed = new JsonParser().parse(text);
         if (!parsed.isJsonObject())
-            throw new IllegalArgumentException(source("Expected chat macro bindings"));
+            throw new IllegalArgumentException("Expected chat macro bindings");
         Map<Integer, String> result = new LinkedHashMap<>();
         for (Map.Entry<String, JsonElement> entry : parsed.getAsJsonObject().entrySet()) {
             int key = Keyboard.getKeyIndex(entry.getKey().toUpperCase(Locale.ROOT));
             if (key == Keyboard.KEY_NONE || result.containsKey(key))
-                throw new IllegalArgumentException(source("Invalid macro key"));
+                throw new IllegalArgumentException("Invalid macro key");
             JsonElement value = entry.getValue();
             if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString())
-                throw new IllegalArgumentException(source("Expected a chat message"));
+                throw new IllegalArgumentException("Expected a chat message");
             String message = value.getAsString();
             checkMessage(message);
             result.put(key, message);

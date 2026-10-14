@@ -102,16 +102,14 @@ final class WebUiPreferences implements ConfigChangeListener {
                 }
             } catch (IOException | JsonParseException | IllegalArgumentException
                     | SecurityException failure) {
-                dispatch(activeGeneration,
-                        () -> failed(source("Could not load configuration interface settings"),
-                                failure));
+                dispatch(activeGeneration, () -> failed(failure));
                 return;
             }
             dispatch(activeGeneration, () -> {
                 try {
                     applyLoaded(loaded);
                 } catch (IllegalArgumentException failure) {
-                    failed(source("Could not load configuration interface settings"), failure);
+                    failed(failure);
                     return;
                 }
                 ready = true;
@@ -296,9 +294,10 @@ final class WebUiPreferences implements ConfigChangeListener {
         }
     }
 
-    private void failed(String message, Exception failure) {
-        problem = message;
-        LOGGER.log(Level.WARNING, message + " from " + path, failure);
+    private void failed(Exception failure) {
+        problem = source("Could not load configuration interface settings");
+        LOGGER.log(Level.WARNING, "Could not load configuration interface settings from " + path,
+                failure);
         changed.run();
     }
 
