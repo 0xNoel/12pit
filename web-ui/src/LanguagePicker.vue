@@ -165,9 +165,7 @@ watch(
           >
             <span>
               <strong><FormattedText :text="choice.name" /></strong>
-              <small v-if="choice.displayName !== choice.name">{{
-                choice.displayName
-              }}</small>
+              <small>{{ choice.displayName }}</small>
             </span>
             <Check
               :class="{ 'is-hidden': choice.value !== draft }"
