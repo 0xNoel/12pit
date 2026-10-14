@@ -57,6 +57,8 @@ final class PlayerListHud implements HudElement {
     private final Minecraft minecraft;
     private final HudRenderer renderer;
     private final String[] groupNames = new String[PlayerListGroup.values().length];
+    private final Map<PlayerListGroup, int[]> distanceTextWidths =
+            new EnumMap<>(PlayerListGroup.class);
     private PlayerListSnapshot snapshot = PlayerListSnapshot.empty();
     private PlayerListSnapshot sample;
     private int nameWidth;
@@ -65,6 +67,7 @@ final class PlayerListHud implements HudElement {
     private int distanceWidth;
     private int directionWidth;
     private int directionGap;
+    private int unknownDirectionWidth;
     private int lineHeight;
     private int width;
     private int height;
@@ -78,6 +81,7 @@ final class PlayerListHud implements HudElement {
     private boolean renderDirectionReady;
     private boolean sampleLayout;
     private boolean layoutDirty = true;
+    private boolean unicodeFont;
 
     PlayerListHud(PlayerListConfig config, HudRenderer renderer) {
         this.config = config;
@@ -152,6 +156,11 @@ final class PlayerListHud implements HudElement {
     @Override
     public void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
+        boolean unicode = minecraft.fontRendererObj.getUnicodeFlag();
+        if (unicode != unicodeFont) {
+            unicodeFont = unicode;
+            layoutDirty = true;
+        }
         if (layoutDirty || editing != sampleLayout) {
             sampleLayout = editing;
             recalculateLayout(editing ? sample : snapshot);
@@ -181,15 +190,17 @@ final class PlayerListHud implements HudElement {
                 renderer.text(groupNames[group.ordinal()], EDGE_PADDING, y, 0xFFF0F0F0, hudConfig);
                 y += lineHeight;
             }
-            for (PlayerListEntry entry : entries) {
-                renderEntry(entry, y, partialTicks);
+            int[] textWidths = distanceTextWidths.get(group);
+            for (int index = 0; index < entries.size(); index++) {
+                renderEntry(entries.get(index), y, partialTicks,
+                        textWidths == null ? 0 : textWidths[index]);
                 y += lineHeight;
             }
             hasGroup = true;
         }
     }
 
-    private void renderEntry(PlayerListEntry entry, int y, float partialTicks) {
+    private void renderEntry(PlayerListEntry entry, int y, float partialTicks, int textWidth) {
         int x = EDGE_PADDING;
         renderer.text(entry.name(), x, y, 0xFFF0F0F0, hudConfig);
         x += nameWidth + GAP;
@@ -206,7 +217,7 @@ final class PlayerListHud implements HudElement {
                 renderer.text(SPAWN_TEXT, x, y, MUTED_COLOR, hudConfig);
             } else {
                 String text = entry.distanceText();
-                renderer.text(text, x + distanceWidth - renderer.textWidth(text), y,
+                renderer.text(text, x + distanceWidth - textWidth, y,
                         entry.distanceKnown() ? distanceColor(entry.distance()) : MUTED_COLOR,
                         hudConfig);
             }
@@ -221,8 +232,8 @@ final class PlayerListHud implements HudElement {
                         entry.distanceKnown() ? distanceColor(entry.distance()) : MUTED_COLOR,
                         interpolatedDirection(entry, partialTicks));
             } else if (!entry.spawn()) {
-                renderer.text("?", x + (directionWidth - renderer.textWidth("?")) / 2, y,
-                        MUTED_COLOR, hudConfig);
+                renderer.text("?", x + (directionWidth - unknownDirectionWidth) / 2, y, MUTED_COLOR,
+                        hudConfig);
             }
         }
     }
@@ -266,8 +277,8 @@ final class PlayerListHud implements HudElement {
         double yawRadians = Math.toRadians(yaw);
         renderForwardX = -Math.sin(yawRadians);
         renderForwardZ = Math.cos(yawRadians);
-        renderRightX = -Math.cos(yawRadians);
-        renderRightZ = -Math.sin(yawRadians);
+        renderRightX = -renderForwardZ;
+        renderRightZ = renderForwardX;
         renderDirectionReady = true;
     }
 
@@ -299,8 +310,24 @@ final class PlayerListHud implements HudElement {
         distanceWidth = 0;
         directionWidth = config.showDirection() ? ARROW_SIZE : 0;
         directionGap = Math.max(1, renderer.textWidth(" "));
-        for (List<PlayerListEntry> entries : content.entries().values()) {
-            for (PlayerListEntry entry : entries) {
+        unknownDirectionWidth = renderer.textWidth("?");
+        if (!config.showDistance()) {
+            distanceTextWidths.clear();
+        } else {
+            distanceTextWidths.keySet().retainAll(content.entries().keySet());
+        }
+        for (Map.Entry<PlayerListGroup, List<PlayerListEntry>> group : content.entries()
+                .entrySet()) {
+            List<PlayerListEntry> entries = group.getValue();
+            int[] textWidths =
+                    config.showDistance() ? distanceTextWidths.get(group.getKey()) : null;
+            if (config.showDistance()
+                    && (textWidths == null || textWidths.length != entries.size())) {
+                textWidths = new int[entries.size()];
+                distanceTextWidths.put(group.getKey(), textWidths);
+            }
+            for (int index = 0; index < entries.size(); index++) {
+                PlayerListEntry entry = entries.get(index);
                 nameWidth = Math.max(nameWidth, renderer.textWidth(entry.name()));
                 if (config.showLeggings() && entry.leggingsText() != null) {
                     leggingsWidth =
@@ -312,7 +339,8 @@ final class PlayerListHud implements HudElement {
                 }
                 if (config.showDistance()) {
                     String text = entry.spawn() ? SPAWN_TEXT : entry.distanceText();
-                    distanceWidth = Math.max(distanceWidth, renderer.textWidth(text));
+                    textWidths[index] = renderer.textWidth(text);
+                    distanceWidth = Math.max(distanceWidth, textWidths[index]);
                 }
                 if (config.showDirection() && !config.showDistance() && entry.spawn()) {
                     directionWidth = Math.max(directionWidth, renderer.textWidth(SPAWN_TEXT));

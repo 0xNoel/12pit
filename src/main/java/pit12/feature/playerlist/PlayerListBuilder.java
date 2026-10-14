@@ -20,6 +20,7 @@ package pit12.feature.playerlist;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
@@ -49,6 +51,8 @@ final class PlayerListBuilder {
     private final RelationLookup relations;
     private final PlayerNameCache playerNames;
     private final DenickNames denickNames;
+    private final Map<UUID, PlayerListEntry> previousEntries = new HashMap<>();
+    private WorldClient previousWorld;
 
     PlayerListBuilder(Minecraft minecraft, PlayerEquipmentAccess equipment, PitContext pitContext,
             PlayerListConfig config, RelationLookup relations, PlayerNameCache playerNames,
@@ -62,11 +66,16 @@ final class PlayerListBuilder {
         this.denickNames = denickNames;
     }
 
-    PlayerListSnapshot build(boolean realNames) {
+    PlayerListSnapshot build(boolean realNames, boolean rebuildText) {
         WorldClient world = minecraft.theWorld;
         if (world == null || minecraft.getNetHandler() == null) {
+            clear();
             return PlayerListSnapshot.empty();
         }
+        if (rebuildText || world != previousWorld) {
+            previousEntries.clear();
+        }
+        previousWorld = world;
         EntityPlayer localPlayer = minecraft.thePlayer;
         double forwardX = 0.0D;
         double forwardZ = 0.0D;
@@ -76,8 +85,8 @@ final class PlayerListBuilder {
             double yaw = Math.toRadians(localPlayer.rotationYaw);
             forwardX = -Math.sin(yaw);
             forwardZ = Math.cos(yaw);
-            rightX = -Math.cos(yaw);
-            rightZ = -Math.sin(yaw);
+            rightX = -forwardZ;
+            rightZ = forwardX;
         }
         EnumMap<PlayerListGroup, List<PlayerListEntry>> groups =
                 new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
@@ -99,15 +108,23 @@ final class PlayerListBuilder {
             if (!showSpecial && !showNick && !showEquipment) {
                 continue;
             }
-            String name = config.shortPlayerNames() ? playerNames.shortName(playerId)
-                    : playerNames.displayName(playerId);
+            PlayerListEntry previous = previousEntries.get(playerId);
+            String name = previous != null ? previous.name()
+                    : config.shortPlayerNames() ? playerNames.shortName(playerId)
+                            : playerNames.displayName(playerId);
             if (name == null) {
                 continue;
             }
-            String realName = realNames ? denickNames.realDisplayName(playerId) : null;
-            name = realName == null ? denickNames.listName(playerId, name)
-                    : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
-            EntityPlayer player = world.getPlayerEntityByUUID(playerId);
+            if (previous == null) {
+                String realName = realNames ? denickNames.realDisplayName(playerId) : null;
+                name = realName == null ? denickNames.listName(playerId, name)
+                        : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
+            }
+            Entity entity = previous == null ? null : world.getEntityByID(previous.entityId());
+            EntityPlayer player =
+                    entity instanceof EntityPlayer && playerId.equals(entity.getUniqueID())
+                            ? (EntityPlayer) entity
+                            : world.getPlayerEntityByUUID(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =
                     config.showDirection() && localPlayer != null && player != null;
@@ -117,19 +134,24 @@ final class PlayerListBuilder {
                     : 0.0F;
             boolean spawn = config.showSpawn() && player != null && pitSnapshot
                     .spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
-            String leggingsText = config.showLeggings() && playerEquipment != null
-                    && playerEquipment.leggingsKnown()
-                            ? PitEnchantmentFormat.format(playerEquipment.leggingsEnchantments(),
-                                    config.enchantmentFormat(), config.showGem())
-                            : null;
-            String heldItemText = config.showHeldItem() && playerEquipment != null
-                    && playerEquipment.heldItemKnown()
-                            ? PitEnchantmentFormat.format(playerEquipment.heldEnchantments(),
-                                    config.enchantmentFormat(), config.showGem())
-                            : null;
+            String leggingsText = previous != null ? previous.leggingsText()
+                    : config.showLeggings() && playerEquipment != null
+                            && playerEquipment.leggingsKnown()
+                                    ? PitEnchantmentFormat.format(
+                                            playerEquipment.leggingsEnchantments(),
+                                            config.enchantmentFormat(), config.showGem())
+                                    : null;
+            String heldItemText = previous != null ? previous.heldItemText()
+                    : config.showHeldItem() && playerEquipment != null
+                            && playerEquipment.heldItemKnown()
+                                    ? PitEnchantmentFormat.format(
+                                            playerEquipment.heldEnchantments(),
+                                            config.enchantmentFormat(), config.showGem())
+                                    : null;
             PlayerListEntry entry = new PlayerListEntry(playerId,
                     player == null ? 0 : player.getEntityId(), name, leggingsText, heldItemText,
                     distance, direction, distanceKnown, directionKnown, spawn);
+            previousEntries.put(playerId, entry);
             if (showSpecial) {
                 add(groups, special, entry);
             }
@@ -141,6 +163,11 @@ final class PlayerListBuilder {
             }
         }
         return PlayerListSnapshot.create(groups);
+    }
+
+    void clear() {
+        previousEntries.clear();
+        previousWorld = null;
     }
 
     private static void add(Map<PlayerListGroup, List<PlayerListEntry>> groups,

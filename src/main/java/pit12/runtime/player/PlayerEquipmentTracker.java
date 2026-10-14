@@ -215,8 +215,12 @@ public final class PlayerEquipmentTracker implements ClientLifecycle, PlayerEqui
     }
 
     private void applyDirty(WorldClient world) {
+        Map<UUID, Integer> pending = cache.drainDirty();
+        if (pending.isEmpty()) {
+            return;
+        }
         List<Runnable> notifications = new ArrayList<>();
-        for (Map.Entry<UUID, Integer> change : cache.drainDirty().entrySet()) {
+        for (Map.Entry<UUID, Integer> change : pending.entrySet()) {
             EntityPlayer player = world.getPlayerEntityByUUID(change.getKey());
             if (player == null) {
                 if (cache.remove(change.getKey()) != null) {

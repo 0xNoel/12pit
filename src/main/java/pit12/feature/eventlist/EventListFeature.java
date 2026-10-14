@@ -29,6 +29,7 @@ import java.util.concurrent.Future;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -51,6 +52,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
     private final EventListConfig config;
     private final HudRegistry hudRegistry;
     private final EventListHud hud;
+    private final FontListener fontListener = new FontListener();
     private final Languages language;
     private final Runnable languageListener;
     private final HudRenderer hudRenderer = new HudRenderer();
@@ -100,6 +102,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
             return;
         }
         started = true;
+        MinecraftForge.EVENT_BUS.register(fontListener);
         language.addListener(languageListener);
         hudRegistry.register(hud);
         configs.addListener(this);
@@ -115,6 +118,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
             return;
         }
         started = false;
+        MinecraftForge.EVENT_BUS.unregister(fontListener);
         configs.removeListener(this);
         language.removeListener(languageListener);
         deactivate();
@@ -265,5 +269,13 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         hudRenderer.render(hud, HudRenderer.layout(hud, event.resolution.getScaledWidth(),
                 event.resolution.getScaledHeight(), event.resolution.getScaleFactor(), false),
                 event.partialTicks, false);
+    }
+
+    // Forge's generated event handler requires a public listener class.
+    public final class FontListener {
+        @SubscribeEvent
+        public void onTextureStitch(TextureStitchEvent.Post event) {
+            hud.close();
+        }
     }
 }

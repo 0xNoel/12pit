@@ -23,6 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -60,6 +61,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     private final DenickNames denickNames;
     private final PlayerListBuilder builder;
     private final PlayerListHud hud;
+    private final FontListener fontListener = new FontListener();
     private final Languages language;
     private final Runnable languageListener;
     private final HudRegistry hudRegistry;
@@ -97,6 +99,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             return;
         }
         started = true;
+        MinecraftForge.EVENT_BUS.register(fontListener);
         language.addListener(languageListener);
         hudRegistry.register(hud);
         configs.addListener(this);
@@ -111,6 +114,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             return;
         }
         started = false;
+        MinecraftForge.EVENT_BUS.unregister(fontListener);
         configs.removeListener(this);
         language.removeListener(languageListener);
         deactivate();
@@ -147,6 +151,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         relations.removeListener(this);
         equipment.removeListener(this);
         snapshot = PlayerListSnapshot.empty();
+        builder.clear();
         hud.snapshot(snapshot);
         hud.close();
         ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
@@ -255,9 +260,10 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         ticksSinceUpdate = 0;
         boolean movingColumns = config.showDistance() || config.showDirection();
         if (snapshotDirty || movingColumns) {
-            snapshot = builder.build(realNamesHeld);
-            hud.snapshot(snapshot);
+            boolean rebuildText = snapshotDirty;
             snapshotDirty = false;
+            snapshot = builder.build(realNamesHeld, rebuildText);
+            hud.snapshot(snapshot);
         }
     }
 
@@ -272,5 +278,13 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 hud, HudRenderer.layout(hud, resolution.getScaledWidth(),
                         resolution.getScaledHeight(), resolution.getScaleFactor(), false),
                 event.partialTicks, false);
+    }
+
+    // Forge's generated event handler requires a public listener class.
+    public final class FontListener {
+        @SubscribeEvent
+        public void onTextureStitch(TextureStitchEvent.Post event) {
+            hud.configurationChanged();
+        }
     }
 }

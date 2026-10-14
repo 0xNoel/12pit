@@ -19,6 +19,7 @@
 package pit12.feature.eventlist;
 
 import java.util.Collections;
+import net.minecraft.client.Minecraft;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
@@ -37,7 +38,12 @@ final class EventListHud implements HudElement {
     private float pixelScale = Float.NaN;
     private boolean dirty = true;
     private boolean sampleLayout;
+    private boolean unicodeFont;
     private int iconWidth;
+    private int infoIconWidth;
+    private int dayTimeWidth;
+    private int[] rowIconWidths = new int[0];
+    private int[] rowTimeWidths = new int[0];
     private int nameX;
     private int lineHeight;
     private int width;
@@ -102,21 +108,35 @@ final class EventListHud implements HudElement {
     @Override
     public void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
+        boolean unicode = Minecraft.getMinecraft().fontRendererObj.getUnicodeFlag();
+        if (unicode != unicodeFont) {
+            unicodeFont = unicode;
+            dirty = true;
+        }
         if (!dirty && editing == sampleLayout) {
             return;
         }
         content = editing ? EventListSnapshot.sample(config, language) : snapshot;
         sampleLayout = editing;
         dirty = false;
-        iconWidth = content.dayName.isEmpty() ? 0 : renderer.textWidth("ℹ");
+        infoIconWidth = content.dayName.isEmpty() ? 0 : renderer.textWidth("ℹ");
+        iconWidth = infoIconWidth;
         int nameWidth = renderer.textWidth(content.dayName);
-        int timeWidth = renderer.textWidth(content.dayTime);
-        for (EventListSnapshot.Row row : content.rows) {
+        dayTimeWidth = renderer.textWidth(content.dayTime);
+        int timeWidth = dayTimeWidth;
+        if (rowTimeWidths.length != content.rows.size()) {
+            rowTimeWidths = new int[content.rows.size()];
+            rowIconWidths = new int[content.rows.size()];
+        }
+        for (int index = 0; index < content.rows.size(); index++) {
+            EventListSnapshot.Row row = content.rows.get(index);
             if (config.showIcons.get()) {
-                iconWidth = Math.max(iconWidth, renderer.textWidth(eventIcon(row)));
+                rowIconWidths[index] = renderer.textWidth(eventIcon(row));
+                iconWidth = Math.max(iconWidth, rowIconWidths[index]);
             }
             nameWidth = Math.max(nameWidth, renderer.textWidth(eventNames[row.type.ordinal()]));
-            timeWidth = Math.max(timeWidth, renderer.textWidth(row.time));
+            rowTimeWidths[index] = renderer.textWidth(row.time);
+            timeWidth = Math.max(timeWidth, rowTimeWidths[index]);
         }
         lineHeight = renderer.fontHeight() + 2;
         nameX = PADDING + (iconWidth > 0 ? iconWidth + GAP : 0);
@@ -142,26 +162,27 @@ final class EventListHud implements HudElement {
     public void render(float partialTicks, boolean editing) {
         int y = PADDING;
         if (!content.dayName.isEmpty()) {
-            icon("ℹ", y, 0xFF808080);
+            icon("ℹ", infoIconWidth, y, 0xFF808080);
             renderer.text(content.dayName, nameX, y, 0xFFB0B0B0, hudConfig);
-            renderer.text(content.dayTime, width - PADDING - renderer.textWidth(content.dayTime), y,
-                    0xFFB0B0B0, hudConfig);
+            renderer.text(content.dayTime, width - PADDING - dayTimeWidth, y, 0xFFB0B0B0,
+                    hudConfig);
             y += lineHeight + 2;
         }
         if (content.rows.isEmpty()) {
             renderer.text(content.message, PADDING, y, 0xFFFFFFFF, hudConfig);
             return;
         }
-        for (EventListSnapshot.Row row : content.rows) {
+        for (int index = 0; index < content.rows.size(); index++) {
+            EventListSnapshot.Row row = content.rows.get(index);
             if (config.showIcons.get()) {
                 int color = row.phase == PitEvent.Phase.ACTIVE ? 0xFF55FF55
                         : row.phase == PitEvent.Phase.PREPARING ? 0xFFFFFF55
                                 : row.major ? 0xFFFFAA00 : 0xFF55FFFF;
-                icon(eventIcon(row), y, color);
+                icon(eventIcon(row), rowIconWidths[index], y, color);
             }
             renderer.text(eventNames[row.type.ordinal()], nameX, y,
                     config.showColors.get() ? 0xFF000000 | row.type.color : 0xFFFFFFFF, hudConfig);
-            renderer.text(row.time, width - PADDING - renderer.textWidth(row.time), y, 0xFFFFFFFF,
+            renderer.text(row.time, width - PADDING - rowTimeWidths[index], y, 0xFFFFFFFF,
                     hudConfig);
             y += lineHeight;
         }
@@ -177,8 +198,8 @@ final class EventListHud implements HudElement {
         return row.major ? "✦" : "○";
     }
 
-    private void icon(String symbol, int y, int color) {
-        int x = PADDING + (iconWidth - renderer.textWidth(symbol)) / 2;
+    private void icon(String symbol, int symbolWidth, int y, int color) {
+        int x = PADDING + (iconWidth - symbolWidth) / 2;
         renderer.text(symbol, x, y, color, hudConfig);
     }
 }

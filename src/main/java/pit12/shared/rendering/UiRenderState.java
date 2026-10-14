@@ -39,9 +39,6 @@ public final class UiRenderState {
     private int blendSourceAlpha;
     private int blendDestinationAlpha;
     private int boundTexture;
-    private int shadeModel;
-    private int alphaFunction;
-    private float alphaReference;
 
     public void begin() {
         if (active) {
@@ -58,9 +55,6 @@ public final class UiRenderState {
         blendSourceAlpha = GL11.glGetInteger(GL14.GL_BLEND_SRC_ALPHA);
         blendDestinationAlpha = GL11.glGetInteger(GL14.GL_BLEND_DST_ALPHA);
         boundTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        shadeModel = GL11.glGetInteger(GL11.GL_SHADE_MODEL);
-        alphaFunction = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
-        alphaReference = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
         currentColor.clear();
         GL11.glGetFloat(GL11.GL_CURRENT_COLOR, currentColor);
         for (int index = 0; index < color.length; index++) {
@@ -71,7 +65,6 @@ public final class UiRenderState {
         GlStateManager.enableAlpha();
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
-        GL11.glShadeModel(GL11.GL_SMOOTH);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -108,8 +101,6 @@ public final class UiRenderState {
             GlStateManager.tryBlendFuncSeparate(blendSourceRgb, blendDestinationRgb,
                     blendSourceAlpha, blendDestinationAlpha);
             GlStateManager.bindTexture(boundTexture);
-            GL11.glShadeModel(shadeModel);
-            GlStateManager.alphaFunc(alphaFunction, alphaReference);
             GlStateManager.color(color[0], color[1], color[2], color[3]);
         } finally {
             GlStateManager.popMatrix();

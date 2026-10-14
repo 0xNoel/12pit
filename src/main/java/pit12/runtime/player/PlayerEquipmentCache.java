@@ -58,7 +58,7 @@ public final class PlayerEquipmentCache {
         UUID playerId = player.getUniqueID();
         PlayerEquipmentSnapshot previous = entries.get(playerId);
         int knownSlots = previous == null ? 0 : previous.knownSlots();
-        ItemStack[] equipment = new ItemStack[5];
+        ItemStack[] equipment = previous == null ? new ItemStack[5] : previous.equipmentForUpdate();
         for (int slot = 0; slot < equipment.length; slot++) {
             int mask = slot == 0 ? HELD_ITEM
                     : slot == 1 ? BOOTS : slot == 2 ? LEGGINGS : slot == 3 ? CHESTPLATE : HELMET;
@@ -66,8 +66,6 @@ public final class PlayerEquipmentCache {
                 ItemStack stack =
                         slot == 0 ? player.getHeldItem() : player.getCurrentArmor(slot - 1);
                 equipment[slot] = stack == null ? null : stack.copy();
-            } else {
-                equipment[slot] = previous == null ? null : previous.copyEquipment(slot);
             }
         }
         PitEnchantments heldEnchantments =

@@ -277,12 +277,16 @@ final class WebUiServer {
 
     private void serveEvents(HttpExchange exchange) throws IOException {
         BlockingQueue<Boolean> signal = new ArrayBlockingQueue<Boolean>(1);
+        boolean accepted;
         synchronized (streams) {
-            if (streams.size() >= MAX_STREAMS) {
-                sendJson(exchange, 503, object("error", "Too many open pages"));
-                return;
+            accepted = streams.size() < MAX_STREAMS;
+            if (accepted) {
+                streams.add(signal);
             }
-            streams.add(signal);
+        }
+        if (!accepted) {
+            sendJson(exchange, 503, object("error", "Too many open pages"));
+            return;
         }
         try {
             exchange.getResponseHeaders().set("Content-Type", "text/event-stream; charset=utf-8");

@@ -12,14 +12,14 @@ msgstr ""
 "X-Crowdin-File-ID: 1\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2026-10-11 16:32\n"
+"PO-Revision-Date: 2026-10-11 20:05\n"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:41
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Auto Click"
 msgstr "连点器"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:42
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Combat"
 msgstr "战斗"
@@ -34,120 +34,140 @@ msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Combat"
 msgstr "战斗"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:44
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Clicks repeatedly while holding a mouse button."
 msgstr "按住鼠标按键时连点。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:44
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:45
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Left click"
 msgstr "左键"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:45
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:46
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Left click enabled"
 msgstr "启用左键连点"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:46
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:47
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Repeats left clicks while holding the attack button."
 msgstr "按住攻击键时连续左键点击。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:47
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:48
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Minimum CPS"
 msgstr "最低 CPS"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:59
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:62
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
 msgid "Minimum CPS"
 msgstr "最低 CPS"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:48
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:49
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Lowest left click rate, in clicks per second."
 msgstr "左键每秒点击次数的下限。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:49
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:50
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Maximum CPS"
 msgstr "最高 CPS"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:61
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:64
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
 msgid "Maximum CPS"
 msgstr "最高 CPS"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:50
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Highest left click rate, in clicks per second."
 msgstr "左键每秒点击次数的上限。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:52
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Weapon only"
-msgstr "仅武器"
+msgid "Allow weapons"
+msgstr "允许武器"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:52
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows left clicks with swords and tools. Turn off both filters to allow any item."
-msgstr "手持剑或工具时允许左键连点。关闭两个筛选选项后，手持任何物品都可连点。"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:54
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Only fist"
-msgstr "仅空手"
+msgid "Allows left clicks with swords and tools. Turn off all filters to allow any item."
+msgstr "手持剑或工具时允许左键连点。关闭所有筛选选项后，手持任何物品都可连点。"
 
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:55
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Allow fist"
+msgstr "允许空手"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:56
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allows left clicks with an empty hand."
 msgstr "空手时允许左键连点。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:56
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:57
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Allow dragon egg"
+msgstr "允许龙蛋"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:58
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Allows left clicks while pointing at a dragon egg."
+msgstr "指向龙蛋时允许左键连点。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:59
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Right click"
 msgstr "右键"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:57
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:60
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Right click enabled"
 msgstr "启用右键连点"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:58
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:61
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Repeats right clicks while holding the use button."
 msgstr "按住使用键时连续右键点击。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:60
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Lowest right click rate, in clicks per second."
 msgstr "右键每秒点击次数的下限。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:62
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:65
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Highest right click rate, in clicks per second."
 msgstr "右键每秒点击次数的上限。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:66
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Only blocks"
-msgstr "仅方块"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows right clicks while holding a block. Turn off both filters to allow any item."
-msgstr "手持方块时允许右键连点。关闭两个筛选选项后，手持任何物品都可连点。"
+msgid "Allow blocks"
+msgstr "允许方块"
 
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:66
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Only cake"
-msgstr "仅蛋糕"
+msgid "Allows right clicks while holding a block. Turn off all filters to allow any item."
+msgstr "手持方块时允许右键连点。关闭所有筛选选项后，手持任何物品都可连点。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:67
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:69
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Allow cake"
+msgstr "允许蛋糕"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:70
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allows right clicks while pointing at cake."
 msgstr "指向蛋糕时允许右键连点。"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:71
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
+msgid "Allow dragon egg"
+msgstr "允许龙蛋"
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:72
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Allows right clicks while pointing at a dragon egg."
+msgstr "指向龙蛋时允许右键连点。"
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:38
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
@@ -349,16 +369,6 @@ msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Adds N to nicked players' names in Tab and Player List."
 msgstr "在 Tab 和玩家列表给 nick 玩家添加 N 后缀。"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:47
-msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Show real names while Tab is open"
-msgstr "当 Tab 列表打开时显示真实昵称"
-
-#: src/main/java/pit12/feature/denick/DenickConfig.java:47
-msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Replaces nicked names in Tab and Player List with real names while Tab is open."
-msgstr "当 Tab 列表打开时，用真实昵称替换 Tab 和玩家列表中 nick 玩家的昵称。"
-
 #: src/main/java/pit12/feature/denick/DenickFeature.java:126
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "Find a nicked player's name"
@@ -401,18 +411,18 @@ msgstr "正在查询 {0}..."
 
 #: src/main/java/pit12/feature/denick/DenickFeature.java:482
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
-msgid "{0} -> {1} (cached)"
-msgstr "{0} -> {1}（缓存）"
+msgid "{0} §c-> {1} §c(cached)"
+msgstr "{0} §c-> {1}§c（缓存）"
 
 #: src/main/java/pit12/feature/denick/DenickFeature.java:529
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
-msgid "{0} -> {1} (updated)"
-msgstr "{0} -> {1}（已更新）"
+msgid "{0} §c-> {1} §c(updated)"
+msgstr "{0} §c-> {1}§c（已更新）"
 
 #: src/main/java/pit12/feature/denick/DenickFeature.java:529
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
-msgid "{0} -> {1}"
-msgstr "{0} -> {1}"
+msgid "{0} §c-> {1}"
+msgstr "{0} §c-> {1}"
 
 #: src/main/java/pit12/feature/denick/DenickFeature.java:544
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
@@ -834,10 +844,20 @@ msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
 msgid "Got it"
 msgstr "知道了"
 
+#: web-ui/src/LanguageNotice.vue:124:16
+msgctxt "web-ui/src/LanguageNotice.vue#1"
+msgid "Got it"
+msgstr "知道了"
+
 #: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:100
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
 msgid "Don't show again"
 msgstr "不再显示"
+
+#: web-ui/src/LanguageNotice.vue:125:15
+msgctxt "web-ui/src/LanguageNotice.vue#1"
+msgid "Don't show again"
+msgstr ""
 
 #: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:35
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
@@ -1199,15 +1219,25 @@ msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Player information"
 msgstr "玩家信息"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:66
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:68
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Short player names"
-msgstr "精简玩家名称"
+msgid "Remove bounty suffix"
+msgstr "去掉赏金后缀"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:67
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:69
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows only the level and player name, keeping their formatting."
-msgstr "仅显示等级和玩家名称，保留原有文字格式。"
+msgid "Removes bounty suffixes from player names."
+msgstr "去掉玩家名称中的赏金后缀。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:70
+msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
+msgid "Real names key"
+msgstr "显示真名按键"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:71
+msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
+msgid "Hold to show nicked players' real names in Player List."
+msgstr "按住时，在玩家列表显示 nick 玩家的真实昵称。"
 
 #: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:68
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
@@ -1326,8 +1356,8 @@ msgstr "§c§l敌人"
 
 #: src/main/java/pit12/feature/playerlist/PlayerListGroup.java:26
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListGroup.java#1"
-msgid "§c§lNick"
-msgstr "§c§lNick"
+msgid "§e§lNick"
+msgstr "§e§lNick"
 
 #: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:31
 msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
@@ -1696,7 +1726,7 @@ msgstr "正在加载换装绑定"
 
 #: src/main/java/pit12/feature/swap/BindingBook.java:86
 msgctxt "src/main/java/pit12/feature/swap/BindingBook.java#1"
-msgid "Swap bindings could not be loaded; import a file or use /swap clear"
+msgid "Swap bindings could not be loaded. Import a file or use /swap clear"
 msgstr "无法加载换装绑定，请导入文件或使用 /swap clear"
 
 #: src/main/java/pit12/feature/swap/BindingBook.java:120
@@ -2574,85 +2604,75 @@ msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
 msgid "Moves the held item tooltip upward by this many pixels."
 msgstr "手持物品提示向上移动的像素数。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:40
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:41
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Settings"
 msgstr "设置"
 
-#: web-ui/src/App.vue:161:14
+#: web-ui/src/App.vue:169:14
 msgctxt "web-ui/src/App.vue#1"
 msgid "Settings"
 msgstr "设置"
 
-#: web-ui/src/SettingsPage.vue:63:12
+#: web-ui/src/SettingsPage.vue:75:12
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Settings"
 msgstr "设置"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:41
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:42
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Interface"
 msgstr "界面"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:48
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:49
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Language"
 msgstr "语言"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:49
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:50
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Sets the language for the interface, commands, and HUD."
 msgstr "设置界面、命令回显和 HUD 的语言。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:50
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:51
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Accent color"
 msgstr "主题色"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:50
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:51
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Controls the interface accent."
 msgstr "设置界面的主题色。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:52
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:53
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Show details"
 msgstr "显示详细说明"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:53
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:54
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Shows descriptions for features and settings."
 msgstr "显示功能和设置的说明。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:54
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:55
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Discord RPC"
 msgstr "Discord RPC"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:55
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:56
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Shows 12pit and elapsed time on your Discord profile."
 msgstr "在 Discord 个人资料中显示 12pit 和本次使用时长。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:56
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:57
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Interface key"
 msgstr "界面快捷键"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:57
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:58
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Opens the HUD editor. Press again with no HUD selected to open settings."
 msgstr "打开 HUD 编辑器。未选中 HUD 时，再按一次即可打开设置。"
-
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:59
-msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
-msgid "HUD editor hint"
-msgstr "HUD 编辑器提示"
-
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:60
-msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
-msgid "Shows how to open the Web UI from the HUD editor."
-msgstr "显示从 HUD 编辑器打开网页界面的方法。"
 
 #: src/main/java/pit12/feature/webui/WebUiPreferences.java:106
 msgctxt "src/main/java/pit12/feature/webui/WebUiPreferences.java#1"
@@ -2669,10 +2689,15 @@ msgctxt "src/main/java/pit12/feature/webui/WebUiPreferences.java#1"
 msgid "Could not save Web UI settings"
 msgstr "无法保存网页界面设置"
 
-#: src/main/java/pit12/feature/webui/WebUiServer.java:260
+#: src/main/java/pit12/feature/webui/WebUiServer.java:254
 msgctxt "src/main/java/pit12/feature/webui/WebUiServer.java#1"
 msgid "Web UI settings are unavailable"
 msgstr "网页界面设置不可用"
+
+#: src/main/java/pit12/feature/webui/WebUiServer.java:267
+msgctxt "src/main/java/pit12/feature/webui/WebUiServer.java#2"
+msgid "Web UI settings are unavailable"
+msgstr ""
 
 #: src/main/java/pit12/runtime/command/CommandRegistry.java:43
 msgctxt "src/main/java/pit12/runtime/command/CommandRegistry.java#1"
@@ -2704,152 +2729,142 @@ msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Turns this feature on."
 msgstr "开启此功能。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:148
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:155
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "HUD"
 msgstr "HUD"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:191
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:198
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "HUD"
 msgstr "HUD"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:155
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:162
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Text shadow"
 msgstr "文字阴影"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:156
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:163
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Draws a shadow behind HUD text."
 msgstr "在 HUD 文字后绘制阴影。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:158
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Use monospace font"
-msgstr "使用等宽字体"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:159
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Uses the bundled Monocraft font for HUD text."
-msgstr "HUD 文字使用内置的 Monocraft 字体。"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:161
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:168
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Translate text"
 msgstr "翻译文字"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:162
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:169
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Translates HUD text into the selected language."
 msgstr "将 HUD 文字翻译为所选语言。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:163
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:170
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Anchor"
 msgstr "锚点"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:175
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:182
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "Anchor"
 msgstr "锚点"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:164
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:171
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Auto chooses an anchor when the HUD is moved."
 msgstr "选择自动时，移动 HUD 会自动确定锚点。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:165
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:172
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Auto"
 msgstr "自动"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:166
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:173
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Top left"
 msgstr "左上"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:167
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:174
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Top center"
 msgstr "顶部居中"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:168
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:175
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Top right"
 msgstr "右上"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:169
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:176
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Center left"
 msgstr "左侧居中"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:170
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:177
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Center"
 msgstr "居中"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:171
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:178
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Center right"
 msgstr "右侧居中"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:172
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:179
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Bottom left"
 msgstr "左下"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:173
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Bottom center"
 msgstr "底部居中"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:174
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:181
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Bottom right"
 msgstr "右下"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:176
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Stores the anchor chosen by Auto."
 msgstr "保存自动确定的锚点。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:178
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:185
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Horizontal offset"
 msgstr "水平偏移"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:178
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:185
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Offset from the anchor, in GUI pixels."
 msgstr "相对锚点的偏移量，单位为界面像素。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:181
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:188
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "Offset from the anchor, in GUI pixels."
 msgstr "相对锚点的偏移量，单位为界面像素。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:187
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Vertical offset"
 msgstr "垂直偏移"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:182
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:189
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Scale"
 msgstr "缩放"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:190
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "HUD size, in percent."
 msgstr "HUD 大小，单位为百分比。"
 
-#: web-ui/src/App.vue:130:22
+#: web-ui/src/App.vue:138:22
 msgctxt "web-ui/src/App.vue#1"
 msgid "Pages"
 msgstr "页面"
 
-#: web-ui/src/App.vue:139:14
+#: web-ui/src/App.vue:147:14
 msgctxt "web-ui/src/App.vue#1"
 msgid "Features"
 msgstr "功能"
@@ -2864,7 +2879,7 @@ msgctxt "web-ui/src/FeaturesPage.vue#2"
 msgid "Features"
 msgstr "功能"
 
-#: web-ui/src/App.vue:146:14
+#: web-ui/src/App.vue:154:14
 msgctxt "web-ui/src/App.vue#1"
 msgid "Profiles"
 msgstr "配置方案"
@@ -2879,7 +2894,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Profiles"
 msgstr "配置方案"
 
-#: web-ui/src/App.vue:153:14
+#: web-ui/src/App.vue:161:14
 msgctxt "web-ui/src/App.vue#1"
 msgid "Relations"
 msgstr "玩家关系"
@@ -2894,7 +2909,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Relations"
 msgstr "玩家关系"
 
-#: web-ui/src/App.vue:263:21
+#: web-ui/src/App.vue:276:25
 msgctxt "web-ui/src/App.vue#1"
 msgid "Dismiss error"
 msgstr "关闭错误提示"
@@ -2994,6 +3009,116 @@ msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Subcategory"
 msgstr "子分类"
 
+#: web-ui/src/LanguageNotice.vue:120:18
+msgctxt "web-ui/src/LanguageNotice.vue#1"
+msgid "{0} is available. Open Settings to change your language."
+msgstr ""
+
+#: web-ui/src/LanguageNotice.vue:126:17
+msgctxt "web-ui/src/LanguageNotice.vue#1"
+msgid "Switch language"
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:106:22
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Change {0}"
+msgstr ""
+
+#: web-ui/src/SettingRow.vue:252:15
+msgctxt "web-ui/src/SettingRow.vue#1"
+msgid "Change {0}"
+msgstr "更改 {0}"
+
+#: web-ui/src/LanguagePicker.vue:126:24
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Close"
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:127:19
+msgctxt "web-ui/src/LanguagePicker.vue#2"
+msgid "Close"
+msgstr ""
+
+#: web-ui/src/RelationsPage.vue:291:15
+msgctxt "web-ui/src/RelationsPage.vue#1"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/SettingsPage.vue:142:22
+msgctxt "web-ui/src/SettingsPage.vue#1"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/SettingsPage.vue:143:17
+msgctxt "web-ui/src/SettingsPage.vue#2"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/TransferDialog.vue:308:24
+msgctxt "web-ui/src/TransferDialog.vue#1"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/TransferDialog.vue:309:19
+msgctxt "web-ui/src/TransferDialog.vue#2"
+msgid "Close"
+msgstr "关闭"
+
+#: web-ui/src/LanguagePicker.vue:142:16
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Request a language on GitHub"
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:151:16
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Help improve translations on Crowdin"
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:155:47
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Search languages"
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:179:16
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "No matching languages."
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:190:14
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Use system language"
+msgstr ""
+
+#: web-ui/src/LanguagePicker.vue:193:14
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Cancel"
+msgstr ""
+
+#: web-ui/src/ProfilesPage.vue:238:18
+msgctxt "web-ui/src/ProfilesPage.vue#1"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/RelationsPage.vue:337:22
+msgctxt "web-ui/src/RelationsPage.vue#1"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/RelationsPage.vue:485:20
+msgctxt "web-ui/src/RelationsPage.vue#2"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/TransferDialog.vue:579:14
+msgctxt "web-ui/src/TransferDialog.vue#1"
+msgid "Cancel"
+msgstr "取消"
+
+#: web-ui/src/LanguagePicker.vue:201:14
+msgctxt "web-ui/src/LanguagePicker.vue#1"
+msgid "Apply"
+msgstr ""
+
 #: web-ui/src/PageScrollbar.vue:136:18
 msgctxt "web-ui/src/PageScrollbar.vue#1"
 msgid "Page scroll"
@@ -3038,26 +3163,6 @@ msgstr "删除"
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Delete"
 msgstr "删除"
-
-#: web-ui/src/ProfilesPage.vue:238:18
-msgctxt "web-ui/src/ProfilesPage.vue#1"
-msgid "Cancel"
-msgstr "取消"
-
-#: web-ui/src/RelationsPage.vue:337:22
-msgctxt "web-ui/src/RelationsPage.vue#1"
-msgid "Cancel"
-msgstr "取消"
-
-#: web-ui/src/RelationsPage.vue:485:20
-msgctxt "web-ui/src/RelationsPage.vue#2"
-msgid "Cancel"
-msgstr "取消"
-
-#: web-ui/src/TransferDialog.vue:579:14
-msgctxt "web-ui/src/TransferDialog.vue#1"
-msgid "Cancel"
-msgstr "取消"
 
 #: web-ui/src/ProfilesPage.vue:265:28
 msgctxt "web-ui/src/ProfilesPage.vue#1"
@@ -3138,31 +3243,6 @@ msgstr "添加玩家"
 msgctxt "web-ui/src/RelationsPage.vue#2"
 msgid "Add players"
 msgstr "添加玩家"
-
-#: web-ui/src/RelationsPage.vue:291:15
-msgctxt "web-ui/src/RelationsPage.vue#1"
-msgid "Close"
-msgstr "关闭"
-
-#: web-ui/src/SettingsPage.vue:114:22
-msgctxt "web-ui/src/SettingsPage.vue#1"
-msgid "Close"
-msgstr "关闭"
-
-#: web-ui/src/SettingsPage.vue:115:17
-msgctxt "web-ui/src/SettingsPage.vue#2"
-msgid "Close"
-msgstr "关闭"
-
-#: web-ui/src/TransferDialog.vue:308:24
-msgctxt "web-ui/src/TransferDialog.vue#1"
-msgid "Close"
-msgstr "关闭"
-
-#: web-ui/src/TransferDialog.vue:309:19
-msgctxt "web-ui/src/TransferDialog.vue#2"
-msgid "Close"
-msgstr "关闭"
 
 #: web-ui/src/RelationsPage.vue:297:13
 msgctxt "web-ui/src/RelationsPage.vue#1"
@@ -3277,7 +3357,7 @@ msgstr "选择当前显示的玩家"
 #: web-ui/src/RelationsPage.vue:433:50
 msgctxt "web-ui/src/RelationsPage.vue#1"
 msgid "MC ID"
-msgstr "MC ID"
+msgstr "昵称"
 
 #: web-ui/src/RelationsPage.vue:434:50
 msgctxt "web-ui/src/RelationsPage.vue#1"
@@ -3374,27 +3454,22 @@ msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Cancel capture for {0}"
 msgstr "取消为 {0} 录入按键"
 
-#: web-ui/src/SettingRow.vue:252:15
-msgctxt "web-ui/src/SettingRow.vue#1"
-msgid "Change {0}"
-msgstr "更改 {0}"
-
 #: web-ui/src/SettingRow.vue:260:11
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Press a key"
 msgstr "按下按键"
 
-#: web-ui/src/SettingsPage.vue:69:17
+#: web-ui/src/SettingsPage.vue:81:17
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Replaces the active profile configuration with defaults."
 msgstr "将当前使用的配置方案恢复为默认设置。"
 
-#: web-ui/src/SettingsPage.vue:72:36
+#: web-ui/src/SettingsPage.vue:84:36
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Restore defaults"
 msgstr "恢复默认设置"
 
-#: web-ui/src/SettingsPage.vue:80:35
+#: web-ui/src/SettingsPage.vue:92:35
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Export"
 msgstr "导出"
@@ -3404,7 +3479,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Export"
 msgstr "导出"
 
-#: web-ui/src/SettingsPage.vue:88:33
+#: web-ui/src/SettingsPage.vue:100:33
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Import"
 msgstr "导入"
@@ -3414,22 +3489,22 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Import"
 msgstr "导入"
 
-#: web-ui/src/SettingsPage.vue:110:37
+#: web-ui/src/SettingsPage.vue:138:37
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Help others discover 12pit?"
 msgstr "愿意让更多人认识 12pit 吗？"
 
-#: web-ui/src/SettingsPage.vue:124:11
+#: web-ui/src/SettingsPage.vue:152:11
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Showing 12pit on Discord helps more players find us. If you’re comfortable sharing it, we’d love for you to keep it on 🥺"
 msgstr "在 Discord 上显示 12pit，能帮更多玩家发现我们。如果你愿意，希望你能保留它 🥺"
 
-#: web-ui/src/SettingsPage.vue:137:12
+#: web-ui/src/SettingsPage.vue:165:12
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Turn off"
 msgstr "关闭"
 
-#: web-ui/src/SettingsPage.vue:145:12
+#: web-ui/src/SettingsPage.vue:173:12
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Keep on"
 msgstr "保持开启"
@@ -3604,17 +3679,17 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Working..."
 msgstr "正在处理…"
 
-#: web-ui/src/api.ts:120:56
+#: web-ui/src/api.ts:127:56
 msgctxt "web-ui/src/api.ts#1"
 msgid "Request failed"
 msgstr "请求失败"
 
-#: web-ui/src/useWebUiState.ts:84:60
+#: web-ui/src/useWebUiState.ts:85:60
 msgctxt "web-ui/src/useWebUiState.ts#1"
 msgid "Request failed"
 msgstr "请求失败"
 
-#: web-ui/src/languages.ts:34:43
+#: web-ui/src/languages.ts:35:43
 msgctxt "web-ui/src/languages.ts#1"
 msgid "Could not load language"
 msgstr "无法加载语言"
@@ -3623,3 +3698,33 @@ msgstr "无法加载语言"
 msgctxt "web-ui/src/useKeyCapture.ts#1"
 msgid "This key cannot be bound"
 msgstr "此按键无法绑定"
+
+#: src/main/resources/assets/pit12/languages/languages.json:en-US
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#en-US"
+msgid "English"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:zh-CN
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#zh-CN"
+msgid "Chinese Simplified"
+msgstr ""
+
+#: src/main/java/pit12/feature/banalert/BanAlertConfig.java:10
+msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
+msgid "Ban alerts"
+msgstr "封禁提示"
+
+#: src/main/java/pit12/feature/banalert/BanAlertConfig.java:10
+msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
+msgid "Misc"
+msgstr "杂项"
+
+#: src/main/java/pit12/feature/banalert/BanAlertConfig.java:11
+msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
+msgid "Shows who may have been banned based on ban messages and when players leave."
+msgstr "根据封禁消息和玩家离线时间，推测可能被封禁的人。"
+
+#: src/main/java/pit12/feature/banalert/BanAlertFeature.java:165
+msgctxt "src/main/java/pit12/feature/banalert/BanAlertFeature.java#1"
+msgid "Possibly banned player: {0} §e({1} ms)"
+msgstr "疑似被封禁玩家：{0} §e({1} 毫秒)"

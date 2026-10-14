@@ -33,6 +33,7 @@ final class SwapOverlay {
     private final SwapConfig config;
     private final IdentityHashMap<ItemStack, Label> labels = new IdentityHashMap<>();
     private final IdentityHashMap<ItemStack, CachedIdentity> cache = new IdentityHashMap<>();
+    private final IdentityHashMap<ItemStack, ItemIdentity> identities = new IdentityHashMap<>();
 
     SwapOverlay(Minecraft minecraft, BindingBook bindings, SwapConfig config) {
         this.minecraft = minecraft;
@@ -43,25 +44,26 @@ final class SwapOverlay {
     void clear() {
         labels.clear();
         cache.clear();
+        identities.clear();
     }
 
     void refresh() {
         labels.clear();
+        identities.clear();
         if (!config.highlight.get() || bindings.readinessProblem() != null || bindings.count() == 0
                 || minecraft.thePlayer == null) {
             cache.clear();
             return;
         }
-        IdentityHashMap<ItemStack, ItemIdentity> identities = new IdentityHashMap<>();
         boolean containerScreen = minecraft.currentScreen instanceof GuiContainer;
         for (Slot slot : minecraft.thePlayer.inventoryContainer.inventorySlots) {
             if (containerScreen || slot.slotNumber >= 36
                     || slot.slotNumber >= 5 && slot.slotNumber <= 8)
-                addIdentity(identities, slot.getStack());
+                addIdentity(slot.getStack());
         }
         if (containerScreen) {
             for (Slot slot : minecraft.thePlayer.openContainer.inventorySlots) {
-                addIdentity(identities, slot.getStack());
+                addIdentity(slot.getStack());
             }
         }
         cache.keySet().retainAll(identities.keySet());
@@ -79,7 +81,7 @@ final class SwapOverlay {
         }
     }
 
-    private void addIdentity(IdentityHashMap<ItemStack, ItemIdentity> identities, ItemStack stack) {
+    private void addIdentity(ItemStack stack) {
         if (stack == null || identities.containsKey(stack))
             return;
         CachedIdentity cached = cache.get(stack);

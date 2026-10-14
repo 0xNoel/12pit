@@ -91,7 +91,7 @@ The following helpers create settings and register their metadata in the feature
 - `keybindSetting` stores the key code from `0` to `255`. The feature is responsible for handling the input.
 - `colorSetting` stores RGB color as `0xRRGGBB`. `colorPickerSetting` stores ARGB color as `0xAARRGGBB`.
 - `choiceSetting` creates a choice with default id and `ChoiceSetting.Choice` instances with stable ids.
-- `hudConfig` adds grouped anchor, text shadow, font, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
+- `hudConfig` adds grouped anchor, text shadow, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
 
 Feature IDs are unique in the catalog. Setting and HUD config IDs are unique within their feature. An ID starts with a lowercase ASCII letter or digit; the remaining characters can also include `.`, `-`, or `_`. Preserve saved IDs when changing display names. A HUD config reserves setting IDs under its prefix, such as `status.offset_x`; do not define settings with conflicting IDs.
 

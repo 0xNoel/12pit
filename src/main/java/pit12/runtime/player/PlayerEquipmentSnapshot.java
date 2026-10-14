@@ -67,6 +67,11 @@ public final class PlayerEquipmentSnapshot {
         return copy(equipment[slot]);
     }
 
+    ItemStack[] equipmentForUpdate() {
+        // Unchanged stacks stay private and can be shared by later snapshots.
+        return equipment.clone();
+    }
+
     int knownSlots() {
         return knownSlots;
     }

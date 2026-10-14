@@ -23,7 +23,6 @@ import com.google.gson.JsonPrimitive;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -97,6 +96,9 @@ final class ItemIdentity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(item, variant, kind, value);
+        int result = 31 + item.hashCode();
+        result = 31 * result + variant;
+        result = 31 * result + kind.hashCode();
+        return 31 * result + value.hashCode();
     }
 }
