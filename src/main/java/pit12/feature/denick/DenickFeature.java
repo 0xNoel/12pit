@@ -223,23 +223,23 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     private void command(ICommandSender sender, String[] args) {
         client.check();
         if (!config.enabled()) {
-            throw new IllegalArgumentException(source("Denick is disabled"));
+            throw new IllegalArgumentException("Denick is disabled");
         }
         if (!ready) {
-            throw new IllegalArgumentException(source("Denick cache is loading"));
+            throw new IllegalArgumentException("Denick cache is loading");
         }
         if (args.length == 2 && !"force".equalsIgnoreCase(args[1])) {
-            throw new IllegalArgumentException(source("Use force as the second argument"));
+            throw new IllegalArgumentException("Use force as the second argument");
         }
         if (session.world() == null) {
-            throw new IllegalArgumentException(source("Join a world before using denick"));
+            throw new IllegalArgumentException("Join a world before using denick");
         }
         Map.Entry<UUID, String> player = presence.players().entrySet().stream()
                 .filter(entry -> entry.getValue().equalsIgnoreCase(args[0])).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(source("Player is not in Tab")));
+                .orElseThrow(() -> new IllegalArgumentException("Player is not in Tab"));
         Target target = targets.get(player.getKey());
         if (args.length == 1 && (target == null || !target.nick)) {
-            throw new IllegalArgumentException(source("Player is not nicked. Use force to query"));
+            throw new IllegalArgumentException("Player is not nicked. Use force to query");
         }
         if (target == null) {
             target = new Target(player.getKey(), player.getValue());

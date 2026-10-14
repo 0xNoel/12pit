@@ -25,6 +25,7 @@ import pit12.runtime.config.ChoiceSetting;
 import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.IntegerSetting;
+import pit12.runtime.config.KeybindSetting;
 
 public final class SwapConfig extends FeatureConfig {
     final BooleanSetting rightClick;
@@ -41,7 +42,7 @@ public final class SwapConfig extends FeatureConfig {
     final IntegerSetting bindingDelay;
     final IntegerSetting closeDelay;
     final BooleanSetting resumeInputNextTick;
-    final IntegerSetting unequipKey;
+    final KeybindSetting unequipKey;
     final BooleanSetting bindingMessages;
     final BooleanSetting swapMessages;
     final BooleanSetting showGem;

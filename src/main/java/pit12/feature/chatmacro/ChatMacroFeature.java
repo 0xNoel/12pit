@@ -42,6 +42,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.chat.ChatFeedback;
 import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
+import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class ChatMacroFeature
@@ -112,7 +113,8 @@ public final class ChatMacroFeature
 
     @Override
     public boolean consumesKey(int key) {
-        return key > 0 && (key == config.spawnKey.get() || bindings.message(key) != null);
+        return key > 0
+                && (Keybind.matches(config.spawnKey.get(), key) || bindings.message(key) != null);
     }
 
     @Override
@@ -123,7 +125,7 @@ public final class ChatMacroFeature
             return false;
         if (repeat || pending != null)
             return true;
-        if (key == config.spawnKey.get()) {
+        if (Keybind.matches(config.spawnKey.get(), key)) {
             if (waiting)
                 cancel(true);
             else if (canSpawn())
@@ -236,7 +238,7 @@ public final class ChatMacroFeature
     private void updateHint() {
         if (waiting)
             spawnHint = language.format("Spawning… Press [{0}] to cancel.",
-                    Keyboard.getKeyName(config.spawnKey.get()));
+                    Keybind.name(config.spawnKey.get()));
     }
 
     private void stopWaiting() {

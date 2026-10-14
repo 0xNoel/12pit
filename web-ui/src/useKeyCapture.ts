@@ -25,10 +25,13 @@ export function useKeyCapture(
   reportError: (cause: unknown) => void,
 ) {
   const capturing = ref<{ featureId: string; settingId: string } | null>(null)
+  let modifier: string | null = null
 
   function cancelCapture() {
     capturing.value = null
+    modifier = null
     window.removeEventListener('keydown', onKey, true)
+    window.removeEventListener('keyup', onKeyUp, true)
   }
 
   function startCapture(featureId: string, settingId: string) {
@@ -36,6 +39,7 @@ export function useKeyCapture(
     cancelCapture()
     capturing.value = { featureId, settingId }
     window.addEventListener('keydown', onKey, true)
+    window.addEventListener('keyup', onKeyUp, true)
   }
 
   function onKey(event: KeyboardEvent) {
@@ -55,7 +59,57 @@ export function useKeyCapture(
       cancelCapture()
       return
     }
-    const target = capturing.value
+    if (name === 'NONE') {
+      saveKey(name)
+      return
+    }
+    const isModifier = [
+      'LSHIFT',
+      'RSHIFT',
+      'LCONTROL',
+      'RCONTROL',
+      'LMENU',
+      'RMENU',
+      'LMETA',
+      'RMETA',
+    ].includes(name)
+    // A modifier used as the main key also sets its own modifier flag.
+    const modifiers = [
+      event.shiftKey ? 'LSHIFT' : null,
+      event.ctrlKey ? 'LCONTROL' : null,
+      event.altKey ? 'LMENU' : null,
+      event.metaKey ? 'LMETA' : null,
+    ].filter(
+      (key): key is string =>
+        key !== null && (!isModifier || key.slice(1) !== name.slice(1)),
+    )
+    if (modifiers.length > 1) {
+      reportError(new Error(t('This key cannot be bound')))
+      cancelCapture()
+      return
+    }
+    if (isModifier && modifier === null && modifiers.length === 0) {
+      modifier = name
+      return
+    }
+    if (modifier === name) return
+    const heldModifier = modifier ?? modifiers[0]
+    saveKey(heldModifier ? `${heldModifier}+${name}` : name)
+  }
+
+  function onKeyUp(event: KeyboardEvent) {
+    if (!capturing.value || !modifier) return
+    event.preventDefault()
+    event.stopPropagation()
+    const name =
+      event.code === '' && event.key === 'Shift'
+        ? 'RSHIFT'
+        : keyName(event.code)
+    if (name === modifier) saveKey(name)
+  }
+
+  function saveKey(name: string) {
+    const target = capturing.value!
     cancelCapture()
     setting(target.featureId, target.settingId, name)
   }

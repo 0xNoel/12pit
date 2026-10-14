@@ -91,10 +91,9 @@ public abstract class FeatureConfig {
         return setting;
     }
 
-    protected final IntegerSetting keybindSetting(String id, String displayName, String description,
+    protected final KeybindSetting keybindSetting(String id, String displayName, String description,
             int defaultValue) {
-        IntegerSetting setting =
-                new IntegerSetting(id, displayName, description, defaultValue, 0, 255);
+        KeybindSetting setting = new KeybindSetting(id, displayName, description, defaultValue);
         register(setting, ConfigOption.Kind.KEYBIND);
         return setting;
     }

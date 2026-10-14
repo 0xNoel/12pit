@@ -132,7 +132,8 @@ function menuKeydown(event: KeyboardEvent) {
     buttons[next]?.focus()
   }
 }
-function keyLabel(value: string) {
+function keyLabel(value: string): string {
+  if (value.includes('+')) return value.split('+').map(keyLabel).join(' + ')
   if (value === 'RSHIFT') return t('Right Shift')
   if (value === 'LSHIFT') return t('Left Shift')
   return value === 'NONE' ? t('Unbound') : value

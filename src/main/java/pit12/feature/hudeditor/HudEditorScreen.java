@@ -29,6 +29,7 @@ import org.lwjgl.input.Mouse;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
+import pit12.shared.input.Keybind;
 import pit12.shared.rendering.UiRenderState;
 
 final class HudEditorScreen extends GuiScreen {
@@ -86,7 +87,7 @@ final class HudEditorScreen extends GuiScreen {
         if (interfaceKey.getAsInt() != Keyboard.KEY_NONE) {
             interfaceTips = new String[] {language.format(
                     "When no HUD is selected, press {0} again to open the configuration interface.",
-                    Keyboard.getKeyName(interfaceKey.getAsInt()))};
+                    Keybind.name(interfaceKey.getAsInt()))};
         } else {
             interfaceTips = new String[0];
             hintVisible = false;
@@ -115,8 +116,8 @@ final class HudEditorScreen extends GuiScreen {
     private void updatePreview() {
         // Let the normal overlay callbacks draw the live preview.
         controller.preview(!hintVisible && Keyboard.isKeyDown(Keyboard.KEY_SPACE)
-                && (interfaceKey.getAsInt() != Keyboard.KEY_SPACE || controller.hasSelection()
-                        || controller.busy()));
+                && (!Keybind.matches(interfaceKey.getAsInt(), Keyboard.KEY_SPACE)
+                        || controller.hasSelection() || controller.busy()));
     }
 
     @Override
@@ -237,7 +238,7 @@ final class HudEditorScreen extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (hintVisible && keyCode != interfaceKey.getAsInt()) {
+        if (hintVisible && !Keybind.matches(interfaceKey.getAsInt(), keyCode)) {
             if (keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_RETURN
                     || keyCode == Keyboard.KEY_NUMPADENTER) {
                 dismissHint();
@@ -253,17 +254,17 @@ final class HudEditorScreen extends GuiScreen {
         if (controller.live() || controller.pointerActive()) {
             return;
         }
-        if (isCtrlKeyDown() && keyCode == Keyboard.KEY_Z) {
+        if (!controller.hasSelection() && !controller.busy()
+                && Keybind.matches(interfaceKey.getAsInt(), keyCode) && !Keyboard.isRepeatEvent()) {
+            mc.displayGuiScreen(parent);
+            webUiOpener.run();
+        } else if (isCtrlKeyDown() && keyCode == Keyboard.KEY_Z) {
             controller.undo();
         } else if (isCtrlKeyDown() && keyCode == Keyboard.KEY_Y) {
             controller.redo();
         } else if (keyCode == Keyboard.KEY_R && (controller.hasSelection() || isShiftKeyDown())
                 && !Keyboard.isRepeatEvent()) {
             controller.reset(isShiftKeyDown());
-        } else if (!controller.hasSelection() && !controller.busy() && keyCode != Keyboard.KEY_NONE
-                && keyCode == interfaceKey.getAsInt() && !Keyboard.isRepeatEvent()) {
-            mc.displayGuiScreen(parent);
-            webUiOpener.run();
         } else {
             int step = isShiftKeyDown() ? 10 : 1;
             if (keyCode == Keyboard.KEY_LEFT) {

@@ -27,11 +27,11 @@ import pit12.runtime.config.ChoiceSetting;
 import pit12.runtime.config.ChoiceSetting.Choice;
 import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
-import pit12.runtime.config.IntegerSetting;
+import pit12.runtime.config.KeybindSetting;
 import pit12.runtime.languages.Languages;
 
 public final class WebUiConfig extends FeatureConfig {
-    private final IntegerSetting keybind;
+    private final KeybindSetting keybind;
     private final BooleanSetting hudEditorHint;
     private final BooleanSetting languageHint;
     private final ChoiceSetting language;
@@ -61,7 +61,7 @@ public final class WebUiConfig extends FeatureConfig {
         languageHint = booleanSetting("language_hint", true);
     }
 
-    public IntegerSetting keybind() {
+    public KeybindSetting keybind() {
         return keybind;
     }
 

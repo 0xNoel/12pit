@@ -27,7 +27,7 @@ import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
-import pit12.runtime.config.IntegerSetting;
+import pit12.runtime.config.KeybindSetting;
 import pit12.runtime.item.PitEnchantmentFormat;
 
 public final class PlayerListConfig extends FeatureConfig {
@@ -36,7 +36,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final ChoiceSetting enchantmentFormat;
     private final BooleanSetting showGem;
     private final BooleanSetting shortPlayerNames;
-    private final IntegerSetting realNamesKey;
+    private final KeybindSetting realNamesKey;
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
     private final BooleanSetting showSpawn;

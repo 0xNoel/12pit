@@ -48,6 +48,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.chat.ChatFeedback;
 import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
+import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class SwapFeature
@@ -168,7 +169,8 @@ public final class SwapFeature
 
     @Override
     public boolean consumesKey(int key) {
-        return config.enabled() && (key == config.unequipKey.get() || bindings.hasKey(key));
+        return config.enabled()
+                && (Keybind.matches(config.unequipKey.get(), key) || bindings.hasKey(key));
     }
 
     @Override
@@ -176,7 +178,7 @@ public final class SwapFeature
         if (!pressed || key <= 0 || key >= Keyboard.KEYBOARD_SIZE || !config.enabled()
                 || !controller.acceptsInput())
             return false;
-        boolean unequip = key == controller.unequipKey();
+        boolean unequip = Keybind.matches(controller.unequipKey(), key);
         if (!unequip && !bindings.hasKey(key))
             return false;
         if (!repeat) {

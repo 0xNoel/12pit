@@ -37,6 +37,7 @@ import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.languages.Languages;
+import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener {
@@ -104,7 +105,7 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
         int key = config.keybind().get();
         if (key == Keyboard.KEY_NONE || minecraft.currentScreen != null
                 || !Keyboard.getEventKeyState() || Keyboard.isRepeatEvent()
-                || Keyboard.getEventKey() != key) {
+                || !Keybind.matches(key, Keyboard.getEventKey())) {
             return;
         }
         hudEditor.open();
