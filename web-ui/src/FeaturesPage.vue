@@ -179,10 +179,9 @@ function selectSubcategory(id: string) {
             <Star :size="18" aria-hidden="true" />
           </button>
           <ToggleSwitch
-            v-if="feature.toggleable"
-            :model-value="feature.enabled"
+            :model-value="!feature.toggleable || feature.enabled"
             :label="t('Enable {0}', feature.name)"
-            :disabled="busy"
+            :disabled="busy || !feature.toggleable"
             @update:model-value="emit('change', feature.id, 'enabled', $event)"
           />
         </div>
