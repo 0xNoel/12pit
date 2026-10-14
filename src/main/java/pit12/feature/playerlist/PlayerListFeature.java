@@ -28,7 +28,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import org.lwjgl.input.Keyboard;
 import pit12.feature.denick.api.DenickNames;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationListener;
@@ -47,6 +46,7 @@ import pit12.runtime.player.PlayerEquipmentListener;
 import pit12.runtime.player.PlayerNameCache;
 import pit12.runtime.player.TabPresence;
 import pit12.runtime.player.TabPresenceListener;
+import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class PlayerListFeature implements ClientLifecycle, PlayerEquipmentListener,
@@ -247,9 +247,8 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         if (event.phase != Phase.START) {
             return;
         }
-        int key = config.realNamesKey();
-        boolean realNames = key != Keyboard.KEY_NONE && minecraft.currentScreen == null
-                && minecraft.inGameHasFocus && Keyboard.isCreated() && Keyboard.isKeyDown(key);
+        boolean realNames = minecraft.currentScreen == null && minecraft.inGameHasFocus
+                && Keybind.held(config.realNamesKey());
         if (realNames != realNamesHeld) {
             realNamesHeld = realNames;
             snapshotDirty = true;

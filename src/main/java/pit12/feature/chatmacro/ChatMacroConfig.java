@@ -24,11 +24,11 @@ import org.lwjgl.input.Keyboard;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
-import pit12.runtime.config.IntegerSetting;
+import pit12.runtime.config.KeybindSetting;
 
 public final class ChatMacroConfig extends FeatureConfig {
     final BooleanSetting blockInputs;
-    final IntegerSetting spawnKey;
+    final KeybindSetting spawnKey;
 
     public ChatMacroConfig() {
         super("chatmacro", source("Chat macro"), new ConfigCategory("player", source("Player")),

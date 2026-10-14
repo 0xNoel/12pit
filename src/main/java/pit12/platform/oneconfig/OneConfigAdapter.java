@@ -48,8 +48,10 @@ import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.config.ConfigOption;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.IntegerSetting;
+import pit12.runtime.config.KeybindSetting;
 import pit12.runtime.config.NumberSetting;
 import pit12.runtime.config.Setting;
+import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeListener {
@@ -190,7 +192,7 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
         ConfigOption.Kind kind = option.kind();
         String title = setting.originalDisplayName();
         if (kind == ConfigOption.Kind.KEYBIND) {
-            IntegerSetting keySetting = (IntegerSetting) setting;
+            KeybindSetting keySetting = (KeybindSetting) setting;
             KeybindValue binding = new KeybindValue();
             try {
                 // ConfigKeyBind reads this field before calling our getter.
@@ -201,11 +203,12 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
                             public Object get() {
                                 int key = keySetting.get();
                                 List<Integer> keys = binding.value.getKeyBinds();
-                                if (key != (keys.isEmpty() ? 0 : keys.get(0))) {
+                                if (key != keybindValue(keys)) {
                                     binding.value.clearKeys();
-                                    if (key != 0) {
-                                        binding.value.addKey(key);
-                                    }
+                                    if (Keybind.modifier(key) != 0)
+                                        binding.value.addKey(Keybind.modifier(key));
+                                    if (Keybind.key(key) != 0)
+                                        binding.value.addKey(Keybind.key(key));
                                 }
                                 return binding.value;
                             }
@@ -213,7 +216,7 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
                             @Override
                             protected void set(Object value) {
                                 List<Integer> keys = ((OneKeyBind) value).getKeyBinds();
-                                setValue(keySetting, keys.isEmpty() ? 0 : keys.get(0));
+                                setValue(keySetting, keybindValue(keys));
                             }
                         };
                 keybindControls.add(control);
@@ -282,15 +285,26 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
         };
     }
 
+    private static int keybindValue(List<Integer> keys) {
+        if (keys.isEmpty())
+            return 0;
+        if (keys.size() == 1)
+            return keys.get(0);
+        return Keybind.isModifier(keys.get(0)) ? Keybind.encode(keys.get(1), keys.get(0))
+                : Keybind.encode(keys.get(0), keys.get(1));
+    }
+
     private static final class KeybindValue {
         private final OneKeyBind value = new OneKeyBind() {
             @Override
             public void addKey(int key, boolean mouse) {
-                if (mouse || key <= 0 || key >= Keyboard.KEYBOARD_SIZE) {
+                if (mouse || key <= 0 || key >= Keyboard.KEYBOARD_SIZE
+                        || Keyboard.getKeyName(key) == null) {
                     return;
                 }
-                clearKeys();
-                super.addKey(key, false);
+                if (getSize() == 0 || getSize() == 1
+                        && (Keybind.isModifier(key) || Keybind.isModifier(getKeyBinds().get(0))))
+                    super.addKey(key, false);
             }
         };
     }

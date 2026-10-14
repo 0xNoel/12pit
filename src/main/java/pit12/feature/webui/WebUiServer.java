@@ -55,7 +55,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
 import pit12.feature.profile.api.ProfileCreateSession;
 import pit12.feature.profile.api.ProfileMutationResult;
 import pit12.feature.profile.api.ProfileSummary;
@@ -74,6 +73,7 @@ import pit12.runtime.config.NumberSetting;
 import pit12.runtime.config.Setting;
 import pit12.runtime.languages.Languages;
 import pit12.shared.build.BuildConfig;
+import pit12.shared.input.Keybind;
 import pit12.shared.result.OperationResult;
 
 final class WebUiServer {
@@ -353,12 +353,7 @@ final class WebUiServer {
                 if (!primitive.isString()) {
                     throw new IllegalArgumentException("Expected a key name");
                 }
-                String name = primitive.getAsString();
-                int code = Keyboard.getKeyIndex(name);
-                if (code == Keyboard.KEY_NONE && !"NONE".equals(name)) {
-                    throw new IllegalArgumentException("Unknown key");
-                }
-                candidate = code;
+                candidate = Keybind.parse(primitive.getAsString());
             } else if (primitive.isBoolean()) {
                 candidate = primitive.getAsBoolean();
             } else if (primitive.isNumber()) {
@@ -593,8 +588,7 @@ final class WebUiServer {
             value.put("choices", choices);
         }
         if (option.kind() == ConfigOption.Kind.KEYBIND) {
-            String name = Keyboard.getKeyName(((Number) setting.get()).intValue());
-            value.put("keyName", name == null ? "NONE" : name);
+            value.put("keyName", Keybind.name((Integer) setting.get()));
         }
         return value;
     }
