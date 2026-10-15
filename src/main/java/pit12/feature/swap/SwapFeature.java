@@ -81,8 +81,8 @@ public final class SwapFeature
         this.input = input;
         bindings = new BindingBook(client, path,
                 message -> report(Tone.ERROR, language.translate(message)));
-        controller = new SwapController(minecraft, session, config, bindings, this::report,
-                () -> input.lock(this), resume -> input.unlock(this, resume), language);
+        controller = new SwapController(minecraft, session, config, bindings, this::report, input,
+                this, language);
         DarkTargets darkTargets = new DarkTargets(minecraft, config, equipment, relations);
         automatic =
                 new AutoSwapController(minecraft, config, controller, pit, darkTargets, language);
@@ -163,11 +163,6 @@ public final class SwapFeature
     }
 
     @Override
-    public boolean inventoryClickAllowed() {
-        return controller.sendingClick();
-    }
-
-    @Override
     public boolean consumesKey(int key) {
         return config.enabled()
                 && (Keybind.matches(config.unequipKey.get(), key) || bindings.hasKey(key));
@@ -193,7 +188,7 @@ public final class SwapFeature
     @Override
     public boolean rightClick() {
         if (input.locked())
-            return true;
+            return false;
         if (rightClickHeld)
             return true;
         if (!config.enabled() || !controller.rightClickEnabled() || minecraft.currentScreen != null

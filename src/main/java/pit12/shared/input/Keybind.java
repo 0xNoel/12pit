@@ -37,10 +37,30 @@ public final class Keybind {
     }
 
     public static boolean isModifier(int key) {
-        return key == Keyboard.KEY_LSHIFT || key == Keyboard.KEY_RSHIFT
-                || key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_RCONTROL
-                || key == Keyboard.KEY_LMENU || key == Keyboard.KEY_RMENU
-                || key == Keyboard.KEY_LMETA || key == Keyboard.KEY_RMETA;
+        return modifierMask(key) != 0;
+    }
+
+    public static int modifierMask(int key) {
+        switch (key) {
+            case Keyboard.KEY_LSHIFT:
+                return 1;
+            case Keyboard.KEY_RSHIFT:
+                return 2;
+            case Keyboard.KEY_LCONTROL:
+                return 4;
+            case Keyboard.KEY_RCONTROL:
+                return 8;
+            case Keyboard.KEY_LMENU:
+                return 16;
+            case Keyboard.KEY_RMENU:
+                return 32;
+            case Keyboard.KEY_LMETA:
+                return 64;
+            case Keyboard.KEY_RMETA:
+                return 128;
+            default:
+                return 0;
+        }
     }
 
     public static boolean valid(int binding) {
@@ -75,6 +95,12 @@ public final class Keybind {
         int modifier = modifier(binding);
         return eventKey != Keyboard.KEY_NONE && key(binding) == eventKey
                 && (modifier == 0 || Keyboard.isCreated() && Keyboard.isKeyDown(modifier));
+    }
+
+    public static boolean matches(int binding, int eventKey, int modifiers) {
+        int modifier = modifier(binding);
+        return eventKey != Keyboard.KEY_NONE && key(binding) == eventKey
+                && (modifier == 0 || (modifiers & modifierMask(modifier)) != 0);
     }
 
     public static boolean held(int binding) {

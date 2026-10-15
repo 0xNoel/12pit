@@ -51,7 +51,13 @@ Disk I/O, HTTP requests, expensive computations are done on owned workers with a
 
 `InputBlocker` routes key events before Minecraft handles them. Features register an `InputHandler` on start and remove it on stop. `key(...)` returns true when it consumes an event. `consumesKey(...)` identifies keys whose held states must not be restored after blocking ends.
 
+While input is locked, only lock owners receive `blockedKey(key, modifiers)`. It receives new key presses without repeats. Use `Keybind.matches(binding, key, modifiers)` to check a binding against the captured modifier state. The input device queues these presses and dispatches them at tick start, outside LWJGL polling.
+
 Use `lock(owner)` to block keyboard and mouse input. The platform supplies an `InputDevice` that masks LWJGL events and polled states. Minecraft's key, movement, and smooth camera states are cleared once when blocking starts. Use `unlock(owner, resume)` when the operation finishes or is cancelled. Each operation releases only its own lock. `blockedFor(owner)` reports whether another operation holds a lock. Input resumes only after all locks are released. Buffered events are discarded before restoring the input backend. When `resume` is true, held keys are restored if the game has focus. `held(key)` reads the current LWJGL state, which is false while blocked.
+
+Use `runAction(owner, action)` for an automatic right-click or container click while holding the input lock. The action passes through vanilla hooks without restoring physical input. `blocksActions()` tells interaction hooks whether to block a call. Another owner's lock still blocks the action.
+
+Use `releaseCursor()` while holding a lock to let the cursor leave the game window. `blocksFocus()` keeps menus from grabbing it again until the user clicks inside the window or all input locks are released. Clicking while a menu is open allows focus to return when that menu closes.
 
 ## Config
 

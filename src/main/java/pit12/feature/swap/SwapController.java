@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -40,6 +39,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.util.EnumChatFormatting;
+import pit12.runtime.input.InputBlocker;
 import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.session.ClientSession;
@@ -52,8 +52,8 @@ final class SwapController {
     private final SwapConfig config;
     private final BindingBook bindings;
     private final BiConsumer<Tone, String> report;
-    private final Runnable lockInput;
-    private final Consumer<Boolean> releaseInput;
+    private final InputBlocker input;
+    private final Object inputOwner;
     private final Deque<Request> queue = new ArrayDeque<>();
     private final Set<Object> accepted = new HashSet<>();
     private final Deque<Action> actions = new ArrayDeque<>();
@@ -79,16 +79,16 @@ final class SwapController {
     private String rejection;
 
     SwapController(Minecraft minecraft, ClientSession session, SwapConfig config,
-            BindingBook bindings, BiConsumer<Tone, String> report, Runnable lockInput,
-            Consumer<Boolean> releaseInput, Languages language) {
+            BindingBook bindings, BiConsumer<Tone, String> report, InputBlocker input,
+            Object inputOwner, Languages language) {
         this.language = language;
         this.minecraft = minecraft;
         this.session = session;
         this.config = config;
         this.bindings = bindings;
         this.report = report;
-        this.lockInput = lockInput;
-        this.releaseInput = releaseInput;
+        this.input = input;
+        this.inputOwner = inputOwner;
     }
 
     boolean acceptsInput() {
@@ -160,7 +160,7 @@ final class SwapController {
             options = new SwapConfig.Options(config);
             player = minecraft.thePlayer;
             sessionRevision = session.revision();
-            lockInput.run();
+            input.lock(inputOwner);
         }
         queue.addLast(request);
         closeAt = -1;
@@ -275,10 +275,6 @@ final class SwapController {
         if (!sendingClick || windowId != player.inventoryContainer.windowId)
             return;
         pendingClicks.add(actionNumber);
-    }
-
-    boolean sendingClick() {
-        return sendingClick;
     }
 
     void confirmClick(int windowId, short actionNumber, boolean accepted) {
@@ -402,8 +398,8 @@ final class SwapController {
         }
         sendingClick = true;
         try {
-            minecraft.playerController.windowClick(player.inventoryContainer.windowId, slot, button,
-                    mode, player);
+            input.runAction(inputOwner, () -> minecraft.playerController
+                    .windowClick(player.inventoryContainer.windowId, slot, button, mode, player));
         } finally {
             sendingClick = false;
         }
@@ -582,7 +578,7 @@ final class SwapController {
         waitingToResume = false;
         rejection = null;
         if (active)
-            releaseInput.accept(resume);
+            input.unlock(inputOwner, resume);
     }
 
     private static ItemStack copy(ItemStack stack) {

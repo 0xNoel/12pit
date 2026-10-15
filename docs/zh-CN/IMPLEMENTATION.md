@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: 3c4d7c14a06f45298605bab87c2b6adeed866195 -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: 4d64e449a6fbe6c418a8ae05077b7a2c30327a60 -->
 
 # 12pit 实现
 
@@ -53,7 +53,13 @@ public void stop() {
 
 `InputBlocker` 在 Minecraft 处理按键事件前分派事件。功能在启动时注册 `InputHandler`，停止时注销。`key(...)` 返回 true 表示已处理该事件。`consumesKey(...)` 指定输入阻止结束后不应恢复按住状态的按键。
 
+输入被锁定时，只有锁的持有者会收到 `blockedKey(key, modifiers)`。使用 `Keybind.matches(binding, key, modifiers)` 按事件记录的修饰键状态匹配绑定。输入设备先将这些事件加入队列，再在 tick 开始时分派。回调在 LWJGL 轮询之外执行。
+
 使用 `lock(owner)` 阻止键盘和鼠标输入。平台提供的 `InputDevice` 屏蔽 LWJGL 事件和轮询状态。开始阻止时，清除一次 Minecraft 的按键、移动和平滑视角状态。操作完成或取消时，调用 `unlock(owner, resume)`。每个操作只释放自己的锁。`blockedFor(owner)` 判断是否有其他操作持有锁。所有锁释放后才恢复输入。恢复输入后端前，丢弃缓冲事件。`resume` 为 true 且游戏有焦点时，恢复按住的按键状态。`held(key)` 读取当前 LWJGL 状态，阻止期间返回 false。
+
+持有输入锁时，使用 `runAction(owner, action)` 执行右键或容器点击。`blocksActions()` 供交互钩子判断是否阻止调用。其他持有者的锁仍会阻止该操作。
+
+持有锁时，使用 `releaseCursor()` 允许光标移出游戏窗口。`blocksFocus()` 防止菜单再次锁定光标，直到用户点击窗口内或所有输入锁释放。在菜单打开时点击，焦点会在菜单关闭后恢复。
 
 ## 配置
 

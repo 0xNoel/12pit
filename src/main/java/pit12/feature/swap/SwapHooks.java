@@ -21,8 +21,6 @@ package pit12.feature.swap;
 import net.minecraft.item.ItemStack;
 
 public interface SwapHooks {
-    boolean inventoryClickAllowed();
-
     boolean rightClick();
 
     // 0 = tick start, 1-3 = input phases.
