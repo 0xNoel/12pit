@@ -94,7 +94,7 @@ The following helpers create settings and register their metadata in the feature
 
 - `booleanSetting` creates a boolean. Use `booleanSetting(id, defaultValue)` for a saved flag that has no interface control.
 - `integerSliderSetting` and `doubleSliderSetting` create a numeric setting with default value, minimum, maximum and step parameters.
-- `keybindSetting` creates a `KeybindSetting` for one key and an optional Shift, Ctrl, Alt, or Meta key. The main key may also be a modifier. The saved integer keeps the main key in the low byte and the modifier in the next byte. Existing single-key values stay valid. Features use `Keybind.matches` for key events and `Keybind.held` for held input.
+- `keybindSetting` creates a `KeybindSetting` for one key and an optional Shift, Ctrl, Alt, or Meta key. The main key may also be a modifier. The saved integer keeps the main key in the low byte and the modifier in the next byte. Features use `Keybind.matches` for key events and `Keybind.held` for held input.
 - `colorSetting` stores RGB color as `0xRRGGBB`. `colorPickerSetting` stores ARGB color as `0xAARRGGBB`.
 - `choiceSetting` creates a choice with default id and `ChoiceSetting.Choice` instances with stable ids.
 - `hudConfig` adds grouped anchor, text shadow, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
@@ -128,7 +128,7 @@ private final ConfigChangeListener configListener = changes -> {
 
 `ConfigChangeSet.affects(featureId, settingId)` checks which settings changed. Listeners run after all changes are applied. `snapshot()` copies all registered values. `apply(snapshot)` validates all known values before changing live settings, then sends one notification for the whole set. It applies a complete snapshot: missing known values reset to their defaults, and unknown IDs are ignored. An empty snapshot resets all settings to their defaults. No notification is sent if the resulting values are unchanged.
 
-`recoverSavedValues(snapshot, problems)` restores default values for saved values that are not valid and returns them through the callback. It creates a normalized snapshot but does not apply it. Live input uses a normal validation instead. Profile feature handles saving and switching config snapshots.
+`recoverSavedValues(snapshot, problems)` restores default values for saved values that are not valid and returns them through the callback. It creates a normalized snapshot but does not apply it. Profile feature handles saving and switching config snapshots.
 
 ## Command
 
@@ -148,13 +148,13 @@ commands.register(command);
 
 Use `register(command)` to make `/12pit message` available. If `/message` is supposed to be available too, use `register(command, true)` instead; both will use the same tree. Do not register a command twice. Names and aliases use only lowercase letters, digits, `-` and `_`; `12pit` is reserved as a root name. Names and aliases of siblings mustn't coincide.
 
+Use `register(command, config, standalone)` for commands that belong to a toggleable feature. Call `commands.setActive(config, true)` after the feature starts and `commands.setActive(config, false)` when it stops. These commands are available only while their owner is started and enabled. Otherwise standalone names and aliases are removed and the whole subtree is hidden from `/12pit` help and completion.
+
 `arguments(usage, minimum, maximum)` describes the argument display usage and number range. Default is no arguments. `executes` gets an `ICommandSender` and an array of `String` arguments without the matched command path. Registry checks the argument number; feature can check the values, readiness and result of the action.
 
 A node with children is a group. Without arguments it displays auto-generated help, even if there's a handler. Leaf with a handler executes it, if the argument number is correct. Child's name or alias matches case-insensitively and overrides group's handler. Group handler can accept extra unmatched arguments. Adding a single `help` argument will show group help unless there's an explicit `help` child.
 
 `requires(Predicate<ICommandSender>)` restricts use of a node. Help and completion hide children that cannot be used by the sender. The suggestion callback gets the arguments after the command path, including the current word. Return the complete set of suggestions. The registry filters it by the current prefix case-insensitively and removes duplicates. Return an empty list for no suggestions.
-
-Bootstrap provides [ForgeCommandAdapter](../src/main/java/pit12/platform/command/ForgeCommandAdapter.java) through the `Registrar` of the registry. Features don't register Forge command classes manually. There's no way to unregister commands in Forge. `stop()` disallows execution and completion and `start()` will reuse existing entry points. Registration is closed after the first start.
 
 ## Chat feedback
 
@@ -295,6 +295,10 @@ Keep a [TabPresenceListener](../src/main/java/pit12/runtime/player/TabPresenceLi
 Subscribe to name changes with `addListener(Runnable)` in `start()`, then read the current names. In `stop()`, pass the same listener to `removeListener(Runnable)`.
 
 Use `bindDisplayNameObserver(UUID, Consumer<String>)` to watch one current Tab entry. Each entry has one observer, called on the client thread after its display name changes. Name queries can also refresh an entry and call its observer. The name keeps formatting codes and may be `null`. Pass `null` as the observer to detach it. The subscription ends when the entry leaves Tab or the connection changes.
+
+[NickTracker](../src/main/java/pit12/runtime/nick/NickTracker.java) provides `isNicked(UUID)` for players in Tab. NPCs are not Nicks.
+
+Keep a [NickListener](../src/main/java/pit12/runtime/nick/NickListener.java) in a field. Register it with `nickTracker.addListener(listener)` in `start()`, then read the current Tab state, because existing entries are not replayed. `onNickChanged(playerId, name, nicked)` runs on the client thread when the status changes. `name` is the profile name. A Nick leaving Tab reports `nicked=false`. Unregister the same listener with `nickTracker.removeListener(listener)` in `stop()`.
 
 [SidebarCache](../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) provides `lines()` for the server sidebar. It returns an immutable snapshot of up to 15 lines in display order. Lines include footer text and keep formatting codes. The objective title is excluded. Each [SidebarLine](../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) provides the entry ID, text, and sorting score through `entry()`, `text()`, and `score()`.
 

@@ -18,12 +18,17 @@
  */
 package pit12.platform.command;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.ClientCommandHandler;
+import pit12.platform.mixin.accessor.CommandHandlerAccessor;
 import pit12.runtime.command.CommandNode;
 import pit12.runtime.command.CommandRegistry;
 
@@ -36,8 +41,31 @@ public final class ForgeCommandAdapter extends CommandBase {
         this.command = command;
     }
 
-    public static void register(CommandRegistry registry, CommandNode command) {
-        ClientCommandHandler.instance.registerCommand(new ForgeCommandAdapter(registry, command));
+    public static Runnable register(CommandRegistry registry, CommandNode command) {
+        ClientCommandHandler handler = ClientCommandHandler.instance;
+        ForgeCommandAdapter adapter = new ForgeCommandAdapter(registry, command);
+        List<String> names = new ArrayList<>(command.aliases());
+        names.add(command.name());
+        Map<String, ICommand> previous = new LinkedHashMap<>();
+        Map<String, ICommand> commands = handler.getCommands();
+        for (String name : names) {
+            previous.put(name, commands.get(name));
+        }
+        handler.registerCommand(adapter);
+        return () -> {
+            for (Map.Entry<String, ICommand> entry : previous.entrySet()) {
+                // Someone may have taken this name since. Leave theirs alone.
+                if (commands.get(entry.getKey()) == adapter) {
+                    if (entry.getValue() == null) {
+                        commands.remove(entry.getKey());
+                    } else {
+                        commands.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            // Forge has no unregister. registerCommand also added it to commandSet.
+            ((CommandHandlerAccessor) handler).pit12$getCommandSet().remove(adapter);
+        };
     }
 
     @Override
@@ -62,7 +90,7 @@ public final class ForgeCommandAdapter extends CommandBase {
 
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
-        return command.canUse(sender);
+        return registry.available(command) && command.canUse(sender);
     }
 
     @Override

@@ -51,7 +51,7 @@ final class MacroBindings {
     private final Map<Integer, String> bindings = new LinkedHashMap<>();
     private ExecutorService worker;
     private boolean loading;
-    private String problem = source("Chat macros are unavailable");
+    private boolean ready;
 
     MacroBindings(ClientThread client, Path path, Consumer<String> report) {
         this.client = client;
@@ -64,7 +64,7 @@ final class MacroBindings {
         if (worker != null)
             return;
         loading = true;
-        problem = source("Chat macros are loading");
+        ready = false;
         ExecutorService started = Executors.newSingleThreadExecutor(task -> {
             Thread thread = new Thread(task, "12pit-chat-macros");
             thread.setDaemon(true);
@@ -83,9 +83,8 @@ final class MacroBindings {
                     if (worker != started)
                         return;
                     loading = false;
-                    problem = source(
-                            "Chat macros could not be loaded. Use /macro clear to reset them");
-                    report.accept(problem);
+                    report.accept(source(
+                            "Chat macros could not be loaded. Use /macro clear to reset them"));
                 });
                 return;
             }
@@ -95,7 +94,7 @@ final class MacroBindings {
                 bindings.clear();
                 bindings.putAll(loaded);
                 loading = false;
-                problem = null;
+                ready = true;
             });
         });
     }
@@ -115,11 +114,11 @@ final class MacroBindings {
             Thread.currentThread().interrupt();
         }
         loading = false;
-        problem = source("Chat macros are unavailable");
+        ready = false;
     }
 
     String message(int key) {
-        return problem == null ? bindings.get(key) : null;
+        return ready ? bindings.get(key) : null;
     }
 
     Map<Integer, String> entries() {
@@ -144,16 +143,16 @@ final class MacroBindings {
     void clear() {
         client.check();
         if (worker == null || loading)
-            throw new IllegalArgumentException(problem);
+            throw new IllegalArgumentException("Chat macros are unavailable or still loading");
         bindings.clear();
-        problem = null;
+        ready = true;
         persist();
     }
 
     void requireReady() {
         client.check();
-        if (problem != null)
-            throw new IllegalArgumentException(problem);
+        if (!ready)
+            throw new IllegalArgumentException("Chat macros are not ready");
     }
 
     private void persist() {
@@ -196,12 +195,11 @@ final class MacroBindings {
 
     private static void checkMessage(String message) {
         if (message.trim().isEmpty() || message.length() > 100)
-            throw new IllegalArgumentException(
-                    source("Chat messages must contain 1 to 100 characters"));
+            throw new IllegalArgumentException("Chat messages must contain 1 to 100 characters");
         for (int index = 0; index < message.length(); index++) {
             if (!ChatAllowedCharacters.isAllowedCharacter(message.charAt(index)))
                 throw new IllegalArgumentException(
-                        source("The chat message contains an invalid character"));
+                        "The chat message contains an invalid character");
         }
     }
 }

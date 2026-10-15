@@ -91,6 +91,7 @@ import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
 import pit12.runtime.languages.Languages;
+import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitContextTracker;
 import pit12.runtime.player.PlayerEntityTracker;
@@ -132,7 +133,7 @@ public final class ClientBootstrap {
                 new LwjglInputDevice());
         components.add(input);
         CommandRegistry commands =
-                new CommandRegistry(client, ForgeCommandAdapter::register, language);
+                new CommandRegistry(client, configs, ForgeCommandAdapter::register, language);
         components.add(commands);
         PitContextTracker pitContext = new PitContextTracker(session);
         components.add(pitContext);
@@ -144,6 +145,8 @@ public final class ClientBootstrap {
         components.add(presence);
         PlayerNameCache playerNames = new PlayerNameCache(minecraft, session, presence);
         components.add(playerNames);
+        NickTracker nicks = new NickTracker(client, presence, playerNames);
+        components.add(nicks);
         SidebarCache sidebar = new SidebarCache(minecraft, session);
         components.add(sidebar);
         components.add(new DailyUsageReporter(client, pitContext));
@@ -162,7 +165,7 @@ public final class ClientBootstrap {
                 (SwapHooksBinding) minecraft, input);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
-                playerNames, players, playerEquipment, commands,
+                playerNames, nicks, players, playerEquipment, commands,
                 new File(minecraft.mcDataDir, "12pit/denick-cache.json").toPath());
         // Category: Interface
         BooleanSetting discordRpc =
@@ -187,10 +190,10 @@ public final class ClientBootstrap {
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
-        registerNametag(minecraft, configs, session, playerEquipment, denickNames);
+        registerNametag(minecraft, configs, session, playerEquipment, denickNames, nicks);
         registerPlayerEsp(configs, session, presence, relations);
         registerPlayerList(configs, playerNames, players, playerEquipment, pitContext, hudRegistry,
-                relations, presence, denickNames);
+                relations, presence, denickNames, nicks);
         registerRingHelper(minecraft, configs, session, pitContext);
         registerTooltip(configs);
         // Category: Misc
@@ -244,13 +247,13 @@ public final class ClientBootstrap {
     // Category: Misc
     private DenickNames registerDenick(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, PitContext pitContext, TabPresence presence,
-            PlayerNameCache playerNames, PlayerEntityTracker players,
+            PlayerNameCache playerNames, NickTracker nicks, PlayerEntityTracker players,
             PlayerEquipmentAccess equipment, CommandRegistry commands, Path path) {
         DenickConfig config = new DenickConfig();
         configs.register(config);
         DenickFeature denick = new DenickFeature(minecraft, client, configs, config, session,
-                pitContext, presence, playerNames, players, equipment, commands, language, path,
-                names -> ((DenickNamesBinding) minecraft.ingameGUI.getTabList())
+                pitContext, presence, playerNames, nicks, players, equipment, commands, language,
+                path, names -> ((DenickNamesBinding) minecraft.ingameGUI.getTabList())
                         .pit12$bindDenickNames(names));
         components.add(denick);
         return denick;
@@ -349,14 +352,14 @@ public final class ClientBootstrap {
     }
 
     private void registerNametag(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
-            PlayerEquipmentAccess equipment, DenickNames denickNames) {
+            PlayerEquipmentAccess equipment, DenickNames denickNames, NickTracker nicks) {
         NametagConfig config = new NametagConfig();
         configs.register(config);
-        components
-                .add(new NametagFeature(minecraft, configs, config, session, equipment, denickNames,
-                        names -> minecraft.getRenderManager().getSkinMap().values()
-                                .forEach(renderer -> ((NametagNamesBinding) renderer)
-                                        .pit12$bindNametagNames(names))));
+        components.add(new NametagFeature(minecraft, configs, config, session, equipment,
+                denickNames, nicks,
+                names -> minecraft.getRenderManager().getSkinMap().values()
+                        .forEach(renderer -> ((NametagNamesBinding) renderer)
+                                .pit12$bindNametagNames(names))));
     }
 
     private void registerPlayerEsp(ConfigCatalog configs, ClientSession session,
@@ -369,11 +372,11 @@ public final class ClientBootstrap {
     private void registerPlayerList(ConfigCatalog configs, PlayerNameCache playerNames,
             PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment,
             PitContext pitContext, HudRegistry hudRegistry, RelationLookup relations,
-            TabPresence presence, DenickNames denickNames) {
+            TabPresence presence, DenickNames denickNames, NickTracker nicks) {
         PlayerListConfig config = new PlayerListConfig();
         configs.register(config);
         components.add(new PlayerListFeature(configs, config, playerNames, players, playerEquipment,
-                pitContext, hudRegistry, relations, presence, language, denickNames));
+                pitContext, hudRegistry, relations, presence, language, denickNames, nicks));
     }
 
     private void registerRingHelper(Minecraft minecraft, ConfigCatalog configs,

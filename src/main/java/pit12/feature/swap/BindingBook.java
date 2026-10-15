@@ -168,17 +168,17 @@ final class BindingBook implements SwapBindings {
     void clear() {
         client.check();
         if (worker == null || loading) {
-            throw new IllegalArgumentException(problem);
+            throw new IllegalArgumentException("Swap bindings are unavailable or still loading");
         }
         bindings.clear();
         problem = null;
         persist();
     }
 
-    private void requireReady() {
+    void requireReady() {
         client.check();
         if (problem != null)
-            throw new IllegalArgumentException(problem);
+            throw new IllegalArgumentException("Swap bindings are not ready");
     }
 
     private void persist() {

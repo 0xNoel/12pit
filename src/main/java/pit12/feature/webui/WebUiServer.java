@@ -18,8 +18,6 @@
  */
 package pit12.feature.webui;
 
-import static pit12.runtime.languages.Languages.source;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -62,6 +60,7 @@ import pit12.feature.profile.api.Profiles;
 import pit12.feature.profile.api.ProfilesSnapshot;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationEntry;
+import pit12.feature.relation.api.RelationReadiness;
 import pit12.feature.relation.api.Relations;
 import pit12.feature.swap.api.SwapBindings;
 import pit12.runtime.config.ChoiceSetting;
@@ -175,11 +174,11 @@ final class WebUiServer {
         } catch (JsonParseException failure) {
             sendJson(exchange, 400, object("error", "Invalid JSON"));
         } catch (IllegalArgumentException failure) {
-            sendJson(exchange, 400, object("error", Languages.sourceText(failure.getMessage())));
+            sendJson(exchange, 400, object("error", failure.getMessage()));
         } catch (ExecutionException failure) {
             Throwable cause = failure.getCause();
             if (cause instanceof IllegalArgumentException) {
-                sendJson(exchange, 400, object("error", Languages.sourceText(cause.getMessage())));
+                sendJson(exchange, 400, object("error", cause.getMessage()));
             } else {
                 sendJson(exchange, 500, object("error", "Settings operation failed"));
             }
@@ -252,7 +251,7 @@ final class WebUiServer {
             if ("/api/language-hint/dismiss".equals(path)) {
                 if (!preferences.ready())
                     throw new IllegalArgumentException(
-                            source("Configuration interface settings are unavailable"));
+                            "Configuration interface settings are unavailable");
                 config.languageHint().set(false);
                 return state();
             }
@@ -266,7 +265,7 @@ final class WebUiServer {
                     throw new IllegalArgumentException("Expected a boolean");
                 if (!preferences.ready())
                     throw new IllegalArgumentException(
-                            source("Configuration interface settings are unavailable"));
+                            "Configuration interface settings are unavailable");
                 preferences.setFavorite(id, favorite.getAsBoolean());
             } else if ("/api/setting".equals(path)) {
                 changeSetting(request);
@@ -378,7 +377,8 @@ final class WebUiServer {
         if ("create".equals(action)) {
             result = profiles.beginCreate();
             if (!result.succeeded()) {
-                throw new IllegalArgumentException(result.message());
+                throw new IllegalArgumentException(
+                        "Could not begin profile creation: " + result.status());
             }
             ProfileCreateSession session = result.createSession();
             try {
@@ -408,14 +408,14 @@ final class WebUiServer {
             }
         }
         if (!result.succeeded()) {
-            throw new IllegalArgumentException(result.message());
+            throw new IllegalArgumentException(
+                    "Could not " + action + " profile: " + result.status());
         }
     }
 
     private List<Object> changeRelations(JsonObject request) {
-        String problem = relations.readinessProblem();
-        if (problem != null) {
-            throw new IllegalArgumentException(problem);
+        if (relations.readiness() != RelationReadiness.READY) {
+            throw new IllegalArgumentException("Relations are not ready");
         }
         Relation relation = Relation.valueOf(requiredString(request, "relation"));
         if (relation == Relation.NONE) {
@@ -475,7 +475,8 @@ final class WebUiServer {
         OperationResult<List<OperationResult<Void>>> batch =
                 relations.changeMany(relation, action, changes);
         if (!batch.succeeded())
-            throw new IllegalArgumentException(batch.message());
+            throw new IllegalArgumentException(
+                    "Could not " + action + " relations: " + batch.status());
         List<OperationResult<Void>> messages = batch.value();
         for (int index = 0; index < messages.size(); index++) {
             results.set(positions.get(index), object("name", changes.get(index).name(), "message",

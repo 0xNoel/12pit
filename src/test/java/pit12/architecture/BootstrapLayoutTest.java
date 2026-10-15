@@ -122,6 +122,7 @@ public final class BootstrapLayoutTest {
         Matcher objects = Pattern.compile("\\b(\\w+)\\s*=\\s*new\\s+(\\w+)\\(([^;]*)\\);")
                 .matcher(constructorBody);
         while (objects.find()) {
+            // An object is its own producer, so later calls can use its name.
             producers.put(objects.group(1), objects.group(1));
             arguments.put(objects.group(1), objects.group(3));
             String type = imports.get(objects.group(2));

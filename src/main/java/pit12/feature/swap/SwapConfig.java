@@ -161,7 +161,7 @@ public final class SwapConfig extends FeatureConfig {
                 source("Restore threshold"),
                 source("Health points needed to restore leggings in Health mode. Health must also exceed the trigger threshold."),
                 6, 0, 20, 1);
-        subsubcategory("dark", source("Dark"));
+        subsubcategory("dark", "Dark");
         dark = booleanSetting("use_dark", source("Use dark"), source(
                 "Equips Somber leggings against players with low health wearing Escape Pod or Phoenix."),
                 false);

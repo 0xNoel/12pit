@@ -31,7 +31,7 @@ public final class DenickConfig extends FeatureConfig {
     final BooleanSetting nickMarker;
 
     public DenickConfig() {
-        super("denick", source("Denick"), new ConfigCategory("misc", source("Misc")),
+        super("denick", "Denick", new ConfigCategory("misc", source("Misc")),
                 source("Finds nicked players using their current equipment."));
         subsubcategory("queries", source("Queries"));
         automatic = booleanSetting("automatic", source("Auto Denick"),
@@ -42,6 +42,6 @@ public final class DenickConfig extends FeatureConfig {
                 source("Queues equipment changes until a real name is found."), true);
         subsubcategory("display", source("Display"));
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
-                source("Adds N to nicked players' names in Tab and Player List."), true);
+                source("Adds N to nicked players' names in Tab."), true);
     }
 }

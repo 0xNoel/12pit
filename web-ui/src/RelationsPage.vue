@@ -431,7 +431,7 @@ async function removeEntry(entry: RelationEntry) {
             @change="toggleVisible"
           />
           <span class="relation-name-heading">{{ t('MC ID') }}</span>
-          <span class="relation-uuid-heading">{{ t('UUID') }}</span>
+          <span class="relation-uuid-heading">UUID</span>
         </div>
         <div
           v-for="entry in visible"

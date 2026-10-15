@@ -50,6 +50,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
     private final ConfigCatalog configs;
     private final ClientThread client;
     private final EventListConfig config;
+    private final CommandRegistry commands;
     private final HudRegistry hudRegistry;
     private final EventListHud hud;
     private final FontListener fontListener = new FontListener();
@@ -76,9 +77,10 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         this.configs = configs;
         client = configs.clientThread();
         this.config = config;
+        this.commands = commands;
         this.hudRegistry = hudRegistry;
         hud = new EventListHud(config, hudRenderer, language);
-        commands.register(new EventListCommand(this, language).definition());
+        commands.register(new EventListCommand(this, language).definition(), config, false);
         languageListener = () -> {
             hud.localize();
             rebuild(System.currentTimeMillis());
@@ -109,6 +111,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         if (config.enabled()) {
             activate();
         }
+        commands.setActive(config, true);
     }
 
     @Override
@@ -118,6 +121,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
             return;
         }
         started = false;
+        commands.setActive(config, false);
         MinecraftForge.EVENT_BUS.unregister(fontListener);
         configs.removeListener(this);
         language.removeListener(languageListener);

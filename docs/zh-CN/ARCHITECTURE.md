@@ -1,4 +1,4 @@
-<!-- Source: docs/ARCHITECTURE.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
+<!-- Source: docs/ARCHITECTURE.md; Based on: 0df550b95e0d116f62938a52fcb3b056796879f5 -->
 
 # 12pit 架构
 

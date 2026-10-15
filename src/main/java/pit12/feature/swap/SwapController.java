@@ -76,7 +76,7 @@ final class SwapController {
     private boolean failed;
     private boolean sendingClick;
     private boolean waitingToResume;
-    private String rejection;
+    private boolean clickRejected;
 
     SwapController(Minecraft minecraft, ClientSession session, SwapConfig config,
             BindingBook bindings, BiConsumer<Tone, String> report, InputBlocker input,
@@ -185,8 +185,8 @@ final class SwapController {
     }
 
     private void advance(int phase) {
-        if (rejection != null)
-            throw new IllegalStateException(rejection);
+        if (clickRejected)
+            throw new IllegalStateException("Server rejected the inventory click");
         if (waitingToResume) {
             if (tick >= resumeAt)
                 finish(false);
@@ -197,7 +197,7 @@ final class SwapController {
             return;
         }
         if (!failed && (!acceptsInput() || screen != null && minecraft.currentScreen != screen)) {
-            throw new IllegalStateException(language.translate("Inventory changed"));
+            throw new IllegalStateException("Inventory changed");
         }
         if (cancelling) {
             finishCancellation(phase);
@@ -238,7 +238,7 @@ final class SwapController {
                 if (options == null || cancelling)
                     return;
                 if (!owns(minecraft.currentScreen) || !acceptsInput()) {
-                    throw new IllegalStateException(language.translate("Inventory did not open"));
+                    throw new IllegalStateException("Inventory did not open");
                 }
                 lastClickTick = tick;
             }
@@ -283,7 +283,7 @@ final class SwapController {
                 || !pendingClicks.remove(actionNumber))
             return;
         if (!accepted)
-            rejection = language.translate("Server rejected the inventory click");
+            clickRejected = true;
     }
 
     private void prepare() {
@@ -394,7 +394,7 @@ final class SwapController {
     private void click(int slot, int button, int mode) {
         if (!owns(minecraft.currentScreen) || player.openContainer != player.inventoryContainer
                 || player.inventory.getItemStack() != null) {
-            throw new IllegalStateException(language.translate("Inventory changed"));
+            throw new IllegalStateException("Inventory changed");
         }
         sendingClick = true;
         try {
@@ -476,7 +476,7 @@ final class SwapController {
         failed = true;
         restoreOnCancel = false;
         pendingClicks.clear();
-        rejection = null;
+        clickRejected = false;
         waitingToResume = false;
         closeAt = tick + options.closeDelay;
         report.accept(Tone.ERROR, language.format("Swap failed: {0}", message));
@@ -496,8 +496,7 @@ final class SwapController {
                     click(action.shiftedArmorSlot, 0, 1);
                     if (!ItemStack.areItemStacksEqual(stack(action.binding.guiTarget()),
                             action.originalArmor)) {
-                        throw new IllegalStateException(
-                                language.translate("Armor could not be equipped"));
+                        throw new IllegalStateException("Armor could not be equipped");
                     }
                 } else
                     action.swap(action.source, action.work);
@@ -576,7 +575,7 @@ final class SwapController {
         failed = false;
         sendingClick = false;
         waitingToResume = false;
-        rejection = null;
+        clickRejected = false;
         if (active)
             input.unlock(inputOwner, resume);
     }
@@ -626,7 +625,7 @@ final class SwapController {
             if (stage == ActionStage.EQUIP_WITH_SHIFT_CLICK) {
                 if (stack(binding.guiTarget()) != null
                         || !binding.identity.matches(stack(source))) {
-                    throw new IllegalStateException(language.translate("Inventory changed"));
+                    throw new IllegalStateException("Inventory changed");
                 }
                 click(source, 0, 1);
                 verifyAndComplete();
@@ -635,12 +634,11 @@ final class SwapController {
             if (stage == ActionStage.EQUIP_FROM_HOTBAR) {
                 if (!binding.identity.matches(stack(36 + work))
                         || !ItemStack.areItemStacksEqual(stack(source), originalWorkspace)) {
-                    throw new IllegalStateException(language.translate("Transfer slot changed"));
+                    throw new IllegalStateException("Transfer slot changed");
                 }
                 swap(binding.guiTarget(), work);
                 if (!binding.identity.matches(stack(binding.guiTarget()))) {
-                    throw new IllegalStateException(
-                            language.translate("Armor could not be equipped"));
+                    throw new IllegalStateException("Armor could not be equipped");
                 }
                 expectedWorkspace = copy(stack(36 + work));
                 stage = ActionStage.RESTORE_HOTBAR;
@@ -650,7 +648,7 @@ final class SwapController {
             }
             if (stage == ActionStage.RESTORE_HOTBAR) {
                 if (!restorable())
-                    throw new IllegalStateException(language.translate("Transfer slot changed"));
+                    throw new IllegalStateException("Transfer slot changed");
                 swap(source, work);
                 complete();
                 return;
@@ -683,8 +681,8 @@ final class SwapController {
                         click(binding.guiTarget(), 0, 1);
                         if (stack(binding.guiTarget()) != null || !ItemStack
                                 .areItemStacksEqual(stack(shiftedArmorSlot), originalArmor)) {
-                            throw new IllegalStateException(language
-                                    .translate("Armor could not be moved to the inventory"));
+                            throw new IllegalStateException(
+                                    "Armor could not be moved to the inventory");
                         }
                         stage = ActionStage.EQUIP_WITH_SHIFT_CLICK;
                         return;
@@ -732,8 +730,7 @@ final class SwapController {
 
         private void verifyAndComplete() {
             if (!binding.identity.matches(stack(binding.guiTarget()))) {
-                throw new IllegalStateException(
-                        language.format("Item could not be swapped: {0}", binding.name));
+                throw new IllegalStateException("Item could not be swapped: " + binding.name);
             }
             complete();
         }

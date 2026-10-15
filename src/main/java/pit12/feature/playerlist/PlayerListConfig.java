@@ -36,10 +36,12 @@ public final class PlayerListConfig extends FeatureConfig {
     private final ChoiceSetting enchantmentFormat;
     private final BooleanSetting showGem;
     private final BooleanSetting shortPlayerNames;
+    private final BooleanSetting nickMarker;
     private final KeybindSetting realNamesKey;
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
     private final BooleanSetting showSpawn;
+    private final BooleanSetting hideSpawn;
     private final BooleanSetting showGroupName;
     private final BooleanSetting showFriend;
     private final BooleanSetting showEnemy;
@@ -67,6 +69,8 @@ public final class PlayerListConfig extends FeatureConfig {
         subsubcategory("player_information", source("Player information"));
         shortPlayerNames = booleanSetting("short_player_names", source("Remove bounty suffix"),
                 source("Removes bounty suffixes from player names."), false);
+        nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
+                source("Adds N to nicked players' names in Player List."), true);
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
@@ -74,6 +78,8 @@ public final class PlayerListConfig extends FeatureConfig {
         showSpawn = booleanSetting("show_spawn", source("Show spawn marker"),
                 source("Shows SPAWN instead of distance and direction for players in spawn."),
                 true);
+        hideSpawn = booleanSetting("hide_spawn", source("Hide players in spawn"),
+                source("Hides players in spawn from all groups."), false);
         realNamesKey = keybindSetting("real_names_key", source("Real names key"),
                 source("Hold to show nicked players' real names in Player List."),
                 Keyboard.KEY_TAB);
@@ -118,6 +124,10 @@ public final class PlayerListConfig extends FeatureConfig {
         return realNamesKey.get();
     }
 
+    public boolean nickMarker() {
+        return nickMarker.get();
+    }
+
     public boolean showDistance() {
         return showDistance.get();
     }
@@ -128,6 +138,10 @@ public final class PlayerListConfig extends FeatureConfig {
 
     public boolean showSpawn() {
         return showSpawn.get();
+    }
+
+    public boolean hideSpawn() {
+        return hideSpawn.get();
     }
 
     public boolean showGroupName() {

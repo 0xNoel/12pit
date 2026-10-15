@@ -34,6 +34,7 @@ import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentFormat;
+import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitSnapshot;
 import pit12.runtime.pit.SpawnState;
@@ -52,12 +53,14 @@ final class PlayerListBuilder {
     private final RelationLookup relations;
     private final PlayerNameCache playerNames;
     private final DenickNames denickNames;
+    private final NickTracker nicks;
     private final Map<UUID, PlayerListEntry> previousEntries = new HashMap<>();
     private WorldClient previousWorld;
 
     PlayerListBuilder(Minecraft minecraft, PlayerEntityTracker players,
             PlayerEquipmentAccess equipment, PitContext pitContext, PlayerListConfig config,
-            RelationLookup relations, PlayerNameCache playerNames, DenickNames denickNames) {
+            RelationLookup relations, PlayerNameCache playerNames, DenickNames denickNames,
+            NickTracker nicks) {
         this.minecraft = minecraft;
         this.players = players;
         this.equipment = equipment;
@@ -66,6 +69,7 @@ final class PlayerListBuilder {
         this.relations = relations;
         this.playerNames = playerNames;
         this.denickNames = denickNames;
+        this.nicks = nicks;
     }
 
     PlayerListSnapshot build(boolean realNames, boolean rebuildText) {
@@ -104,10 +108,17 @@ final class PlayerListBuilder {
                     : relation == Relation.ENEMY ? PlayerListGroup.ENEMY : null;
             PlayerListGroup group = equipmentGroup(playerEquipment);
             boolean showSpecial = special != null && config.showGroup(special);
-            boolean showNick =
-                    config.showGroup(PlayerListGroup.NICK) && denickNames.isNicked(playerId);
+            boolean nicked = nicks.isNicked(playerId);
+            boolean showNick = config.showGroup(PlayerListGroup.NICK) && nicked;
             boolean showEquipment = group != null && config.showGroup(group);
             if (!showSpecial && !showNick && !showEquipment) {
+                continue;
+            }
+            EntityPlayer player = players.loadedPlayer(playerId);
+            boolean spawn = (config.hideSpawn() || config.showSpawn()) && player != null
+                    && pitSnapshot.spawnStateAt(player.posX, player.posY,
+                            player.posZ) == SpawnState.IN_SPAWN;
+            if (config.hideSpawn() && spawn) {
                 continue;
             }
             PlayerListEntry previous = previousEntries.get(playerId);
@@ -119,10 +130,12 @@ final class PlayerListBuilder {
             }
             if (previous == null) {
                 String realName = realNames ? denickNames.realDisplayName(playerId) : null;
-                name = realName == null ? denickNames.listName(playerId, name)
-                        : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
+                if (realName != null) {
+                    name = PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
+                } else if (config.nickMarker() && nicked) {
+                    name = name.trim() + " §e§lN";
+                }
             }
-            EntityPlayer player = players.loadedPlayer(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =
                     config.showDirection() && localPlayer != null && player != null;
@@ -130,8 +143,6 @@ final class PlayerListBuilder {
             float direction = directionKnown
                     ? direction(localPlayer, player, forwardX, forwardZ, rightX, rightZ)
                     : 0.0F;
-            boolean spawn = config.showSpawn() && player != null && pitSnapshot
-                    .spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
             String leggingsText = previous != null ? previous.leggingsText()
                     : config.showLeggings() && playerEquipment != null
                             && playerEquipment.leggingsKnown()
@@ -146,9 +157,10 @@ final class PlayerListBuilder {
                                             playerEquipment.heldEnchantments(),
                                             config.enchantmentFormat(), config.showGem())
                                     : null;
-            PlayerListEntry entry = new PlayerListEntry(playerId,
-                    player == null ? 0 : player.getEntityId(), name, leggingsText, heldItemText,
-                    distance, direction, distanceKnown, directionKnown, spawn);
+            PlayerListEntry entry =
+                    new PlayerListEntry(playerId, player == null ? 0 : player.getEntityId(), name,
+                            leggingsText, heldItemText, distance, direction, distanceKnown,
+                            directionKnown, config.showSpawn() && spawn);
             previousEntries.put(playerId, entry);
             if (showSpecial) {
                 add(groups, special, entry);

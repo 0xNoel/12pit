@@ -50,6 +50,7 @@ public final class ChatMacroFeature
     private final Minecraft minecraft;
     private final ConfigCatalog configs;
     private final ChatMacroConfig config;
+    private final CommandRegistry commands;
     private final ClientSession session;
     private final SidebarCache sidebar;
     private final InputBlocker input;
@@ -73,6 +74,7 @@ public final class ChatMacroFeature
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
+        this.commands = commands;
         this.session = session;
         this.sidebar = sidebar;
         this.input = input;
@@ -81,7 +83,7 @@ public final class ChatMacroFeature
             if (minecraft.thePlayer != null)
                 ChatFeedback.reply(minecraft.thePlayer, Tone.ERROR, language.translate(message));
         });
-        commands.register(new ChatMacroCommand(bindings, language).definition(), true);
+        commands.register(new ChatMacroCommand(bindings, language).definition(), config, true);
     }
 
     @Override
@@ -96,12 +98,14 @@ public final class ChatMacroFeature
         session.addListener(sessionListener);
         language.addListener(languageListener);
         MinecraftForge.EVENT_BUS.register(this);
+        commands.setActive(config, true);
     }
 
     @Override
     public void stop() {
         session.checkThread();
         started = false;
+        commands.setActive(config, false);
         cancel(false);
         input.removeHandler(this);
         configs.removeListener(this);

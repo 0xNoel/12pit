@@ -1,4 +1,4 @@
-<!-- Source: docs/IMPLEMENTATION.md; Based on: f12f00d52de6f34fb6cd0d9679d6ccce66bf0fbf -->
+<!-- Source: docs/IMPLEMENTATION.md; Based on: 0df550b95e0d116f62938a52fcb3b056796879f5 -->
 
 # 12pit 实现
 
@@ -96,7 +96,7 @@ public final class StatusConfig extends FeatureConfig {
 
 - `booleanSetting` 创建布尔值。使用 `booleanSetting(id, defaultValue)` 创建需要保存但没有界面控件的布尔标志。
 - `integerSliderSetting` 和 `doubleSliderSetting` 创建数值设置，参数包括默认值、最小值、最大值和步长。
-- `keybindSetting` 创建一个 `KeybindSetting`，支持一个主键和一个可选的 Shift、Ctrl、Alt 或 Meta 修饰键。主键也可以是修饰键。保存的整数用低字节存主键，下一字节存修饰键。现有单键值仍然有效。功能用 `Keybind.matches` 匹配按键事件，用 `Keybind.held` 判断按住状态。
+- `keybindSetting` 创建一个 `KeybindSetting`，支持一个主键和一个可选的 Shift、Ctrl、Alt 或 Meta 修饰键。主键也可以是修饰键。保存的整数用低字节存主键，下一字节存修饰键。功能用 `Keybind.matches` 匹配按键事件，用 `Keybind.held` 判断按住状态。
 - `colorSetting` 将 RGB 颜色存储为 `0xRRGGBB`。`colorPickerSetting` 将 ARGB 颜色存储为 `0xAARRGGBB`。
 - `choiceSetting` 使用默认 ID 和具有稳定 ID 的 `ChoiceSetting.Choice` 实例创建选项设置。
 - `hudConfig` 为 HUD 添加分组后的锚点、文字阴影和翻译选项，并存储 HUD 编辑器使用的位置和缩放。分组和存储细节见 [HUD](#hud)。
@@ -130,7 +130,7 @@ private final ConfigChangeListener configListener = changes -> {
 
 `ConfigChangeSet.affects(featureId, settingId)` 判断哪些设置发生了变化。监听器在所有变更应用后被调用。`snapshot()` 复制所有已注册的值。`apply(snapshot)` 在修改实时设置前校验所有已知值，然后为整组变更发送一次通知。它应用完整快照，缺失的已知值会重置为默认值，未知 ID 会被忽略。空快照会将所有设置重置为默认值。只有最终值没有实际变化时，才不发送通知。
 
-`recoverSavedValues(snapshot, problems)` 将无效的已保存值恢复为默认值，并通过回调返回这些值。它创建规范化的快照，但不应用它。实时输入改用普通校验。配置方案功能负责保存和切换配置快照。
+`recoverSavedValues(snapshot, problems)` 将无效的已保存值恢复为默认值，并通过回调返回这些值。它创建规范化的快照，但不应用它。配置方案功能负责保存和切换配置快照。
 
 ## 命令
 
@@ -150,13 +150,13 @@ commands.register(command);
 
 使用 `register(command)` 使 `/12pit message` 可用。如果 `/message` 也应可用，改用 `register(command, true)`；两者会使用同一棵树。不要重复注册命令。名称和别名只能使用小写字母、数字、`-` 和 `_`；`12pit` 是保留的根名称。同级节点的名称和别名不得相同。
 
+属于可开关功能的命令使用 `register(command, config, standalone)`。功能启动完成后调用 `commands.setActive(config, true)`，停止时调用 `commands.setActive(config, false)`。只有所属功能已启动且开启时，这些命令才可用。否则会移除独立命令的名称和别名，并从 `/12pit` 的帮助和补全中隐藏整个子树。
+
 `arguments(usage, minimum, maximum)` 描述显示给用户的参数用法和数量范围。默认没有参数。`executes` 接收一个 `ICommandSender` 和一个不包含已匹配命令路径的 `String` 参数数组。注册表检查参数数量；功能可以检查值、就绪状态和操作结果。
 
 有子节点的节点是分组。没有参数时，它显示自动生成的帮助，即使存在处理器。带有处理器的叶节点在参数数量正确时执行处理器。子节点的名称或别名匹配不区分大小写，并覆盖分组的处理器。分组处理器可以接收额外的未匹配参数。添加单个 `help` 参数会显示分组帮助，除非存在显式的 `help` 子节点。
 
 `requires(Predicate<ICommandSender>)` 限制节点的使用。帮助和补全会隐藏发送者无法使用的子节点。补全回调接收命令路径之后的参数，包括当前单词。返回完整的补全建议集合。注册表按当前前缀过滤，不区分大小写，并去除重复项。没有建议时返回空列表。
-
-Bootstrap 通过注册表的 `Registrar` 提供 [ForgeCommandAdapter](../../src/main/java/pit12/platform/command/ForgeCommandAdapter.java)。功能不手动注册 Forge 命令类。Forge 无法注销命令。`stop()` 禁止执行和补全，`start()` 会复用现有入口。首次启动后关闭注册。
 
 ## 聊天回显
 
@@ -297,6 +297,10 @@ Bootstrap 为功能提供查询契约。其实时查询和订阅需要客户端�
 在 `start()` 中通过 `addListener(Runnable)` 订阅名称变化，再读取当前名称。在 `stop()` 中通过 `removeListener(Runnable)` 注销同一个监听器。
 
 通过 `bindDisplayNameObserver(UUID, Consumer<String>)` 监听一个当前 Tab 条目。每个条目只能绑定一个监听器，显示名变化后在客户端线程上调用。名称查询也可能刷新条目并调用监听器。名称保留格式化代码，也可能为 `null`。将监听器设为 `null` 可取消绑定。条目离开 Tab 或连接变化时，订阅结束。
+
+[NickTracker](../../src/main/java/pit12/runtime/nick/NickTracker.java) 通过 `isNicked(UUID)` 查询 Tab 中的玩家是否为 Nick。NPC 不是 Nick。
+
+将 [NickListener](../../src/main/java/pit12/runtime/nick/NickListener.java) 保存为字段。在 `start()` 中调用 `nickTracker.addListener(listener)` 注册，再读取当前 Tab 状态，因为不会补发已有条目。状态变化时，`onNickChanged(playerId, name, nicked)` 在客户端线程执行。`name` 是档案名称。Nick 离开 Tab 时，`nicked` 为 `false`。在 `stop()` 中调用 `nickTracker.removeListener(listener)` 注销同一个监听器。
 
 [SidebarCache](../../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) 通过 `lines()` 查询服务器侧栏。它返回按显示顺序排列的不可变快照，最多包含 15 行。内容保留底部文字和格式化代码，不包含目标标题。每个 [SidebarLine](../../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) 通过 `entry()`、`text()` 和 `score()` 提供条目标识、文字和排序分数。
 
