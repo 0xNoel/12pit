@@ -41,6 +41,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
     private final BooleanSetting showSpawn;
+    private final BooleanSetting hideSpawn;
     private final BooleanSetting showGroupName;
     private final BooleanSetting showFriend;
     private final BooleanSetting showEnemy;
@@ -77,6 +78,8 @@ public final class PlayerListConfig extends FeatureConfig {
         showSpawn = booleanSetting("show_spawn", source("Show spawn marker"),
                 source("Shows SPAWN instead of distance and direction for players in spawn."),
                 true);
+        hideSpawn = booleanSetting("hide_spawn", source("Hide players in spawn"),
+                source("Hides players in spawn from all groups."), false);
         realNamesKey = keybindSetting("real_names_key", source("Real names key"),
                 source("Hold to show nicked players' real names in Player List."),
                 Keyboard.KEY_TAB);
@@ -135,6 +138,10 @@ public final class PlayerListConfig extends FeatureConfig {
 
     public boolean showSpawn() {
         return showSpawn.get();
+    }
+
+    public boolean hideSpawn() {
+        return hideSpawn.get();
     }
 
     public boolean showGroupName() {

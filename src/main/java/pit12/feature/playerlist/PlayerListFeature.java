@@ -228,6 +228,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 || changes.affects("playerlist", "show_distance")
                 || changes.affects("playerlist", "show_direction")
                 || changes.affects("playerlist", "show_spawn")
+                || changes.affects("playerlist", "hide_spawn")
                 || changes.affects("playerlist", "show_group_name")
                 || changes.affects("playerlist", "show_friend")
                 || changes.affects("playerlist", "show_enemy")
@@ -261,8 +262,9 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             return;
         }
         ticksSinceUpdate = 0;
-        boolean movingColumns = config.showDistance() || config.showDirection();
-        if (snapshotDirty || movingColumns) {
+        boolean updatePositions =
+                config.showDistance() || config.showDirection() || config.hideSpawn();
+        if (snapshotDirty || updatePositions) {
             boolean rebuildText = snapshotDirty;
             snapshotDirty = false;
             snapshot = builder.build(realNamesHeld, rebuildText);

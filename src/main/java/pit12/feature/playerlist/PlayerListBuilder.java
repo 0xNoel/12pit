@@ -114,6 +114,13 @@ final class PlayerListBuilder {
             if (!showSpecial && !showNick && !showEquipment) {
                 continue;
             }
+            EntityPlayer player = players.loadedPlayer(playerId);
+            boolean spawn = (config.hideSpawn() || config.showSpawn()) && player != null
+                    && pitSnapshot.spawnStateAt(player.posX, player.posY,
+                            player.posZ) == SpawnState.IN_SPAWN;
+            if (config.hideSpawn() && spawn) {
+                continue;
+            }
             PlayerListEntry previous = previousEntries.get(playerId);
             String name = previous != null ? previous.name()
                     : config.shortPlayerNames() ? playerNames.shortName(playerId)
@@ -129,7 +136,6 @@ final class PlayerListBuilder {
                     name = name.trim() + " §e§lN";
                 }
             }
-            EntityPlayer player = players.loadedPlayer(playerId);
             boolean distanceKnown = localPlayer != null && player != null;
             boolean directionKnown =
                     config.showDirection() && localPlayer != null && player != null;
@@ -137,8 +143,6 @@ final class PlayerListBuilder {
             float direction = directionKnown
                     ? direction(localPlayer, player, forwardX, forwardZ, rightX, rightZ)
                     : 0.0F;
-            boolean spawn = config.showSpawn() && player != null && pitSnapshot
-                    .spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
             String leggingsText = previous != null ? previous.leggingsText()
                     : config.showLeggings() && playerEquipment != null
                             && playerEquipment.leggingsKnown()
@@ -153,9 +157,10 @@ final class PlayerListBuilder {
                                             playerEquipment.heldEnchantments(),
                                             config.enchantmentFormat(), config.showGem())
                                     : null;
-            PlayerListEntry entry = new PlayerListEntry(playerId,
-                    player == null ? 0 : player.getEntityId(), name, leggingsText, heldItemText,
-                    distance, direction, distanceKnown, directionKnown, spawn);
+            PlayerListEntry entry =
+                    new PlayerListEntry(playerId, player == null ? 0 : player.getEntityId(), name,
+                            leggingsText, heldItemText, distance, direction, distanceKnown,
+                            directionKnown, config.showSpawn() && spawn);
             previousEntries.put(playerId, entry);
             if (showSpecial) {
                 add(groups, special, entry);
