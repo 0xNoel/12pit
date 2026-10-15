@@ -24,31 +24,43 @@ import static pit12.shared.chat.ChatFeedback.reply;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
+import pit12.runtime.config.ConfigCatalog;
+import pit12.runtime.config.ConfigChangeListener;
+import pit12.runtime.config.ConfigChangeSet;
+import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.languages.Languages;
 import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-public final class CommandRegistry implements ClientLifecycle {
+public final class CommandRegistry implements ClientLifecycle, ConfigChangeListener {
     private final ClientThread client;
+    private final ConfigCatalog configs;
     private final Languages language;
     private final Registrar registrar;
     private final CommandNode.Builder rootBuilder =
             CommandNode.command("12pit", source("12pit commands"));
     private final List<CommandNode> entryPoints = new ArrayList<>();
     private CommandNode root;
-    private int installed;
+    private final Map<CommandNode, FeatureConfig> owners = new LinkedHashMap<>();
+    private final Set<FeatureConfig> activeOwners = new LinkedHashSet<>();
+    private final Map<CommandNode, Runnable> installed = new LinkedHashMap<>();
     private boolean started;
 
-    public CommandRegistry(ClientThread client, Registrar registrar, Languages language) {
+    public CommandRegistry(ClientThread client, ConfigCatalog configs, Registrar registrar,
+            Languages language) {
         this.language = language;
         this.client = client;
+        this.configs = configs;
         this.registrar = registrar;
     }
 
@@ -57,6 +69,10 @@ public final class CommandRegistry implements ClientLifecycle {
     }
 
     public void register(CommandNode command, boolean standalone) {
+        register(command, null, standalone);
+    }
+
+    public void register(CommandNode command, FeatureConfig owner, boolean standalone) {
         client.check();
         if (root != null) {
             throw new IllegalStateException("Commands must be registered before startup");
@@ -65,6 +81,9 @@ public final class CommandRegistry implements ClientLifecycle {
             throw new IllegalArgumentException("The command name 12pit is reserved");
         }
         rootBuilder.child(command);
+        if (owner != null) {
+            owners.put(command, owner);
+        }
         if (standalone) {
             entryPoints.add(command);
         }
@@ -80,18 +99,61 @@ public final class CommandRegistry implements ClientLifecycle {
             root = rootBuilder.build();
             entryPoints.add(0, root);
         }
-        // Forge won't let us unregister these. Reuse them if start() runs again.
-        while (installed < entryPoints.size()) {
-            registrar.register(this, entryPoints.get(installed));
-            installed++;
-        }
         started = true;
+        configs.addListener(this);
+        updateRegistrations();
     }
 
     @Override
     public void stop() {
         client.check();
         started = false;
+        configs.removeListener(this);
+        for (Runnable unregister : installed.values()) {
+            unregister.run();
+        }
+        installed.clear();
+    }
+
+    public boolean available(CommandNode command) {
+        client.check();
+        FeatureConfig owner = owners.get(command);
+        return started && (owner == null || (activeOwners.contains(owner) && owner.enabled()));
+    }
+
+    public void setActive(FeatureConfig owner, boolean active) {
+        client.check();
+        if (active) {
+            activeOwners.add(owner);
+        } else {
+            activeOwners.remove(owner);
+        }
+        updateRegistrations();
+    }
+
+    @Override
+    public void onConfigChanged(ConfigChangeSet changes) {
+        for (FeatureConfig owner : owners.values()) {
+            if (changes.affects(owner.id(), "enabled")) {
+                updateRegistrations();
+                return;
+            }
+        }
+    }
+
+    private void updateRegistrations() {
+        for (CommandNode command : entryPoints) {
+            if (available(command)) {
+                if (!installed.containsKey(command)) {
+                    installed.put(command, registrar.register(this, command));
+                }
+            } else {
+                Runnable unregister = installed.remove(command);
+                if (unregister != null) {
+                    unregister.run();
+                }
+            }
+        }
     }
 
     public String usage(CommandNode command) {
@@ -110,6 +172,9 @@ public final class CommandRegistry implements ClientLifecycle {
 
     private void execute(CommandNode command, ICommandSender sender, String[] args, String path)
             throws CommandException {
+        if (!available(command)) {
+            throw new CommandNotFoundException();
+        }
         if (!command.canUse(sender)) {
             throw new CommandException("commands.generic.permission");
         }
@@ -143,7 +208,7 @@ public final class CommandRegistry implements ClientLifecycle {
 
     public List<String> complete(CommandNode command, ICommandSender sender, String[] args) {
         client.check();
-        if (!started || args.length == 0 || !command.canUse(sender)) {
+        if (!available(command) || args.length == 0 || !command.canUse(sender)) {
             return Collections.emptyList();
         }
         if (args.length > 1) {
@@ -155,7 +220,7 @@ public final class CommandRegistry implements ClientLifecycle {
         Set<String> options = new LinkedHashSet<>();
         if (args.length == 1) {
             for (CommandNode child : command.children) {
-                if (child.canUse(sender)) {
+                if (available(child) && child.canUse(sender)) {
                     options.add(child.name);
                     options.addAll(child.aliases);
                 }
@@ -184,7 +249,7 @@ public final class CommandRegistry implements ClientLifecycle {
     private void help(CommandNode command, ICommandSender sender, String path) {
         reply(sender, Tone.INFO, path + " - " + language.translate(command.description));
         for (CommandNode child : command.children) {
-            if (child.canUse(sender)) {
+            if (available(child) && child.canUse(sender)) {
                 reply(sender, Tone.INFO, usage(child, path + " " + child.name) + " - "
                         + language.translate(child.description));
             }
@@ -197,6 +262,6 @@ public final class CommandRegistry implements ClientLifecycle {
 
     @FunctionalInterface
     public interface Registrar {
-        void register(CommandRegistry registry, CommandNode command);
+        Runnable register(CommandRegistry registry, CommandNode command);
     }
 }

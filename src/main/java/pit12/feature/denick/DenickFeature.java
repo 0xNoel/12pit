@@ -25,13 +25,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,12 +38,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -58,6 +54,8 @@ import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.config.Setting;
 import pit12.runtime.languages.Languages;
+import pit12.runtime.nick.NickListener;
+import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitState;
 import pit12.runtime.player.PlayerEntityTracker;
@@ -76,23 +74,23 @@ import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class DenickFeature implements ClientLifecycle, DenickNames, TabPresenceListener,
-        PlayerEquipmentListener, ConfigChangeListener {
+        PlayerEquipmentListener, ConfigChangeListener, NickListener {
     private static final Logger LOGGER = Logger.getLogger(DenickFeature.class.getName());
-    private static final Pattern NPC_TAB_NAME = Pattern.compile("[a-z0-9]{10}(?![A-Za-z0-9_])");
     private final Minecraft minecraft;
     private final ClientThread client;
     private final ConfigCatalog configs;
     private final DenickConfig config;
+    private final CommandRegistry commands;
     private final ClientSession session;
     private final PitContext pit;
     private final TabPresence presence;
     private final PlayerNameCache names;
+    private final NickTracker nicks;
     private final PlayerEntityTracker players;
     private final PlayerEquipmentAccess equipment;
     private final Languages language;
     private final DenickNamesBinding binding;
     private final DenickStore store;
-    private final Set<UUID> checkedPlayers = new HashSet<>();
     private final Map<UUID, Target> targets = new LinkedHashMap<>();
     private final Map<String, String> mappings = new LinkedHashMap<>();
     private final List<Runnable> listeners = new ArrayList<>();
@@ -109,16 +107,19 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     public DenickFeature(Minecraft minecraft, ClientThread client, ConfigCatalog configs,
             DenickConfig config, ClientSession session, PitContext pit, TabPresence presence,
-            PlayerNameCache names, PlayerEntityTracker players, PlayerEquipmentAccess equipment,
-            CommandRegistry commands, Languages language, Path path, DenickNamesBinding binding) {
+            PlayerNameCache names, NickTracker nicks, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment, CommandRegistry commands, Languages language,
+            Path path, DenickNamesBinding binding) {
         this.minecraft = minecraft;
         this.client = client;
         this.configs = configs;
         this.config = config;
+        this.commands = commands;
         this.session = session;
         this.pit = pit;
         this.presence = presence;
         this.names = names;
+        this.nicks = nicks;
         this.players = players;
         this.equipment = equipment;
         this.language = language;
@@ -129,7 +130,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 .suggests((sender, args) -> args.length == 1
                         ? new ArrayList<>(presence.players().values())
                         : Collections.singletonList("force"))
-                .build(), true);
+                .build(), config, true);
     }
 
     @Override
@@ -153,11 +154,13 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             return thread;
         });
         configs.addListener(this);
+        nicks.addListener(this);
         presence.addListener(this);
         equipment.addListener(this);
         session.addListener(sessionChanged);
         MinecraftForge.EVENT_BUS.register(this);
         resetWorld();
+        presence.players().forEach((id, name) -> onPlayerSeen(id, name, true));
         ExecutorService loader = storageWorker;
         loader.execute(() -> {
             Map<String, String> loaded = null;
@@ -179,12 +182,14 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 ready = true;
             });
         });
+        commands.setActive(config, true);
     }
 
     @Override
     public void stop() {
         client.check();
         started = false;
+        commands.setActive(config, false);
         generation++;
         if (namesBound) {
             binding.pit12$bindDenickNames(null);
@@ -195,14 +200,11 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         session.removeListener(sessionChanged);
         equipment.removeListener(this);
         presence.removeListener(this);
+        nicks.removeListener(this);
         for (Target target : targets.values()) {
             target.cancel();
-            if (target.nick) {
-                names.bindDisplayNameObserver(target.id, null);
-            }
         }
         targets.clear();
-        checkedPlayers.clear();
         if (queryWorker != null) {
             queryWorker.shutdownNow();
             queryWorker = null;
@@ -227,9 +229,6 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     private void command(ICommandSender sender, String[] args) {
         client.check();
-        if (!config.enabled()) {
-            throw new IllegalArgumentException("Denick is disabled");
-        }
         if (!ready) {
             throw new IllegalArgumentException("Denick cache is loading");
         }
@@ -274,52 +273,37 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         changed();
     }
 
-    private boolean isNick(UUID id) {
-        if (id.version() == 4 && id.variant() == 2) {
-            return false;
+    @Override
+    public void onPlayerSeen(UUID playerId, String name, boolean joined) {
+        if (name == null || !nicks.isNicked(playerId)) {
+            return;
         }
-        String display = names.displayName(id);
-        return display != null && !isNpc(display);
-    }
-
-    private boolean isNpc(String display) {
-        String plain = EnumChatFormatting.getTextWithoutFormattingCodes(display).trim();
-        return plain.contains("[NPC]") || NPC_TAB_NAME.matcher(display).lookingAt();
+        Target target = targets.computeIfAbsent(playerId, id -> new Target(id, name));
+        // Tab and NickTracker both report the same player.
+        if (target.nick) {
+            return;
+        }
+        target.nick = true;
+        if (config.enabled() && config.automatic.get()) {
+            begin(target, null, false);
+        }
+        changed();
     }
 
     @Override
-    public void onPlayerSeen(UUID playerId, String name, boolean joined) {
-        if (name == null || !checkedPlayers.add(playerId)) {
-            return;
-        }
-        if (isNick(playerId)) {
-            Target target = targets.computeIfAbsent(playerId, id -> new Target(id, name));
-            target.nick = true;
-            names.bindDisplayNameObserver(playerId, display -> {
-                if (display != null && isNpc(display)) {
-                    // A repeated ADD packet must not mark this entry as Nick again.
-                    Target removed = targets.remove(playerId);
-                    removed.cancel();
-                    names.bindDisplayNameObserver(playerId, null);
-                    changed();
-                }
-            });
-            if (config.enabled() && config.automatic.get()) {
-                begin(target, null, false);
-            }
-            changed();
+    public void onNickChanged(UUID playerId, String name, boolean nicked) {
+        if (nicked) {
+            onPlayerSeen(playerId, name, true);
+        } else {
+            onPlayerLeft(playerId);
         }
     }
 
     @Override
     public void onPlayerLeft(UUID playerId) {
-        checkedPlayers.remove(playerId);
         Target target = targets.remove(playerId);
         if (target != null) {
             target.cancel();
-            if (target.nick) {
-                names.bindDisplayNameObserver(playerId, null);
-            }
             changed();
         }
     }
@@ -609,13 +593,6 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         // Refreshing the name can remove an NPC target before a query reply.
         String displayName = names.displayName(target.id);
         return displayName == null ? target.name : displayName;
-    }
-
-    @Override
-    public boolean isNicked(UUID playerId) {
-        client.check();
-        Target target = targets.get(playerId);
-        return config.enabled() && target != null && target.nick;
     }
 
     @Override

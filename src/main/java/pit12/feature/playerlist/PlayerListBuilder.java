@@ -34,6 +34,7 @@ import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentFormat;
+import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.pit.PitSnapshot;
 import pit12.runtime.pit.SpawnState;
@@ -52,12 +53,14 @@ final class PlayerListBuilder {
     private final RelationLookup relations;
     private final PlayerNameCache playerNames;
     private final DenickNames denickNames;
+    private final NickTracker nicks;
     private final Map<UUID, PlayerListEntry> previousEntries = new HashMap<>();
     private WorldClient previousWorld;
 
     PlayerListBuilder(Minecraft minecraft, PlayerEntityTracker players,
             PlayerEquipmentAccess equipment, PitContext pitContext, PlayerListConfig config,
-            RelationLookup relations, PlayerNameCache playerNames, DenickNames denickNames) {
+            RelationLookup relations, PlayerNameCache playerNames, DenickNames denickNames,
+            NickTracker nicks) {
         this.minecraft = minecraft;
         this.players = players;
         this.equipment = equipment;
@@ -66,6 +69,7 @@ final class PlayerListBuilder {
         this.relations = relations;
         this.playerNames = playerNames;
         this.denickNames = denickNames;
+        this.nicks = nicks;
     }
 
     PlayerListSnapshot build(boolean realNames, boolean rebuildText) {
@@ -104,8 +108,8 @@ final class PlayerListBuilder {
                     : relation == Relation.ENEMY ? PlayerListGroup.ENEMY : null;
             PlayerListGroup group = equipmentGroup(playerEquipment);
             boolean showSpecial = special != null && config.showGroup(special);
-            boolean showNick =
-                    config.showGroup(PlayerListGroup.NICK) && denickNames.isNicked(playerId);
+            boolean nicked = nicks.isNicked(playerId);
+            boolean showNick = config.showGroup(PlayerListGroup.NICK) && nicked;
             boolean showEquipment = group != null && config.showGroup(group);
             if (!showSpecial && !showNick && !showEquipment) {
                 continue;
@@ -119,8 +123,11 @@ final class PlayerListBuilder {
             }
             if (previous == null) {
                 String realName = realNames ? denickNames.realDisplayName(playerId) : null;
-                name = realName == null ? denickNames.listName(playerId, name)
-                        : PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
+                if (realName != null) {
+                    name = PRESTIGE_PREFIX.matcher(realName).replaceFirst("[");
+                } else if (config.nickMarker() && nicked) {
+                    name = name.trim() + " §e§lN";
+                }
             }
             EntityPlayer player = players.loadedPlayer(playerId);
             boolean distanceKnown = localPlayer != null && player != null;

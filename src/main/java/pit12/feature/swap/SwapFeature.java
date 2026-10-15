@@ -56,6 +56,7 @@ public final class SwapFeature
     private final Minecraft minecraft;
     private final ConfigCatalog configs;
     private final SwapConfig config;
+    private final CommandRegistry commands;
     private final ClientSession session;
     private final BindingBook bindings;
     private final SwapController controller;
@@ -76,6 +77,7 @@ public final class SwapFeature
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
+        this.commands = commands;
         this.session = session;
         this.hookBinding = hookBinding;
         this.input = input;
@@ -89,7 +91,7 @@ public final class SwapFeature
         overlay = new SwapOverlay(minecraft, bindings, config);
         commands.register(
                 new SwapCommand(minecraft, bindings, config, automatic, language).definition(),
-                true);
+                config, true);
     }
 
     public SwapBindings bindings() {
@@ -106,6 +108,7 @@ public final class SwapFeature
         session.addListener(sessionListener);
         bindings.start();
         updateListening();
+        commands.setActive(config, true);
     }
 
     @Override
@@ -114,6 +117,7 @@ public final class SwapFeature
         if (!started)
             return;
         started = false;
+        commands.setActive(config, false);
         controller.finish(false);
         configs.removeListener(this);
         session.removeListener(sessionListener);

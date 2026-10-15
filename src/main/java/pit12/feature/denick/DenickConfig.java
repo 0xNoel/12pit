@@ -42,6 +42,6 @@ public final class DenickConfig extends FeatureConfig {
                 source("Queues equipment changes until a real name is found."), true);
         subsubcategory("display", source("Display"));
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
-                source("Adds N to nicked players' names in Tab and Player List."), true);
+                source("Adds N to nicked players' names in Tab."), true);
     }
 }

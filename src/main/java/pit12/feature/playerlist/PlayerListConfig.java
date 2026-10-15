@@ -36,6 +36,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final ChoiceSetting enchantmentFormat;
     private final BooleanSetting showGem;
     private final BooleanSetting shortPlayerNames;
+    private final BooleanSetting nickMarker;
     private final KeybindSetting realNamesKey;
     private final BooleanSetting showDistance;
     private final BooleanSetting showDirection;
@@ -67,6 +68,8 @@ public final class PlayerListConfig extends FeatureConfig {
         subsubcategory("player_information", source("Player information"));
         shortPlayerNames = booleanSetting("short_player_names", source("Remove bounty suffix"),
                 source("Removes bounty suffixes from player names."), false);
+        nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
+                source("Adds N to nicked players' names in Player List."), true);
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
@@ -116,6 +119,10 @@ public final class PlayerListConfig extends FeatureConfig {
 
     public int realNamesKey() {
         return realNamesKey.get();
+    }
+
+    public boolean nickMarker() {
+        return nickMarker.get();
     }
 
     public boolean showDistance() {

@@ -22,8 +22,6 @@ import java.util.UUID;
 
 /** Use this API on the client thread. */
 public interface DenickNames {
-    boolean isNicked(UUID playerId);
-
     String listName(UUID playerId, String original);
 
     /** Returns null when Denick is disabled or no real name is known. */

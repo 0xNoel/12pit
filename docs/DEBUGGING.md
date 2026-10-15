@@ -64,8 +64,6 @@ If Gradle sync fails or reports a toolchain error, check that Gradle uses JDK 21
 
 In case the Vite page is opened, but the requests fail, make sure that the game is launched and the `WEB_UI_TARGET` matches the current address of the game. If the configuration interface fails to launch, look for the "Configuration interface is unavailable" message in the game log.
 
-While reporting a failure, provide the relevant log messages and steps to reproduce it.
-
 The saved data is in `12pit/` directory in the Minecraft game directory. Profiles are stored in `12pit/config/`, relations are stored in `12pit/relations.json`, and swap bindings are stored in `12pit/swap-bindings.json`.
 
-Create a backup copy of these files before changing them in order to diagnose a load error. Do not delete the saved data in order to reset a temporary session issue.
+Create a backup copy of these files before changing them in order to diagnose a load error.

@@ -37,6 +37,7 @@ import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.item.PitEnchantmentFormat;
+import pit12.runtime.nick.NickTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentCache;
 import pit12.runtime.player.PlayerEquipmentListener;
@@ -52,6 +53,7 @@ public final class NametagFeature
     private final ClientSession session;
     private final PlayerEquipmentAccess equipment;
     private final DenickNames denickNames;
+    private final NickTracker nicks;
     private final NametagNamesBinding binding;
     private final NametagRenderer renderer = new NametagRenderer();
     private final Map<UUID, NametagText> texts = new HashMap<>();
@@ -64,13 +66,14 @@ public final class NametagFeature
 
     public NametagFeature(Minecraft minecraft, ConfigCatalog configs, NametagConfig config,
             ClientSession session, PlayerEquipmentAccess equipment, DenickNames denickNames,
-            NametagNamesBinding binding) {
+            NickTracker nicks, NametagNamesBinding binding) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
         this.session = session;
         this.equipment = equipment;
         this.denickNames = denickNames;
+        this.nicks = nicks;
         this.binding = binding;
     }
 
@@ -229,8 +232,8 @@ public final class NametagFeature
         if (!config.enabled()) {
             return original;
         }
-        String name = config.nickMarker() && denickNames.isNicked(playerId) ? original + " §e§lN"
-                : original;
+        String name =
+                config.nickMarker() && nicks.isNicked(playerId) ? original + " §e§lN" : original;
         if (config.realNames()) {
             String realName = denickNames.realDisplayName(playerId);
             if (realName != null) {

@@ -39,6 +39,7 @@ import pit12.runtime.config.Setting;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
+import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
 import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
@@ -79,7 +80,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             PlayerNameCache playerNames, PlayerEntityTracker players,
             PlayerEquipmentAccess equipment, PitContext pitContext, HudRegistry hudRegistry,
             RelationLookup relations, TabPresence presence, Languages language,
-            DenickNames denickNames) {
+            DenickNames denickNames, NickTracker nicks) {
         this.language = language;
         this.configs = configs;
         this.config = config;
@@ -90,7 +91,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         this.denickNames = denickNames;
         this.hudRegistry = hudRegistry;
         builder = new PlayerListBuilder(minecraft, players, equipment, pitContext, config,
-                relations, playerNames, denickNames);
+                relations, playerNames, denickNames, nicks);
         hud = new PlayerListHud(config, hudRenderer);
         languageListener = () -> hud.localize(language);
     }
@@ -222,6 +223,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
                 || changes.affects("playerlist", "enchantment_format")
                 || changes.affects("playerlist", "show_gem")
                 || changes.affects("playerlist", "short_player_names")
+                || changes.affects("playerlist", "nick_marker")
                 || changes.affects("playerlist", "real_names_key")
                 || changes.affects("playerlist", "show_distance")
                 || changes.affects("playerlist", "show_direction")
