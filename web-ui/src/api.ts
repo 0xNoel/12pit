@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-import { t, type SourceText } from './languages'
+import type { SourceText } from './languages'
 
 export interface Option {
   id: string
@@ -123,8 +123,7 @@ async function request<T = State>(path: string, body?: object): Promise<T> {
     cache: 'no-store',
   })
   const payload = await response.json()
-  if (!response.ok)
-    throw new Error(payload.error ? t(payload.error) : t('Request failed'))
+  if (!response.ok) throw new Error(payload.error || 'Request failed')
   return payload as T
 }
 

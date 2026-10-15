@@ -75,7 +75,7 @@ final class SwapCommand {
                 handler.execute(sender, args);
             } catch (IllegalArgumentException failure) {
                 // Bindings also use this exception when input is bad or they aren't ready yet.
-                reply(sender, Tone.ERROR, language.translate(failure.getMessage()));
+                reply(sender, Tone.ERROR, failure.getMessage());
             }
         });
     }
@@ -87,10 +87,10 @@ final class SwapCommand {
             try {
                 target = Integer.parseInt(args[1]);
             } catch (NumberFormatException failure) {
-                throw new IllegalArgumentException(source("Hotbar slot must be from 1 to 9"));
+                throw new IllegalArgumentException("Hotbar slot must be from 1 to 9");
             }
             if (target < 1 || target > 9) {
-                throw new IllegalArgumentException(source("Hotbar slot must be from 1 to 9"));
+                throw new IllegalArgumentException("Hotbar slot must be from 1 to 9");
             }
         }
         SwapBinding binding =
@@ -108,7 +108,7 @@ final class SwapCommand {
             requirePlayer();
             held = ItemIdentity.read(minecraft.thePlayer.getHeldItem());
             if (held == null)
-                throw new IllegalArgumentException(source("Hold an item to unbind"));
+                throw new IllegalArgumentException("Hold an item to unbind");
         }
         int removed = bindings.unbind(args.length == 1 ? key(args[0]) : 0, held);
         if (removed == 0 || config.bindingMessages.get())
@@ -118,8 +118,7 @@ final class SwapCommand {
     }
 
     private void list(ICommandSender sender, String[] args) {
-        if (bindings.readinessProblem() != null)
-            throw new IllegalArgumentException(bindings.readinessProblem());
+        bindings.requireReady();
         reply(sender, Tone.INFO, language.format("Swap bindings: {0}", bindings.count()));
         for (SwapBinding entry : bindings.entries())
             reply(sender, Tone.INFO, Keyboard.getKeyName(entry.key) + ": "
@@ -145,7 +144,7 @@ final class SwapCommand {
 
     private void requirePlayer() {
         if (minecraft.thePlayer == null)
-            throw new IllegalArgumentException(source("Join a world first"));
+            throw new IllegalArgumentException("Join a world first");
     }
 
     private String state(PitEnchantment type, boolean enabled) {
@@ -161,7 +160,7 @@ final class SwapCommand {
     private int key(String name) {
         int code = Keyboard.getKeyIndex(name.toUpperCase(Locale.ROOT));
         if (code == Keyboard.KEY_NONE)
-            throw new IllegalArgumentException(language.format("Unknown keyboard key: {0}", name));
+            throw new IllegalArgumentException("Unknown keyboard key: " + name);
         return code;
     }
 

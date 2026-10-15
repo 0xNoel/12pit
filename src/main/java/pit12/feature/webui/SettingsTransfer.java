@@ -43,6 +43,7 @@ import pit12.feature.profile.api.ProfileSummary;
 import pit12.feature.profile.api.Profiles;
 import pit12.feature.relation.api.Relation;
 import pit12.feature.relation.api.RelationEntry;
+import pit12.feature.relation.api.RelationReadiness;
 import pit12.feature.relation.api.Relations;
 import pit12.feature.swap.api.SwapBindings;
 import pit12.shared.result.OperationResult;
@@ -70,7 +71,8 @@ final class SettingsTransfer {
         data.addProperty("schemaVersion", VERSION);
         JsonArray exported = new JsonArray();
         if (!selected.isEmpty()) {
-            for (String text : requireSuccess(profiles.exportProfiles(selected))) {
+            for (String text : requireSuccess(profiles.exportProfiles(selected),
+                    "export profiles")) {
                 exported.add(new JsonParser().parse(text));
             }
         }
@@ -82,8 +84,8 @@ final class SettingsTransfer {
         }
         data.add("relations", groups);
         if (includeSwap)
-            data.add("swapBindings",
-                    new JsonParser().parse(requireSuccess(swapBindings.exportBindings())));
+            data.add("swapBindings", new JsonParser()
+                    .parse(requireSuccess(swapBindings.exportBindings(), "export swap bindings")));
         return data;
     }
 
@@ -146,24 +148,25 @@ final class SettingsTransfer {
         JsonObject decisions = object(request, "resolutions");
         List<RelationEntry> resolved = resolve(bundle, selectedTypes, mode, decisions);
         if (!chosen.isEmpty()) {
-            requireSuccess(profiles.importProfiles(chosen));
+            requireSuccess(profiles.importProfiles(chosen), "import profiles");
         }
         if (!selectedTypes.isEmpty()) {
-            requireSuccess(relations.replaceAll(resolved));
+            requireSuccess(relations.replaceAll(resolved), "replace relations");
         }
         if (includeSwap)
-            requireSuccess(swapBindings.replaceBindings(bundle.swapBindings));
+            requireSuccess(swapBindings.replaceBindings(bundle.swapBindings),
+                    "import swap bindings");
     }
 
-    private static <T> T requireSuccess(OperationResult<T> result) {
+    private static <T> T requireSuccess(OperationResult<T> result, String operation) {
         if (!result.succeeded())
-            throw new IllegalArgumentException(result.message());
+            throw new IllegalArgumentException("Could not " + operation + ": " + result.status());
         return result.value();
     }
 
-    private static void requireSuccess(ProfileMutationResult result) {
+    private static void requireSuccess(ProfileMutationResult result, String operation) {
         if (!result.succeeded())
-            throw new IllegalArgumentException(result.message());
+            throw new IllegalArgumentException("Could not " + operation + ": " + result.status());
     }
 
     private Bundle parseData(JsonObject data) {
@@ -180,7 +183,8 @@ final class SettingsTransfer {
             savedProfiles.add(gson.toJson(element));
         }
         if (!savedProfiles.isEmpty()) {
-            requireSuccess(profiles.validateImportProfiles(savedProfiles));
+            requireSuccess(profiles.validateImportProfiles(savedProfiles),
+                    "validate profile import");
         }
         EnumMap<Relation, List<RelationEntry>> groups =
                 new EnumMap<Relation, List<RelationEntry>>(Relation.class);
@@ -228,7 +232,7 @@ final class SettingsTransfer {
         JsonElement swapData = data.get("swapBindings");
         String savedSwap = swapData == null ? null : gson.toJson(swapData);
         if (savedSwap != null)
-            requireSuccess(swapBindings.validateImport(savedSwap));
+            requireSuccess(swapBindings.validateImport(savedSwap), "validate swap binding import");
         if (savedProfiles.isEmpty() && groups.isEmpty() && savedSwap == null) {
             throw new IllegalArgumentException("File is empty");
         }
@@ -327,8 +331,8 @@ final class SettingsTransfer {
         for (ProfileSummary profile : profiles.snapshot().profiles()) {
             all.add(profile.id());
         }
-        StringBuilder state =
-                new StringBuilder(gson.toJson(requireSuccess(profiles.exportProfiles(all))));
+        StringBuilder state = new StringBuilder(
+                gson.toJson(requireSuccess(profiles.exportProfiles(all), "export profiles")));
         state.append(profiles.snapshot().activeProfileId());
         state.append("swapBindings:").append(swapBindings.revision());
         for (Relation type : TYPES) {
@@ -348,8 +352,8 @@ final class SettingsTransfer {
     }
 
     private void requireRelations() {
-        if (relations.readinessProblem() != null) {
-            throw new IllegalArgumentException(relations.readinessProblem());
+        if (relations.readiness() != RelationReadiness.READY) {
+            throw new IllegalArgumentException("Relations are not ready");
         }
     }
 

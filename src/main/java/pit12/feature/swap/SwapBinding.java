@@ -18,8 +18,6 @@
  */
 package pit12.feature.swap;
 
-import static pit12.runtime.languages.Languages.source;
-
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import pit12.runtime.item.PitEnchantmentReader;
@@ -47,17 +45,16 @@ final class SwapBinding {
 
     static SwapBinding create(int key, ItemStack stack, int hotbarTarget) {
         if (stack == null)
-            throw new IllegalArgumentException(source("Hold an item to bind"));
+            throw new IllegalArgumentException("Hold an item to bind");
         int armor = armorTarget(stack);
         if (hotbarTarget == 0 && armor == 0) {
-            throw new IllegalArgumentException(
-                    source("Hold armor or specify a hotbar slot from 1 to 9"));
+            throw new IllegalArgumentException("Hold armor or specify a hotbar slot from 1 to 9");
         }
         PitEnchantments enchantments = PitEnchantmentReader.read(stack);
         String details = enchantments.formatDisplayNames(false);
         ItemIdentity identity = ItemIdentity.read(stack);
         if (identity == null)
-            throw new IllegalArgumentException(source("Held item could not be identified"));
+            throw new IllegalArgumentException("Held item could not be identified");
         String name = stack.getDisplayName();
         return new SwapBinding(key, identity, hotbarTarget == 0,
                 hotbarTarget == 0 ? armor : hotbarTarget, name.isEmpty() ? identity.item : name,

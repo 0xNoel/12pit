@@ -31,7 +31,7 @@ public final class DenickConfig extends FeatureConfig {
     final BooleanSetting nickMarker;
 
     public DenickConfig() {
-        super("denick", source("Denick"), new ConfigCategory("misc", source("Misc")),
+        super("denick", "Denick", new ConfigCategory("misc", source("Misc")),
                 source("Finds nicked players using their current equipment."));
         subsubcategory("queries", source("Queries"));
         automatic = booleanSetting("automatic", source("Auto Denick"),

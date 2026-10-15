@@ -32,7 +32,7 @@ export async function loadLanguage(language: string) {
       cache: 'no-store',
     })
       .then(async (response) => {
-        if (!response.ok) throw new Error(t('Could not load language'))
+        if (!response.ok) throw new Error('Could not load language')
         return (await response.json()) as Catalog
       })
       .catch((cause) => {

@@ -527,9 +527,11 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             if (search.force || !Objects.equals(previousName, result.displayName)
                     || !Objects.equals(previousOwner, result.owner)) {
                 boolean corrected = cached != null && !Objects.equals(cached, result.owner);
-                reply(search.sender, Tone.SUCCESS, language.format(
-                        corrected ? source("{0} §c-> {1} §c(updated)") : source("{0} §c-> {1}"),
-                        display, result.displayName));
+                reply(search.sender, Tone.SUCCESS,
+                        corrected
+                                ? language.format("{0} §c-> {1} §c(updated)", display,
+                                        result.displayName)
+                                : display + " §c-> " + result.displayName);
                 changed();
             }
             if (!Objects.equals(mappings.put(target.name.toLowerCase(Locale.ROOT), result.owner),

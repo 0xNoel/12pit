@@ -151,7 +151,7 @@ public abstract class FeatureConfig {
     protected final HudConfig hudConfig(String id, HudAnchor defaultAnchor, int defaultOffsetX,
             int defaultOffsetY, boolean defaultTextShadow) {
         return hudConfig(id, defaultAnchor, defaultOffsetX, defaultOffsetY, defaultTextShadow,
-                HudGroup.AUTO, source("HUD"));
+                HudGroup.AUTO, "HUD");
     }
 
     protected final HudConfig hudConfig(String id, HudAnchor defaultAnchor, int defaultOffsetX,
@@ -189,8 +189,7 @@ public abstract class FeatureConfig {
         register(translateText, ConfigOption.Kind.BOOLEAN);
         register(anchor, ConfigOption.Kind.CHOICE);
         int lastOption = options.size();
-        ConfigGroup group =
-                new ConfigGroup(id + ".hud", groupName == null ? source("HUD") : groupName);
+        ConfigGroup group = new ConfigGroup(id + ".hud", groupName == null ? "HUD" : groupName);
         ConfigGroup parent = currentSubcategory;
         hudGroups.add(() -> {
             boolean topLevel = grouping == HudGroup.SUBCATEGORY

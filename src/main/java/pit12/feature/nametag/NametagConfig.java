@@ -40,7 +40,7 @@ public final class NametagConfig extends FeatureConfig {
     public NametagConfig() {
         super("nametag", source("Nametag"), new ConfigCategory("render", source("Render")),
                 source("Adds real names and Pit enchantments to player nametags."));
-        subsubcategory("names", source("Denick"));
+        subsubcategory("names", "Denick");
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
                 source("Adds N to nicked players' names."), true);
         realNames = booleanSetting("real_names", source("Show real names on nametags"),

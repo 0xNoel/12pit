@@ -63,7 +63,7 @@ final class ChatMacroCommand {
             try {
                 handler.execute(sender, args);
             } catch (IllegalArgumentException failure) {
-                reply(sender, Tone.ERROR, language.translate(failure.getMessage()));
+                reply(sender, Tone.ERROR, failure.getMessage());
             }
         });
     }
@@ -94,7 +94,7 @@ final class ChatMacroCommand {
     private int key(String name) {
         int key = Keyboard.getKeyIndex(name.toUpperCase(Locale.ROOT));
         if (key == Keyboard.KEY_NONE)
-            throw new IllegalArgumentException(language.format("Unknown keyboard key: {0}", name));
+            throw new IllegalArgumentException("Unknown keyboard key: " + name);
         return key;
     }
 

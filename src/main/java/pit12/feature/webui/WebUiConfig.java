@@ -52,7 +52,7 @@ public final class WebUiConfig extends FeatureConfig {
                 0x7BADE2);
         booleanSetting("show_details", source("Show details"),
                 source("Shows descriptions for features and settings."), false);
-        discordRpc = booleanSetting("discord_rpc", source("Discord RPC"),
+        discordRpc = booleanSetting("discord_rpc", "Discord RPC",
                 source("Shows 12pit and elapsed time on your Discord profile."), true);
         keybind = keybindSetting("keybind", source("Interface key"),
                 source("Opens the HUD editor. Press again with no HUD selected to open settings."),
