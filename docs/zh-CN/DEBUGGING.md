@@ -1,4 +1,4 @@
-<!-- Source: docs/DEBUGGING.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
+<!-- Source: docs/DEBUGGING.md; Based on: 0df550b95e0d116f62938a52fcb3b056796879f5 -->
 
 # 运行和调试 12pit
 
@@ -66,8 +66,6 @@ npm run format:check --prefix web-ui
 
 如果 Vite 页面已打开，但请求失败，确保游戏已启动，且 `WEB_UI_TARGET` 与游戏当前地址一致。如果配置界面无法启动，在游戏日志中查找 "Configuration interface is unavailable" 消息。
 
-报告故障时，提供相关日志消息和复现步骤。
-
 保存的数据位于 Minecraft 游戏目录中的 `12pit/` 目录。配置方案存储在 `12pit/config/`，关系存储在 `12pit/relations.json`，切换绑定存储在 `12pit/swap-bindings.json`。
 
-为诊断加载错误而修改这些文件前，先创建备份。不要为了重置临时会话问题而删除已保存的数据。
+为诊断加载错误而修改这些文件前，先创建备份。
