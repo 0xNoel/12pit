@@ -195,7 +195,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         session.removeListener(sessionChanged);
         equipment.removeListener(this);
         presence.removeListener(this);
-        targets.values().forEach(Target::cancel);
+        for (Target target : targets.values()) {
+            target.cancel();
+            if (target.nick) {
+                names.bindDisplayNameObserver(target.id, null);
+            }
+        }
         targets.clear();
         checkedPlayers.clear();
         if (queryWorker != null) {
@@ -274,11 +279,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             return false;
         }
         String display = names.displayName(id);
-        if (display == null) {
-            return false;
-        }
+        return display != null && !isNpc(display);
+    }
+
+    private boolean isNpc(String display) {
         String plain = EnumChatFormatting.getTextWithoutFormattingCodes(display).trim();
-        return !plain.contains("[NPC]") && !NPC_TAB_NAME.matcher(display).lookingAt();
+        return plain.contains("[NPC]") || NPC_TAB_NAME.matcher(display).lookingAt();
     }
 
     @Override
@@ -289,6 +295,15 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         if (isNick(playerId)) {
             Target target = targets.computeIfAbsent(playerId, id -> new Target(id, name));
             target.nick = true;
+            names.bindDisplayNameObserver(playerId, display -> {
+                if (display != null && isNpc(display)) {
+                    // A repeated ADD packet must not mark this entry as Nick again.
+                    Target removed = targets.remove(playerId);
+                    removed.cancel();
+                    names.bindDisplayNameObserver(playerId, null);
+                    changed();
+                }
+            });
             if (config.enabled() && config.automatic.get()) {
                 begin(target, null, false);
             }
@@ -302,6 +317,9 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         Target target = targets.remove(playerId);
         if (target != null) {
             target.cancel();
+            if (target.nick) {
+                names.bindDisplayNameObserver(playerId, null);
+            }
             changed();
         }
     }
@@ -474,11 +492,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                         cachedDisplayName = api.displayName(cached, cancelled);
                         String name = cachedDisplayName;
                         client.execute(() -> {
+                            String display = displayName(target);
                             if (valid(target, requestGeneration, request)) {
                                 target.realDisplayName = name;
                                 target.owner = cached;
-                                reply(search.sender, Tone.SUCCESS, language.format(
-                                        "{0} §c-> {1} §c(cached)", displayName(target), name));
+                                reply(search.sender, Tone.SUCCESS,
+                                        language.format("{0} §c-> {1} §c(cached)", display, name));
                                 changed();
                             }
                         });
@@ -490,8 +509,9 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 DenickQuery result = DenickQuery.run(api, items, search.force ? null : cached,
                         cachedDisplayName, cancelled);
                 client.execute(() -> {
+                    String display = displayName(target);
                     if (valid(target, requestGeneration, request)) {
-                        complete(target, search, items, cached, result);
+                        complete(target, search, items, cached, result, display);
                     }
                 });
             } catch (InterruptedException interrupted) {
@@ -506,7 +526,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     }
 
     private void complete(Target target, Search search, List<DenickItem> items, String cached,
-            DenickQuery result) {
+            DenickQuery result, String display) {
         boolean first = search.initial;
         search.initial = false;
         search.busy = false;
@@ -523,11 +543,9 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             if (search.force || !Objects.equals(previousName, result.displayName)
                     || !Objects.equals(previousOwner, result.owner)) {
                 boolean corrected = cached != null && !Objects.equals(cached, result.owner);
-                reply(search.sender, Tone.SUCCESS,
-                        language.format(
-                                corrected ? source("{0} §c-> {1} §c(updated)")
-                                        : source("{0} §c-> {1}"),
-                                displayName(target), result.displayName));
+                reply(search.sender, Tone.SUCCESS, language.format(
+                        corrected ? source("{0} §c-> {1} §c(updated)") : source("{0} §c-> {1}"),
+                        display, result.displayName));
                 changed();
             }
             if (!Objects.equals(mappings.put(target.name.toLowerCase(Locale.ROOT), result.owner),
@@ -588,6 +606,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     }
 
     private String displayName(Target target) {
+        // Refreshing the name can remove an NPC target before a query reply.
         String displayName = names.displayName(target.id);
         return displayName == null ? target.name : displayName;
     }

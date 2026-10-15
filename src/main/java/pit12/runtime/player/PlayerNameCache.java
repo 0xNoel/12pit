@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -124,6 +125,18 @@ public final class PlayerNameCache
     public void removeListener(Runnable listener) {
         session.checkThread();
         listeners.remove(listener);
+    }
+
+    /**
+     * One observer per current Tab entry. Null clears it; absent entries are ignored. Name queries can refresh an entry and
+     * call its observer.
+     */
+    public void bindDisplayNameObserver(UUID playerId, Consumer<String> observer) {
+        session.checkThread();
+        NameEntry entry = entries.get(playerId);
+        if (entry != null) {
+            entry.displayNameObserver = observer;
+        }
     }
 
     @Override
@@ -266,6 +279,9 @@ public final class PlayerNameCache
         if (!Objects.equals(entry.displayName, name)) {
             entry.displayName = name;
             entry.shortName = null;
+            if (entry.displayNameObserver != null) {
+                entry.displayNameObserver.accept(name);
+            }
             Listeners.notify(listeners, Runnable::run);
         }
     }
@@ -283,6 +299,7 @@ public final class PlayerNameCache
         private NetworkPlayerInfo info;
         private String displayName;
         private String shortName;
+        private Consumer<String> displayNameObserver;
 
         private NameEntry(NetworkPlayerInfo info) {
             this.info = info;

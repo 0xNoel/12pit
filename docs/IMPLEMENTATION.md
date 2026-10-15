@@ -294,6 +294,8 @@ Keep a [TabPresenceListener](../src/main/java/pit12/runtime/player/TabPresenceLi
 
 Subscribe to name changes with `addListener(Runnable)` in `start()`, then read the current names. In `stop()`, pass the same listener to `removeListener(Runnable)`.
 
+Use `bindDisplayNameObserver(UUID, Consumer<String>)` to watch one current Tab entry. Each entry has one observer, called on the client thread after its display name changes. Name queries can also refresh an entry and call its observer. The name keeps formatting codes and may be `null`. Pass `null` as the observer to detach it. The subscription ends when the entry leaves Tab or the connection changes.
+
 [SidebarCache](../src/main/java/pit12/runtime/scoreboard/SidebarCache.java) provides `lines()` for the server sidebar. It returns an immutable snapshot of up to 15 lines in display order. Lines include footer text and keep formatting codes. The objective title is excluded. Each [SidebarLine](../src/main/java/pit12/runtime/scoreboard/SidebarLine.java) provides the entry ID, text, and sorting score through `entry()`, `text()`, and `score()`.
 
 `formattedText(minecraft.fontRendererObj)` removes formatting codes and characters with a width of zero in the Minecraft font. Call it on the client thread. It computes the text on the first call and caches it for that line. Score changes retain the cache. Text changes create a new line with an empty cache.
