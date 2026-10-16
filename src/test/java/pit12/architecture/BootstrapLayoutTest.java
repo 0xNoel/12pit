@@ -74,7 +74,7 @@ public final class BootstrapLayoutTest {
             imports.put(name.substring(name.lastIndexOf('.') + 1), name);
         }
         List<String> categories =
-                Arrays.asList("", "combat", "player", "render", "misc", "interface");
+                Arrays.asList("", "combat", "player", "render", "misc", "patch", "interface");
         Map<String, Registration> registrations = new LinkedHashMap<>();
         Set<String> configTypes = new HashSet<>();
         Matcher declarations = Pattern

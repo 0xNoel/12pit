@@ -68,6 +68,9 @@ import pit12.feature.relation.api.RelationLookup;
 import pit12.feature.relation.api.Relations;
 import pit12.feature.ringhelper.RingHelperConfig;
 import pit12.feature.ringhelper.RingHelperFeature;
+import pit12.feature.scoreboardfix.ScoreboardFixBinding;
+import pit12.feature.scoreboardfix.ScoreboardFixConfig;
+import pit12.feature.scoreboardfix.ScoreboardFixFeature;
 import pit12.feature.smartblock.SmartBlockBinding;
 import pit12.feature.smartblock.SmartBlockConfig;
 import pit12.feature.smartblock.SmartBlockFeature;
@@ -199,6 +202,8 @@ public final class ClientBootstrap {
         // Category: Misc
         registerAutoQuickMath(configs);
         registerBanAlert(minecraft, configs, session, presence);
+        // Category: Patch
+        registerScoreboardFix(configs, (ScoreboardFixBinding) minecraft);
         // Platform integrations
         OneConfigSupport oneConfig = new OneConfigSupport(configs);
         components.add(oneConfig);
@@ -405,6 +410,13 @@ public final class ClientBootstrap {
         configs.register(config);
         components
                 .add(new BanAlertFeature(minecraft, configs, config, session, presence, language));
+    }
+
+    // Category: Patch
+    private void registerScoreboardFix(ConfigCatalog configs, ScoreboardFixBinding binding) {
+        ScoreboardFixConfig config = new ScoreboardFixConfig();
+        configs.register(config);
+        components.add(new ScoreboardFixFeature(config, binding));
     }
 
     public void start() {

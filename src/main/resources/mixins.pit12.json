@@ -27,6 +27,8 @@
     "feature.nametag.RendererLivingEntityMixin",
     "feature.nojumpdelay.EntityLivingBaseMixin",
     "feature.nojumpdelay.MinecraftMixin",
+    "feature.scoreboardfix.MinecraftMixin",
+    "feature.scoreboardfix.ScoreboardMixin",
     "feature.sprint.EntityPlayerSPMixin",
     "feature.smartblock.EntityArrowAccessor",
     "feature.smartblock.MinecraftMixin",
