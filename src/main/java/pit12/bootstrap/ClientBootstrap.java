@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import pit12.feature.autoclick.AutoClickBinding;
 import pit12.feature.autoclick.AutoClickConfig;
 import pit12.feature.autoclick.AutoClickFeature;
@@ -66,6 +67,9 @@ import pit12.feature.quickmath.AutoQuickMathFeature;
 import pit12.feature.relation.RelationFeature;
 import pit12.feature.relation.api.RelationLookup;
 import pit12.feature.relation.api.Relations;
+import pit12.feature.resourceleakfix.ResourceLeakFixBinding;
+import pit12.feature.resourceleakfix.ResourceLeakFixConfig;
+import pit12.feature.resourceleakfix.ResourceLeakFixFeature;
 import pit12.feature.ringhelper.RingHelperConfig;
 import pit12.feature.ringhelper.RingHelperFeature;
 import pit12.feature.scoreboardfix.ScoreboardFixBinding;
@@ -203,6 +207,10 @@ public final class ClientBootstrap {
         registerAutoQuickMath(configs);
         registerBanAlert(minecraft, configs, session, presence);
         // Category: Patch
+        if (FMLClientHandler.instance().hasOptifine()) {
+            registerResourceLeakFix(configs,
+                    (ResourceLeakFixBinding) minecraft.getTextureMapBlocks());
+        }
         registerScoreboardFix(configs, (ScoreboardFixBinding) minecraft);
         // Platform integrations
         OneConfigSupport oneConfig = new OneConfigSupport(configs);
@@ -413,6 +421,12 @@ public final class ClientBootstrap {
     }
 
     // Category: Patch
+    private void registerResourceLeakFix(ConfigCatalog configs, ResourceLeakFixBinding binding) {
+        ResourceLeakFixConfig config = new ResourceLeakFixConfig();
+        configs.register(config);
+        components.add(new ResourceLeakFixFeature(config, binding));
+    }
+
     private void registerScoreboardFix(ConfigCatalog configs, ScoreboardFixBinding binding) {
         ScoreboardFixConfig config = new ScoreboardFixConfig();
         configs.register(config);
