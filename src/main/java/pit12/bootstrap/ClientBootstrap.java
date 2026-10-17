@@ -170,14 +170,14 @@ public final class ClientBootstrap {
                 playerEquipment, relations, commands,
                 new File(minecraft.mcDataDir, "12pit/swap-bindings.json").toPath(),
                 (SwapHooksBinding) minecraft, input);
+        // Category: No config
+        BooleanSetting discordRpc =
+                registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
+                        new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
                 new File(minecraft.mcDataDir, "12pit/denick-cache.json").toPath());
-        // Category: Interface
-        BooleanSetting discordRpc =
-                registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
-                        new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
         // Features
         // Category: No config
         registerDiscordRpc(webUiConfigs, discordRpc);
@@ -257,6 +257,19 @@ public final class ClientBootstrap {
         return swap.bindings();
     }
 
+    // Category: No config
+    private BooleanSetting registerWebUi(ConfigCatalog configs, ConfigCatalog featureConfigs,
+            Profiles profiles, Relations relations, HudEditorFeature hudEditor,
+            SwapBindings swapBindings, Path path) {
+        WebUiConfig config = new WebUiConfig(language);
+        configs.register(config);
+        WebUiFeature webUi = new WebUiFeature(featureConfigs, configs, profiles, relations,
+                hudEditor, swapBindings, config, language, path);
+        hudEditor.setWebUiOpener(config.keybind()::get, webUi::open, config.hudEditorHint());
+        components.add(webUi);
+        return config.discordRpc();
+    }
+
     // Category: Misc
     private DenickNames registerDenick(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, PitContext pitContext, TabPresence presence,
@@ -270,19 +283,6 @@ public final class ClientBootstrap {
                         .pit12$bindDenickNames(names));
         components.add(denick);
         return denick;
-    }
-
-    // Category: Interface
-    private BooleanSetting registerWebUi(ConfigCatalog configs, ConfigCatalog featureConfigs,
-            Profiles profiles, Relations relations, HudEditorFeature hudEditor,
-            SwapBindings swapBindings, Path path) {
-        WebUiConfig config = new WebUiConfig(language);
-        configs.register(config);
-        WebUiFeature webUi = new WebUiFeature(featureConfigs, configs, profiles, relations,
-                hudEditor, swapBindings, config, language, path);
-        hudEditor.setWebUiOpener(config.keybind()::get, webUi::open, config.hudEditorHint());
-        components.add(webUi);
-        return config.discordRpc();
     }
 
     // Features
