@@ -166,6 +166,12 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         if (changes.affects("eventlist", config.hud().translateText().id())) {
             hud.localize();
         }
+        if (changes.affects("eventlist", config.endpoint.id())) {
+            rateLimitedUntil = 0L;
+            if (active) {
+                deactivate();
+            }
+        }
         for (Setting<?> setting : config.settings()) {
             if (changes.affects("eventlist", setting.id())) {
                 if (config.enabled() && !active) {
@@ -211,8 +217,9 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
             });
         }
         long requestGeneration = generation;
+        String endpoint = config.endpoint.get();
         request = worker.submit(() -> {
-            EventFeedClient.Result result = feed.fetch();
+            EventFeedClient.Result result = feed.fetch(endpoint);
             if (!Thread.currentThread().isInterrupted()) {
                 client.execute(() -> accept(requestGeneration, result));
             }

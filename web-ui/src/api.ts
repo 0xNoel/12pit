@@ -22,8 +22,15 @@ export interface Option {
   id: string
   name: string
   description: string
-  kind: 'BOOLEAN' | 'NUMBER' | 'CHOICE' | 'COLOR' | 'COLOR_PICKER' | 'KEYBIND'
-  value: boolean | number
+  kind:
+    | 'BOOLEAN'
+    | 'NUMBER'
+    | 'CHOICE'
+    | 'COLOR'
+    | 'COLOR_PICKER'
+    | 'KEYBIND'
+    | 'TEXT'
+  value: boolean | number | string
   min?: number
   max?: number
   step?: number

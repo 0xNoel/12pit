@@ -359,7 +359,7 @@ final class WebUiServer {
             } else if (primitive.isNumber()) {
                 candidate = primitive.getAsNumber();
             } else {
-                throw new IllegalArgumentException("Expected a number or boolean");
+                candidate = primitive.getAsString();
             }
             setValue(option.setting(), candidate);
             return;

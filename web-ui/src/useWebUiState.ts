@@ -105,7 +105,7 @@ export function useWebUiState() {
     const option = feature.sections
       .flatMap((section) => section.options)
       .find((item) => item.id === edit.optionId)!
-    if (typeof edit.value === 'string') option.keyName = edit.value
+    if (option.kind === 'KEYBIND') option.keyName = String(edit.value)
     else option.value = edit.value
   }
 

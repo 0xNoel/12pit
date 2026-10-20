@@ -24,7 +24,7 @@ import pit12.runtime.languages.Languages;
 
 public abstract class Setting<T> {
     public enum StorageType {
-        BOOLEAN, INTEGER, DECIMAL
+        BOOLEAN, INTEGER, DECIMAL, STRING
     }
 
     private final String id;

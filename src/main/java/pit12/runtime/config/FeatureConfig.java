@@ -84,6 +84,13 @@ public abstract class FeatureConfig {
         return setting;
     }
 
+    protected final StringSetting stringSetting(String id, String displayName, String description,
+            String defaultValue) {
+        StringSetting setting = new StringSetting(id, displayName, description, defaultValue);
+        register(setting, ConfigOption.Kind.TEXT);
+        return setting;
+    }
+
     /** Saved, but doesn't get a UI control. */
     protected final BooleanSetting booleanSetting(String id, boolean defaultValue) {
         BooleanSetting setting = new BooleanSetting(id, "", "", defaultValue);
