@@ -22,7 +22,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -36,7 +38,7 @@ public final class PitContextTracker implements ClientLifecycle, PitContext {
     private final Runnable sessionChanged = this::onSessionChanged;
     private WorldClient boundWorld;
     private PitSnapshot snapshot = new PitSnapshot(PitMap.UNKNOWN);
-    private boolean detectionComplete;
+    private boolean detectionPending;
     private boolean started;
 
     public PitContextTracker(ClientSession session) {
@@ -52,7 +54,7 @@ public final class PitContextTracker implements ClientLifecycle, PitContext {
         MinecraftForge.EVENT_BUS.register(this);
         started = true;
         session.addListener(sessionChanged);
-        bindWorld(session.world());
+        onSessionChanged();
     }
 
     @Override
@@ -78,27 +80,33 @@ public final class PitContextTracker implements ClientLifecycle, PitContext {
         if (event.phase != Phase.START) {
             return;
         }
-        WorldClient world = session.world();
-        if (world != boundWorld) {
-            bindWorld(world);
-        }
-        if (world == null || detectionComplete) {
+        if (boundWorld == null || !detectionPending) {
             return;
         }
-        if (!world.getChunkProvider().chunkExists(ORIGIN_X, ORIGIN_Z)) {
+        if (boundWorld.getChunkFromChunkCoords(ORIGIN_X, ORIGIN_Z).isEmpty()) {
             return;
         }
-        detect(world);
+        detectionPending = false;
+        detect(boundWorld);
     }
 
-    private void bindWorld(WorldClient world) {
-        boundWorld = world;
-        detectionComplete = false;
-        replaceSnapshot(PitMap.UNKNOWN);
+    @SubscribeEvent
+    public void onChunkLoad(ChunkEvent.Load event) {
+        if (event.world != boundWorld) {
+            return;
+        }
+        session.checkThread();
+        Chunk chunk = event.getChunk();
+        if (chunk.xPosition == ORIGIN_X && chunk.zPosition == ORIGIN_Z) {
+            // Load fires before the packet fills the chunk, so scan on the next tick.
+            detectionPending = true;
+        }
     }
 
     private void onSessionChanged() {
-        bindWorld(session.world());
+        boundWorld = session.world();
+        detectionPending = boundWorld != null;
+        replaceSnapshot(PitMap.UNKNOWN);
     }
 
     private void detect(WorldClient world) {
@@ -120,16 +128,14 @@ public final class PitContextTracker implements ClientLifecycle, PitContext {
                 continue;
             }
             replaceSnapshot(candidate);
-            detectionComplete = true;
             return;
         }
         replaceSnapshot(PitMap.UNKNOWN);
-        detectionComplete = true;
     }
 
     private void reset() {
         boundWorld = null;
-        detectionComplete = false;
+        detectionPending = false;
         replaceSnapshot(PitMap.UNKNOWN);
     }
 

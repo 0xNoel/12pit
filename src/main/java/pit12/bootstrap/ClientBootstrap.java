@@ -115,6 +115,7 @@ import pit12.runtime.player.TabPresence;
 import pit12.runtime.player.TabPresenceTracker;
 import pit12.runtime.scoreboard.SidebarCache;
 import pit12.runtime.session.ClientSession;
+import pit12.runtime.session.ClientSessionBinding;
 import pit12.runtime.usage.DailyUsageReporter;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.MinecraftActions;
@@ -140,7 +141,8 @@ public final class ClientBootstrap {
         ConfigCatalog configs = new ConfigCatalog(client);
         ConfigCatalog webUiConfigs = new ConfigCatalog(client);
         shutdown = (ClientShutdownBinding) minecraft;
-        ClientSession session = new ClientSession(minecraft, client);
+        ClientSession session =
+                new ClientSession(minecraft, client, (ClientSessionBinding) minecraft);
         components.add(session);
         ArrowTracker arrows = new ArrowTracker(minecraft, session);
         components.add(arrows);
