@@ -16,16 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.platform.mixin.feature.smartblock;
+package pit12.runtime.arrow;
 
-import net.minecraft.entity.projectile.EntityArrow;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-import pit12.feature.smartblock.ArrowAccess;
-
-@Mixin(EntityArrow.class)
-public interface EntityArrowAccessor extends ArrowAccess {
-    @Override
-    @Accessor("inGround")
+public interface ArrowAccess {
     boolean pit12$isInGround();
+
+    void pit12$bindArrowObserver(ArrowObserver observer);
+
+    void pit12$onRemovedFromWorld();
 }

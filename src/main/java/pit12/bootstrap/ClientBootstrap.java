@@ -91,6 +91,7 @@ import pit12.feature.webui.WebUiFeature;
 import pit12.platform.command.ForgeCommandAdapter;
 import pit12.platform.input.LwjglInputDevice;
 import pit12.platform.oneconfig.OneConfigSupport;
+import pit12.runtime.arrow.ArrowTracker;
 import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ConfigCatalog;
@@ -136,6 +137,8 @@ public final class ClientBootstrap {
         shutdown = (ClientShutdownBinding) minecraft;
         ClientSession session = new ClientSession(minecraft, client);
         components.add(session);
+        ArrowTracker arrows = new ArrowTracker(minecraft, session);
+        components.add(arrows);
         InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
                 new LwjglInputDevice());
         components.add(input);
