@@ -84,6 +84,8 @@ import pit12.feature.swap.SwapConfig;
 import pit12.feature.swap.SwapFeature;
 import pit12.feature.swap.SwapHooksBinding;
 import pit12.feature.swap.api.SwapBindings;
+import pit12.feature.telebow.TelebowConfig;
+import pit12.feature.telebow.TelebowFeature;
 import pit12.feature.tooltip.TooltipConfig;
 import pit12.feature.tooltip.TooltipFeature;
 import pit12.feature.webui.WebUiConfig;
@@ -177,6 +179,8 @@ public final class ClientBootstrap {
         BooleanSetting discordRpc =
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
                         new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
+        // Category: Render
+        registerTelebow(minecraft, configs, session, arrows, relations);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
@@ -271,6 +275,14 @@ public final class ClientBootstrap {
         hudEditor.setWebUiOpener(config.keybind()::get, webUi::open, config.hudEditorHint());
         components.add(webUi);
         return config.discordRpc();
+    }
+
+    // Category: Render
+    private void registerTelebow(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, ArrowTracker arrows, RelationLookup relations) {
+        TelebowConfig config = new TelebowConfig();
+        configs.register(config);
+        components.add(new TelebowFeature(minecraft, configs, config, session, arrows, relations));
     }
 
     // Category: Misc
