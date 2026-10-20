@@ -66,7 +66,7 @@ jobs:
           git tag --force nightly
           git push --force origin refs/tags/nightly
           commit_sha="$(git rev-parse HEAD)"
-          release_notes="This nightly build was compiled from commit [${commit_sha::7}](https://github.com/${GITHUB_REPOSITORY}/commit/${commit_sha})."
+          release_notes="_The attached JAR was built from commit [${commit_sha::7}](https://github.com/${GITHUB_REPOSITORY}/commit/${commit_sha}) by [GitHub Actions](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT})._"
 
           if gh release view nightly --repo "${GITHUB_REPOSITORY}" > /dev/null 2>&1; then
             gh release edit nightly \

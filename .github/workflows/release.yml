@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Target tag (blank for the latest tag)'
+        required: false
+        type: string
 
 permissions:
   actions: read
@@ -24,6 +29,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Select release tag
+        id: release-tag
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${RELEASE_TAG}" ]]; then
+            RELEASE_TAG="$(git tag --sort=-creatordate --list --exclude nightly | sed -n '1p')"
+          fi
+
+          if [[ "${RELEASE_TAG}" == nightly ]]; then
+            echo '::error::The nightly tag cannot be used for a release.'
+            exit 1
+          fi
+
+          git show-ref --verify "refs/tags/${RELEASE_TAG}" > /dev/null
+          git checkout --detach "refs/tags/${RELEASE_TAG}"
+          echo "tag=${RELEASE_TAG}" >> "${GITHUB_OUTPUT}"
 
       - name: Select release token
         id: release-token
@@ -76,21 +103,17 @@ jobs:
       - name: Create draft release
         env:
           GH_TOKEN: ${{ secrets[steps.release-token.outputs.secret-name] || github.token }}
-          ATTESTATION_BUNDLE: ${{ steps.attest.outputs.bundle-path }}
           ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
+          RELEASE_TAG: ${{ steps.release-tag.outputs.tag }}
         run: |
           set -euo pipefail
 
-          release_version="$(sed -n 's/^modVersion=//p' gradle.properties)"
-          cp "${ATTESTATION_BUNDLE}" build/libs/12pit.jar.sigstore.json
-          cat > "${RUNNER_TEMP}/release-notes.md" <<EOF
-          _The attached JAR was built from commit [${GITHUB_SHA::7}](https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}) by [GitHub Actions](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}). You can click [here](${ATTESTATION_URL}) to view the build provenance attestation._
-          EOF
+          commit_sha="$(git rev-parse HEAD)"
 
-          gh release create "${release_version}" \
+          gh release create "${RELEASE_TAG}" \
             build/libs/12pit.jar \
-            build/libs/12pit.jar.sigstore.json \
             --repo "${GITHUB_REPOSITORY}" \
-            --title "12pit ${release_version}" \
-            --notes-file "${RUNNER_TEMP}/release-notes.md" \
+            --title "12pit ${RELEASE_TAG}" \
+            --verify-tag \
+            --notes "_The attached JAR was built from commit [${commit_sha::7}](https://github.com/${GITHUB_REPOSITORY}/commit/${commit_sha}) by [GitHub Actions](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}). You can click [here](${ATTESTATION_URL}) to view the build provenance attestation._" \
             --draft
