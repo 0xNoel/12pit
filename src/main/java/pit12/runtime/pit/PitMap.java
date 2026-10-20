@@ -45,8 +45,15 @@ public enum PitMap {
     }
 
     public boolean matchesSurface(IBlockState state) {
-        return this != UNKNOWN && state.getBlock() == surfaceBlock
-                && surfaceBlock.getMetaFromState(state) == surfaceMetadata;
+        Block block = state.getBlock();
+        if (this == SEASONS && block == Blocks.sandstone) {
+            return block.getMetaFromState(state) == 2;
+        }
+        if (this == ELEMENTS && block == Blocks.planks) {
+            return block.getMetaFromState(state) == 5;
+        }
+        return this != UNKNOWN && block == surfaceBlock
+                && block.getMetaFromState(state) == surfaceMetadata;
     }
 
     public int spawnY() {
