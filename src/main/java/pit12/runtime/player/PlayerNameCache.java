@@ -274,7 +274,11 @@ public final class PlayerNameCache
             name = info.getDisplayName() == null ? info.getGameProfile().getName()
                     : info.getDisplayName().getFormattedText();
         } else {
-            name = minecraft.ingameGUI.getTabList().getPlayerName(info);
+            // Keep markers out of the cached server name.
+            name = info.getDisplayName() == null
+                    ? ScorePlayerTeam.formatPlayerName(info.getPlayerTeam(),
+                            info.getGameProfile().getName())
+                    : info.getDisplayName().getFormattedText();
         }
         if (!Objects.equals(entry.displayName, name)) {
             entry.displayName = name;
