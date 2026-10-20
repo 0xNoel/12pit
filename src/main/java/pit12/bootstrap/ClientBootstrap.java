@@ -37,6 +37,8 @@ import pit12.feature.chatmacro.ChatMacroConfig;
 import pit12.feature.chatmacro.ChatMacroFeature;
 import pit12.feature.contractreroll.ContractRerollConfig;
 import pit12.feature.contractreroll.ContractRerollFeature;
+import pit12.feature.debufftimers.DebuffTimersConfig;
+import pit12.feature.debufftimers.DebuffTimersFeature;
 import pit12.feature.denick.DenickConfig;
 import pit12.feature.denick.DenickFeature;
 import pit12.feature.denick.DenickNamesBinding;
@@ -86,6 +88,7 @@ import pit12.feature.swap.SwapHooksBinding;
 import pit12.feature.swap.api.SwapBindings;
 import pit12.feature.telebow.TelebowConfig;
 import pit12.feature.telebow.TelebowFeature;
+import pit12.feature.telebow.api.TelebowCooldowns;
 import pit12.feature.tooltip.TooltipConfig;
 import pit12.feature.tooltip.TooltipFeature;
 import pit12.feature.webui.WebUiConfig;
@@ -180,7 +183,8 @@ public final class ClientBootstrap {
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
                         new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
         // Category: Render
-        registerTelebow(minecraft, configs, session, arrows, relations);
+        TelebowCooldowns telebowCooldowns =
+                registerTelebow(minecraft, configs, session, arrows, relations);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
@@ -201,6 +205,8 @@ public final class ClientBootstrap {
                 (MinecraftActions) minecraft);
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         // Category: Render
+        registerDebuffTimers(minecraft, configs, session, arrows, relations, playerNames,
+                hudRegistry, telebowCooldowns);
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
@@ -278,11 +284,14 @@ public final class ClientBootstrap {
     }
 
     // Category: Render
-    private void registerTelebow(Minecraft minecraft, ConfigCatalog configs,
+    private TelebowCooldowns registerTelebow(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, ArrowTracker arrows, RelationLookup relations) {
         TelebowConfig config = new TelebowConfig();
         configs.register(config);
-        components.add(new TelebowFeature(minecraft, configs, config, session, arrows, relations));
+        TelebowFeature feature =
+                new TelebowFeature(minecraft, configs, config, session, arrows, relations);
+        components.add(feature);
+        return feature.cooldowns();
     }
 
     // Category: Misc
@@ -360,6 +369,16 @@ public final class ClientBootstrap {
     }
 
     // Category: Render
+    private void registerDebuffTimers(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, ArrowTracker arrows, RelationLookup relations,
+            PlayerNameCache playerNames, HudRegistry hudRegistry,
+            TelebowCooldowns telebowCooldowns) {
+        DebuffTimersConfig config = new DebuffTimersConfig();
+        configs.register(config);
+        components.add(new DebuffTimersFeature(minecraft, configs, config, session, arrows,
+                relations, playerNames, hudRegistry, telebowCooldowns));
+    }
+
     private void registerEventList(ConfigCatalog configs, HudRegistry hudRegistry,
             CommandRegistry commands) {
         EventListConfig config = new EventListConfig();

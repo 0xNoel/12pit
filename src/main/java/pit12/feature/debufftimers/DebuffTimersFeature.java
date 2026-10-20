@@ -1,0 +1,289 @@
+/*
+ * This file is part of 12pit.
+ *
+ * Copyright (C) 2026 The 12pit Authors and contributors <https://github.com/12src/12pit>
+ *
+ * 12pit is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 12pit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
+ */
+package pit12.feature.debufftimers;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import pit12.feature.debufftimers.DebuffTimersHud.Group;
+import pit12.feature.debufftimers.DebuffTimersHud.TimerType;
+import pit12.feature.relation.api.Relation;
+import pit12.feature.relation.api.RelationLookup;
+import pit12.feature.telebow.api.TelebowCooldownListener;
+import pit12.feature.telebow.api.TelebowCooldowns;
+import pit12.runtime.arrow.ArrowTracker;
+import pit12.runtime.config.ConfigCatalog;
+import pit12.runtime.config.ConfigChangeListener;
+import pit12.runtime.config.ConfigChangeSet;
+import pit12.runtime.hud.HudBounds;
+import pit12.runtime.hud.HudRegistry;
+import pit12.runtime.hud.HudRenderer;
+import pit12.runtime.player.PlayerNameCache;
+import pit12.runtime.session.ClientSession;
+import pit12.shared.lifecycle.ClientLifecycle;
+
+public final class DebuffTimersFeature
+        implements ClientLifecycle, ConfigChangeListener, TelebowCooldownListener {
+    private final Minecraft minecraft;
+    private final ConfigCatalog configs;
+    private final DebuffTimersConfig config;
+    private final ClientSession session;
+    private final RelationLookup relations;
+    private final PlayerNameCache playerNames;
+    private final HudRegistry hudRegistry;
+    private final TelebowCooldowns telebow;
+    private final HudRenderer renderer = new HudRenderer();
+    private final DebuffTimersHud hud;
+    private final PinTracker pin;
+    private final Map<UUID, Timer> pinTimers = new LinkedHashMap<>();
+    private final Map<UUID, Timer> telebowCooldowns = new LinkedHashMap<>();
+    private List<DebuffTimersHud.Row> rows = new ArrayList<>();
+    private List<DebuffTimersHud.Row> pendingRows = new ArrayList<>();
+    private long nextRefresh;
+    private boolean started;
+    private boolean active;
+    private boolean pinActive;
+    private boolean telebowActive;
+
+    public DebuffTimersFeature(Minecraft minecraft, ConfigCatalog configs,
+            DebuffTimersConfig config, ClientSession session, ArrowTracker arrows,
+            RelationLookup relations, PlayerNameCache playerNames, HudRegistry hudRegistry,
+            TelebowCooldowns telebow) {
+        this.minecraft = minecraft;
+        this.configs = configs;
+        this.config = config;
+        this.session = session;
+        this.relations = relations;
+        this.playerNames = playerNames;
+        this.hudRegistry = hudRegistry;
+        this.telebow = telebow;
+        hud = new DebuffTimersHud(minecraft, config, renderer);
+        pin = new PinTracker(config, arrows, this::onPin, () -> {
+            pinTimers.clear();
+            nextRefresh = 0;
+        });
+    }
+
+    @Override
+    public void start() {
+        session.checkThread();
+        if (started)
+            return;
+        started = true;
+        hudRegistry.register(hud);
+        configs.addListener(this);
+        updateActivation();
+    }
+
+    @Override
+    public void stop() {
+        session.checkThread();
+        started = false;
+        configs.removeListener(this);
+        updateActivation();
+        hudRegistry.unregister(hud);
+    }
+
+    private void updateActivation() {
+        boolean pin = started && config.enabled() && (config.pinOwn.get() || config.pinFriends.get()
+                || config.pinEnemies.get() || config.pinOthers.get());
+        boolean cooldowns = started && config.enabled()
+                && (config.telebowOwn.get() || config.telebowFriends.get()
+                        || config.telebowEnemies.get() || config.telebowOthers.get());
+        if (pin != pinActive) {
+            pinActive = pin;
+            this.pin.active(pin);
+        }
+        if (cooldowns != telebowActive) {
+            telebowActive = cooldowns;
+            if (telebowActive) {
+                telebow.addListener(this);
+            } else {
+                telebow.removeListener(this);
+                onTelebowCooldownsReset();
+            }
+        }
+        boolean enabled = pinActive || telebowActive;
+        if (enabled == active)
+            return;
+        active = enabled;
+        if (active) {
+            MinecraftForge.EVENT_BUS.register(this);
+        } else {
+            MinecraftForge.EVENT_BUS.unregister(this);
+            rows.clear();
+            pendingRows.clear();
+            hud.rows(rows);
+        }
+    }
+
+    @Override
+    public void onConfigChanged(ConfigChangeSet changes) {
+        if (!started || !(changes.affects("debufftimers", "enabled")
+                || changes.affects("debufftimers", "own")
+                || changes.affects("debufftimers", "friends")
+                || changes.affects("debufftimers", "enemies")
+                || changes.affects("debufftimers", "others")
+                || changes.affects("debufftimers", "telebow_own")
+                || changes.affects("debufftimers", "telebow_friends")
+                || changes.affects("debufftimers", "telebow_enemies")
+                || changes.affects("debufftimers", "telebow_others")
+                || changes.affects("debufftimers", "show_group_names")))
+            return;
+        updateActivation();
+        nextRefresh = 0;
+        hud.invalidate();
+    }
+
+    private boolean accepts(EntityPlayer player, TimerType type) {
+        boolean pin = type == TimerType.PIN;
+        return minecraft.thePlayer != null
+                && relations.matches(player.getUniqueID(), minecraft.thePlayer.getUniqueID(),
+                        pin ? config.pinOwn.get() : config.telebowOwn.get(),
+                        pin ? config.pinFriends.get() : config.telebowFriends.get(),
+                        pin ? config.pinEnemies.get() : config.telebowEnemies.get(),
+                        pin ? config.pinOthers.get() : config.telebowOthers.get());
+    }
+
+    @Override
+    public void onTelebowCooldown(EntityPlayer player, long until) {
+        UUID playerId = player.getUniqueID();
+        Timer timer = telebowCooldowns.get(playerId);
+        if (timer == null || timer.player != player) {
+            telebowCooldowns.put(playerId, new Timer(player, until));
+        } else {
+            timer.until = until;
+        }
+        nextRefresh = 0;
+    }
+
+    @Override
+    public void onTelebowCooldownsReset() {
+        telebowCooldowns.clear();
+        nextRefresh = 0;
+    }
+
+    private void onPin(EntityPlayer player, long until) {
+        if (!player.isEntityAlive() || !accepts(player, TimerType.PIN))
+            return;
+        UUID playerId = player.getUniqueID();
+        Timer previous = pinTimers.get(playerId);
+        if (previous == null || until > previous.until) {
+            pinTimers.put(playerId, new Timer(player, until));
+            nextRefresh = 0;
+        }
+    }
+
+    @SubscribeEvent
+    public void onTick(ClientTickEvent event) {
+        if (event.phase != Phase.END)
+            return;
+        if (pinTimers.isEmpty() && telebowCooldowns.isEmpty() && hud.empty())
+            return;
+        long now = System.nanoTime();
+        if (now < nextRefresh)
+            return;
+        nextRefresh = now + 100_000_000L;
+        pendingRows.clear();
+        boolean orderChanged = appendRows(pinTimers, TimerType.PIN, now);
+        orderChanged |= appendRows(telebowCooldowns, TimerType.TELEBOW, now);
+        if (orderChanged || pendingRows.size() != rows.size()) {
+            pendingRows.sort(Comparator.comparing((DebuffTimersHud.Row row) -> row.type)
+                    .thenComparing(row -> row.group).thenComparingLong(row -> row.until));
+            List<DebuffTimersHud.Row> previous = rows;
+            rows = pendingRows;
+            pendingRows = previous;
+        }
+        hud.rows(rows);
+    }
+
+    private boolean appendRows(Map<UUID, Timer> timers, TimerType type, long now) {
+        boolean orderChanged = false;
+        Iterator<Timer> iterator = timers.values().iterator();
+        while (iterator.hasNext()) {
+            Timer timer = iterator.next();
+            if (now >= timer.until || type == TimerType.PIN && !timer.player.isEntityAlive()) {
+                iterator.remove();
+                continue;
+            }
+            if (accepts(timer.player, type)) {
+                UUID playerId = timer.player.getUniqueID();
+                Group group;
+                if (playerId.equals(minecraft.thePlayer.getUniqueID())) {
+                    group = Group.OWN;
+                } else {
+                    Relation relation = relations.relationOf(playerId);
+                    group = relation == Relation.FRIEND ? Group.FRIEND
+                            : relation == Relation.ENEMY ? Group.ENEMY : Group.OTHER;
+                }
+                String name = playerNames.displayName(playerId);
+                if (name == null)
+                    name = timer.player.getDisplayName().getFormattedText();
+                if (timer.row == null) {
+                    timer.row = new DebuffTimersHud.Row(type, group, name, timer.until - now);
+                    orderChanged = true;
+                } else {
+                    orderChanged |= timer.row.group != group || timer.row.until != timer.until;
+                    timer.row.update(group, name, timer.until - now);
+                }
+                timer.row.until = timer.until;
+                pendingRows.add(timer.row);
+            } else {
+                timer.row = null;
+            }
+        }
+        return orderChanged;
+    }
+
+    @SubscribeEvent
+    public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
+        if (event.type != RenderGameOverlayEvent.ElementType.ALL || hud.empty()
+                || hudRegistry.editing() || minecraft.theWorld == null
+                || minecraft.gameSettings.hideGUI)
+            return;
+        ScaledResolution resolution = event.resolution;
+        HudBounds bounds = HudRenderer.layout(hud, resolution.getScaledWidth(),
+                resolution.getScaledHeight(), resolution.getScaleFactor(), false);
+        hud.visibleHeight = (resolution.getScaledHeight() - bounds.y) / bounds.scale;
+        renderer.render(hud, bounds, event.partialTicks, false);
+    }
+
+    private static final class Timer {
+        final EntityPlayer player;
+        long until;
+        DebuffTimersHud.Row row;
+
+        Timer(EntityPlayer player, long until) {
+            this.player = player;
+            this.until = until;
+        }
+    }
+}
