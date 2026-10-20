@@ -34,12 +34,14 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
+import pit12.shared.rendering.LunarTextureState;
 import pit12.shared.rendering.UiRenderer;
 
 final class TelebowRenderer {
     private final Minecraft minecraft;
     private final TelebowConfig config;
     private final UiRenderer text;
+    private final LunarTextureState textures = new LunarTextureState();
     private final Map<TelebowPath, Mesh> meshes = new IdentityHashMap<>();
     private final List<Mesh> visible = new ArrayList<>();
     private ClippingHelper clipping;
@@ -127,15 +129,12 @@ final class TelebowRenderer {
         if (visible.isEmpty())
             return;
         boolean alphaEnabled = drawNames && GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
-        boolean textureEnabled = drawNames && GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
-        int boundTexture = drawNames ? GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D) : 0;
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_LINE_BIT | GL11.GL_CURRENT_BIT | GL11.GL_TEXTURE_BIT);
-        GL11.glPushMatrix();
+        textures.begin();
+        int boundTexture = drawNames ? GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D) : 0;
+        GlStateManager.pushMatrix();
         try {
-            OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             GL11.glDepthMask(false);
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -146,7 +145,7 @@ final class TelebowRenderer {
             OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
                     GL11.GL_ZERO);
             GL11.glLineWidth(2F);
-            GL11.glTranslated(-camera.viewerPosX, -camera.viewerPosY, -camera.viewerPosZ);
+            GlStateManager.translate(-camera.viewerPosX, -camera.viewerPosY, -camera.viewerPosZ);
             for (Mesh mesh : visible) {
                 TelebowPath path = mesh.path;
                 int color = path.color;
@@ -161,14 +160,14 @@ final class TelebowRenderer {
                         compile(mesh, path);
                         mesh.revision = path.revision;
                     }
-                    GL11.glDisable(GL11.GL_TEXTURE_2D);
+                    GlStateManager.disableTexture2D();
                     GL11.glDisable(GL11.GL_ALPHA_TEST);
                     if (path.hasImpact) {
                         GL11.glColor4f(red, green, blue, alpha * 0.2F);
-                        GL11.glCallList(mesh.beam);
+                        GlStateManager.callList(mesh.beam);
                     }
                     GL11.glColor4f(red, green, blue, alpha);
-                    GL11.glCallList(mesh.lines);
+                    GlStateManager.callList(mesh.lines);
                 }
                 if (mesh.nameVisible) {
                     drawName(path, mesh.nameWidth, mesh.nameScale, font, camera, alpha);
@@ -176,20 +175,17 @@ final class TelebowRenderer {
             }
         } finally {
             visible.clear();
-            // FontRenderer changes these cached states even though the geometry uses raw GL.
+            // FontRenderer also changes the cached alpha state and bound texture.
             if (drawNames) {
                 GlStateManager.bindTexture(boundTexture);
-                if (textureEnabled)
-                    GlStateManager.enableTexture2D();
-                else
-                    GlStateManager.disableTexture2D();
                 if (alphaEnabled)
                     GlStateManager.enableAlpha();
                 else
                     GlStateManager.disableAlpha();
             }
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
             GL11.glPopAttrib();
+            textures.end();
             GlStateManager.resetColor();
         }
     }
@@ -317,14 +313,14 @@ final class TelebowRenderer {
         double x = path.points[offset];
         double y = path.points[offset + 1];
         double z = path.points[offset + 2];
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         try {
-            GL11.glTranslated(x, y + 1.5, z);
-            GL11.glRotatef(-camera.playerViewY, 0, 1, 0);
-            GL11.glRotatef(minecraft.gameSettings.thirdPersonView == 2 ? -camera.playerViewX
+            GlStateManager.translate(x, y + 1.5, z);
+            GlStateManager.rotate(-camera.playerViewY, 0, 1, 0);
+            GlStateManager.rotate(minecraft.gameSettings.thirdPersonView == 2 ? -camera.playerViewX
                     : camera.playerViewX, 1, 0, 0);
-            GL11.glScalef(-scale, -scale, scale);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GlStateManager.scale(-scale, -scale, scale);
+            GlStateManager.disableTexture2D();
             GL11.glColor4f(0, 0, 0, alpha * 0.5F);
             GL11.glBegin(GL11.GL_QUADS);
             try {
@@ -335,16 +331,15 @@ final class TelebowRenderer {
             } finally {
                 GL11.glEnd();
             }
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GlStateManager.enableTexture2D();
             GL11.glEnable(GL11.GL_ALPHA_TEST);
             GL11.glAlphaFunc(GL11.GL_GREATER, 0.001F);
-            GlStateManager.enableTexture2D();
             GlStateManager.enableAlpha();
             GlStateManager.resetColor();
             font.drawString(path.displayName, -width / 2, 0,
                     Math.round(alpha * 255) << 24 | 0xFFFFFF);
         } finally {
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
     }
 

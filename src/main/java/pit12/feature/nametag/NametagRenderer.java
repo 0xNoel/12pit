@@ -45,7 +45,6 @@ final class NametagRenderer {
         boolean alphaEnabled = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
         boolean textureEnabled = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
         int boundTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        // Use raw GL here so GlStateManager's cache stays untouched.
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_CURRENT_BIT | GL11.GL_TEXTURE_BIT);
         GlStateManager.pushMatrix();
@@ -68,7 +67,8 @@ final class NametagRenderer {
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
             }
             GL11.glDepthMask(false);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            // Keep Lunar's texture tracking in sync while drawing the background.
+            GlStateManager.disableTexture2D();
             Tessellator tessellator = Tessellator.getInstance();
             WorldRenderer vertices = tessellator.getWorldRenderer();
             vertices.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
@@ -79,7 +79,6 @@ final class NametagRenderer {
                 background(vertices, text.heldItemWidth, heldItemY, font.FONT_HEIGHT);
             }
             tessellator.draw();
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
             GlStateManager.enableTexture2D();
             drawText(font, text, heldItemY, 0x20FFFFFF);
             if (!sneaking) {

@@ -243,8 +243,9 @@ public final class NametagFeature
         return name;
     }
 
+    // Lunar replaces name rendering and skips Forge's Specials events.
     @SubscribeEvent
-    public void onRenderName(RenderLivingEvent.Specials.Post<?> event) {
+    public void onRenderName(RenderLivingEvent.Post<?> event) {
         if (!active || !(event.entity instanceof EntityPlayer) || minecraft.thePlayer == null
                 || event.entity == minecraft.thePlayer
                 || event.entity.worldObj != minecraft.theWorld
@@ -265,7 +266,7 @@ public final class NametagFeature
             return;
         }
         NametagText text = texts.get(player.getUniqueID());
-        // Forge fires this even if the renderer hides the nametag.
+        // The model can render even when its nametag is hidden.
         if (text != null && ((NametagVisibility) event.renderer).pit12$canRenderName(player)) {
             renderer.render(minecraft, player, text, event.x, event.y, event.z, distanceSquared,
                     config.upwardOffset());
