@@ -106,6 +106,7 @@ final class DebuffTimersHud implements HudElement {
             String name = minecraft.thePlayer == null ? "You"
                     : minecraft.thePlayer.getDisplayName().getFormattedText();
             content = Arrays.asList(new Row(TimerType.PIN, Group.OWN, name, 10_000_000_000L),
+                    new Row(TimerType.VENOM, Group.OWN, name, 24_000_000_000L),
                     new Row(TimerType.TELEBOW, Group.OWN, name, 20_000_000_000L));
         } else {
             content = rows;
@@ -175,7 +176,7 @@ final class DebuffTimersHud implements HudElement {
             if (!editing && y >= visibleHeight + lineHeight)
                 break;
             if (previousType != row.type && config.showGroupNames.get()) {
-                renderer.text(row.type.title, 4, y, 0xFFFFFF55, config.hud);
+                renderer.text(row.type.title, 4, y, 0xFFFFFFFF, config.hud);
                 y += lineHeight;
             }
             previousType = row.type;
@@ -188,7 +189,7 @@ final class DebuffTimersHud implements HudElement {
     }
 
     enum TimerType {
-        PIN("§lPin"), TELEBOW("§lTelebow");
+        PIN("§e§lPin"), VENOM("§d§lVenom"), TELEBOW("§b§lTelebow");
 
         final String title;
 

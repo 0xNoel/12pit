@@ -30,6 +30,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -46,6 +47,8 @@ import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.hud.HudBounds;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
+import pit12.runtime.player.PlayerEntityTracker;
+import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerNameCache;
 import pit12.runtime.session.ClientSession;
 import pit12.shared.lifecycle.ClientLifecycle;
@@ -63,7 +66,9 @@ public final class DebuffTimersFeature
     private final HudRenderer renderer = new HudRenderer();
     private final DebuffTimersHud hud;
     private final PinTracker pin;
+    private final VenomTracker venom;
     private final Map<UUID, Timer> pinTimers = new LinkedHashMap<>();
+    private final Map<UUID, Timer> venomTimers = new LinkedHashMap<>();
     private final Map<UUID, Timer> telebowCooldowns = new LinkedHashMap<>();
     private List<DebuffTimersHud.Row> rows = new ArrayList<>();
     private List<DebuffTimersHud.Row> pendingRows = new ArrayList<>();
@@ -71,12 +76,14 @@ public final class DebuffTimersFeature
     private boolean started;
     private boolean active;
     private boolean pinActive;
+    private boolean venomActive;
     private boolean telebowActive;
 
     public DebuffTimersFeature(Minecraft minecraft, ConfigCatalog configs,
             DebuffTimersConfig config, ClientSession session, ArrowTracker arrows,
             RelationLookup relations, PlayerNameCache playerNames, HudRegistry hudRegistry,
-            TelebowCooldowns telebow) {
+            TelebowCooldowns telebow, PlayerEntityTracker players,
+            PlayerEquipmentAccess equipment) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
@@ -88,6 +95,10 @@ public final class DebuffTimersFeature
         hud = new DebuffTimersHud(minecraft, config, renderer);
         pin = new PinTracker(config, arrows, this::onPin, () -> {
             pinTimers.clear();
+            nextRefresh = 0;
+        });
+        venom = new VenomTracker(minecraft, session, players, equipment, this::onVenom, () -> {
+            venomTimers.clear();
             nextRefresh = 0;
         });
     }
@@ -118,6 +129,10 @@ public final class DebuffTimersFeature
         boolean cooldowns = started && config.enabled()
                 && (config.telebowOwn.get() || config.telebowFriends.get()
                         || config.telebowEnemies.get() || config.telebowOthers.get());
+        boolean poison =
+                started && config.enabled() && (config.venomSelf.get() || config.venomTargets.get())
+                        && (config.venomOwn.get() || config.venomFriends.get()
+                                || config.venomEnemies.get() || config.venomOthers.get());
         if (pin != pinActive) {
             pinActive = pin;
             this.pin.active(pin);
@@ -131,7 +146,11 @@ public final class DebuffTimersFeature
                 onTelebowCooldownsReset();
             }
         }
-        boolean enabled = pinActive || telebowActive;
+        if (poison != venomActive) {
+            venomActive = poison;
+            venom.active(poison);
+        }
+        boolean enabled = pinActive || venomActive || telebowActive;
         if (enabled == active)
             return;
         active = enabled;
@@ -152,6 +171,12 @@ public final class DebuffTimersFeature
                 || changes.affects("debufftimers", "friends")
                 || changes.affects("debufftimers", "enemies")
                 || changes.affects("debufftimers", "others")
+                || changes.affects("debufftimers", "venom_self")
+                || changes.affects("debufftimers", "venom_targets")
+                || changes.affects("debufftimers", "venom_own")
+                || changes.affects("debufftimers", "venom_friends")
+                || changes.affects("debufftimers", "venom_enemies")
+                || changes.affects("debufftimers", "venom_others")
                 || changes.affects("debufftimers", "telebow_own")
                 || changes.affects("debufftimers", "telebow_friends")
                 || changes.affects("debufftimers", "telebow_enemies")
@@ -159,18 +184,58 @@ public final class DebuffTimersFeature
                 || changes.affects("debufftimers", "show_group_names")))
             return;
         updateActivation();
+        venomTimers.values().removeIf(
+                timer -> timer.venomSelf ? !config.venomSelf.get() : !config.venomTargets.get());
         nextRefresh = 0;
         hud.invalidate();
     }
 
     private boolean accepts(EntityPlayer player, TimerType type) {
-        boolean pin = type == TimerType.PIN;
-        return minecraft.thePlayer != null
-                && relations.matches(player.getUniqueID(), minecraft.thePlayer.getUniqueID(),
-                        pin ? config.pinOwn.get() : config.telebowOwn.get(),
-                        pin ? config.pinFriends.get() : config.telebowFriends.get(),
-                        pin ? config.pinEnemies.get() : config.telebowEnemies.get(),
-                        pin ? config.pinOthers.get() : config.telebowOthers.get());
+        if (minecraft.thePlayer == null)
+            return false;
+        UUID playerId = player.getUniqueID();
+        UUID ownId = minecraft.thePlayer.getUniqueID();
+        switch (type) {
+            case PIN:
+                return relations.matches(playerId, ownId, config.pinOwn.get(),
+                        config.pinFriends.get(), config.pinEnemies.get(), config.pinOthers.get());
+            case VENOM:
+                return relations.matches(playerId, ownId, config.venomOwn.get(),
+                        config.venomFriends.get(), config.venomEnemies.get(),
+                        config.venomOthers.get());
+            default:
+                return relations.matches(playerId, ownId, config.telebowOwn.get(),
+                        config.telebowFriends.get(), config.telebowEnemies.get(),
+                        config.telebowOthers.get());
+        }
+    }
+
+    private void onVenom(EntityPlayer wearer, EntityPlayer target) {
+        long now = System.nanoTime();
+        if (config.venomSelf.get())
+            recordVenom(wearer, now + 24_000_000_000L, true);
+        if (config.venomTargets.get())
+            recordVenom(target, now + 12_000_000_000L, false);
+    }
+
+    private void recordVenom(EntityPlayer player, long until, boolean self) {
+        if (!player.isEntityAlive() || !accepts(player, TimerType.VENOM))
+            return;
+        UUID playerId = player.getUniqueID();
+        Timer previous = venomTimers.get(playerId);
+        if (previous == null || previous.player != player || until > previous.until) {
+            Timer timer = new Timer(player, until);
+            timer.venomSelf = self;
+            venomTimers.put(playerId, timer);
+            nextRefresh = 0;
+        }
+    }
+
+    @SubscribeEvent
+    public void onAttack(AttackEntityEvent event) {
+        if (venomActive && event.entityPlayer == minecraft.thePlayer
+                && event.target instanceof EntityPlayer)
+            venom.attack((EntityPlayer) event.target);
     }
 
     @Override
@@ -206,7 +271,10 @@ public final class DebuffTimersFeature
     public void onTick(ClientTickEvent event) {
         if (event.phase != Phase.END)
             return;
-        if (pinTimers.isEmpty() && telebowCooldowns.isEmpty() && hud.empty())
+        if (venomActive)
+            venom.tick();
+        if (pinTimers.isEmpty() && venomTimers.isEmpty() && telebowCooldowns.isEmpty()
+                && hud.empty())
             return;
         long now = System.nanoTime();
         if (now < nextRefresh)
@@ -214,6 +282,7 @@ public final class DebuffTimersFeature
         nextRefresh = now + 100_000_000L;
         pendingRows.clear();
         boolean orderChanged = appendRows(pinTimers, TimerType.PIN, now);
+        orderChanged |= appendRows(venomTimers, TimerType.VENOM, now);
         orderChanged |= appendRows(telebowCooldowns, TimerType.TELEBOW, now);
         if (orderChanged || pendingRows.size() != rows.size()) {
             pendingRows.sort(Comparator.comparing((DebuffTimersHud.Row row) -> row.type)
@@ -230,7 +299,7 @@ public final class DebuffTimersFeature
         Iterator<Timer> iterator = timers.values().iterator();
         while (iterator.hasNext()) {
             Timer timer = iterator.next();
-            if (now >= timer.until || type == TimerType.PIN && !timer.player.isEntityAlive()) {
+            if (now >= timer.until || type != TimerType.TELEBOW && !timer.player.isEntityAlive()) {
                 iterator.remove();
                 continue;
             }
@@ -280,6 +349,7 @@ public final class DebuffTimersFeature
         final EntityPlayer player;
         long until;
         DebuffTimersHud.Row row;
+        boolean venomSelf;
 
         Timer(EntityPlayer player, long until) {
             this.player = player;

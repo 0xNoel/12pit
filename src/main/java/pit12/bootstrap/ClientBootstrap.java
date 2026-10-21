@@ -208,7 +208,7 @@ public final class ClientBootstrap {
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         // Category: Render
         registerDebuffTimers(minecraft, configs, session, arrows, relations, playerNames,
-                hudRegistry, telebowCooldowns);
+                hudRegistry, telebowCooldowns, players, playerEquipment);
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
@@ -373,12 +373,12 @@ public final class ClientBootstrap {
     // Category: Render
     private void registerDebuffTimers(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
-            PlayerNameCache playerNames, HudRegistry hudRegistry,
-            TelebowCooldowns telebowCooldowns) {
+            PlayerNameCache playerNames, HudRegistry hudRegistry, TelebowCooldowns telebowCooldowns,
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment) {
         DebuffTimersConfig config = new DebuffTimersConfig();
         configs.register(config);
         components.add(new DebuffTimersFeature(minecraft, configs, config, session, arrows,
-                relations, playerNames, hudRegistry, telebowCooldowns));
+                relations, playerNames, hudRegistry, telebowCooldowns, players, playerEquipment));
     }
 
     private void registerEventList(ConfigCatalog configs, HudRegistry hudRegistry,

@@ -34,6 +34,12 @@ public final class DebuffTimersConfig extends FeatureConfig {
     public final BooleanSetting pinEnemies;
     public final BooleanSetting pinOthers;
     public final IntegerSetting pinHitWindow;
+    public final BooleanSetting venomSelf;
+    public final BooleanSetting venomTargets;
+    public final BooleanSetting venomOwn;
+    public final BooleanSetting venomFriends;
+    public final BooleanSetting venomEnemies;
+    public final BooleanSetting venomOthers;
     public final BooleanSetting telebowOwn;
     public final BooleanSetting telebowFriends;
     public final BooleanSetting telebowEnemies;
@@ -73,6 +79,18 @@ public final class DebuffTimersConfig extends FeatureConfig {
         pinHitWindow = integerSliderSetting("pin_hit_window_ms", source("Prediction margin (ms)"),
                 source("Sets the time allowed between arrow collision, player damage, and arrow removal."),
                 250, 50, 1000, 25);
+        subsubcategory("venom", "Venom");
+        venomSelf = booleanSetting("venom_self", source("Track wearers"),
+                source("Estimates the wearer's 24-second poison from observed hits."), true);
+        venomTargets = booleanSetting("venom_targets", source("Track targets"),
+                source("Estimates the target's 12-second poison from observed hits."), true);
+        venomOwn = booleanSetting("venom_own", source("Own"), source("Shows Venom on you."), true);
+        venomFriends = booleanSetting("venom_friends", source("Friends"),
+                source("Shows Venom on friends."), true);
+        venomEnemies = booleanSetting("venom_enemies", source("Enemies"),
+                source("Shows Venom on enemies."), true);
+        venomOthers = booleanSetting("venom_others", source("Others"),
+                source("Shows Venom on other players."), true);
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
         telebowOwn = booleanSetting("telebow_own", source("Own"),
