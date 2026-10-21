@@ -79,6 +79,8 @@ final class HudEditorSnap {
             add(0, 0, 0, 0);
             add(screenLength - length, screenLength, 0, 0);
             add(screenLength / 2 - length / 2, screenLength / 2, 0, 0);
+            add(screenLength / 2, screenLength / 2, 0, 0);
+            add(screenLength / 2 - length, screenLength / 2, 0, 0);
         }
 
         private void addElement(int length, int origin, int otherLength, int start, int end) {
