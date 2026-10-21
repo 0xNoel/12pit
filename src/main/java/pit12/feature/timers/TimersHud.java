@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.feature.debufftimers;
+package pit12.feature.timers;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,9 +26,9 @@ import pit12.runtime.config.HudConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
 
-final class DebuffTimersHud implements HudElement {
+final class TimersHud implements HudElement {
     private final Minecraft minecraft;
-    private final DebuffTimersConfig config;
+    private final TimersConfig config;
     private final HudRenderer renderer;
     private List<Row> rows = Collections.emptyList();
     private List<Row> content = Collections.emptyList();
@@ -43,7 +43,7 @@ final class DebuffTimersHud implements HudElement {
     private final int[] titleWidths = new int[TimerType.values().length];
     float visibleHeight = Float.POSITIVE_INFINITY;
 
-    DebuffTimersHud(Minecraft minecraft, DebuffTimersConfig config, HudRenderer renderer) {
+    TimersHud(Minecraft minecraft, TimersConfig config, HudRenderer renderer) {
         this.minecraft = minecraft;
         this.config = config;
         this.renderer = renderer;
@@ -201,7 +201,7 @@ final class DebuffTimersHud implements HudElement {
     enum Group {
         OWN, FRIEND, ENEMY, OTHER;
 
-        int color(DebuffTimersConfig config) {
+        int color(TimersConfig config) {
             switch (this) {
                 case OWN:
                     return config.ownColor.get();

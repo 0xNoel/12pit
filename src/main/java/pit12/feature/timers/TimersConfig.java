@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.feature.debufftimers;
+package pit12.feature.timers;
 
 import static pit12.runtime.languages.Languages.source;
 
@@ -28,24 +28,28 @@ import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.config.IntegerSetting;
 
-public final class DebuffTimersConfig extends FeatureConfig {
+public final class TimersConfig extends FeatureConfig {
+    public final BooleanSetting pinEnabled;
     public final BooleanSetting pinOwn;
     public final BooleanSetting pinFriends;
     public final BooleanSetting pinEnemies;
     public final BooleanSetting pinOthers;
     public final IntegerSetting pinHitWindow;
+    public final BooleanSetting venomEnabled;
     public final BooleanSetting venomSelf;
     public final BooleanSetting venomTargets;
     public final BooleanSetting venomOwn;
     public final BooleanSetting venomFriends;
     public final BooleanSetting venomEnemies;
     public final BooleanSetting venomOthers;
+    public final BooleanSetting jumpBoostEnabled;
     public final BooleanSetting jumpBoostOwn;
     public final BooleanSetting jumpBoostFriends;
     public final BooleanSetting jumpBoostEnemies;
     public final BooleanSetting jumpBoostOthers;
     public final BooleanSetting jumpBoostSoundRequired;
     public final BooleanSetting jumpBoostResetOnLowJump;
+    public final BooleanSetting telebowEnabled;
     public final BooleanSetting telebowOwn;
     public final BooleanSetting telebowFriends;
     public final BooleanSetting telebowEnemies;
@@ -57,7 +61,7 @@ public final class DebuffTimersConfig extends FeatureConfig {
     public final ColorSetting otherColor;
     public final HudConfig hud;
 
-    public DebuffTimersConfig() {
+    public TimersConfig() {
         super("debufftimers", source("Timers"), new ConfigCategory("render", source("Render")),
                 source("Shows estimated effect durations and cooldowns."));
         hud = hudConfig("debuff_timers", HudAnchor.TOP_RIGHT, 6, 6, true, HudGroup.SUBCATEGORY,
@@ -75,6 +79,8 @@ public final class DebuffTimersConfig extends FeatureConfig {
                 source("Sets the color of other players' countdowns."), 0xFFFFFFFF);
         subcategory("debuffs", source("Debuffs"));
         subsubcategory("pin", "Pin");
+        pinEnabled = booleanSetting("pin_enabled", source("Enabled"), source("Tracks Pin timers."),
+                true);
         pinOwn = booleanSetting("own", source("Own"), source("Shows Pin on you."), true);
         pinFriends =
                 booleanSetting("friends", source("Friends"), source("Shows Pin on friends."), true);
@@ -86,6 +92,8 @@ public final class DebuffTimersConfig extends FeatureConfig {
                 source("Sets the time allowed between arrow collision, player damage, and arrow removal."),
                 250, 50, 1000, 25);
         subsubcategory("venom", "Venom");
+        venomEnabled = booleanSetting("venom_enabled", source("Enabled"),
+                source("Tracks Venom timers."), true);
         venomSelf = booleanSetting("venom_self", source("Track wearers"),
                 source("Estimates the wearer's 24-second poison from observed hits."), true);
         venomTargets = booleanSetting("venom_targets", source("Track targets"),
@@ -99,6 +107,8 @@ public final class DebuffTimersConfig extends FeatureConfig {
                 source("Shows Venom on other players."), true);
         subcategory("buffs", source("Buffs"));
         subsubcategory("jump_boost", "Jump Boost");
+        jumpBoostEnabled = booleanSetting("jump_boost_enabled", source("Enabled"),
+                source("Tracks Jump Boost timers."), true);
         jumpBoostOwn = booleanSetting("jump_boost_own", source("Own"),
                 source("Shows Jump Boost on you."), true);
         jumpBoostFriends = booleanSetting("jump_boost_friends", source("Friends"),
@@ -116,6 +126,8 @@ public final class DebuffTimersConfig extends FeatureConfig {
                         source("Removes the timer when an unobstructed jump is too low."), false);
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
+        telebowEnabled = booleanSetting("telebow_enabled", source("Enabled"),
+                source("Shows Telebow cooldowns."), true);
         telebowOwn = booleanSetting("telebow_own", source("Own"),
                 source("Shows your Telebow cooldown."), true);
         telebowFriends = booleanSetting("telebow_friends", source("Friends"),

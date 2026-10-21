@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.feature.debufftimers;
+package pit12.feature.timers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +42,7 @@ import pit12.runtime.session.ClientSession;
 public final class JumpBoostTracker implements PlayerEquipmentListener {
     private static final long DURATION_NANOS = 30_000_000_000L;
     private final Minecraft minecraft;
-    private final DebuffTimersConfig config;
+    private final TimersConfig config;
     private final ClientSession session;
     private final PlayerEntityTracker players;
     private final PlayerEquipmentAccess equipment;
@@ -54,7 +54,7 @@ public final class JumpBoostTracker implements PlayerEquipmentListener {
     private final Map<UUID, Jump> jumps = new HashMap<>();
     private NetHandlerPlayClient boundConnection;
 
-    JumpBoostTracker(Minecraft minecraft, DebuffTimersConfig config, ClientSession session,
+    JumpBoostTracker(Minecraft minecraft, TimersConfig config, ClientSession session,
             PlayerEntityTracker players, PlayerEquipmentAccess equipment,
             BiConsumer<EntityPlayer, Long> triggered, Consumer<EntityPlayer> removed,
             Runnable resetTimers) {

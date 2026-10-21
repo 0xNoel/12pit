@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.feature.debufftimers;
+package pit12.feature.timers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +32,14 @@ import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
 
 final class PinTracker implements ArrowListener {
-    private final DebuffTimersConfig config;
+    private final TimersConfig config;
     private final ArrowTracker arrows;
     private final BiConsumer<EntityPlayer, Long> triggered;
     private final Runnable resetTimers;
     private final Map<Integer, Shot> shots = new HashMap<>();
 
-    PinTracker(DebuffTimersConfig config, ArrowTracker arrows,
-            BiConsumer<EntityPlayer, Long> triggered, Runnable resetTimers) {
+    PinTracker(TimersConfig config, ArrowTracker arrows, BiConsumer<EntityPlayer, Long> triggered,
+            Runnable resetTimers) {
         this.config = config;
         this.arrows = arrows;
         this.triggered = triggered;
