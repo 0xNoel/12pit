@@ -107,6 +107,7 @@ final class DebuffTimersHud implements HudElement {
                     : minecraft.thePlayer.getDisplayName().getFormattedText();
             content = Arrays.asList(new Row(TimerType.PIN, Group.OWN, name, 10_000_000_000L),
                     new Row(TimerType.VENOM, Group.OWN, name, 24_000_000_000L),
+                    new Row(TimerType.JUMP_BOOST, Group.OWN, name, 30_000_000_000L),
                     new Row(TimerType.TELEBOW, Group.OWN, name, 20_000_000_000L));
         } else {
             content = rows;
@@ -189,7 +190,7 @@ final class DebuffTimersHud implements HudElement {
     }
 
     enum TimerType {
-        PIN("§e§lPin"), VENOM("§d§lVenom"), TELEBOW("§b§lTelebow");
+        PIN("§e§lPin"), VENOM("§d§lVenom"), JUMP_BOOST("§a§lJump Boost"), TELEBOW("§b§lTelebow");
 
         final String title;
 

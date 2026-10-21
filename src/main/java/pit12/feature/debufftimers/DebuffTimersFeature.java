@@ -30,6 +30,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -67,8 +68,10 @@ public final class DebuffTimersFeature
     private final DebuffTimersHud hud;
     private final PinTracker pin;
     private final VenomTracker venom;
+    private final JumpBoostTracker jumpBoost;
     private final Map<UUID, Timer> pinTimers = new LinkedHashMap<>();
     private final Map<UUID, Timer> venomTimers = new LinkedHashMap<>();
+    private final Map<UUID, Timer> jumpBoostTimers = new LinkedHashMap<>();
     private final Map<UUID, Timer> telebowCooldowns = new LinkedHashMap<>();
     private List<DebuffTimersHud.Row> rows = new ArrayList<>();
     private List<DebuffTimersHud.Row> pendingRows = new ArrayList<>();
@@ -77,6 +80,7 @@ public final class DebuffTimersFeature
     private boolean active;
     private boolean pinActive;
     private boolean venomActive;
+    private boolean jumpBoostActive;
     private boolean telebowActive;
 
     public DebuffTimersFeature(Minecraft minecraft, ConfigCatalog configs,
@@ -101,6 +105,14 @@ public final class DebuffTimersFeature
             venomTimers.clear();
             nextRefresh = 0;
         });
+        jumpBoost = new JumpBoostTracker(minecraft, config, session, players, equipment,
+                this::onJumpBoost, player -> {
+                    jumpBoostTimers.remove(player.getUniqueID());
+                    nextRefresh = 0;
+                }, () -> {
+                    jumpBoostTimers.clear();
+                    nextRefresh = 0;
+                });
     }
 
     @Override
@@ -133,6 +145,9 @@ public final class DebuffTimersFeature
                 started && config.enabled() && (config.venomSelf.get() || config.venomTargets.get())
                         && (config.venomOwn.get() || config.venomFriends.get()
                                 || config.venomEnemies.get() || config.venomOthers.get());
+        boolean jump = started && config.enabled()
+                && (config.jumpBoostOwn.get() || config.jumpBoostFriends.get()
+                        || config.jumpBoostEnemies.get() || config.jumpBoostOthers.get());
         if (pin != pinActive) {
             pinActive = pin;
             this.pin.active(pin);
@@ -150,7 +165,11 @@ public final class DebuffTimersFeature
             venomActive = poison;
             venom.active(poison);
         }
-        boolean enabled = pinActive || venomActive || telebowActive;
+        if (jump != jumpBoostActive) {
+            jumpBoostActive = jump;
+            jumpBoost.active(jump);
+        }
+        boolean enabled = pinActive || venomActive || jumpBoostActive || telebowActive;
         if (enabled == active)
             return;
         active = enabled;
@@ -177,6 +196,12 @@ public final class DebuffTimersFeature
                 || changes.affects("debufftimers", "venom_friends")
                 || changes.affects("debufftimers", "venom_enemies")
                 || changes.affects("debufftimers", "venom_others")
+                || changes.affects("debufftimers", "jump_boost_own")
+                || changes.affects("debufftimers", "jump_boost_friends")
+                || changes.affects("debufftimers", "jump_boost_enemies")
+                || changes.affects("debufftimers", "jump_boost_others")
+                || changes.affects("debufftimers", "jump_boost_sound_required")
+                || changes.affects("debufftimers", "jump_boost_reset_on_low_jump")
                 || changes.affects("debufftimers", "telebow_own")
                 || changes.affects("debufftimers", "telebow_friends")
                 || changes.affects("debufftimers", "telebow_enemies")
@@ -184,6 +209,13 @@ public final class DebuffTimersFeature
                 || changes.affects("debufftimers", "show_group_names")))
             return;
         updateActivation();
+        if (changes.affects("debufftimers", "jump_boost_reset_on_low_jump")) {
+            jumpBoost.resetJumpChecks();
+            if (config.jumpBoostResetOnLowJump.get()) {
+                for (Timer timer : jumpBoostTimers.values())
+                    jumpBoost.trackJumps(timer.player, timer.until);
+            }
+        }
         venomTimers.values().removeIf(
                 timer -> timer.venomSelf ? !config.venomSelf.get() : !config.venomTargets.get());
         nextRefresh = 0;
@@ -203,6 +235,10 @@ public final class DebuffTimersFeature
                 return relations.matches(playerId, ownId, config.venomOwn.get(),
                         config.venomFriends.get(), config.venomEnemies.get(),
                         config.venomOthers.get());
+            case JUMP_BOOST:
+                return relations.matches(playerId, ownId, config.jumpBoostOwn.get(),
+                        config.jumpBoostFriends.get(), config.jumpBoostEnemies.get(),
+                        config.jumpBoostOthers.get());
             default:
                 return relations.matches(playerId, ownId, config.telebowOwn.get(),
                         config.telebowFriends.get(), config.telebowEnemies.get(),
@@ -236,6 +272,21 @@ public final class DebuffTimersFeature
         if (venomActive && event.entityPlayer == minecraft.thePlayer
                 && event.target instanceof EntityPlayer)
             venom.attack((EntityPlayer) event.target);
+    }
+
+    @SubscribeEvent
+    public void onSound(PlaySoundAtEntityEvent event) {
+        if (jumpBoostActive && config.jumpBoostSoundRequired.get()
+                && event.entity == minecraft.thePlayer && "random.drink".equals(event.name))
+            jumpBoost.drink(minecraft.thePlayer);
+    }
+
+    private void onJumpBoost(EntityPlayer player, long until) {
+        if (!accepts(player, TimerType.JUMP_BOOST))
+            return;
+        jumpBoostTimers.put(player.getUniqueID(), new Timer(player, until));
+        jumpBoost.trackJumps(player, until);
+        nextRefresh = 0;
     }
 
     @Override
@@ -273,8 +324,10 @@ public final class DebuffTimersFeature
             return;
         if (venomActive)
             venom.tick();
-        if (pinTimers.isEmpty() && venomTimers.isEmpty() && telebowCooldowns.isEmpty()
-                && hud.empty())
+        if (jumpBoostActive)
+            jumpBoost.tick();
+        if (pinTimers.isEmpty() && venomTimers.isEmpty() && jumpBoostTimers.isEmpty()
+                && telebowCooldowns.isEmpty() && hud.empty())
             return;
         long now = System.nanoTime();
         if (now < nextRefresh)
@@ -283,6 +336,7 @@ public final class DebuffTimersFeature
         pendingRows.clear();
         boolean orderChanged = appendRows(pinTimers, TimerType.PIN, now);
         orderChanged |= appendRows(venomTimers, TimerType.VENOM, now);
+        orderChanged |= appendRows(jumpBoostTimers, TimerType.JUMP_BOOST, now);
         orderChanged |= appendRows(telebowCooldowns, TimerType.TELEBOW, now);
         if (orderChanged || pendingRows.size() != rows.size()) {
             pendingRows.sort(Comparator.comparing((DebuffTimersHud.Row row) -> row.type)

@@ -40,6 +40,12 @@ public final class DebuffTimersConfig extends FeatureConfig {
     public final BooleanSetting venomFriends;
     public final BooleanSetting venomEnemies;
     public final BooleanSetting venomOthers;
+    public final BooleanSetting jumpBoostOwn;
+    public final BooleanSetting jumpBoostFriends;
+    public final BooleanSetting jumpBoostEnemies;
+    public final BooleanSetting jumpBoostOthers;
+    public final BooleanSetting jumpBoostSoundRequired;
+    public final BooleanSetting jumpBoostResetOnLowJump;
     public final BooleanSetting telebowOwn;
     public final BooleanSetting telebowFriends;
     public final BooleanSetting telebowEnemies;
@@ -91,6 +97,23 @@ public final class DebuffTimersConfig extends FeatureConfig {
                 source("Shows Venom on enemies."), true);
         venomOthers = booleanSetting("venom_others", source("Others"),
                 source("Shows Venom on other players."), true);
+        subcategory("buffs", source("Buffs"));
+        subsubcategory("jump_boost", "Jump Boost");
+        jumpBoostOwn = booleanSetting("jump_boost_own", source("Own"),
+                source("Shows Jump Boost on you."), true);
+        jumpBoostFriends = booleanSetting("jump_boost_friends", source("Friends"),
+                source("Shows Jump Boost on friends."), true);
+        jumpBoostEnemies = booleanSetting("jump_boost_enemies", source("Enemies"),
+                source("Shows Jump Boost on enemies."), true);
+        jumpBoostOthers = booleanSetting("jump_boost_others", source("Others"),
+                source("Shows Jump Boost on other players."), true);
+        jumpBoostSoundRequired = booleanSetting("jump_boost_sound_required",
+                source("Sound required"),
+                source("Uses a drinking sound instead of the minimum hold time. Still requires a direct switch to a glass bottle."),
+                false);
+        jumpBoostResetOnLowJump =
+                booleanSetting("jump_boost_reset_on_low_jump", source("Reset on low jump"),
+                        source("Removes the timer when an unobstructed jump is too low."), false);
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
         telebowOwn = booleanSetting("telebow_own", source("Own"),

@@ -23,26 +23,89 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S0BPacketAnimation;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
+import net.minecraft.network.play.server.S14PacketEntity;
+import net.minecraft.network.play.server.S18PacketEntityTeleport;
 import net.minecraft.network.play.server.S19PacketEntityStatus;
+import net.minecraft.network.play.server.S29PacketSoundEffect;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import pit12.feature.debufftimers.JumpBoostPacketBinding;
+import pit12.feature.debufftimers.JumpBoostTracker;
 import pit12.feature.debufftimers.VenomPacketBinding;
 import pit12.feature.debufftimers.VenomTracker;
 
 @Mixin(NetHandlerPlayClient.class)
-public abstract class NetHandlerPlayClientMixin implements VenomPacketBinding {
+public abstract class NetHandlerPlayClientMixin
+        implements VenomPacketBinding, JumpBoostPacketBinding {
     @Shadow
     private Minecraft gameController;
     @Unique
     private VenomTracker pit12$venomTracker;
+    @Unique
+    private JumpBoostTracker pit12$jumpBoostTracker;
 
     @Override
     public void bindVenomTracker(VenomTracker tracker) {
         pit12$venomTracker = tracker;
+    }
+
+    @Override
+    public void bindJumpBoostTracker(JumpBoostTracker tracker) {
+        pit12$jumpBoostTracker = tracker;
+    }
+
+    @Inject(method = "handleSoundEffect", at = @At("TAIL"))
+    private void pit12$afterJumpBoostSound(S29PacketSoundEffect packet, CallbackInfo ci) {
+        if (pit12$jumpBoostTracker != null && "random.drink".equals(packet.getSoundName())
+                && (Object) this == gameController.getNetHandler())
+            pit12$jumpBoostTracker.sound(packet.getX(), packet.getY(), packet.getZ());
+    }
+
+    @Inject(method = "handleEntityMovement", at = @At("TAIL"))
+    private void pit12$afterJumpBoostMovement(S14PacketEntity packet, CallbackInfo ci) {
+        if (pit12$jumpBoostTracker == null || !pit12$jumpBoostTracker.checkingJumps()
+                || (Object) this != gameController.getNetHandler()
+                || gameController.theWorld == null)
+            return;
+        Entity entity = packet.getEntity(gameController.theWorld);
+        if (entity instanceof EntityPlayer)
+            pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, false);
+    }
+
+    @Inject(method = "handleEntityTeleport", at = @At("TAIL"))
+    private void pit12$afterJumpBoostTeleport(S18PacketEntityTeleport packet, CallbackInfo ci) {
+        if (pit12$jumpBoostTracker == null || !pit12$jumpBoostTracker.checkingJumps()
+                || (Object) this != gameController.getNetHandler()
+                || gameController.theWorld == null)
+            return;
+        Entity entity = gameController.theWorld.getEntityByID(packet.getEntityId());
+        // Absolute packets also carry normal takeoff and landing updates.
+        if (entity instanceof EntityPlayer)
+            pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, false);
+    }
+
+    @Inject(method = "handleEntityVelocity", at = @At("TAIL"))
+    private void pit12$afterJumpBoostVelocity(S12PacketEntityVelocity packet, CallbackInfo ci) {
+        if (pit12$jumpBoostTracker == null || !pit12$jumpBoostTracker.checkingJumps()
+                || (Object) this != gameController.getNetHandler()
+                || gameController.theWorld == null)
+            return;
+        Entity entity = gameController.theWorld.getEntityByID(packet.getEntityID());
+        if (entity instanceof EntityPlayer)
+            pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, true);
+    }
+
+    @Inject(method = {"handlePlayerPosLook", "handleExplosion"}, at = @At("TAIL"))
+    private void pit12$afterJumpBoostLocalCorrection(CallbackInfo ci) {
+        if (pit12$jumpBoostTracker != null && pit12$jumpBoostTracker.checkingJumps()
+                && (Object) this == gameController.getNetHandler()
+                && gameController.thePlayer != null)
+            pit12$jumpBoostTracker.observeJump(gameController.thePlayer, true);
     }
 
     @Inject(method = "handleAnimation", at = @At("TAIL"))
