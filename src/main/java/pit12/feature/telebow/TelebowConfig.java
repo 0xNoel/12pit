@@ -23,6 +23,7 @@ import static pit12.runtime.languages.Languages.source;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ColorSetting;
 import pit12.runtime.config.ConfigCategory;
+import pit12.runtime.config.DoubleSetting;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.IntegerSetting;
 
@@ -34,6 +35,13 @@ public final class TelebowConfig extends FeatureConfig {
     public final IntegerSetting sneakWindow;
     public final BooleanSetting ignoreCooldown;
     public final BooleanSetting correctCooldown;
+    public final BooleanSetting aimPoints;
+    public final BooleanSetting aimHoldingOnly;
+    public final BooleanSetting aimFriends;
+    public final BooleanSetting aimEnemies;
+    public final BooleanSetting aimOthers;
+    public final BooleanSetting aimNames;
+    public final DoubleSetting aimTolerance;
     public final ColorSetting ownColor;
     public final ColorSetting friendColor;
     public final ColorSetting enemyColor;
@@ -46,7 +54,7 @@ public final class TelebowConfig extends FeatureConfig {
         super("telebow", source("Telebow Prediction"),
                 new ConfigCategory("render", source("Render")),
                 source("Shows Telebow trails, landing beams, and shooter names through blocks."));
-        subsubcategory("shooters", source("Shooters"));
+        subcategory("shooters", source("Shooters"));
         own = booleanSetting("own", source("Own"), source("Shows your arrows."), true);
         friends = booleanSetting("friends", source("Friends"), source("Shows friends' arrows."),
                 true);
@@ -54,7 +62,7 @@ public final class TelebowConfig extends FeatureConfig {
                 true);
         others = booleanSetting("others", source("Others"), source("Shows other players' arrows."),
                 true);
-        subsubcategory("prediction", source("Prediction"));
+        subcategory("prediction", source("Prediction"));
         ignoreCooldown = booleanSetting("ignore_cooldown", source("Ignore arrows during cooldown"),
                 source("Skips arrows blocked by a tracked cooldown."), true);
         correctCooldown = booleanSetting("correct_cooldown", source("Correct cooldown estimates"),
@@ -63,20 +71,36 @@ public final class TelebowConfig extends FeatureConfig {
         sneakWindow = integerSliderSetting("sneak_window_ms", source("Prediction margin (ms)"),
                 source("Sets the time allowed for sneak changes and arrow hit confirmation."), 250,
                 0, 1000, 25);
-        subsubcategory("appearance", source("Appearance"));
+        subcategory("aim", source("Aim points"));
+        aimPoints = booleanSetting("aim_points", source("Show aim points"), source(
+                "Shows where to aim a fully drawn Telebow while sneaking to reach each marked landing point. Uses the trail's hold and fade times."),
+                false);
+        aimHoldingOnly = booleanSetting("aim_holding_only", source("Only while holding Telebow"),
+                source("Shows aim points only while holding a Telebow."), true);
+        aimFriends = booleanSetting("aim_friends", source("Friends"),
+                source("Finds shots near friends' Telebow landing points."), true);
+        aimEnemies = booleanSetting("aim_enemies", source("Enemies"),
+                source("Finds shots near enemies' Telebow landing points."), true);
+        aimOthers = booleanSetting("aim_others", source("Others"),
+                source("Finds shots near other players' Telebow landing points."), true);
+        aimNames = booleanSetting("aim_names", source("Show names"),
+                source("Shows player names next to aim points."), true);
+        aimTolerance = doubleSliderSetting("aim_tolerance_blocks", source("Tolerance (blocks)"),
+                source("Accepts impacts within this radius of the marked landing point."), 2, 0.25,
+                8, 0.25);
+        subcategory("appearance", source("Appearance"));
         ownColor = colorPickerSetting("own_color", source("Own color"), "", 0xFF55FFFF);
         friendColor = colorPickerSetting("friend_color", source("Friend color"), "", 0xFF55FF55);
         enemyColor = colorPickerSetting("enemy_color", source("Enemy color"), "", 0xFFFF5555);
         otherColor =
                 colorPickerSetting("other_color", source("Other player color"), "", 0xFFFFFFFF);
-        showNames = booleanSetting("show_names", source("Show names"),
-                source("Shows the shooter's display name at the landing point."), true);
-        subsubcategory("lifetime", source("Lifetime"));
         holdTime = integerSliderSetting("hold_time_ms", source("Hold time (ms)"),
                 source("Keeps the trail and landing point after the arrow lands or disappears."),
                 2000, 0, 5000, 100);
         fadeTime = integerSliderSetting("fade_time_ms", source("Fade time (ms)"),
                 source("Fades the trail, beam, and name together after the hold time."), 1000, 100,
                 3000, 100);
+        showNames = booleanSetting("show_names", source("Show names"),
+                source("Shows the shooter's display name at the landing point."), true);
     }
 }
