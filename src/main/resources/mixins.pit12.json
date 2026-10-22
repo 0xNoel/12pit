@@ -27,6 +27,8 @@
     "feature.gamma.EntityRendererMixin",
     "feature.nametag.RendererLivingEntityAccessor",
     "feature.nametag.RendererLivingEntityMixin",
+    "feature.nametag.VanillaRendererLivingEntityMixin",
+    "feature.nametag.LunarEntityLivingBaseMixin",
     "feature.nojumpdelay.EntityLivingBaseMixin",
     "feature.nojumpdelay.MinecraftMixin",
     "feature.resourceleakfix.SimpleResourceAccessor",
