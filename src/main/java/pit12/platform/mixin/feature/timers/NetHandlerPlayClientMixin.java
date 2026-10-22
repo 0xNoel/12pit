@@ -67,26 +67,39 @@ public abstract class NetHandlerPlayClientMixin
     }
 
     @Inject(method = "handleEntityMovement", at = @At("TAIL"))
-    private void pit12$afterJumpBoostMovement(S14PacketEntity packet, CallbackInfo ci) {
-        if (pit12$jumpBoostTracker == null || !pit12$jumpBoostTracker.checkingJumps()
-                || (Object) this != gameController.getNetHandler()
+    private void pit12$afterPlayerMovement(S14PacketEntity packet, CallbackInfo ci) {
+        boolean venom = pit12$venomTracker != null && pit12$venomTracker.trackingHits()
+                && packet.func_149060_h(); // has rotation
+        boolean jumping = pit12$jumpBoostTracker != null && pit12$jumpBoostTracker.checkingJumps();
+        if ((!venom && !jumping) || (Object) this != gameController.getNetHandler()
                 || gameController.theWorld == null)
             return;
         Entity entity = packet.getEntity(gameController.theWorld);
-        if (entity instanceof EntityPlayer)
-            pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, false);
+        if (entity instanceof EntityPlayer) {
+            if (venom)
+                pit12$venomTracker.rotation((EntityPlayer) entity, packet.func_149066_f(), // yaw
+                        packet.func_149063_g()); // pitch
+            if (jumping)
+                pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, false);
+        }
     }
 
     @Inject(method = "handleEntityTeleport", at = @At("TAIL"))
-    private void pit12$afterJumpBoostTeleport(S18PacketEntityTeleport packet, CallbackInfo ci) {
-        if (pit12$jumpBoostTracker == null || !pit12$jumpBoostTracker.checkingJumps()
-                || (Object) this != gameController.getNetHandler()
+    private void pit12$afterPlayerTeleport(S18PacketEntityTeleport packet, CallbackInfo ci) {
+        boolean venom = pit12$venomTracker != null && pit12$venomTracker.trackingHits();
+        boolean jumping = pit12$jumpBoostTracker != null && pit12$jumpBoostTracker.checkingJumps();
+        if ((!venom && !jumping) || (Object) this != gameController.getNetHandler()
                 || gameController.theWorld == null)
             return;
         Entity entity = gameController.theWorld.getEntityByID(packet.getEntityId());
         // Absolute packets also carry normal takeoff and landing updates.
-        if (entity instanceof EntityPlayer)
-            pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, false);
+        if (entity instanceof EntityPlayer) {
+            if (venom)
+                pit12$venomTracker.rotation((EntityPlayer) entity, packet.getYaw(),
+                        packet.getPitch());
+            if (jumping)
+                pit12$jumpBoostTracker.observeJump((EntityPlayer) entity, false);
+        }
     }
 
     @Inject(method = "handleEntityVelocity", at = @At("TAIL"))
@@ -110,8 +123,8 @@ public abstract class NetHandlerPlayClientMixin
 
     @Inject(method = "handleAnimation", at = @At("TAIL"))
     private void pit12$afterVenomAnimation(S0BPacketAnimation packet, CallbackInfo ci) {
-        if (pit12$venomTracker == null || packet.getAnimationType() != 0
-                || (Object) this != gameController.getNetHandler()
+        if (pit12$venomTracker == null || !pit12$venomTracker.trackingHits()
+                || packet.getAnimationType() != 0 || (Object) this != gameController.getNetHandler()
                 || gameController.theWorld == null)
             return;
         Entity entity = gameController.theWorld.getEntityByID(packet.getEntityID());
@@ -121,8 +134,8 @@ public abstract class NetHandlerPlayClientMixin
 
     @Inject(method = "handleEntityStatus", at = @At("TAIL"))
     private void pit12$afterVenomHurt(S19PacketEntityStatus packet, CallbackInfo ci) {
-        if (pit12$venomTracker == null || packet.getOpCode() != 2
-                || (Object) this != gameController.getNetHandler()
+        if (pit12$venomTracker == null || !pit12$venomTracker.trackingHits()
+                || packet.getOpCode() != 2 || (Object) this != gameController.getNetHandler()
                 || gameController.theWorld == null)
             return;
         Entity entity = packet.getEntity(gameController.theWorld);

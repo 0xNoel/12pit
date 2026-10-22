@@ -104,10 +104,11 @@ public final class TimersFeature
             pinTimers.clear();
             nextRefresh = 0;
         });
-        venom = new VenomTracker(minecraft, session, players, equipment, this::onVenom, () -> {
-            venomTimers.clear();
-            nextRefresh = 0;
-        });
+        venom = new VenomTracker(minecraft, config, session, players, equipment, this::onVenom,
+                () -> {
+                    venomTimers.clear();
+                    nextRefresh = 0;
+                });
         jumpBoost = new JumpBoostTracker(minecraft, config, session, players, equipment,
                 this::onJumpBoost, player -> {
                     jumpBoostTimers.remove(player.getUniqueID());

@@ -23,6 +23,7 @@ import static pit12.runtime.languages.Languages.source;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ColorSetting;
 import pit12.runtime.config.ConfigCategory;
+import pit12.runtime.config.DoubleSetting;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
@@ -42,6 +43,9 @@ public final class TimersConfig extends FeatureConfig {
     public final BooleanSetting venomFriends;
     public final BooleanSetting venomEnemies;
     public final BooleanSetting venomOthers;
+    public final IntegerSetting venomHitWindow;
+    public final DoubleSetting venomReach;
+    public final DoubleSetting venomHitboxMargin;
     public final BooleanSetting jumpBoostEnabled;
     public final BooleanSetting jumpBoostOwn;
     public final BooleanSetting jumpBoostFriends;
@@ -105,6 +109,15 @@ public final class TimersConfig extends FeatureConfig {
                 source("Shows Venom on enemies."), true);
         venomOthers = booleanSetting("venom_others", source("Others"),
                 source("Shows Venom on other players."), true);
+        venomHitWindow =
+                integerSliderSetting("venom_hit_window_ms", source("Prediction margin (ms)"),
+                        source("Sets the time allowed between an attack and player damage."), 250,
+                        50, 1500, 25);
+        venomReach = doubleSliderSetting("venom_reach_blocks", source("Maximum reach (blocks)"),
+                source("Sets the maximum distance used to match an attack."), 4.5, 2, 6, 0.1);
+        venomHitboxMargin = doubleSliderSetting("venom_hitbox_margin_blocks",
+                source("Hitbox margin (blocks)"),
+                source("Expands the target's hitbox when matching an attack."), 0.4, 0, 1, 0.05);
         subcategory("buffs", source("Buffs"));
         subsubcategory("jump_boost", "Jump Boost");
         jumpBoostEnabled = booleanSetting("jump_boost_enabled", source("Enabled"),

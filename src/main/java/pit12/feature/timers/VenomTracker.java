@@ -19,7 +19,6 @@
 package pit12.feature.timers;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiConsumer;
@@ -27,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
@@ -39,6 +39,7 @@ import pit12.runtime.session.ClientSession;
 
 public final class VenomTracker implements PlayerEquipmentListener {
     private final Minecraft minecraft;
+    private final TimersConfig config;
     private final ClientSession session;
     private final PlayerEntityTracker players;
     private final PlayerEquipmentAccess equipment;
@@ -46,14 +47,13 @@ public final class VenomTracker implements PlayerEquipmentListener {
     private final Runnable resetTimers;
     private final Runnable sessionChanged = this::onSessionChanged;
     private final Map<UUID, Combo> wearers = new HashMap<>();
-    // Swing and hurt packets can arrive in either order.
-    private final Map<Integer, Hit> pendingHits = new HashMap<>();
     private NetHandlerPlayClient boundConnection;
 
-    VenomTracker(Minecraft minecraft, ClientSession session, PlayerEntityTracker players,
-            PlayerEquipmentAccess equipment, BiConsumer<EntityPlayer, EntityPlayer> triggered,
-            Runnable resetTimers) {
+    VenomTracker(Minecraft minecraft, TimersConfig config, ClientSession session,
+            PlayerEntityTracker players, PlayerEquipmentAccess equipment,
+            BiConsumer<EntityPlayer, EntityPlayer> triggered, Runnable resetTimers) {
         this.minecraft = minecraft;
+        this.config = config;
         this.session = session;
         this.players = players;
         this.equipment = equipment;
@@ -71,7 +71,6 @@ public final class VenomTracker implements PlayerEquipmentListener {
             session.removeListener(sessionChanged);
             unbind();
             wearers.clear();
-            pendingHits.clear();
             resetTimers.run();
         }
     }
@@ -79,7 +78,6 @@ public final class VenomTracker implements PlayerEquipmentListener {
     private void onSessionChanged() {
         unbind();
         wearers.clear();
-        pendingHits.clear();
         resetTimers.run();
         NetHandlerPlayClient connection = session.connection();
         if (connection instanceof VenomPacketBinding) {
@@ -118,7 +116,6 @@ public final class VenomTracker implements PlayerEquipmentListener {
     @Override
     public void onPlayerEquipmentReset() {
         wearers.clear();
-        pendingHits.clear();
     }
 
     private void observe(EntityPlayer player, boolean venom) {
@@ -139,108 +136,131 @@ public final class VenomTracker implements PlayerEquipmentListener {
                     PitEnchantment.Combo_Venom));
     }
 
+    public boolean trackingHits() {
+        return !wearers.isEmpty();
+    }
+
+    public void rotation(EntityPlayer player, byte yaw, byte pitch) {
+        Combo combo = wearers.get(player.getUniqueID());
+        if (combo != null) {
+            combo.yaw = yaw * 360.0F / 256.0F;
+            combo.pitch = pitch * 360.0F / 256.0F;
+        }
+    }
+
     public void swing(EntityPlayer player) {
-        if (wearers.isEmpty() || player == minecraft.thePlayer)
+        if (player == minecraft.thePlayer)
             return;
         Combo combo = wearers.get(player.getUniqueID());
         if (combo == null)
             return;
+        // Use packet coordinates and rotation before display interpolation.
+        Vec3 from = new Vec3(player.serverPosX / 32.0,
+                player.serverPosY / 32.0 + player.getEyeHeight(), player.serverPosZ / 32.0);
+        float yaw = combo.yaw * (float) Math.PI / 180;
+        float pitch = combo.pitch * (float) Math.PI / 180;
+        double reach = config.venomReach.get();
+        double horizontal = MathHelper.cos(pitch) * reach;
+        Vec3 to = from.addVector(-MathHelper.sin(yaw) * horizontal, -MathHelper.sin(pitch) * reach,
+                MathHelper.cos(yaw) * horizontal);
         combo.swungAt = System.nanoTime();
-        combo.from = player.getPositionEyes(1);
-        Vec3 look = player.getLook(1);
-        combo.to = combo.from.addVector(look.xCoord * 4.5, look.yCoord * 4.5, look.zCoord * 4.5);
+        combo.from = from;
+        combo.to = to;
     }
 
     void attack(EntityPlayer target) {
         observeLocal();
-        if (wearers.isEmpty() || minecraft.thePlayer == null)
+        if (minecraft.thePlayer == null)
             return;
         Combo combo = wearers.get(minecraft.thePlayer.getUniqueID());
         if (combo != null) {
             combo.swungAt = System.nanoTime();
             combo.localTarget = target;
+            combo.from = minecraft.thePlayer.getPositionEyes(1);
         }
     }
 
     public void hurt(EntityPlayer player) {
-        if (wearers.isEmpty())
-            return;
+        double margin = config.venomHitboxMargin.get();
+        // This coarse check also allows for eye height and the hitbox margin.
+        double range = config.venomReach.get() + 2 + margin;
+        double rangeSq = range * range;
+        long now = System.nanoTime();
+        long window = config.venomHitWindow.get() * 1_000_000L;
+        Combo attacker = null;
+        AxisAlignedBB displayBox = null;
+        AxisAlignedBB serverBox = null;
         for (Combo combo : wearers.values()) {
-            if (combo.player != player && combo.player.getDistanceSqToEntity(player) <= 36) {
-                pendingHits.put(player.getEntityId(), new Hit(player, System.nanoTime()));
-                return;
+            if (combo.player == player || combo.swungAt == 0 || now - combo.swungAt > window
+                    || combo.player.getDistanceSqToEntity(player) > rangeSq)
+                continue;
+            if (combo.localTarget != null && combo.localTarget != player)
+                continue;
+            if (displayBox == null) {
+                displayBox = player.getEntityBoundingBox().expand(margin, margin, margin);
+                serverBox = player == minecraft.thePlayer ? displayBox
+                        : displayBox.offset(player.serverPosX / 32.0 - player.posX,
+                                player.serverPosY / 32.0 - player.posY,
+                                player.serverPosZ / 32.0 - player.posZ);
             }
+            if (combo.localTarget != null) {
+                double x = Math.max(0, Math.max(displayBox.minX - combo.from.xCoord,
+                        combo.from.xCoord - displayBox.maxX));
+                double y = Math.max(0, Math.max(displayBox.minY - combo.from.yCoord,
+                        combo.from.yCoord - displayBox.maxY));
+                double z = Math.max(0, Math.max(displayBox.minZ - combo.from.zCoord,
+                        combo.from.zCoord - displayBox.maxZ));
+                double reach = config.venomReach.get();
+                if (x * x + y * y + z * z > reach * reach)
+                    continue;
+            } else if (!intersects(combo, serverBox)
+                    && (serverBox == displayBox || !intersects(combo, displayBox))) {
+                continue;
+            }
+            // Hurt packets do not name the attacker. Leave ambiguous hits uncounted.
+            if (attacker != null)
+                return;
+            attacker = combo;
+        }
+        if (attacker == null)
+            return;
+        attacker.swungAt = 0;
+        attacker.localTarget = null;
+        if (attacker.target != player) {
+            attacker.target = player;
+            attacker.hits = 0;
+        }
+        if (++attacker.hits == 3) {
+            attacker.hits = 0;
+            triggered.accept(attacker.player, player);
         }
     }
 
     void tick() {
         observeLocal();
-        if (wearers.isEmpty()) {
-            pendingHits.clear();
+        if (wearers.isEmpty())
             return;
-        }
         wearers.values().removeIf(combo -> !combo.player.isEntityAlive()
                 || players.loadedPlayer(combo.player.getUniqueID()) != combo.player);
-        if (pendingHits.isEmpty())
-            return;
-        long now = System.nanoTime();
-        Iterator<Hit> iterator = pendingHits.values().iterator();
-        while (iterator.hasNext()) {
-            Hit hit = iterator.next();
-            if (now - hit.at > 250_000_000L || hit.player.worldObj != minecraft.theWorld
-                    || minecraft.theWorld.getEntityByID(hit.player.getEntityId()) != hit.player) {
-                iterator.remove();
-                continue;
-            }
-            Combo combo = attacker(hit);
-            if (combo == null)
-                continue;
-            iterator.remove();
-            combo.swungAt = 0;
-            combo.localTarget = null;
-            if (combo.target != hit.player) {
-                combo.target = hit.player;
-                combo.hits = 0;
-            }
-            if (++combo.hits == 3) {
-                combo.hits = 0;
-                triggered.accept(combo.player, hit.player);
-            }
-        }
     }
 
-    private Combo attacker(Hit hit) {
-        Combo candidate = null;
-        AxisAlignedBB box = null;
-        for (Combo combo : wearers.values()) {
-            if (combo.player == hit.player || combo.swungAt == 0)
-                continue;
-            long age = hit.at - combo.swungAt;
-            if (age < -150_000_000L
-                    || age > (combo.localTarget == null ? 350_000_000L : 750_000_000L))
-                continue;
-            if (combo.localTarget != null) {
-                if (combo.localTarget != hit.player
-                        || combo.player.getDistanceSqToEntity(hit.player) > 36)
-                    continue;
-            } else {
-                if (box == null)
-                    box = hit.player.getEntityBoundingBox().expand(0.4, 0.4, 0.4);
-                if (box.calculateIntercept(combo.from, combo.to) == null)
-                    continue;
-            }
-            // Hurt packets do not name the attacker. Leave ambiguous hits uncounted.
-            if (candidate != null)
-                return null;
-            candidate = combo;
-        }
-        return candidate;
+    private static boolean intersects(Combo combo, AxisAlignedBB box) {
+        if (Math.max(combo.from.xCoord, combo.to.xCoord) < box.minX
+                || Math.min(combo.from.xCoord, combo.to.xCoord) > box.maxX
+                || Math.max(combo.from.yCoord, combo.to.yCoord) < box.minY
+                || Math.min(combo.from.yCoord, combo.to.yCoord) > box.maxY
+                || Math.max(combo.from.zCoord, combo.to.zCoord) < box.minZ
+                || Math.min(combo.from.zCoord, combo.to.zCoord) > box.maxZ)
+            return false;
+        return box.isVecInside(combo.from) || box.calculateIntercept(combo.from, combo.to) != null;
     }
 
     private static final class Combo {
         final EntityPlayer player;
         EntityPlayer target;
         int hits;
+        float yaw;
+        float pitch;
         long swungAt;
         EntityPlayer localTarget;
         Vec3 from;
@@ -248,15 +268,8 @@ public final class VenomTracker implements PlayerEquipmentListener {
 
         Combo(EntityPlayer player) {
             this.player = player;
-        }
-    }
-    private static final class Hit {
-        final EntityPlayer player;
-        final long at;
-
-        Hit(EntityPlayer player, long at) {
-            this.player = player;
-            this.at = at;
+            yaw = player.rotationYaw;
+            pitch = player.rotationPitch;
         }
     }
 }
