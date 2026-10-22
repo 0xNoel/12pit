@@ -27,6 +27,12 @@ public final class HudConfig {
     private final IntegerSetting offsetX;
     private final IntegerSetting offsetY;
     private final IntegerSetting scale;
+    // Keep the last layout size to preserve position when the anchor changes.
+    private int screenWidth;
+    private int screenHeight;
+    private int elementWidth;
+    private int elementHeight;
+    private boolean placing;
 
     HudConfig(BooleanSetting textShadow, BooleanSetting translateText, ChoiceSetting anchor,
             IntegerSetting autoAnchor, IntegerSetting offsetX, IntegerSetting offsetY,
@@ -38,6 +44,7 @@ public final class HudConfig {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.scale = scale;
+        anchor.beforeChange(this::changeAnchor);
     }
 
     public BooleanSetting textShadow() {
@@ -50,6 +57,10 @@ public final class HudConfig {
 
     public IntegerSetting scale() {
         return scale;
+    }
+
+    public IntegerSetting autoAnchor() {
+        return autoAnchor;
     }
 
     public float scaleFactor() {
@@ -67,12 +78,16 @@ public final class HudConfig {
     }
 
     public int resolveX(int screenWidth, int elementWidth) {
+        this.screenWidth = screenWidth;
+        this.elementWidth = elementWidth;
         HudAnchor currentAnchor = resolvedAnchor();
         return currentAnchor.screenX(screenWidth) - currentAnchor.elementX(elementWidth)
                 + offsetX.get();
     }
 
     public int resolveY(int screenHeight, int elementHeight) {
+        this.screenHeight = screenHeight;
+        this.elementHeight = elementHeight;
         HudAnchor currentAnchor = resolvedAnchor();
         return currentAnchor.screenY(screenHeight) - currentAnchor.elementY(elementHeight)
                 + offsetY.get();
@@ -81,9 +96,36 @@ public final class HudConfig {
     public void placement(HudPlacement placement) {
         offsetX.set(placement.offsetX());
         offsetY.set(placement.offsetY());
-        autoAnchor.set(placement.anchor().id());
+        if (placement.automatic()) {
+            autoAnchor.set(placement.anchor().id());
+        }
         // Update offsets before notifying anchor listeners.
-        anchor.set(placement.automatic() ? AUTO_ANCHOR : placement.anchor().id());
+        placing = true;
+        try {
+            anchor.set(placement.automatic() ? AUTO_ANCHOR : placement.anchor().id());
+        } finally {
+            placing = false;
+        }
+    }
+
+    private void changeAnchor(int value) {
+        if (placing) {
+            return;
+        }
+        HudAnchor previous = resolvedAnchor();
+        HudAnchor next = HudAnchor.fromId(value == AUTO_ANCHOR ? autoAnchor.get() : value);
+        if (screenWidth > 0 && screenHeight > 0) {
+            // Use the visible position, including the renderer's screen bounds.
+            int x = Math.max(0,
+                    Math.min(Math.max(0, screenWidth - elementWidth), previous.screenX(screenWidth)
+                            - previous.elementX(elementWidth) + offsetX.get()));
+            int y = Math.max(0,
+                    Math.min(Math.max(0, screenHeight - elementHeight),
+                            previous.screenY(screenHeight) - previous.elementY(elementHeight)
+                                    + offsetY.get()));
+            offsetX.applyValidated(x + next.elementX(elementWidth) - next.screenX(screenWidth));
+            offsetY.applyValidated(y + next.elementY(elementHeight) - next.screenY(screenHeight));
+        }
     }
 
     private HudAnchor resolvedAnchor() {

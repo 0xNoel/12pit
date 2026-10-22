@@ -377,21 +377,24 @@ final class HudEditorController {
         try {
             for (Map.Entry<HudElement, HudBounds> entry : origins.entrySet()) {
                 HudBounds origin = entry.getValue();
-                if (deltaX != 0 || deltaY != 0) {
+                if (deltaX != 0 || deltaY != 0 || gesture == Gesture.MOVE) {
                     HudElement element = entry.getKey();
                     int x = origin.x + deltaX;
                     int y = origin.y + deltaY;
                     HudPlacement placement = element.config().placement();
+                    HudAnchor anchor = placement.anchor();
                     if (placement.automatic()) {
-                        element.config().placement(HudPlacement.fromOrigin(x, y, origin.width,
-                                origin.height, screenWidth, screenHeight));
-                    } else {
-                        HudAnchor anchor = placement.anchor();
-                        element.config().placement(new HudPlacement(anchor,
-                                x + anchor.elementX(origin.width) - anchor.screenX(screenWidth),
-                                y + anchor.elementY(origin.height) - anchor.screenY(screenHeight),
-                                false));
+                        HudAnchor nearest = HudPlacement.fromOrigin(x, y, origin.width,
+                                origin.height, screenWidth, screenHeight).anchor();
+                        int horizontal =
+                                snap.horizontal.alignment(x, origin.width, nearest.id() % 3);
+                        int vertical = snap.vertical.alignment(y, origin.height, nearest.id() / 3);
+                        anchor = HudAnchor.fromId(vertical * 3 + horizontal);
                     }
+                    element.config().placement(new HudPlacement(anchor,
+                            x + anchor.elementX(origin.width) - anchor.screenX(screenWidth),
+                            y + anchor.elementY(origin.height) - anchor.screenY(screenHeight),
+                            placement.automatic()));
                 }
             }
             history.commit();

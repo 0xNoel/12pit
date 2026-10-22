@@ -113,21 +113,25 @@ final class HudEditorHistory {
     }
     private static final class State {
         private final HudPlacement placement;
+        private final int autoAnchor;
         private final int scale;
 
         private State(HudConfig config) {
             placement = config.placement();
+            autoAnchor = config.autoAnchor().get();
             scale = config.scale().get();
         }
 
         private boolean same(State other) {
             return placement.anchor() == other.placement.anchor()
                     && placement.automatic() == other.placement.automatic()
+                    && autoAnchor == other.autoAnchor
                     && placement.offsetX() == other.placement.offsetX()
                     && placement.offsetY() == other.placement.offsetY() && scale == other.scale;
         }
 
         private void apply(HudConfig config) {
+            config.autoAnchor().set(autoAnchor);
             config.placement(placement);
             config.scale().set(scale);
         }
