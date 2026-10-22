@@ -50,7 +50,6 @@ import org.apache.http.impl.client.HttpClients;
 
 /** Only the event list worker uses this client. */
 final class EventFeedClient {
-    static final long REFRESH_THRESHOLD = 10_800_000L;
     private static final Logger LOGGER = Logger.getLogger(EventFeedClient.class.getName());
     private static final String MAINLAND_ENDPOINT = "https://events.askll.dev/";
     private String defaultEndpoint =

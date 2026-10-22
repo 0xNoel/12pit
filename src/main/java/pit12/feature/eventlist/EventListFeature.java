@@ -23,17 +23,15 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
@@ -59,12 +57,11 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
     private final HudRenderer hudRenderer = new HudRenderer();
     private final EventFeedClient feed = new EventFeedClient();
     private final List<PitEvent> events = new ArrayList<>();
-    private ExecutorService worker;
+    // Reuse the worker across toggles so requests finish closing before the next one starts.
+    private ScheduledThreadPoolExecutor worker;
     private Future<?> request;
     private long generation;
-    private long nextRequestAt;
     private long rateLimitedUntil;
-    private long retryDelay = 60_000L;
     private long displayedSecond = Long.MIN_VALUE;
     private boolean loaded;
     private boolean failed;
@@ -89,8 +86,9 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
 
     List<PitEvent> events(EventType type) {
         List<PitEvent> matching = new ArrayList<>();
+        long now = System.currentTimeMillis();
         for (PitEvent event : events) {
-            if (event.type == type) {
+            if (event.type == type && event.endsAt > now) {
                 matching.add(event);
             }
         }
@@ -126,15 +124,19 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         configs.removeListener(this);
         language.removeListener(languageListener);
         deactivate();
+        if (worker != null) {
+            worker.shutdownNow();
+            worker = null;
+        }
         hudRegistry.unregister(hud);
     }
 
     private void activate() {
         active = true;
         generation++;
-        nextRequestAt = rateLimitedUntil;
         rebuild(System.currentTimeMillis());
         MinecraftForge.EVENT_BUS.register(this);
+        fetch(rateLimitedUntil);
     }
 
     private void deactivate() {
@@ -145,13 +147,9 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
             request.cancel(true);
             request = null;
         }
-        if (worker != null) {
-            worker.shutdownNow();
-        }
         events.clear();
         loaded = false;
         failed = false;
-        retryDelay = 60_000L;
         displayedSecond = Long.MIN_VALUE;
         hud.snapshot(EventListSnapshot.build(events, config, System.currentTimeMillis(), "", true,
                 language));
@@ -186,44 +184,23 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         }
     }
 
-    @SubscribeEvent
-    public void onClientTick(ClientTickEvent event) {
-        if (!active || event.phase != Phase.START || minecraft.theWorld == null) {
-            return;
-        }
-        long now = System.currentTimeMillis();
-        if (request == null && now >= nextRequestAt) {
-            fetch();
-        }
-        if (now / 1000L != displayedSecond) {
-            events.removeIf(scheduled -> scheduled.endsAt <= now);
-            rebuild(now);
-        }
-    }
-
-    private void fetch() {
-        if (worker != null && worker.isShutdown()) {
-            // The old requests need to close their connections before we start again.
-            if (!worker.isTerminated()) {
-                return;
-            }
-            worker = null;
-        }
+    private void fetch(long requestAt) {
         if (worker == null) {
-            worker = Executors.newSingleThreadExecutor(task -> {
+            worker = new ScheduledThreadPoolExecutor(1, task -> {
                 Thread thread = new Thread(task, "12pit-event-list");
                 thread.setDaemon(true);
                 return thread;
             });
+            worker.setRemoveOnCancelPolicy(true);
         }
         long requestGeneration = generation;
         String endpoint = config.endpoint.get();
-        request = worker.submit(() -> {
+        request = worker.schedule(() -> {
             EventFeedClient.Result result = feed.fetch(endpoint);
             if (!Thread.currentThread().isInterrupted()) {
                 client.execute(() -> accept(requestGeneration, result));
             }
-        });
+        }, Math.max(0L, requestAt - System.currentTimeMillis()), TimeUnit.MILLISECONDS);
     }
 
     private void accept(long requestGeneration, EventFeedClient.Result result) {
@@ -234,10 +211,7 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         long now = System.currentTimeMillis();
         rateLimitedUntil = Math.max(rateLimitedUntil, result.retryAt);
         failed = result.events == null;
-        if (failed) {
-            nextRequestAt = Math.max(now + retryDelay, rateLimitedUntil);
-            retryDelay = Math.min(1_800_000L, retryDelay * 2L);
-        } else {
+        if (!failed) {
             Map<String, PitEvent> merged = new LinkedHashMap<>();
             for (PitEvent event : events) {
                 if (event.timestamp <= now && event.endsAt > now) {
@@ -253,13 +227,14 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
             events.addAll(merged.values());
             events.sort(Comparator.comparingLong(event -> event.timestamp));
             loaded = true;
-            retryDelay = 60_000L;
-            long coverage = events.isEmpty() ? 0L : events.get(events.size() - 1).timestamp - now;
-            nextRequestAt = Math.max(
-                    now + (coverage >= EventFeedClient.REFRESH_THRESHOLD ? 1_800_000L : 300_000L),
-                    rateLimitedUntil);
         }
+        // The feed updates on the hour in UTC. Leave five minutes for it to finish.
+        long interval = failed ? 300_000L : 3_600_000L;
+        long offset = failed ? 0L : 300_000L;
+        long earliest = Math.max(now + 1L, rateLimitedUntil);
+        long nextRequestAt = (earliest - offset + interval - 1L) / interval * interval + offset;
         rebuild(now);
+        fetch(nextRequestAt);
     }
 
     private void rebuild(long now) {
@@ -276,6 +251,11 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         if (!active || event.type != ElementType.ALL || hudRegistry.editing()
                 || minecraft.theWorld == null) {
             return;
+        }
+        long now = System.currentTimeMillis();
+        if (now / 1000L != displayedSecond) {
+            events.removeIf(scheduled -> scheduled.endsAt <= now);
+            rebuild(now);
         }
         hudRenderer.render(hud, HudRenderer.layout(hud, event.resolution.getScaledWidth(),
                 event.resolution.getScaledHeight(), event.resolution.getScaleFactor(), false),
