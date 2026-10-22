@@ -89,6 +89,7 @@ import pit12.feature.telebow.TelebowFeature;
 import pit12.feature.telebow.api.TelebowCooldowns;
 import pit12.feature.timers.TimersConfig;
 import pit12.feature.timers.TimersFeature;
+import pit12.feature.timers.api.PlayerTimers;
 import pit12.feature.tooltip.TooltipConfig;
 import pit12.feature.tooltip.TooltipFeature;
 import pit12.feature.webui.WebUiConfig;
@@ -187,6 +188,8 @@ public final class ClientBootstrap {
         // Category: Render
         TelebowCooldowns telebowCooldowns =
                 registerTelebow(minecraft, configs, session, arrows, relations);
+        PlayerTimers timers = registerTimers(minecraft, configs, session, arrows, relations,
+                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
@@ -210,13 +213,11 @@ public final class ClientBootstrap {
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
-        registerNametag(minecraft, configs, session, playerEquipment, denickNames, nicks);
+        registerNametag(minecraft, configs, session, playerEquipment, denickNames, nicks, timers);
         registerPlayerEsp(configs, session, presence, relations);
         registerPlayerList(configs, playerNames, players, playerEquipment, pitContext, hudRegistry,
                 relations, presence, denickNames, nicks);
         registerRingHelper(minecraft, configs, session, pitContext);
-        registerTimers(minecraft, configs, session, arrows, relations, playerNames, hudRegistry,
-                telebowCooldowns, players, playerEquipment);
         registerTooltip(configs);
         // Category: Misc
         registerAutoQuickMath(configs);
@@ -294,6 +295,18 @@ public final class ClientBootstrap {
                 new TelebowFeature(minecraft, configs, config, session, arrows, relations);
         components.add(feature);
         return feature.cooldowns();
+    }
+
+    private PlayerTimers registerTimers(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, ArrowTracker arrows, RelationLookup relations,
+            PlayerNameCache playerNames, HudRegistry hudRegistry, TelebowCooldowns telebowCooldowns,
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment) {
+        TimersConfig config = new TimersConfig();
+        configs.register(config);
+        TimersFeature feature = new TimersFeature(minecraft, configs, config, session, arrows,
+                relations, playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
+        components.add(feature);
+        return feature;
     }
 
     // Category: Misc
@@ -391,11 +404,12 @@ public final class ClientBootstrap {
     }
 
     private void registerNametag(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
-            PlayerEquipmentAccess equipment, DenickNames denickNames, NickTracker nicks) {
+            PlayerEquipmentAccess equipment, DenickNames denickNames, NickTracker nicks,
+            PlayerTimers timers) {
         NametagConfig config = new NametagConfig();
         configs.register(config);
         components.add(new NametagFeature(minecraft, configs, config, session, equipment,
-                denickNames, nicks,
+                denickNames, nicks, timers,
                 names -> minecraft.getRenderManager().getSkinMap().values()
                         .forEach(renderer -> ((NametagNamesBinding) renderer)
                                 .pit12$bindNametagNames(names))));
@@ -423,16 +437,6 @@ public final class ClientBootstrap {
         RingHelperConfig config = new RingHelperConfig();
         configs.register(config);
         components.add(new RingHelperFeature(minecraft, configs, config, session, pitContext));
-    }
-
-    private void registerTimers(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
-            ArrowTracker arrows, RelationLookup relations, PlayerNameCache playerNames,
-            HudRegistry hudRegistry, TelebowCooldowns telebowCooldowns, PlayerEntityTracker players,
-            PlayerEquipmentAccess playerEquipment) {
-        TimersConfig config = new TimersConfig();
-        configs.register(config);
-        components.add(new TimersFeature(minecraft, configs, config, session, arrows, relations,
-                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment));
     }
 
     private void registerTooltip(ConfigCatalog configs) {

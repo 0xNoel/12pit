@@ -193,9 +193,11 @@ final class TimersHud implements HudElement {
         PIN("§e§lPin"), VENOM("§d§lVenom"), JUMP_BOOST("§a§lJump Boost"), TELEBOW("§b§lTelebow");
 
         final String title;
+        final String color;
 
         TimerType(String title) {
             this.title = title;
+            color = title.substring(0, 2);
         }
     }
     enum Group {

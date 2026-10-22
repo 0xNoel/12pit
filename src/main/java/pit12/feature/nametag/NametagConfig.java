@@ -20,6 +20,7 @@ package pit12.feature.nametag;
 
 import static pit12.runtime.languages.Languages.source;
 
+import pit12.feature.timers.api.PlayerTimers;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ChoiceSetting;
 import pit12.runtime.config.ConfigCategory;
@@ -30,6 +31,10 @@ import pit12.runtime.item.PitEnchantmentFormat;
 public final class NametagConfig extends FeatureConfig {
     private final BooleanSetting nickMarker;
     private final BooleanSetting realNames;
+    private final BooleanSetting pinTimer;
+    private final BooleanSetting venomTimer;
+    private final BooleanSetting jumpBoostTimer;
+    private final BooleanSetting telebowTimer;
     private final ChoiceSetting enchantmentFormat;
     private final BooleanSetting showGem;
     private final BooleanSetting showHeldItem;
@@ -39,7 +44,7 @@ public final class NametagConfig extends FeatureConfig {
 
     public NametagConfig() {
         super("nametag", source("Nametag"), new ConfigCategory("render", source("Render")),
-                source("Adds real names and Pit enchantments to player nametags."));
+                source("Adds real names, Pit enchantments, and timers to player nametags."));
         subsubcategory("names", "Denick");
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
                 source("Adds N to nicked players' names."), true);
@@ -55,6 +60,16 @@ public final class NametagConfig extends FeatureConfig {
                 source("Shows the held item's Pit enchantments."), true);
         showLeggings = booleanSetting("show_leggings", source("Show leggings enchantments"),
                 source("Shows the leggings' Pit enchantments."), true);
+        subsubcategory("timers", source("Timers"));
+        pinTimer = booleanSetting("pin_timer", source("Show Pin timer"),
+                source("Shows Pin after player names while Timers is enabled."), true);
+        venomTimer = booleanSetting("venom_timer", source("Show Venom timer"),
+                source("Shows Venom after player names while Timers is enabled."), true);
+        jumpBoostTimer = booleanSetting("jump_boost_timer", source("Show Jump Boost timer"),
+                source("Shows Jump Boost after player names while Timers is enabled."), true);
+        telebowTimer = booleanSetting("telebow_timer", source("Show Telebow cooldown"),
+                source("Shows Telebow cooldowns after player names while Timers is enabled."),
+                true);
         subsubcategory("display", source("Display"));
         displayDistance = integerSliderSetting("display_distance", source("Display distance"),
                 source("Shows enchantments within this distance, in blocks."), 32, 1, 64, 1);
@@ -69,6 +84,12 @@ public final class NametagConfig extends FeatureConfig {
 
     public boolean realNames() {
         return realNames.get();
+    }
+
+    public int timerTypes() {
+        return (pinTimer.get() ? PlayerTimers.PIN : 0) | (venomTimer.get() ? PlayerTimers.VENOM : 0)
+                | (jumpBoostTimer.get() ? PlayerTimers.JUMP_BOOST : 0)
+                | (telebowTimer.get() ? PlayerTimers.TELEBOW : 0);
     }
 
     public int enchantmentFormat() {

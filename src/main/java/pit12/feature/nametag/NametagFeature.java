@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import pit12.feature.denick.api.DenickNames;
+import pit12.feature.timers.api.PlayerTimers;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
@@ -54,6 +55,7 @@ public final class NametagFeature
     private final PlayerEquipmentAccess equipment;
     private final DenickNames denickNames;
     private final NickTracker nicks;
+    private final PlayerTimers timers;
     private final NametagNamesBinding binding;
     private final NametagRenderer renderer = new NametagRenderer();
     private final Map<UUID, NametagText> texts = new HashMap<>();
@@ -63,10 +65,11 @@ public final class NametagFeature
     private boolean started;
     private boolean active;
     private boolean namesBound;
+    private int timerTypes;
 
     public NametagFeature(Minecraft minecraft, ConfigCatalog configs, NametagConfig config,
             ClientSession session, PlayerEquipmentAccess equipment, DenickNames denickNames,
-            NickTracker nicks, NametagNamesBinding binding) {
+            NickTracker nicks, PlayerTimers timers, NametagNamesBinding binding) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
@@ -74,6 +77,7 @@ public final class NametagFeature
         this.equipment = equipment;
         this.denickNames = denickNames;
         this.nicks = nicks;
+        this.timers = timers;
         this.binding = binding;
     }
 
@@ -106,6 +110,7 @@ public final class NametagFeature
     }
 
     private void updateActivation() {
+        timerTypes = config.timerTypes();
         if (config.enabled() && (config.showHeldItem() || config.showLeggings())) {
             if (!active) {
                 active = true;
@@ -193,7 +198,11 @@ public final class NametagFeature
             return;
         }
         if (changes.affects("nametag", "enabled") || changes.affects("nametag", "show_held_item")
-                || changes.affects("nametag", "show_leggings")) {
+                || changes.affects("nametag", "show_leggings")
+                || changes.affects("nametag", "pin_timer")
+                || changes.affects("nametag", "venom_timer")
+                || changes.affects("nametag", "jump_boost_timer")
+                || changes.affects("nametag", "telebow_timer")) {
             updateActivation();
         }
         if (active && (changes.affects("nametag", "enchantment_format")
@@ -237,10 +246,10 @@ public final class NametagFeature
         if (config.realNames()) {
             String realName = denickNames.realDisplayName(playerId);
             if (realName != null) {
-                return name + " §7(" + realName + "§7)";
+                name += " §7(" + realName + "§7)";
             }
         }
-        return name;
+        return timerTypes == 0 ? name : name + timers.countdowns(playerId, timerTypes);
     }
 
     // Lunar replaces name rendering and skips Forge's Specials events.

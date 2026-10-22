@@ -23,31 +23,41 @@ import java.util.function.BiFunction;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.feature.nametag.NametagNamesBinding;
 
 @Mixin(RendererLivingEntity.class)
 public abstract class RendererLivingEntityMixin implements NametagNamesBinding {
     @Unique
     private BiFunction<UUID, String, String> pit12$nametagNames;
+    @Unique
+    private UUID pit12$nametagPlayer;
 
     @Override
     public void pit12$bindNametagNames(BiFunction<UUID, String, String> names) {
         pit12$nametagNames = names;
     }
 
-    @Redirect(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V", at = @At(
+    @Inject(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/util/IChatComponent;getFormattedText()Ljava/lang/String;"))
-    private String pit12$displayName(IChatComponent component, EntityLivingBase entity, double x,
-            double y, double z) {
-        String original = component.getFormattedText();
-        return pit12$nametagNames != null && entity instanceof EntityPlayer
-                ? pit12$nametagNames.apply(entity.getUniqueID(), original)
+    private void pit12$capturePlayer(EntityLivingBase entity, double x, double y, double z,
+            CallbackInfo ci) {
+        pit12$nametagPlayer = entity instanceof EntityPlayer ? entity.getUniqueID() : null;
+    }
+
+    @ModifyVariable(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V",
+            at = @At("STORE"), ordinal = 0)
+    private String pit12$displayName(String original) {
+        UUID playerId = pit12$nametagPlayer;
+        pit12$nametagPlayer = null;
+        return pit12$nametagNames != null && playerId != null
+                ? pit12$nametagNames.apply(playerId, original)
                 : original;
     }
 }

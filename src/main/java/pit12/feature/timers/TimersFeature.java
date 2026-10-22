@@ -20,6 +20,7 @@ package pit12.feature.timers;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +42,7 @@ import pit12.feature.telebow.api.TelebowCooldownListener;
 import pit12.feature.telebow.api.TelebowCooldowns;
 import pit12.feature.timers.TimersHud.Group;
 import pit12.feature.timers.TimersHud.TimerType;
+import pit12.feature.timers.api.PlayerTimers;
 import pit12.runtime.arrow.ArrowTracker;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
@@ -55,7 +57,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class TimersFeature
-        implements ClientLifecycle, ConfigChangeListener, TelebowCooldownListener {
+        implements ClientLifecycle, ConfigChangeListener, TelebowCooldownListener, PlayerTimers {
     private final Minecraft minecraft;
     private final ConfigCatalog configs;
     private final TimersConfig config;
@@ -73,9 +75,11 @@ public final class TimersFeature
     private final Map<UUID, Timer> venomTimers = new LinkedHashMap<>();
     private final Map<UUID, Timer> jumpBoostTimers = new LinkedHashMap<>();
     private final Map<UUID, Timer> telebowCooldowns = new LinkedHashMap<>();
+    private final Map<UUID, String> countdownTexts = new HashMap<>();
     private List<TimersHud.Row> rows = new ArrayList<>();
     private List<TimersHud.Row> pendingRows = new ArrayList<>();
     private long nextRefresh;
+    private int countdownTypes;
     private boolean started;
     private boolean active;
     private boolean pinActive;
@@ -178,7 +182,45 @@ public final class TimersFeature
             MinecraftForge.EVENT_BUS.unregister(this);
             rows.clear();
             pendingRows.clear();
+            countdownTexts.clear();
             hud.rows(rows);
+        }
+    }
+
+    @Override
+    public String countdowns(UUID playerId, int types) {
+        session.checkThread();
+        if (!active || pinTimers.isEmpty() && venomTimers.isEmpty() && jumpBoostTimers.isEmpty()
+                && telebowCooldowns.isEmpty())
+            return "";
+        if (countdownTypes != types) {
+            countdownTypes = types;
+            countdownTexts.clear();
+        }
+        String cached = countdownTexts.get(playerId);
+        if (cached != null && nextRefresh != 0)
+            return cached;
+        long now = System.nanoTime();
+        StringBuilder text = new StringBuilder();
+        if (pinActive && (types & PIN) != 0)
+            appendCountdown(text, pinTimers.get(playerId), TimerType.PIN, now);
+        if (venomActive && (types & VENOM) != 0)
+            appendCountdown(text, venomTimers.get(playerId), TimerType.VENOM, now);
+        if (jumpBoostActive && (types & JUMP_BOOST) != 0)
+            appendCountdown(text, jumpBoostTimers.get(playerId), TimerType.JUMP_BOOST, now);
+        if (telebowActive && (types & TELEBOW) != 0)
+            appendCountdown(text, telebowCooldowns.get(playerId), TimerType.TELEBOW, now);
+        String result = text.toString();
+        if (nextRefresh != 0)
+            countdownTexts.put(playerId, result);
+        return result;
+    }
+
+    private void appendCountdown(StringBuilder text, Timer timer, TimerType type, long now) {
+        if (timer != null && timer.row != null && now < timer.until
+                && (type == TimerType.TELEBOW || timer.player.isEntityAlive())
+                && accepts(timer.player, type)) {
+            text.append(' ').append(type.color).append(timer.row.time);
         }
     }
 
@@ -336,6 +378,7 @@ public final class TimersFeature
         if (now < nextRefresh)
             return;
         nextRefresh = now + 100_000_000L;
+        countdownTexts.clear();
         pendingRows.clear();
         boolean orderChanged = pinActive && appendRows(pinTimers, TimerType.PIN, now);
         orderChanged |= venomActive && appendRows(venomTimers, TimerType.VENOM, now);
