@@ -1,6 +1,8 @@
-<!-- Source: README.md; Based on: 1ba2c692c4ee6c2312b39063b1ebfff6b3732539 -->
+<!-- Source: README.md; Based on: 482e314bf954829cf6418f09c9d7a74d3bb1f9da -->
 
 # 12pit
+
+[![Release](https://img.shields.io/github/v/release/12src/12pit)](https://github.com/12src/12pit/releases/latest) [![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](../../LICENSE) [![Build](https://github.com/12src/12pit/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/12src/12pit/actions/workflows/build.yml?query=branch%3Amain+event%3Apush) [![Crowdin](https://badges.crowdin.net/12pit/localized.svg)](https://crowdin.com/project/12pit)
 
 [English](../../README.md) | 简体中文
 

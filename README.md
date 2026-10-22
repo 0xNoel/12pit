@@ -1,5 +1,7 @@
 # 12pit
 
+[![Release](https://img.shields.io/github/v/release/12src/12pit)](https://github.com/12src/12pit/releases/latest) [![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE) [![Build](https://github.com/12src/12pit/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/12src/12pit/actions/workflows/build.yml?query=branch%3Amain+event%3Apush) [![Crowdin](https://badges.crowdin.net/12pit/localized.svg)](https://crowdin.com/project/12pit)
+
 English | [简体中文](docs/zh-CN/README.md)
 
 12pit is a lightweight, open-source Forge mod for The Pit on Minecraft 1.8.9, with a configuration interface and [OneConfig](https://github.com/Polyfrost/OneConfig) support.
