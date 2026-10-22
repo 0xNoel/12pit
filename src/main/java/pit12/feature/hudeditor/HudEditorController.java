@@ -40,6 +40,7 @@ import pit12.runtime.hud.HudBounds;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
+import pit12.shared.rendering.FontWidths;
 import pit12.shared.rendering.UiRenderState;
 
 final class HudEditorController {
@@ -490,8 +491,8 @@ final class HudEditorController {
         outline(bounds.x, bounds.y, bounds.width, bounds.height, color);
         if (element == primary || hovered && !busy()) {
             String label = element.displayName() + "  " + element.config().scale().get() + "%";
-            int labelX =
-                    clamp(bounds.x, 1, Math.max(1, screenWidth - renderer.textWidth(label) - 1));
+            int labelX = clamp(bounds.x, 1, Math.max(1,
+                    screenWidth - FontWidths.measure(minecraft.fontRendererObj, label) - 1));
             int fontHeight = renderer.fontHeight();
             int labelY = clamp(
                     bounds.y >= fontHeight + 3 ? bounds.y - fontHeight - 2

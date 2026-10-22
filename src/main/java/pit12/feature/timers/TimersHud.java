@@ -22,9 +22,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
+import pit12.shared.rendering.FontWidths;
 
 final class TimersHud implements HudElement {
     private final Minecraft minecraft;
@@ -95,7 +97,8 @@ final class TimersHud implements HudElement {
     @Override
     public void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
-        boolean nextUnicode = minecraft.fontRendererObj.getUnicodeFlag();
+        FontRenderer font = minecraft.fontRendererObj;
+        boolean nextUnicode = font.getUnicodeFlag();
         if (!dirty && this.editing == editing && unicode == nextUnicode)
             return;
         dirty = false;
@@ -139,16 +142,16 @@ final class TimersHud implements HudElement {
                 lines++;
                 int index = row.type.ordinal();
                 if (titleWidths[index] < 0)
-                    titleWidths[index] = renderer.textWidth(row.type.title);
+                    titleWidths[index] = FontWidths.measure(font, row.type.title);
                 titleWidth = Math.max(titleWidth, titleWidths[index]);
             }
             previousType = row.type;
             previous = row.group;
             if (row.nameWidth < 0)
-                row.nameWidth = renderer.textWidth(row.name);
+                row.nameWidth = FontWidths.measure(font, row.name);
             nameWidth = Math.max(nameWidth, row.nameWidth);
             if (row.timeWidth < 0)
-                row.timeWidth = renderer.textWidth(row.time);
+                row.timeWidth = FontWidths.measure(font, row.time);
             timeWidth = Math.max(timeWidth, row.timeWidth);
         }
         width = content.isEmpty() ? 0 : 8 + Math.max(titleWidth, nameWidth + 10 + timeWidth);

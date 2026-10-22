@@ -237,7 +237,7 @@ Implement [HudElement](../src/main/java/pit12/runtime/hud/HudElement.java) with 
 - `width()` and `height()` provide cheap unscaled logical size of the element's content.
 - `render(partialTicks, editing)` draws the element from logical point `0,0` according to the caller's transformation.
 
-HUD text uses the Minecraft font. Use the renderer's `text` method with the HUD config to draw text, and `textWidth(text)` and `fontHeight()` to measure it. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
+HUD text uses the Minecraft font. Use the renderer's `text` method with the HUD config to draw text. Measure text with [FontWidths.measure(font, text)](../src/main/java/pit12/shared/rendering/FontWidths.java) and use `fontHeight()` for its height. The width helper follows formatting codes, including colors that clear bold, in one pass without allocating strings. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
 
 For `editing=true`, prepare and render fixed sample content, including for disabled HUDs. Refresh its text and bounds when display settings or the language change. Measured bounds must match the rendered content.
 
@@ -269,7 +269,7 @@ hudRegistry.unregister(element);
 
 Clear the element's cached rendering state before reuse.
 
-For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides text measurements, rectangles, and textures. Construct it with Minecraft and call `resize(pixelScale)` before drawing shapes or textures. Use Minecraft's `FontRenderer` to draw text.
+For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides the font height, rectangles, and textures. Construct it with Minecraft and call `resize(pixelScale)` before drawing shapes or textures. Use Minecraft's `FontRenderer` to draw text and `FontWidths.measure(font, text)` to measure it.
 
 Keep the render origin in integer GUI coordinates before applying HUD scale.
 

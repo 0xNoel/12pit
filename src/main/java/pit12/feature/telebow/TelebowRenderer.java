@@ -36,8 +36,8 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import pit12.shared.rendering.FontWidths;
 import pit12.shared.rendering.LunarTextureState;
-import pit12.shared.rendering.UiRenderer;
 
 final class TelebowRenderer {
     private static final ResourceLocation BEAM_TEXTURE =
@@ -52,7 +52,6 @@ final class TelebowRenderer {
     }
     private final Minecraft minecraft;
     private final TelebowConfig config;
-    private final UiRenderer text;
     private final LunarTextureState textures = new LunarTextureState();
     private final Map<TelebowPath, Mesh> meshes = new IdentityHashMap<>();
     private final List<Mesh> visible = new ArrayList<>();
@@ -63,7 +62,6 @@ final class TelebowRenderer {
     TelebowRenderer(Minecraft minecraft, TelebowConfig config) {
         this.minecraft = minecraft;
         this.config = config;
-        text = new UiRenderer(minecraft);
     }
 
     void render(Collection<TelebowPath> paths, Collection<TelebowAim.Target> aims, long now) {
@@ -116,7 +114,7 @@ final class TelebowRenderer {
             mesh.nameVisible = false;
             if (names && trajectory.hasImpact && Math.round(alpha * 255) >= 4) {
                 if (mesh.nameWidth < 0 || mesh.unicode != unicode) {
-                    mesh.nameWidth = text.textWidth(path.displayName);
+                    mesh.nameWidth = FontWidths.measure(font, path.displayName);
                     mesh.unicode = unicode;
                 }
                 int offset = (trajectory.count - 1) * 3;
@@ -152,7 +150,7 @@ final class TelebowRenderer {
                 if (!target.renderable || alpha <= 0)
                     continue;
                 if (aimNames && (target.nameWidth < 0 || target.unicode != unicode)) {
-                    target.nameWidth = text.textWidth(target.path.displayName);
+                    target.nameWidth = FontWidths.measure(font, target.path.displayName);
                     target.unicode = unicode;
                 }
                 target.alpha = alpha;

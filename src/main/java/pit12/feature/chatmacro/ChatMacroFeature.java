@@ -44,6 +44,7 @@ import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
+import pit12.shared.rendering.FontWidths;
 
 public final class ChatMacroFeature
         implements ClientLifecycle, InputHandler, SidebarListener, ConfigChangeListener {
@@ -271,7 +272,7 @@ public final class ChatMacroFeature
                 event.resolution.getScaledHeight() / 2.0F + 35, 0);
         GlStateManager.scale(2, 2, 2);
         minecraft.fontRendererObj.drawStringWithShadow(spawnHint,
-                -minecraft.fontRendererObj.getStringWidth(spawnHint) / 2.0F, 0, 0xFFFFFF);
+                -FontWidths.measure(minecraft.fontRendererObj, spawnHint) / 2.0F, 0, 0xFFFFFF);
         GlStateManager.popMatrix();
     }
 }

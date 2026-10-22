@@ -30,6 +30,7 @@ import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
 import pit12.shared.input.Keybind;
+import pit12.shared.rendering.FontWidths;
 import pit12.shared.rendering.UiRenderState;
 
 final class HudEditorScreen extends GuiScreen {
@@ -137,7 +138,7 @@ final class HudEditorScreen extends GuiScreen {
                 renderer.rect(0, 0, width, height, 0x70000000);
                 renderer.rect((width - hintWidth) / 2, top, hintWidth, 90, 0xF016191D);
                 String text = interfaceTips[0];
-                int textWidth = renderer.textWidth(text);
+                int textWidth = FontWidths.measure(fontRendererObj, text);
                 float scale = Math.min(1.0F, (hintWidth - 24.0F) / textWidth);
                 GlStateManager.translate(width / 2.0F, top + 24.0F, 0.0F);
                 GlStateManager.scale(scale, scale, 1.0F);
@@ -173,7 +174,8 @@ final class HudEditorScreen extends GuiScreen {
         for (int index = lines.length - 1; index >= 0; index--) {
             String tip = lines[index];
             y -= renderer.fontHeight() + 2;
-            fontRendererObj.drawString(tip, Math.max(4, width - renderer.textWidth(tip) - 8), y,
+            fontRendererObj.drawString(tip,
+                    Math.max(4, width - FontWidths.measure(fontRendererObj, tip) - 8), y,
                     0xFFF0F0F0, true);
         }
         return y;
