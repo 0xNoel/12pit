@@ -101,13 +101,13 @@ final class PlayerListHud implements HudElement {
                             ? language.translate(group.displayName(), translate)
                             : group.displayName();
         }
-        recalculateLayout(sampleLayout ? sample : snapshot);
+        layoutDirty = true;
     }
 
     void snapshot(PlayerListSnapshot snapshot) {
         this.snapshot = snapshot;
         if (!sampleLayout) {
-            recalculateLayout(snapshot);
+            layoutDirty = true;
         }
     }
 
@@ -147,7 +147,7 @@ final class PlayerListHud implements HudElement {
         }
         this.pixelScale = pixelScale;
         renderer.resize(pixelScale);
-        recalculateLayout(sampleLayout ? sample : snapshot);
+        layoutDirty = true;
     }
 
     @Override

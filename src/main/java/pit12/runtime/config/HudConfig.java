@@ -22,6 +22,7 @@ public final class HudConfig {
     static final int AUTO_ANCHOR = 9;
     private final BooleanSetting textShadow;
     private final BooleanSetting translateText;
+    private final ChoiceSetting font;
     private final ChoiceSetting anchor;
     private final IntegerSetting autoAnchor;
     private final IntegerSetting offsetX;
@@ -34,11 +35,12 @@ public final class HudConfig {
     private int elementHeight;
     private boolean placing;
 
-    HudConfig(BooleanSetting textShadow, BooleanSetting translateText, ChoiceSetting anchor,
-            IntegerSetting autoAnchor, IntegerSetting offsetX, IntegerSetting offsetY,
-            IntegerSetting scale) {
+    HudConfig(BooleanSetting textShadow, BooleanSetting translateText, ChoiceSetting font,
+            ChoiceSetting anchor, IntegerSetting autoAnchor, IntegerSetting offsetX,
+            IntegerSetting offsetY, IntegerSetting scale) {
         this.textShadow = textShadow;
         this.translateText = translateText;
+        this.font = font;
         this.anchor = anchor;
         this.autoAnchor = autoAnchor;
         this.offsetX = offsetX;
@@ -53,6 +55,10 @@ public final class HudConfig {
 
     public BooleanSetting translateText() {
         return translateText;
+    }
+
+    public ChoiceSetting font() {
+        return font;
     }
 
     public IntegerSetting scale() {

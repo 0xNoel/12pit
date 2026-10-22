@@ -170,6 +170,9 @@ public abstract class FeatureConfig {
         BooleanSetting translateText =
                 new BooleanSetting(prefix + "translate_text", source("Translate text"),
                         source("Translates HUD text into the selected language."), true);
+        ChoiceSetting font = new ChoiceSetting(prefix + "font", source("Font"),
+                source("Font used for HUD text."), 1, new ChoiceSetting.Choice(0, "ASCII"),
+                new ChoiceSetting.Choice(1, "Unicode"));
         ChoiceSetting anchor = new ChoiceSetting(prefix + "anchor", source("Anchor"),
                 source("Auto chooses an anchor when the HUD is moved."), HudConfig.AUTO_ANCHOR,
                 new ChoiceSetting.Choice(HudConfig.AUTO_ANCHOR, source("Auto")),
@@ -194,6 +197,7 @@ public abstract class FeatureConfig {
         int firstOption = options.size();
         register(textShadow, ConfigOption.Kind.BOOLEAN);
         register(translateText, ConfigOption.Kind.BOOLEAN);
+        register(font, ConfigOption.Kind.CHOICE);
         register(anchor, ConfigOption.Kind.CHOICE);
         int lastOption = options.size();
         ConfigGroup group = new ConfigGroup(id + ".hud", groupName == null ? "HUD" : groupName);
@@ -209,7 +213,7 @@ public abstract class FeatureConfig {
         register(offsetX, null);
         register(offsetY, null);
         register(scale, null);
-        return new HudConfig(textShadow, translateText, anchor, autoAnchor, offsetX, offsetY,
+        return new HudConfig(textShadow, translateText, font, anchor, autoAnchor, offsetX, offsetY,
                 scale);
     }
 
