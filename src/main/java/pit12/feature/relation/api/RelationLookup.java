@@ -27,6 +27,24 @@ public interface RelationLookup {
 
     Relation relationOf(UUID playerId);
 
+    default boolean matches(UUID playerId, UUID ownPlayerId, boolean own, boolean friends,
+            boolean enemies, boolean others) {
+        if (playerId.equals(ownPlayerId))
+            return own;
+        if (friends == enemies && enemies == others)
+            return friends;
+        if (readiness() != RelationReadiness.READY)
+            return false;
+        switch (relationOf(playerId)) {
+            case FRIEND:
+                return friends;
+            case ENEMY:
+                return enemies;
+            default:
+                return others;
+        }
+    }
+
     List<RelationEntry> entries(Relation relation);
 
     /** Listeners receive future changes only. */

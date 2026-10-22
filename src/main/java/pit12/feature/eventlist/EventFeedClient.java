@@ -25,180 +25,119 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.InterruptedIOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLException;
 import org.apache.http.Header;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
+/** Only the event list worker uses this client. */
 final class EventFeedClient {
-    static final long REFRESH_THRESHOLD = 10_800_000L;
     private static final Logger LOGGER = Logger.getLogger(EventFeedClient.class.getName());
-    private static final String[] ENDPOINTS =
-            {"https://raw.githubusercontent.com/BrookeAFK/brookeafk-api/main/events.js",
-                    "https://fastly.jsdelivr.net/gh/BrookeAFK/brookeafk-api@main/events.js",
-                    "https://gcore.jsdelivr.net/gh/BrookeAFK/brookeafk-api@main/events.js",
-                    "https://testingcf.jsdelivr.net/gh/BrookeAFK/brookeafk-api@main/events.js",
-                    "https://cdn.jsdelivr.net/gh/BrookeAFK/brookeafk-api@main/events.js"};
-    private long loadedThrough;
-    private long purgedThrough = -1L;
+    private static final String MAINLAND_ENDPOINT = "https://events.askll.dev/";
+    private String defaultEndpoint =
+            usesMainlandSettings() ? MAINLAND_ENDPOINT : "https://events.12pit.workers.dev/";
 
-    Result fetch() {
-        ExecutorService racers = Executors.newFixedThreadPool(ENDPOINTS.length, task -> {
-            Thread thread = new Thread(task, "12pit-event-feed");
-            thread.setDaemon(true);
-            return thread;
-        });
+    Result fetch(String endpoint) {
+        endpoint = endpoint.trim();
+        boolean defaultService = endpoint.isEmpty();
+        if (defaultService) {
+            endpoint = defaultEndpoint;
+        }
+        long retryAt = 0L;
         try (CloseableHttpClient http = HttpClients.custom()
                 .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(5000)
                         .setConnectionRequestTimeout(5000).setSocketTimeout(10000).build())
-                .setMaxConnTotal(ENDPOINTS.length).setMaxConnPerRoute(ENDPOINTS.length)
                 .useSystemProperties().disableAutomaticRetries().build()) {
-            Result result = race(http, racers);
-            if (result.events != null) {
-                long through = latestTimestamp(result.events);
-                loadedThrough = through;
-                if (through - System.currentTimeMillis() < REFRESH_THRESHOLD
-                        && through > purgedThrough) {
-                    purgedThrough = through;
-                    purge(http, racers);
-                    Result refreshed = race(http, racers);
-                    if (refreshed.events != null) {
-                        loadedThrough = latestTimestamp(refreshed.events);
-                        return refreshed;
+            while (true) {
+                try (CloseableHttpResponse response = http.execute(new HttpGet(endpoint))) {
+                    Header retryAfter = response.getFirstHeader("Retry-After");
+                    retryAt = Math.max(retryAt,
+                            retryAfter(retryAfter == null ? null : retryAfter.getValue(),
+                                    System.currentTimeMillis()));
+                    int status = response.getStatusLine().getStatusCode();
+                    if (status != 200) {
+                        LOGGER.fine("Event schedule request to " + endpoint + " returned HTTP "
+                                + status);
+                        return new Result(null, retryAt);
                     }
-                }
-            }
-            return result;
-        } catch (InterruptedException failure) {
-            Thread.currentThread().interrupt();
-            return new Result(null, 0L);
-        } catch (IOException | ExecutionException failure) {
-            LOGGER.log(Level.WARNING, "Could not load the event schedule", failure);
-            return new Result(null, 0L);
-        } finally {
-            racers.shutdownNow();
-        }
-    }
-
-    private Result race(CloseableHttpClient http, ExecutorService racers)
-            throws InterruptedException, ExecutionException {
-        ExecutorCompletionService<Result> completed = new ExecutorCompletionService<>(racers);
-        List<HttpGet> requests = new ArrayList<>();
-        List<Future<Result>> futures = new ArrayList<>();
-        long retryAt = Long.MAX_VALUE;
-        try {
-            for (String endpoint : ENDPOINTS) {
-                HttpGet request = new HttpGet(endpoint);
-                requests.add(request);
-                futures.add(completed.submit(() -> fetch(http, request)));
-            }
-            for (int i = 0; i < ENDPOINTS.length; i++) {
-                Result result = completed.take().get();
-                retryAt = Math.min(retryAt, result.retryAt);
-                if (result.events != null) {
-                    // Don't let a stale mirror shorten the schedule we already have.
-                    if (latestTimestamp(result.events) >= loadedThrough) {
-                        return result;
+                    if (response.getEntity() == null) {
+                        throw new IOException("Event schedule response has no body");
                     }
-                }
-            }
-            LOGGER.warning("Could not load the event schedule from any endpoint");
-            return new Result(null, retryAt);
-        } finally {
-            for (Future<Result> future : futures) {
-                future.cancel(true);
-            }
-            for (HttpGet request : requests) {
-                request.abort();
-            }
-        }
-    }
-
-    private void purge(CloseableHttpClient http, ExecutorService racers)
-            throws InterruptedException, ExecutionException {
-        HttpGet request =
-                new HttpGet("https://purge.jsdelivr.net/gh/BrookeAFK/brookeafk-api@main/events.js");
-        Future<?> task = racers.submit(() -> {
-            try (CloseableHttpResponse response = http.execute(request)) {
-                int status = response.getStatusLine().getStatusCode();
-                if (status < 200 || status >= 300) {
-                    LOGGER.fine("Event schedule cache purge returned HTTP " + status);
-                }
-            } catch (IOException failure) {
-                if (!request.isAborted()) {
-                    LOGGER.log(Level.FINE, "Could not purge the event schedule cache", failure);
-                }
-            }
-        });
-        try {
-            task.get();
-        } finally {
-            task.cancel(true);
-            request.abort();
-        }
-    }
-
-    private long latestTimestamp(List<PitEvent> events) {
-        long latest = 0L;
-        for (PitEvent event : events) {
-            latest = Math.max(latest, event.timestamp);
-        }
-        return latest;
-    }
-
-    private Result fetch(CloseableHttpClient http, HttpGet request) {
-        long retryAt = 0L;
-        try (CloseableHttpResponse response = http.execute(request)) {
-            Header retryAfter = response.getFirstHeader("Retry-After");
-            retryAt = retryAfter(retryAfter == null ? null : retryAfter.getValue(),
-                    System.currentTimeMillis());
-            int status = response.getStatusLine().getStatusCode();
-            if (status != 200) {
-                LOGGER.fine("Event schedule request to " + request.getURI() + " returned HTTP "
-                        + status);
-                return new Result(null, retryAt);
-            }
-            if (response.getEntity() == null) {
-                throw new IOException("Event schedule response has no body");
-            }
-            StringBuilder body = new StringBuilder();
-            try (InputStreamReader reader = new InputStreamReader(response.getEntity().getContent(),
-                    StandardCharsets.UTF_8)) {
-                char[] buffer = new char[4096];
-                int count;
-                while ((count = reader.read(buffer)) != -1) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        throw new InterruptedIOException("Event schedule request was canceled");
+                    StringBuilder body = new StringBuilder();
+                    try (InputStreamReader reader = new InputStreamReader(
+                            response.getEntity().getContent(), StandardCharsets.UTF_8)) {
+                        char[] buffer = new char[4096];
+                        int count;
+                        while ((count = reader.read(buffer)) != -1) {
+                            if (Thread.currentThread().isInterrupted()) {
+                                throw new InterruptedIOException(
+                                        "Event schedule request was canceled");
+                            }
+                            if (body.length() + count > 262_144) {
+                                throw new IOException("Event schedule is too large");
+                            }
+                            body.append(buffer, 0, count);
+                        }
                     }
-                    if (body.length() + count > 262_144) {
-                        throw new IOException("Event schedule is too large");
+                    List<PitEvent> events = parse(body.toString());
+                    if (defaultService) {
+                        defaultEndpoint = endpoint;
                     }
-                    body.append(buffer, 0, count);
+                    return new Result(events, retryAt);
+                } catch (ConnectTimeoutException | SocketTimeoutException | UnknownHostException
+                        | SocketException | SSLException failure) {
+                    if (!defaultService || MAINLAND_ENDPOINT.equals(endpoint)
+                            || Thread.currentThread().isInterrupted()) {
+                        throw failure;
+                    }
+                    LOGGER.log(Level.FINE,
+                            "Event schedule request failed, trying " + MAINLAND_ENDPOINT, failure);
+                    endpoint = MAINLAND_ENDPOINT;
                 }
             }
-            return new Result(parse(body.toString()), retryAt);
-        } catch (IOException | JsonParseException | NumberFormatException
-                | ArithmeticException failure) {
-            if (!request.isAborted() && !Thread.currentThread().isInterrupted()) {
-                LOGGER.log(Level.FINE, "Could not load the event schedule from " + request.getURI(),
-                        failure);
+        } catch (IOException | JsonParseException | IllegalArgumentException | ArithmeticException
+                | DateTimeParseException failure) {
+            if (!Thread.currentThread().isInterrupted()) {
+                LOGGER.log(Level.WARNING, "Could not load the event schedule", failure);
             }
             return new Result(null, retryAt);
+        }
+    }
+
+    private static boolean usesMainlandSettings() {
+        if ("CN".equals(Locale.getDefault(Locale.Category.FORMAT).getCountry())) {
+            return true;
+        }
+        switch (TimeZone.getDefault().getID()) {
+            case "Asia/Shanghai":
+            case "Asia/Urumqi":
+            case "Asia/Chongqing":
+            case "Asia/Chungking":
+            case "Asia/Harbin":
+            case "Asia/Kashgar":
+            case "PRC":
+            case "CTT":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -213,26 +152,27 @@ final class EventFeedClient {
                 throw new IOException("Event schedule contains a non-object row");
             }
             JsonObject row = element.getAsJsonObject();
-            JsonElement name = row.get("event");
-            JsonElement timestamp = row.get("timestamp");
+            JsonElement name = row.get("name");
+            JsonElement timestamp = row.get("time");
             JsonElement kind = row.get("type");
             if (name == null || !name.isJsonPrimitive() || !name.getAsJsonPrimitive().isString()
                     || kind == null || !kind.isJsonPrimitive()
                     || !kind.getAsJsonPrimitive().isString() || timestamp == null
-                    || !timestamp.isJsonPrimitive() || !timestamp.getAsJsonPrimitive().isNumber()) {
+                    || !timestamp.isJsonPrimitive() || !timestamp.getAsJsonPrimitive().isString()) {
                 throw new IOException("Event schedule row has invalid fields");
             }
             String category = kind.getAsString();
             if (!"major".equals(category) && !"minor".equals(category)) {
                 throw new IOException("Event schedule row has an unknown category");
             }
-            long time = timestamp.getAsBigDecimal().longValueExact();
+            boolean major = "major".equals(category);
+            long time = OffsetDateTime.parse(timestamp.getAsString()).toInstant().toEpochMilli();
             if (time <= 0L || time > Long.MAX_VALUE - 480_000L) {
                 throw new IOException("Event schedule row has an invalid timestamp");
             }
             EventType type = EventType.fromName(name.getAsString());
             if (type != null) {
-                events.add(new PitEvent(type, time, "major".equals(category)));
+                events.add(new PitEvent(type, time, major));
             }
         }
         if (events.isEmpty() && root.getAsJsonArray().size() > 0) {

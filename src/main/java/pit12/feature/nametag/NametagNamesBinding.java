@@ -19,8 +19,10 @@
 package pit12.feature.nametag;
 
 import java.util.UUID;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public interface NametagNamesBinding {
-    void pit12$bindNametagNames(BiFunction<UUID, String, String> names);
+    void pit12$bindNametagNames(Function<UUID, String> suffix);
+
+    String pit12$nametagSuffix(UUID playerId);
 }

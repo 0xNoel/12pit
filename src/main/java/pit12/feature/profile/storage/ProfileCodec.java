@@ -139,6 +139,9 @@ public final class ProfileCodec {
                                     + settingEntry.getKey()
                                     + " must be a finite decimal. The default is used");
                         }
+                    } else if (settingEntry.getValue() == Setting.StorageType.STRING
+                            && value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
+                        settingValues.put(settingEntry.getKey(), value.getAsString());
                     } else {
                         warnings.add(
                                 "$.features." + featureEntry.getKey() + "." + settingEntry.getKey()
@@ -187,6 +190,11 @@ public final class ProfileCodec {
                         Object value = values.get(settingEntry.getKey());
                         if (value instanceof Number) {
                             featureObject.addProperty(settingEntry.getKey(), (Number) value);
+                        }
+                    } else if (settingEntry.getValue() == Setting.StorageType.STRING) {
+                        Object value = values.get(settingEntry.getKey());
+                        if (value instanceof String) {
+                            featureObject.addProperty(settingEntry.getKey(), (String) value);
                         }
                     }
                 }

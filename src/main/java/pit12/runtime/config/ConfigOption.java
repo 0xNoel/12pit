@@ -20,7 +20,7 @@ package pit12.runtime.config;
 
 public final class ConfigOption<T> {
     public enum Kind {
-        BOOLEAN, NUMBER, CHOICE, COLOR, COLOR_PICKER, KEYBIND
+        BOOLEAN, NUMBER, CHOICE, COLOR, COLOR_PICKER, KEYBIND, TEXT
     }
 
     private final Setting<T> setting;

@@ -24,6 +24,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import org.lwjgl.opengl.Display;
+import pit12.runtime.arrow.ArrowAccess;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;

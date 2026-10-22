@@ -58,6 +58,7 @@ import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.input.Keybind;
 import pit12.shared.input.MinecraftActions;
 import pit12.shared.lifecycle.ClientLifecycle;
+import pit12.shared.rendering.FontWidths;
 
 public final class ContractRerollFeature
         implements ClientLifecycle, InputHandler, SidebarListener, ConfigChangeListener {
@@ -509,7 +510,7 @@ public final class ContractRerollFeature
                 event.resolution.getScaledHeight() / 2.0F + 35, 0);
         GlStateManager.scale(2, 2, 2);
         minecraft.fontRendererObj.drawStringWithShadow(hint,
-                -minecraft.fontRendererObj.getStringWidth(hint) / 2.0F, 0, 0xFFFFFF);
+                -FontWidths.measure(minecraft.fontRendererObj, hint) / 2.0F, 0, 0xFFFFFF);
         GlStateManager.popMatrix();
     }
 

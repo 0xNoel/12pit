@@ -59,12 +59,14 @@ final class HudEditorSnap {
         final int line;
         final int start;
         final int end;
+        final int priority;
 
-        private Target(int origin, int line, int start, int end) {
+        private Target(int origin, int line, int start, int end, int priority) {
             this.origin = origin;
             this.line = line;
             this.start = start;
             this.end = end;
+            this.priority = priority;
         }
     }
     static final class Axis {
@@ -76,22 +78,26 @@ final class HudEditorSnap {
             targets.clear();
             active = null;
             maximum = Math.max(0, screenLength - length);
-            add(0, 0, 0, 0);
-            add(screenLength - length, screenLength, 0, 0);
-            add(screenLength / 2 - length / 2, screenLength / 2, 0, 0);
+            add(0, 0, 0, 0, 3);
+            add(screenLength - length, screenLength, 0, 0, 3);
+            add(screenLength / 2 - length / 2, screenLength / 2, 0, 0, 0);
+            add(screenLength / 2, screenLength / 2, 0, 0, 0);
+            add(screenLength / 2 - length, screenLength / 2, 0, 0, 0);
         }
 
         private void addElement(int length, int origin, int otherLength, int start, int end) {
-            for (int target : new int[] {origin, origin + otherLength / 2, origin + otherLength}) {
-                for (int offset : new int[] {0, length / 2, length}) {
-                    add(target - offset, target, start, end);
+            for (int target = 0; target < 3; target++) {
+                int line = origin + (target == 0 ? 0 : target == 1 ? otherLength / 2 : otherLength);
+                for (int alignment = 0; alignment < 3; alignment++) {
+                    int offset = alignment == 0 ? 0 : alignment == 1 ? length / 2 : length;
+                    add(line - offset, line, start, end, target == alignment ? 2 : 1);
                 }
             }
         }
 
-        private void add(int origin, int line, int start, int end) {
+        private void add(int origin, int line, int start, int end, int priority) {
             if (origin >= 0 && origin <= maximum) {
-                targets.add(new Target(origin, line, start, end));
+                targets.add(new Target(origin, line, start, end, priority));
             }
         }
 
@@ -110,12 +116,29 @@ final class HudEditorSnap {
             int nearest = 3;
             for (Target target : targets) {
                 int distance = Math.abs(value - target.origin);
-                if (distance < nearest) {
+                // At the same distance, prefer screen edges, then matching HUD sides.
+                if (distance < nearest || active != null && distance == nearest
+                        && target.priority > active.priority) {
                     nearest = distance;
                     active = target;
                 }
             }
             return active == null ? value : active.origin;
+        }
+
+        int alignment(int origin, int length, int fallback) {
+            if (active != null) {
+                if (active.line == origin) {
+                    return 0;
+                }
+                if (active.line == origin + length) {
+                    return 2;
+                }
+                if (active.line == origin + length / 2) {
+                    return 1;
+                }
+            }
+            return fallback;
         }
     }
 }

@@ -26,8 +26,6 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.event.Listeners;
@@ -37,14 +35,16 @@ import pit12.shared.lifecycle.ClientLifecycle;
 public final class ClientSession implements ClientLifecycle {
     private final Minecraft minecraft;
     private final ClientThread client;
+    private final ClientSessionBinding binding;
     private final SessionState<NetHandlerPlayClient, WorldClient> state = new SessionState<>();
     private final List<Runnable> listeners = new ArrayList<>();
     private boolean started;
     private volatile long generation;
 
-    public ClientSession(Minecraft minecraft, ClientThread client) {
+    public ClientSession(Minecraft minecraft, ClientThread client, ClientSessionBinding binding) {
         this.minecraft = minecraft;
         this.client = client;
+        this.binding = binding;
     }
 
     public NetHandlerPlayClient connection() {
@@ -84,6 +84,7 @@ public final class ClientSession implements ClientLifecycle {
             return;
         started = true;
         generation++;
+        binding.bindWorldChangeListener(this::refresh);
         MinecraftForge.EVENT_BUS.register(this);
         refresh();
     }
@@ -95,6 +96,7 @@ public final class ClientSession implements ClientLifecycle {
             return;
         started = false;
         generation++;
+        binding.bindWorldChangeListener(null);
         MinecraftForge.EVENT_BUS.unregister(this);
         if (state.clear())
             Listeners.notify(listeners, Runnable::run);
@@ -106,12 +108,6 @@ public final class ClientSession implements ClientLifecycle {
         if (started && state.update(minecraft.getNetHandler(), minecraft.theWorld)) {
             Listeners.notify(listeners, Runnable::run);
         }
-    }
-
-    @SubscribeEvent
-    public void onTick(ClientTickEvent event) {
-        if (event.phase == Phase.START)
-            refresh();
     }
 
     @SubscribeEvent

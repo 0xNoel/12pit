@@ -156,6 +156,17 @@ function keyLabel(value: string): string {
         :disabled="busy"
         @update:model-value="emit('change', $event)"
       />
+      <input
+        v-else-if="option.kind === 'TEXT'"
+        class="text-input"
+        type="text"
+        :aria-label="option.name"
+        :value="String(option.value)"
+        :disabled="busy"
+        :spellcheck="false"
+        @change="emit('change', ($event.target as HTMLInputElement).value)"
+        @keydown.enter.prevent="($event.target as HTMLInputElement).blur()"
+      />
       <template v-else-if="option.kind === 'NUMBER'">
         <div class="numeric-control" :style="{ '--range-fill': rangeFill }">
           <input

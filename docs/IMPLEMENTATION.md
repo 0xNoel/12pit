@@ -93,11 +93,12 @@ The four-argument `FeatureConfig` constructor adds `enabled` setting with defaul
 The following helpers create settings and register their metadata in the feature:
 
 - `booleanSetting` creates a boolean. Use `booleanSetting(id, defaultValue)` for a saved flag that has no interface control.
+- `stringSetting` creates a string with a text input in the configuration interface.
 - `integerSliderSetting` and `doubleSliderSetting` create a numeric setting with default value, minimum, maximum and step parameters.
 - `keybindSetting` creates a `KeybindSetting` for one key and an optional Shift, Ctrl, Alt, or Meta key. The main key may also be a modifier. The saved integer keeps the main key in the low byte and the modifier in the next byte. Features use `Keybind.matches` for key events and `Keybind.held` for held input.
 - `colorSetting` stores RGB color as `0xRRGGBB`. `colorPickerSetting` stores ARGB color as `0xAARRGGBB`.
 - `choiceSetting` creates a choice with default id and `ChoiceSetting.Choice` instances with stable ids.
-- `hudConfig` adds grouped anchor, text shadow, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
+- `hudConfig` adds grouped anchor, font, text shadow, and translation options. It also stores placement and scale for the HUD editor. See [HUD](#hud) for grouping and storage details.
 
 Feature IDs are unique in the catalog. Setting and HUD config IDs are unique within their feature. An ID starts with a lowercase ASCII letter or digit; the remaining characters can also include `.`, `-`, or `_`. Preserve saved IDs when changing display names. A HUD config reserves setting IDs under its prefix, such as `status.offset_x`; do not define settings with conflicting IDs.
 
@@ -209,7 +210,7 @@ hud = hudConfig("status", HudAnchor.TOP_LEFT, 6, 6, true,
 
 Use `HudGroup.AUTO` for a subcategory when the feature declares other subcategories, or a subsubcategory otherwise. `SUBCATEGORY` creates a separate subcategory. `SUBSUBCATEGORY` uses the active subcategory at the call site, or the feature root if there is none. Pass null for the name to use `HUD`. The call preserves the active groups for later settings.
 
-The returned `HudConfig` exposes settings through `textShadow()`, `translateText()`, and `scale()`. Read or change their values with `get()` and `set()`. Scale is a percentage and defaults to `100`.
+The returned `HudConfig` exposes settings through `font()`, `textShadow()`, `translateText()`, and `scale()`. Read or change their values with `get()` and `set()`. Font choices are ASCII (`0`) and Unicode (`1`), with Unicode as the default. Scale is a percentage and defaults to `100`.
 
 Read the current placement with `placement()`. To change it, pass a [HudPlacement](../src/main/java/pit12/runtime/config/HudPlacement.java) containing the anchor, offsets, and anchor mode:
 
@@ -236,7 +237,9 @@ Implement [HudElement](../src/main/java/pit12/runtime/hud/HudElement.java) with 
 - `width()` and `height()` provide cheap unscaled logical size of the element's content.
 - `render(partialTicks, editing)` draws the element from logical point `0,0` according to the caller's transformation.
 
-HUD text uses the Minecraft font. Use the renderer's `text` method with the HUD config to draw text, and `textWidth(text)` and `fontHeight()` to measure it. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
+HUD text uses the Minecraft font. Use the renderer's `text` method with the HUD config to draw text. Measure text with [FontWidths.measure(font, text)](../src/main/java/pit12/shared/rendering/FontWidths.java) and use `fontHeight()` for its height. The width helper follows formatting codes, including colors that clear bold, in one pass without allocating strings.
+
+The selected font applies during `prepare` and `render`. Measure cached text in `prepare` and refresh its widths when the font changes. Prepare display snapshots when inputs change. Keep expensive parsing, IO, and large world scans out of render callbacks.
 
 For `editing=true`, prepare and render fixed sample content, including for disabled HUDs. Refresh its text and bounds when display settings or the language change. Measured bounds must match the rendered content.
 
@@ -258,7 +261,7 @@ if (!hudRegistry.editing() && element.enabled()) {
 }
 ```
 
-`layout` calls `prepare`, applies placement and scaling and keeps the resolved origin inside the screen if the element fits. `render` applies the transform and restores the UI rendering state.
+`layout` calls `prepare`, applies placement and scaling and keeps the resolved origin inside the screen if the element fits. `render` applies the transform and restores the UI rendering state. Both calls restore the previous font mode when they finish.
 
 In `stop()`, unregister the same element:
 
@@ -268,7 +271,7 @@ hudRegistry.unregister(element);
 
 Clear the element's cached rendering state before reuse.
 
-For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides text measurements, rectangles, and textures. Construct it with Minecraft and call `resize(pixelScale)` before drawing shapes or textures. Use Minecraft's `FontRenderer` to draw text.
+For custom UI, [UiRenderer](../src/main/java/pit12/shared/rendering/UiRenderer.java) provides the font height, rectangles, and textures. Construct it with Minecraft and call `resize(pixelScale)` before drawing shapes or textures. Use Minecraft's `FontRenderer` to draw text and `FontWidths.measure(font, text)` to measure it.
 
 Keep the render origin in integer GUI coordinates before applying HUD scale.
 

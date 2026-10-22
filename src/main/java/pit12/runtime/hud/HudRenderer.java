@@ -19,6 +19,7 @@
 package pit12.runtime.hud;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import pit12.runtime.config.HudConfig;
 import pit12.shared.rendering.UiRenderState;
@@ -38,7 +39,14 @@ public final class HudRenderer extends UiRenderer {
     public static HudBounds layout(HudElement element, int screenWidth, int screenHeight,
             float pixelScale, boolean editing) {
         float scale = element.config().scaleFactor();
-        element.prepare(pixelScale * scale, editing);
+        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+        boolean unicode = font.getUnicodeFlag();
+        font.setUnicodeFlag(element.config().font().get() == 1);
+        try {
+            element.prepare(pixelScale * scale, editing);
+        } finally {
+            font.setUnicodeFlag(unicode);
+        }
         int width = Math.max(1, Math.round(Math.max(1, element.width()) * scale));
         int height = Math.max(1, Math.round(Math.max(1, element.height()) * scale));
         int x = Math.max(0, Math.min(Math.max(0, screenWidth - width),
@@ -50,11 +58,14 @@ public final class HudRenderer extends UiRenderer {
 
     public void render(HudElement element, HudBounds bounds, float partialTicks, boolean editing) {
         state.begin();
+        boolean unicode = fontRenderer.getUnicodeFlag();
+        fontRenderer.setUnicodeFlag(element.config().font().get() == 1);
         try {
             GlStateManager.translate(bounds.x, bounds.y, 0.0F);
             GlStateManager.scale(bounds.scale, bounds.scale, 1.0F);
             element.render(partialTicks, editing);
         } finally {
+            fontRenderer.setUnicodeFlag(unicode);
             state.end();
         }
     }

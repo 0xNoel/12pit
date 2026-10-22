@@ -96,34 +96,6 @@ public class UiRenderer {
         }
     }
 
-    public int textWidth(String text) {
-        // Color codes clear bold when drawing, but FontRenderer forgets that when measuring.
-        StringBuilder measuredText = null;
-        int start = 0;
-        boolean bold = false;
-        for (int index = 0; index + 1 < text.length(); index++) {
-            if (text.charAt(index) != '§') {
-                continue;
-            }
-            char code = Character.toLowerCase(text.charAt(++index));
-            boolean color = code >= '0' && code <= '9' || code >= 'a' && code <= 'f';
-            if (code == 'l') {
-                bold = true;
-            } else if (code == 'r' || color) {
-                if (bold && color) {
-                    if (measuredText == null) {
-                        measuredText = new StringBuilder(text.length() + 2);
-                    }
-                    measuredText.append(text, start, index - 1).append("§r");
-                    start = index - 1;
-                }
-                bold = false;
-            }
-        }
-        return fontRenderer.getStringWidth(measuredText == null ? text
-                : measuredText.append(text, start, text.length()).toString());
-    }
-
     public int fontHeight() {
         return fontRenderer.FONT_HEIGHT;
     }

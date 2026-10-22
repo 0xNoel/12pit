@@ -84,6 +84,12 @@ import pit12.feature.swap.SwapConfig;
 import pit12.feature.swap.SwapFeature;
 import pit12.feature.swap.SwapHooksBinding;
 import pit12.feature.swap.api.SwapBindings;
+import pit12.feature.telebow.TelebowConfig;
+import pit12.feature.telebow.TelebowFeature;
+import pit12.feature.telebow.api.TelebowCooldowns;
+import pit12.feature.timers.TimersConfig;
+import pit12.feature.timers.TimersFeature;
+import pit12.feature.timers.api.PlayerTimers;
 import pit12.feature.tooltip.TooltipConfig;
 import pit12.feature.tooltip.TooltipFeature;
 import pit12.feature.webui.WebUiConfig;
@@ -91,6 +97,7 @@ import pit12.feature.webui.WebUiFeature;
 import pit12.platform.command.ForgeCommandAdapter;
 import pit12.platform.input.LwjglInputDevice;
 import pit12.platform.oneconfig.OneConfigSupport;
+import pit12.runtime.arrow.ArrowTracker;
 import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ConfigCatalog;
@@ -109,6 +116,7 @@ import pit12.runtime.player.TabPresence;
 import pit12.runtime.player.TabPresenceTracker;
 import pit12.runtime.scoreboard.SidebarCache;
 import pit12.runtime.session.ClientSession;
+import pit12.runtime.session.ClientSessionBinding;
 import pit12.runtime.usage.DailyUsageReporter;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.MinecraftActions;
@@ -134,8 +142,11 @@ public final class ClientBootstrap {
         ConfigCatalog configs = new ConfigCatalog(client);
         ConfigCatalog webUiConfigs = new ConfigCatalog(client);
         shutdown = (ClientShutdownBinding) minecraft;
-        ClientSession session = new ClientSession(minecraft, client);
+        ClientSession session =
+                new ClientSession(minecraft, client, (ClientSessionBinding) minecraft);
         components.add(session);
+        ArrowTracker arrows = new ArrowTracker(minecraft, session);
+        components.add(arrows);
         InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
                 new LwjglInputDevice());
         components.add(input);
@@ -174,6 +185,11 @@ public final class ClientBootstrap {
         BooleanSetting discordRpc =
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
                         new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
+        // Category: Render
+        TelebowCooldowns telebowCooldowns =
+                registerTelebow(minecraft, configs, session, arrows, relations);
+        PlayerTimers timers = registerTimers(minecraft, configs, session, arrows, relations,
+                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
@@ -197,7 +213,7 @@ public final class ClientBootstrap {
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
         registerItemEsp(configs, session);
-        registerNametag(minecraft, configs, session, playerEquipment, denickNames, nicks);
+        registerNametag(minecraft, configs, session, playerEquipment, denickNames, nicks, timers);
         registerPlayerEsp(configs, session, presence, relations);
         registerPlayerList(configs, playerNames, players, playerEquipment, pitContext, hudRegistry,
                 relations, presence, denickNames, nicks);
@@ -268,6 +284,29 @@ public final class ClientBootstrap {
         hudEditor.setWebUiOpener(config.keybind()::get, webUi::open, config.hudEditorHint());
         components.add(webUi);
         return config.discordRpc();
+    }
+
+    // Category: Render
+    private TelebowCooldowns registerTelebow(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, ArrowTracker arrows, RelationLookup relations) {
+        TelebowConfig config = new TelebowConfig();
+        configs.register(config);
+        TelebowFeature feature =
+                new TelebowFeature(minecraft, configs, config, session, arrows, relations);
+        components.add(feature);
+        return feature.cooldowns();
+    }
+
+    private PlayerTimers registerTimers(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, ArrowTracker arrows, RelationLookup relations,
+            PlayerNameCache playerNames, HudRegistry hudRegistry, TelebowCooldowns telebowCooldowns,
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment) {
+        TimersConfig config = new TimersConfig();
+        configs.register(config);
+        TimersFeature feature = new TimersFeature(minecraft, configs, config, session, arrows,
+                relations, playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
+        components.add(feature);
+        return feature;
     }
 
     // Category: Misc
@@ -365,11 +404,12 @@ public final class ClientBootstrap {
     }
 
     private void registerNametag(Minecraft minecraft, ConfigCatalog configs, ClientSession session,
-            PlayerEquipmentAccess equipment, DenickNames denickNames, NickTracker nicks) {
+            PlayerEquipmentAccess equipment, DenickNames denickNames, NickTracker nicks,
+            PlayerTimers timers) {
         NametagConfig config = new NametagConfig();
         configs.register(config);
         components.add(new NametagFeature(minecraft, configs, config, session, equipment,
-                denickNames, nicks,
+                denickNames, nicks, timers,
                 names -> minecraft.getRenderManager().getSkinMap().values()
                         .forEach(renderer -> ((NametagNamesBinding) renderer)
                                 .pit12$bindNametagNames(names))));

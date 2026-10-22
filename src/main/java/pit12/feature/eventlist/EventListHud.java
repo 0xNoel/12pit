@@ -20,10 +20,12 @@ package pit12.feature.eventlist;
 
 import java.util.Collections;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
+import pit12.shared.rendering.FontWidths;
 
 final class EventListHud implements HudElement {
     private static final int PADDING = 4;
@@ -108,7 +110,8 @@ final class EventListHud implements HudElement {
     @Override
     public void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
-        boolean unicode = Minecraft.getMinecraft().fontRendererObj.getUnicodeFlag();
+        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+        boolean unicode = font.getUnicodeFlag();
         if (unicode != unicodeFont) {
             unicodeFont = unicode;
             dirty = true;
@@ -119,10 +122,10 @@ final class EventListHud implements HudElement {
         content = editing ? EventListSnapshot.sample(config, language) : snapshot;
         sampleLayout = editing;
         dirty = false;
-        infoIconWidth = content.dayName.isEmpty() ? 0 : renderer.textWidth("ℹ");
+        infoIconWidth = content.dayName.isEmpty() ? 0 : FontWidths.measure(font, "ℹ");
         iconWidth = infoIconWidth;
-        int nameWidth = renderer.textWidth(content.dayName);
-        dayTimeWidth = renderer.textWidth(content.dayTime);
+        int nameWidth = FontWidths.measure(font, content.dayName);
+        dayTimeWidth = FontWidths.measure(font, content.dayTime);
         int timeWidth = dayTimeWidth;
         if (rowTimeWidths.length != content.rows.size()) {
             rowTimeWidths = new int[content.rows.size()];
@@ -131,17 +134,18 @@ final class EventListHud implements HudElement {
         for (int index = 0; index < content.rows.size(); index++) {
             EventListSnapshot.Row row = content.rows.get(index);
             if (config.showIcons.get()) {
-                rowIconWidths[index] = renderer.textWidth(eventIcon(row));
+                rowIconWidths[index] = FontWidths.measure(font, eventIcon(row));
                 iconWidth = Math.max(iconWidth, rowIconWidths[index]);
             }
-            nameWidth = Math.max(nameWidth, renderer.textWidth(eventNames[row.type.ordinal()]));
-            rowTimeWidths[index] = renderer.textWidth(row.time);
+            nameWidth =
+                    Math.max(nameWidth, FontWidths.measure(font, eventNames[row.type.ordinal()]));
+            rowTimeWidths[index] = FontWidths.measure(font, row.time);
             timeWidth = Math.max(timeWidth, rowTimeWidths[index]);
         }
         lineHeight = renderer.fontHeight() + 2;
         nameX = PADDING + (iconWidth > 0 ? iconWidth + GAP : 0);
         width = Math.max(nameX + nameWidth + (timeWidth > 0 ? GAP + timeWidth : 0),
-                PADDING + renderer.textWidth(content.message)) + PADDING;
+                PADDING + FontWidths.measure(font, content.message)) + PADDING;
         height = PADDING * 2 + Math.max(1, content.rows.size()) * lineHeight;
         if (!content.dayName.isEmpty()) {
             height += lineHeight + 2;

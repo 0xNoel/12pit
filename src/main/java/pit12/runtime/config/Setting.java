@@ -24,7 +24,7 @@ import pit12.runtime.languages.Languages;
 
 public abstract class Setting<T> {
     public enum StorageType {
-        BOOLEAN, INTEGER, DECIMAL
+        BOOLEAN, INTEGER, DECIMAL, STRING
     }
 
     private final String id;
@@ -35,6 +35,7 @@ public abstract class Setting<T> {
     private final T defaultValue;
     private final StorageType storageType;
     private T value;
+    private Consumer<T> beforeChange;
     private Consumer<Setting<?>> changeSink;
     private Runnable checkThread;
 
@@ -100,6 +101,9 @@ public abstract class Setting<T> {
         if (Objects.equals(value, validated)) {
             return;
         }
+        if (beforeChange != null) {
+            beforeChange.accept(validated);
+        }
         value = validated;
         if (changeSink != null) {
             changeSink.accept(this);
@@ -107,6 +111,11 @@ public abstract class Setting<T> {
     }
 
     protected abstract T requireValue(Object candidate);
+
+    /** Adjust related values before a direct edit. Snapshots supply all values together. */
+    final void beforeChange(Consumer<T> action) {
+        beforeChange = action;
+    }
 
     @SuppressWarnings("unchecked")
     final void applyValidated(Object candidate) {

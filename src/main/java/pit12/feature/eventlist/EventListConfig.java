@@ -30,6 +30,7 @@ import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.config.IntegerSetting;
+import pit12.runtime.config.StringSetting;
 
 public final class EventListConfig extends FeatureConfig {
     private final HudConfig hud;
@@ -39,6 +40,7 @@ public final class EventListConfig extends FeatureConfig {
     final BooleanSetting zeroPadding;
     final IntegerSetting eventCount;
     final ChoiceSetting timeFormat;
+    final StringSetting endpoint;
     private final BooleanSetting showMajorEvents;
     private final BooleanSetting showMinorEvents;
     private final Map<EventType, BooleanSetting> shownEvents = new EnumMap<>(EventType.class);
@@ -83,6 +85,9 @@ public final class EventListConfig extends FeatureConfig {
                         source("Shows this event in the list."), true));
             }
         }
+        subcategory("source", source("Source"));
+        endpoint = stringSetting("endpoint", source("Endpoint"),
+                source("Leave blank to use the service hosted by 12pit."), "");
     }
 
     HudConfig hud() {

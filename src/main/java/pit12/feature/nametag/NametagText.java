@@ -19,6 +19,7 @@
 package pit12.feature.nametag;
 
 import net.minecraft.client.gui.FontRenderer;
+import pit12.shared.rendering.FontWidths;
 
 final class NametagText {
     final String heldItem;
@@ -29,7 +30,7 @@ final class NametagText {
     NametagText(String heldItem, String leggings, FontRenderer font) {
         this.heldItem = heldItem;
         this.leggings = leggings;
-        heldItemWidth = heldItem == null ? 0 : font.getStringWidth(heldItem);
-        leggingsWidth = leggings == null ? 0 : font.getStringWidth(leggings);
+        heldItemWidth = heldItem == null ? 0 : FontWidths.measure(font, heldItem);
+        leggingsWidth = leggings == null ? 0 : FontWidths.measure(font, leggings);
     }
 }

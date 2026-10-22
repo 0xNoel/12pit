@@ -26,11 +26,12 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.GL11;
+import pit12.shared.rendering.LunarTextureState;
 
 final class RingRenderer {
+    private final LunarTextureState textures = new LunarTextureState();
     private int displayList;
     private long compiledRevision = -1;
-    private int compiledColor;
 
     void render(Minecraft minecraft, List<BlockPos> blocks, int color, long revision) {
         if (minecraft.getRenderViewEntity() == null || (color >>> 24) == 0) {
@@ -39,24 +40,20 @@ final class RingRenderer {
         if (displayList == 0) {
             displayList = GLAllocation.generateDisplayLists(1);
         }
-        if (revision != compiledRevision || color != compiledColor) {
+        if (revision != compiledRevision) {
             GL11.glNewList(displayList, GL11.GL_COMPILE);
             try {
-                draw(blocks, color);
+                draw(blocks);
             } finally {
                 GL11.glEndList();
             }
             compiledRevision = revision;
-            compiledColor = color;
         }
-        // Stick to raw GL here. glPopAttrib won't update GlStateManager's cache.
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_LINE_BIT | GL11.GL_CURRENT_BIT | GL11.GL_TEXTURE_BIT);
+        textures.begin();
+        GlStateManager.pushMatrix();
         try {
-            OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-            OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             GL11.glDepthMask(false);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -67,23 +64,20 @@ final class RingRenderer {
             OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
                     GL11.GL_ZERO);
             GL11.glLineWidth(1.0F);
-            GL11.glPushMatrix();
-            try {
-                RenderManager camera = minecraft.getRenderManager();
-                GL11.glTranslated(-camera.viewerPosX, -camera.viewerPosY, -camera.viewerPosZ);
-                GL11.glCallList(displayList);
-            } finally {
-                GL11.glPopMatrix();
-            }
+            GL11.glColor4f((color >>> 16 & 255) / 255F, (color >>> 8 & 255) / 255F,
+                    (color & 255) / 255F, (color >>> 24) / 255F);
+            RenderManager camera = minecraft.getRenderManager();
+            GlStateManager.translate(-camera.viewerPosX, -camera.viewerPosY, -camera.viewerPosZ);
+            GlStateManager.callList(displayList);
         } finally {
+            GlStateManager.popMatrix();
             GL11.glPopAttrib();
+            textures.end();
             GlStateManager.resetColor();
         }
     }
 
-    private static void draw(List<BlockPos> blocks, int color) {
-        GL11.glColor4ub((byte) (color >>> 16), (byte) (color >>> 8), (byte) color,
-                (byte) (color >>> 24));
+    private static void draw(List<BlockPos> blocks) {
         GL11.glBegin(GL11.GL_LINES);
         try {
             for (int index = 0; index < blocks.size(); index++) {

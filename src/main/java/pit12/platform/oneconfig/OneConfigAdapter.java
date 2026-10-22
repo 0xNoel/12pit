@@ -33,6 +33,7 @@ import cc.polyfrost.oneconfig.gui.elements.config.ConfigDropdown;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigKeyBind;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigSlider;
 import cc.polyfrost.oneconfig.gui.elements.config.ConfigSwitch;
+import cc.polyfrost.oneconfig.gui.elements.config.ConfigTextBox;
 import cc.polyfrost.oneconfig.internal.config.core.ConfigCore;
 import java.util.ArrayList;
 import java.util.List;
@@ -191,6 +192,20 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
             String subcategory) {
         ConfigOption.Kind kind = option.kind();
         String title = setting.originalDisplayName();
+        if (kind == ConfigOption.Kind.TEXT) {
+            return new ConfigTextBox(null, null, title, setting.originalDescription(), category,
+                    subcategory, 2, "", false, false) {
+                @Override
+                public Object get() {
+                    return setting.get();
+                }
+
+                @Override
+                protected void set(Object value) {
+                    setValue(setting, value);
+                }
+            };
+        }
         if (kind == ConfigOption.Kind.KEYBIND) {
             KeybindSetting keySetting = (KeybindSetting) setting;
             KeybindValue binding = new KeybindValue();

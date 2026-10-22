@@ -19,21 +19,37 @@
 package pit12.platform.mixin.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import pit12.runtime.session.ClientSessionBinding;
 import pit12.shared.lifecycle.ClientShutdownBinding;
 
 @Mixin(Minecraft.class)
-public abstract class MinecraftMixin implements ClientShutdownBinding {
+public abstract class MinecraftMixin implements ClientShutdownBinding, ClientSessionBinding {
     @Unique
     private Runnable pit12$shutdown;
+    @Unique
+    private Runnable pit12$worldChangeListener;
 
     @Override
     public void bindClientShutdown(Runnable shutdown) {
         pit12$shutdown = shutdown;
+    }
+
+    @Override
+    public void bindWorldChangeListener(Runnable listener) {
+        pit12$worldChangeListener = listener;
+    }
+
+    @Inject(method = "loadWorld(Lnet/minecraft/client/multiplayer/WorldClient;Ljava/lang/String;)V",
+            at = @At("RETURN"))
+    private void pit12$afterWorldChange(WorldClient world, String message, CallbackInfo ci) {
+        if (pit12$worldChangeListener != null)
+            pit12$worldChangeListener.run();
     }
 
     @Inject(method = "shutdownMinecraftApplet", at = @At("HEAD"))

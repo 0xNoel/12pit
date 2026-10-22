@@ -21,6 +21,8 @@ package pit12.feature.nametag;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
@@ -33,6 +35,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import pit12.feature.denick.api.DenickNames;
+import pit12.feature.timers.api.PlayerTimers;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
@@ -54,7 +57,8 @@ public final class NametagFeature
     private final PlayerEquipmentAccess equipment;
     private final DenickNames denickNames;
     private final NickTracker nicks;
-    private final NametagNamesBinding binding;
+    private final PlayerTimers timers;
+    private final Consumer<Function<UUID, String>> binding;
     private final NametagRenderer renderer = new NametagRenderer();
     private final Map<UUID, NametagText> texts = new HashMap<>();
     private final Runnable sessionChanged = this::rebuildTexts;
@@ -63,10 +67,11 @@ public final class NametagFeature
     private boolean started;
     private boolean active;
     private boolean namesBound;
+    private int timerTypes;
 
     public NametagFeature(Minecraft minecraft, ConfigCatalog configs, NametagConfig config,
             ClientSession session, PlayerEquipmentAccess equipment, DenickNames denickNames,
-            NickTracker nicks, NametagNamesBinding binding) {
+            NickTracker nicks, PlayerTimers timers, Consumer<Function<UUID, String>> binding) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
@@ -74,6 +79,7 @@ public final class NametagFeature
         this.equipment = equipment;
         this.denickNames = denickNames;
         this.nicks = nicks;
+        this.timers = timers;
         this.binding = binding;
     }
 
@@ -97,7 +103,7 @@ public final class NametagFeature
         }
         started = false;
         if (namesBound) {
-            binding.pit12$bindNametagNames(null);
+            binding.accept(null);
             namesBound = false;
         }
         MinecraftForge.EVENT_BUS.unregister(this);
@@ -106,6 +112,7 @@ public final class NametagFeature
     }
 
     private void updateActivation() {
+        timerTypes = config.timerTypes();
         if (config.enabled() && (config.showHeldItem() || config.showLeggings())) {
             if (!active) {
                 active = true;
@@ -193,7 +200,11 @@ public final class NametagFeature
             return;
         }
         if (changes.affects("nametag", "enabled") || changes.affects("nametag", "show_held_item")
-                || changes.affects("nametag", "show_leggings")) {
+                || changes.affects("nametag", "show_leggings")
+                || changes.affects("nametag", "pin_timer")
+                || changes.affects("nametag", "venom_timer")
+                || changes.affects("nametag", "jump_boost_timer")
+                || changes.affects("nametag", "telebow_timer")) {
             updateActivation();
         }
         if (active && (changes.affects("nametag", "enchantment_format")
@@ -219,7 +230,7 @@ public final class NametagFeature
         session.checkThread();
         if (!namesBound) {
             // The player renderers don't exist yet during start().
-            binding.pit12$bindNametagNames(this::displayName);
+            binding.accept(this::nameSuffix);
             namesBound = true;
         }
         if (active && (fontDirty || unicodeFont != minecraft.fontRendererObj.getUnicodeFlag())) {
@@ -227,24 +238,24 @@ public final class NametagFeature
         }
     }
 
-    private String displayName(UUID playerId, String original) {
+    private String nameSuffix(UUID playerId) {
         session.checkThread();
         if (!config.enabled()) {
-            return original;
+            return "";
         }
-        String name =
-                config.nickMarker() && nicks.isNicked(playerId) ? original + " §e§lN" : original;
+        String suffix = config.nickMarker() && nicks.isNicked(playerId) ? " §e§lN" : "";
         if (config.realNames()) {
             String realName = denickNames.realDisplayName(playerId);
             if (realName != null) {
-                return name + " §7(" + realName + "§7)";
+                suffix += " §7(" + realName + "§7)";
             }
         }
-        return name;
+        return timerTypes == 0 ? suffix : suffix + timers.countdowns(playerId, timerTypes);
     }
 
+    // Lunar replaces name rendering and skips Forge's Specials events.
     @SubscribeEvent
-    public void onRenderName(RenderLivingEvent.Specials.Post<?> event) {
+    public void onRenderName(RenderLivingEvent.Post<?> event) {
         if (!active || !(event.entity instanceof EntityPlayer) || minecraft.thePlayer == null
                 || event.entity == minecraft.thePlayer
                 || event.entity.worldObj != minecraft.theWorld
@@ -265,7 +276,7 @@ public final class NametagFeature
             return;
         }
         NametagText text = texts.get(player.getUniqueID());
-        // Forge fires this even if the renderer hides the nametag.
+        // The model can render even when its nametag is hidden.
         if (text != null && ((NametagVisibility) event.renderer).pit12$canRenderName(player)) {
             renderer.render(minecraft, player, text, event.x, event.y, event.z, distanceSquared,
                     config.upwardOffset());

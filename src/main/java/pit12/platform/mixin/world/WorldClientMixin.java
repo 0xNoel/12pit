@@ -21,11 +21,13 @@ package pit12.platform.mixin.world;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import pit12.runtime.arrow.ArrowAccess;
 import pit12.runtime.player.PlayerEntityWorldBinding;
 import pit12.runtime.player.PlayerEntityWorldObserver;
 
@@ -49,6 +51,9 @@ public abstract class WorldClientMixin implements PlayerEntityWorldBinding {
 
     @Inject(method = "onEntityRemoved", at = @At("RETURN"))
     private void pit12$afterEntityRemoved(Entity entity, CallbackInfo ci) {
+        if (entity instanceof EntityArrow) {
+            ((ArrowAccess) entity).pit12$onRemovedFromWorld();
+        }
         PlayerEntityWorldObserver observer = pit12$playerEntityObserver;
         if (observer != null && entity instanceof EntityPlayer) {
             observer.onPlayerRemoved((EntityPlayer) entity);

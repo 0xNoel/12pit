@@ -16,8 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
-package pit12.feature.smartblock;
+package pit12.runtime.arrow;
 
-public interface ArrowAccess {
-    boolean pit12$isInGround();
+import net.minecraft.entity.projectile.EntityArrow;
+
+public final class ArrowHit {
+    public final EntityArrow arrow;
+    public final boolean critical;
+
+    ArrowHit(EntityArrow arrow, boolean critical) {
+        this.arrow = arrow;
+        this.critical = critical;
+    }
 }

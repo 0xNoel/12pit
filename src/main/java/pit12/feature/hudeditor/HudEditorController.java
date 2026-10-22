@@ -40,6 +40,7 @@ import pit12.runtime.hud.HudBounds;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
+import pit12.shared.rendering.FontWidths;
 import pit12.shared.rendering.UiRenderState;
 
 final class HudEditorController {
@@ -377,21 +378,24 @@ final class HudEditorController {
         try {
             for (Map.Entry<HudElement, HudBounds> entry : origins.entrySet()) {
                 HudBounds origin = entry.getValue();
-                if (deltaX != 0 || deltaY != 0) {
+                if (deltaX != 0 || deltaY != 0 || gesture == Gesture.MOVE) {
                     HudElement element = entry.getKey();
                     int x = origin.x + deltaX;
                     int y = origin.y + deltaY;
                     HudPlacement placement = element.config().placement();
+                    HudAnchor anchor = placement.anchor();
                     if (placement.automatic()) {
-                        element.config().placement(HudPlacement.fromOrigin(x, y, origin.width,
-                                origin.height, screenWidth, screenHeight));
-                    } else {
-                        HudAnchor anchor = placement.anchor();
-                        element.config().placement(new HudPlacement(anchor,
-                                x + anchor.elementX(origin.width) - anchor.screenX(screenWidth),
-                                y + anchor.elementY(origin.height) - anchor.screenY(screenHeight),
-                                false));
+                        HudAnchor nearest = HudPlacement.fromOrigin(x, y, origin.width,
+                                origin.height, screenWidth, screenHeight).anchor();
+                        int horizontal =
+                                snap.horizontal.alignment(x, origin.width, nearest.id() % 3);
+                        int vertical = snap.vertical.alignment(y, origin.height, nearest.id() / 3);
+                        anchor = HudAnchor.fromId(vertical * 3 + horizontal);
                     }
+                    element.config().placement(new HudPlacement(anchor,
+                            x + anchor.elementX(origin.width) - anchor.screenX(screenWidth),
+                            y + anchor.elementY(origin.height) - anchor.screenY(screenHeight),
+                            placement.automatic()));
                 }
             }
             history.commit();
@@ -487,8 +491,8 @@ final class HudEditorController {
         outline(bounds.x, bounds.y, bounds.width, bounds.height, color);
         if (element == primary || hovered && !busy()) {
             String label = element.displayName() + "  " + element.config().scale().get() + "%";
-            int labelX =
-                    clamp(bounds.x, 1, Math.max(1, screenWidth - renderer.textWidth(label) - 1));
+            int labelX = clamp(bounds.x, 1, Math.max(1,
+                    screenWidth - FontWidths.measure(minecraft.fontRendererObj, label) - 1));
             int fontHeight = renderer.fontHeight();
             int labelY = clamp(
                     bounds.y >= fontHeight + 3 ? bounds.y - fontHeight - 2

@@ -26,8 +26,12 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public final class MixinConfigPlugin implements IMixinConfigPlugin {
+    private boolean lunar;
+
     @Override
-    public void onLoad(String mixinPackage) {}
+    public void onLoad(String mixinPackage) {
+        lunar = Launch.classLoader.getResource("mixins.legacy_bridge_combined.json") != null;
+    }
 
     @Override
     public String getRefMapperConfig() {
@@ -36,6 +40,14 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (mixinClassName
+                .equals("pit12.platform.mixin.feature.nametag.VanillaRendererLivingEntityMixin")) {
+            return !lunar;
+        }
+        if (mixinClassName
+                .equals("pit12.platform.mixin.feature.nametag.LunarEntityLivingBaseMixin")) {
+            return lunar;
+        }
         // Forge detects OptiFine after Mixin preparation.
         return !mixinClassName.startsWith("pit12.platform.mixin.feature.resourceleakfix.")
                 || Launch.classLoader

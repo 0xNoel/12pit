@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 public final class BoxRenderer {
+    private final LunarTextureState textures = new LunarTextureState();
     private final List<Box> boxes = new ArrayList<>();
     private Frustum frustum;
     private Tessellator tessellator;
@@ -91,17 +92,13 @@ public final class BoxRenderer {
         if (tessellator == null) {
             tessellator = new Tessellator(16384);
         }
-        // Stick to raw GL here. glPopAttrib won't update GlStateManager's cache.
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT
                 | GL11.GL_LINE_BIT | GL11.GL_CURRENT_BIT | GL11.GL_POLYGON_BIT
                 | GL11.GL_TEXTURE_BIT);
+        textures.begin();
         try {
             GL11.glPushClientAttrib(GL11.GL_CLIENT_VERTEX_ARRAY_BIT);
             try {
-                OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
                 GL11.glDepthMask(false);
                 GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -127,6 +124,7 @@ public final class BoxRenderer {
             }
         } finally {
             GL11.glPopAttrib();
+            textures.end();
             GlStateManager.resetColor();
         }
     }

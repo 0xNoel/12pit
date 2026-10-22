@@ -24,6 +24,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +41,7 @@ import pit12.runtime.item.PitEnchantmentFormat;
 import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
 import pit12.shared.build.BuildConfig;
+import pit12.shared.rendering.FontWidths;
 import pit12.shared.text.PlayerNameFormatter;
 
 final class PlayerListHud implements HudElement {
@@ -99,13 +101,13 @@ final class PlayerListHud implements HudElement {
                             ? language.translate(group.displayName(), translate)
                             : group.displayName();
         }
-        recalculateLayout(sampleLayout ? sample : snapshot);
+        layoutDirty = true;
     }
 
     void snapshot(PlayerListSnapshot snapshot) {
         this.snapshot = snapshot;
         if (!sampleLayout) {
-            recalculateLayout(snapshot);
+            layoutDirty = true;
         }
     }
 
@@ -145,7 +147,7 @@ final class PlayerListHud implements HudElement {
         }
         this.pixelScale = pixelScale;
         renderer.resize(pixelScale);
-        recalculateLayout(sampleLayout ? sample : snapshot);
+        layoutDirty = true;
     }
 
     @Override
@@ -301,14 +303,15 @@ final class PlayerListHud implements HudElement {
     }
 
     private void recalculateLayout(PlayerListSnapshot content) {
+        FontRenderer font = minecraft.fontRendererObj;
         layoutDirty = false;
         nameWidth = 0;
         leggingsWidth = 0;
         heldItemWidth = 0;
         distanceWidth = 0;
         directionWidth = config.showDirection() ? ARROW_SIZE : 0;
-        directionGap = Math.max(1, renderer.textWidth(" "));
-        unknownDirectionWidth = renderer.textWidth("?");
+        directionGap = Math.max(1, FontWidths.measure(font, " "));
+        unknownDirectionWidth = FontWidths.measure(font, "?");
         if (!config.showDistance()) {
             distanceTextWidths.clear();
         } else {
@@ -326,30 +329,30 @@ final class PlayerListHud implements HudElement {
             }
             for (int index = 0; index < entries.size(); index++) {
                 PlayerListEntry entry = entries.get(index);
-                nameWidth = Math.max(nameWidth, renderer.textWidth(entry.name()));
+                nameWidth = Math.max(nameWidth, FontWidths.measure(font, entry.name()));
                 if (config.showLeggings() && entry.leggingsText() != null) {
                     leggingsWidth =
-                            Math.max(leggingsWidth, renderer.textWidth(entry.leggingsText()));
+                            Math.max(leggingsWidth, FontWidths.measure(font, entry.leggingsText()));
                 }
                 if (config.showHeldItem() && entry.heldItemText() != null) {
                     heldItemWidth =
-                            Math.max(heldItemWidth, renderer.textWidth(entry.heldItemText()));
+                            Math.max(heldItemWidth, FontWidths.measure(font, entry.heldItemText()));
                 }
                 if (config.showDistance()) {
                     String text = entry.spawn() ? SPAWN_TEXT : entry.distanceText();
-                    textWidths[index] = renderer.textWidth(text);
+                    textWidths[index] = FontWidths.measure(font, text);
                     distanceWidth = Math.max(distanceWidth, textWidths[index]);
                 }
                 if (config.showDirection() && !config.showDistance() && entry.spawn()) {
-                    directionWidth = Math.max(directionWidth, renderer.textWidth(SPAWN_TEXT));
+                    directionWidth = Math.max(directionWidth, FontWidths.measure(font, SPAWN_TEXT));
                 }
             }
         }
         if (config.showGroupName()) {
             for (PlayerListGroup group : PlayerListGroup.values()) {
                 if (!content.entries(group).isEmpty()) {
-                    nameWidth =
-                            Math.max(nameWidth, renderer.textWidth(groupNames[group.ordinal()]));
+                    nameWidth = Math.max(nameWidth,
+                            FontWidths.measure(font, groupNames[group.ordinal()]));
                 }
             }
         }

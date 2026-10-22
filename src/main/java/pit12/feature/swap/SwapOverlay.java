@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Keyboard;
+import pit12.shared.rendering.FontWidths;
 
 final class SwapOverlay {
     private final Minecraft minecraft;
@@ -75,9 +76,9 @@ final class SwapOverlay {
                     minecraft.thePlayer.inventoryContainer.getSlot(binding.guiTarget()).getStack();
             if (binding.identity.equals(identities.get(target)))
                 continue;
-            String name = Keyboard.getKeyName(binding.key);
-            labels.put(entry.getKey(), new Label("§c§l" + name, binding.equipment,
-                    minecraft.fontRendererObj.getStringWidth(name)));
+            String name = "§c§l" + Keyboard.getKeyName(binding.key);
+            labels.put(entry.getKey(), new Label(name, binding.equipment,
+                    FontWidths.measure(minecraft.fontRendererObj, name)));
         }
     }
 
