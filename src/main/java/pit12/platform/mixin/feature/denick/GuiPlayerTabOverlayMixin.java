@@ -18,6 +18,7 @@
  */
 package pit12.platform.mixin.feature.denick;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,39 +31,37 @@ import pit12.feature.denick.DenickNamesBinding;
 import pit12.feature.denick.api.DenickNames;
 
 @Mixin(GuiPlayerTabOverlay.class)
-public abstract class GuiPlayerTabOverlayMixin implements DenickNamesBinding {
+public abstract class GuiPlayerTabOverlayMixin {
     @Unique
-    private DenickNames pit12$denickNames;
-    @Unique
-    private boolean pit12$renderingName;
-
-    @Override
-    public void pit12$bindDenickNames(DenickNames names) {
-        pit12$denickNames = names;
-    }
+    private DenickNames pit12$renderingNames;
 
     // Only decorate render calls. PlayerNameCache also calls getPlayerName.
     @Inject(method = "renderPlayerlist", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;getPlayerName(Lnet/minecraft/client/network/NetworkPlayerInfo;)Ljava/lang/String;"))
     private void pit12$beginName(CallbackInfo callback) {
-        pit12$renderingName = true;
+        DenickNames names = ((DenickNamesBinding) Minecraft.getMinecraft()).pit12$denickNames();
+        if (names != null) {
+            pit12$renderingNames = names;
+        }
     }
 
     @Inject(method = "renderPlayerlist", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;getPlayerName(Lnet/minecraft/client/network/NetworkPlayerInfo;)Ljava/lang/String;",
             shift = At.Shift.AFTER))
     private void pit12$endName(CallbackInfo callback) {
-        pit12$renderingName = false;
+        if (pit12$renderingNames != null) {
+            pit12$renderingNames = null;
+        }
     }
 
     @Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)
     private void pit12$displayName(NetworkPlayerInfo player,
             CallbackInfoReturnable<String> callback) {
-        if (!pit12$renderingName || pit12$denickNames == null) {
+        if (pit12$renderingNames == null) {
             return;
         }
         String original = callback.getReturnValue();
-        String name = pit12$denickNames.listName(player.getGameProfile().getId(), original);
+        String name = pit12$renderingNames.listName(player.getGameProfile().getId(), original);
         if (!name.equals(original)) {
             callback.setReturnValue(name);
         }

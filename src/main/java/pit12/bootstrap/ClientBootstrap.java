@@ -78,6 +78,7 @@ import pit12.feature.scoreboardfix.ScoreboardFixFeature;
 import pit12.feature.smartblock.SmartBlockBinding;
 import pit12.feature.smartblock.SmartBlockConfig;
 import pit12.feature.smartblock.SmartBlockFeature;
+import pit12.feature.sprint.AutoSprintBinding;
 import pit12.feature.sprint.AutoSprintConfig;
 import pit12.feature.sprint.AutoSprintFeature;
 import pit12.feature.swap.SwapConfig;
@@ -203,7 +204,7 @@ public final class ClientBootstrap {
         registerSmartBlock(minecraft, configs, session, (SmartBlockBinding) minecraft);
         // Category: Player
         registerAutoFish(configs, session, (MinecraftActions) minecraft);
-        registerAutoSprint(configs);
+        registerAutoSprint(configs, (AutoSprintBinding) minecraft);
         registerChatMacro(minecraft, configs, session, sidebar, input, commands,
                 new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
         registerContractReroll(minecraft, configs, session, pitContext, sidebar, input,
@@ -318,8 +319,7 @@ public final class ClientBootstrap {
         configs.register(config);
         DenickFeature denick = new DenickFeature(minecraft, client, configs, config, session,
                 pitContext, presence, playerNames, nicks, players, equipment, commands, language,
-                path, names -> ((DenickNamesBinding) minecraft.ingameGUI.getTabList())
-                        .pit12$bindDenickNames(names));
+                path, (DenickNamesBinding) minecraft);
         components.add(denick);
         return denick;
     }
@@ -353,10 +353,10 @@ public final class ClientBootstrap {
         components.add(new AutoFishFeature(configs, config, session, actions));
     }
 
-    private void registerAutoSprint(ConfigCatalog configs) {
+    private void registerAutoSprint(ConfigCatalog configs, AutoSprintBinding binding) {
         AutoSprintConfig config = new AutoSprintConfig();
         configs.register(config);
-        components.add(new AutoSprintFeature(config));
+        components.add(new AutoSprintFeature(config, binding));
     }
 
     private void registerChatMacro(Minecraft minecraft, ConfigCatalog configs,
@@ -409,10 +409,7 @@ public final class ClientBootstrap {
         NametagConfig config = new NametagConfig();
         configs.register(config);
         components.add(new NametagFeature(minecraft, configs, config, session, equipment,
-                denickNames, nicks, timers,
-                names -> minecraft.getRenderManager().getSkinMap().values()
-                        .forEach(renderer -> ((NametagNamesBinding) renderer)
-                                .pit12$bindNametagNames(names))));
+                denickNames, nicks, timers, (NametagNamesBinding) minecraft));
     }
 
     private void registerPlayerEsp(ConfigCatalog configs, ClientSession session,
@@ -449,7 +446,7 @@ public final class ClientBootstrap {
     private void registerAutoQuickMath(ConfigCatalog configs) {
         AutoQuickMathConfig config = new AutoQuickMathConfig();
         configs.register(config);
-        components.add(new AutoQuickMathFeature(config));
+        components.add(new AutoQuickMathFeature(configs, config));
     }
 
     private void registerBanAlert(Minecraft minecraft, ConfigCatalog configs, ClientSession session,

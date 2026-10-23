@@ -18,37 +18,21 @@
  */
 package pit12.platform.mixin.feature.sprint;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import pit12.feature.sprint.AutoSprintBinding;
-import pit12.feature.sprint.AutoSprintConfig;
 
 @Mixin(EntityPlayerSP.class)
-public abstract class EntityPlayerSPMixin extends AbstractClientPlayer
-        implements AutoSprintBinding {
-    @Unique
-    private AutoSprintConfig pit12$sprintConfig;
-
-    protected EntityPlayerSPMixin(World world, GameProfile gameProfile) {
-        super(world, gameProfile);
-    }
-
-    @Override
-    public void pit12$bindSprintConfig(AutoSprintConfig config) {
-        pit12$sprintConfig = config;
-    }
-
+public abstract class EntityPlayerSPMixin {
     // Override both key checks while leaving the normal sprint rules in place.
     @Redirect(method = "onLivingUpdate", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/settings/KeyBinding;isKeyDown()Z"))
     private boolean pit12$sprintAutomatically(KeyBinding key) {
-        return key.isKeyDown() || (pit12$sprintConfig != null && pit12$sprintConfig.enabled());
+        return key.isKeyDown()
+                || ((AutoSprintBinding) Minecraft.getMinecraft()).pit12$autoSprintEnabled();
     }
 }

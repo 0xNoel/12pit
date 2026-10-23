@@ -52,8 +52,7 @@ final class DarkTargets {
     }
 
     void attack(EntityPlayer target) {
-        if (!config.enabled() || !config.autoSwap.get() || !config.dark.get() || !ready()
-                || minecraft.theWorld == null || target.worldObj != minecraft.theWorld
+        if (!ready() || minecraft.theWorld == null || target.worldObj != minecraft.theWorld
                 || minecraft.theWorld.getEntityByID(target.getEntityId()) != target
                 || target == minecraft.thePlayer || target.isDead || target.isSpectator()
                 || target.getHealth() <= 0 || !allowed(target))
@@ -68,7 +67,7 @@ final class DarkTargets {
     }
 
     boolean needed() {
-        if (!config.dark.get() || minecraft.theWorld == null || minecraft.thePlayer == null) {
+        if (minecraft.theWorld == null || minecraft.thePlayer == null) {
             reset();
             return false;
         }

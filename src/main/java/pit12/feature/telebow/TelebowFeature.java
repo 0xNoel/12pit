@@ -61,6 +61,7 @@ public final class TelebowFeature
     private final TelebowAim aim;
     private boolean started;
     private boolean active;
+    private boolean aimActive;
 
     public TelebowFeature(Minecraft minecraft, ConfigCatalog configs, TelebowConfig config,
             ClientSession session, ArrowTracker arrows, RelationLookup relations) {
@@ -104,11 +105,11 @@ public final class TelebowFeature
                 || config.friends.get() && (config.friendColor.get() >>> 24) != 0
                 || config.enemies.get() && (config.enemyColor.get() >>> 24) != 0
                 || config.others.get() && (config.otherColor.get() >>> 24) != 0;
-        boolean aiming = config.aimPoints.get()
+        aimActive = started && config.enabled() && config.aimPoints.get()
                 && (config.aimFriends.get() && (config.friendColor.get() >>> 24) != 0
                         || config.aimEnemies.get() && (config.enemyColor.get() >>> 24) != 0
                         || config.aimOthers.get() && (config.otherColor.get() >>> 24) != 0);
-        boolean enabled = started && config.enabled() && (prediction || aiming);
+        boolean enabled = started && config.enabled() && (prediction || aimActive);
         if (enabled == active)
             return;
         active = enabled;
@@ -262,10 +263,12 @@ public final class TelebowFeature
             if (path.dirty)
                 path.predict();
         }
-        if (minecraft.theWorld == session.world())
-            aim.update(paths.values());
-        else
-            aim.clear();
+        if (aimActive) {
+            if (minecraft.theWorld == session.world())
+                aim.update(paths.values());
+            else
+                aim.clear();
+        }
     }
 
     @Override
@@ -280,7 +283,8 @@ public final class TelebowFeature
         if (paths.isEmpty() && aim.targets.isEmpty() || minecraft.gameSettings.hideGUI
                 || minecraft.theWorld != session.world())
             return;
-        aim.interpolate(event.partialTicks);
+        if (aimActive)
+            aim.interpolate(event.partialTicks);
         renderer.render(paths.values(), aim.targets.values(), System.nanoTime());
     }
 }

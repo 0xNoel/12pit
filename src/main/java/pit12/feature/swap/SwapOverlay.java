@@ -31,15 +31,13 @@ import pit12.shared.rendering.FontWidths;
 final class SwapOverlay {
     private final Minecraft minecraft;
     private final BindingBook bindings;
-    private final SwapConfig config;
     private final IdentityHashMap<ItemStack, Label> labels = new IdentityHashMap<>();
     private final IdentityHashMap<ItemStack, CachedIdentity> cache = new IdentityHashMap<>();
     private final IdentityHashMap<ItemStack, ItemIdentity> identities = new IdentityHashMap<>();
 
-    SwapOverlay(Minecraft minecraft, BindingBook bindings, SwapConfig config) {
+    SwapOverlay(Minecraft minecraft, BindingBook bindings) {
         this.minecraft = minecraft;
         this.bindings = bindings;
-        this.config = config;
     }
 
     void clear() {
@@ -51,7 +49,7 @@ final class SwapOverlay {
     void refresh() {
         labels.clear();
         identities.clear();
-        if (!config.highlight.get() || bindings.readinessProblem() != null || bindings.count() == 0
+        if (bindings.readinessProblem() != null || bindings.count() == 0
                 || minecraft.thePlayer == null) {
             cache.clear();
             return;
@@ -100,7 +98,7 @@ final class SwapOverlay {
 
     void draw(ItemStack stack, int x, int y) {
         Label label = labels.get(stack);
-        if (label == null || !config.highlight.get())
+        if (label == null)
             return;
         int textX = label.equipment ? x + 14 - label.width : x + 2;
         // The rest of the overlay needs lighting and depth back on when we're done.

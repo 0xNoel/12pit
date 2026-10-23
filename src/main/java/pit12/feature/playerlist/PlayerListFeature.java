@@ -92,8 +92,8 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         this.hudRegistry = hudRegistry;
         builder = new PlayerListBuilder(minecraft, players, equipment, pitContext, config,
                 relations, playerNames, denickNames, nicks);
-        hud = new PlayerListHud(config, hudRenderer);
-        languageListener = () -> hud.localize(language);
+        hud = new PlayerListHud(config, hudRenderer, language);
+        languageListener = hud::localize;
     }
 
     @Override
@@ -209,7 +209,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             }
         }
         if (changes.affects("playerlist", config.hud().translateText().id())) {
-            hud.localize(language);
+            hud.localize();
         }
         if (changes.affects("playerlist", "enabled")) {
             if (config.enabled() && !active) {
