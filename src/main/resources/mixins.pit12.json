@@ -17,6 +17,7 @@
     "network.NetworkPlayerInfoMixin",
     "projectile.EntityArrowMixin",
     "oneconfig.ModCardMixin",
+    "patcher.FontRendererHookMixin",
     "scoreboard.ScoreboardMixin",
     "world.WorldClientMixin",
     "input.MinecraftMixin",
