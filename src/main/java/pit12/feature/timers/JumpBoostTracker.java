@@ -171,14 +171,16 @@ public final class JumpBoostTracker implements PlayerEquipmentListener {
         double dx = x - jump.x;
         double dy = y - jump.y;
         double dz = z - jump.z;
-        if (System.nanoTime() < jump.graceUntil || interrupted || dx * dx + dy * dy + dz * dz > 16
-                || player.hurtTime > 0 || player.isRiding() || player.capabilities.isFlying
-                || player.isInWater() || player.isInLava() || player.isOnLadder()) {
+        if (interrupted || dx * dx + dy * dy + dz * dz > 16 || player.hurtTime > 0
+                || player.isRiding() || player.capabilities.isFlying || player.isInWater()
+                || player.isInLava() || player.isOnLadder()) {
             jump.jumping = false;
         } else {
             if (jump.grounded && !player.onGround && y > jump.y + 0.1) {
                 jump.startY = jump.y;
-                jump.jumping = true;
+                // Give the potion effect time to reach the jumping player.
+                jump.jumping = System.nanoTime() >= jump.until - DURATION_NANOS
+                        + config.jumpBoostGrace.get() * 1_000_000L;
             }
             // Jump Boost IV peaks near 4.15 blocks. Packets can miss the exact peak.
             if (jump.jumping && y - jump.startY >= 3.9)
@@ -279,7 +281,6 @@ public final class JumpBoostTracker implements PlayerEquipmentListener {
     private static final class Jump {
         final EntityPlayer player;
         final long until;
-        final long graceUntil;
         double x;
         double y;
         double z;
@@ -290,7 +291,6 @@ public final class JumpBoostTracker implements PlayerEquipmentListener {
         Jump(EntityPlayer player, long until, boolean local) {
             this.player = player;
             this.until = until;
-            graceUntil = until - DURATION_NANOS + 1_000_000_000L;
             x = local ? player.posX : player.serverPosX / 32.0;
             y = local ? player.posY : player.serverPosY / 32.0;
             z = local ? player.posZ : player.serverPosZ / 32.0;

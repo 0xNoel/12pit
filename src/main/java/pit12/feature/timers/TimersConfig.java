@@ -53,6 +53,7 @@ public final class TimersConfig extends FeatureConfig {
     public final BooleanSetting jumpBoostOthers;
     public final BooleanSetting jumpBoostSoundRequired;
     public final BooleanSetting jumpBoostResetOnLowJump;
+    public final IntegerSetting jumpBoostGrace;
     public final BooleanSetting telebowEnabled;
     public final BooleanSetting telebowOwn;
     public final BooleanSetting telebowFriends;
@@ -136,7 +137,10 @@ public final class TimersConfig extends FeatureConfig {
                 false);
         jumpBoostResetOnLowJump =
                 booleanSetting("jump_boost_reset_on_low_jump", source("Reset on low jump"),
-                        source("Removes the timer when an unobstructed jump is too low."), false);
+                        source("Removes the timer when an unobstructed jump is too low."), true);
+        jumpBoostGrace = integerSliderSetting("jump_boost_grace_ms",
+                source("Prediction margin (ms)"),
+                source("Skips jumps started within this time after drinking."), 250, 0, 1000, 25);
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
         telebowEnabled = booleanSetting("telebow_enabled", source("Enabled"),
