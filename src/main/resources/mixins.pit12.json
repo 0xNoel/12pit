@@ -27,6 +27,7 @@
     "input.EntityRendererMixin",
     "input.PlayerControllerMPMixin",
     "feature.autoclick.MinecraftMixin",
+    "feature.commandfix.ClientCommandHandlerMixin",
     "feature.denick.MinecraftMixin",
     "feature.denick.GuiPlayerTabOverlayMixin",
     "feature.gamma.EntityRendererMixin",
