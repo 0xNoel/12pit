@@ -20,13 +20,13 @@ package pit12.platform.mixin.feature.nametag;
 
 import java.util.UUID;
 import java.util.function.Function;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import pit12.feature.nametag.NametagNamesBinding;
 
-@Mixin(RendererLivingEntity.class)
-public abstract class RendererLivingEntityMixin implements NametagNamesBinding {
+@Mixin(Minecraft.class)
+public abstract class MinecraftMixin implements NametagNamesBinding {
     @Unique
     private Function<UUID, String> pit12$nametagSuffix;
 
@@ -36,7 +36,7 @@ public abstract class RendererLivingEntityMixin implements NametagNamesBinding {
     }
 
     @Override
-    public String pit12$nametagSuffix(UUID playerId) {
-        return pit12$nametagSuffix == null ? "" : pit12$nametagSuffix.apply(playerId);
+    public Function<UUID, String> pit12$nametagNames() {
+        return pit12$nametagSuffix;
     }
 }

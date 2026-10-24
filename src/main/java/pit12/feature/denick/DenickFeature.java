@@ -52,7 +52,6 @@ import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
-import pit12.runtime.config.Setting;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.nick.NickListener;
 import pit12.runtime.nick.NickTracker;
@@ -101,7 +100,8 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     private boolean ready;
     private boolean writable;
     private boolean inPit;
-    private boolean namesBound;
+    private boolean active;
+    private boolean monitoring;
     private volatile long generation;
     private volatile boolean started;
 
@@ -140,6 +140,12 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             return;
         }
         started = true;
+        configs.addListener(this);
+        updateActivation();
+        commands.setActive(config, true);
+    }
+
+    private void loadCache() {
         ready = false;
         writable = false;
         api = new PitPalClient();
@@ -153,14 +159,6 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             thread.setDaemon(true);
             return thread;
         });
-        configs.addListener(this);
-        nicks.addListener(this);
-        presence.addListener(this);
-        equipment.addListener(this);
-        session.addListener(sessionChanged);
-        MinecraftForge.EVENT_BUS.register(this);
-        resetWorld();
-        presence.players().forEach((id, name) -> onPlayerSeen(id, name, true));
         ExecutorService loader = storageWorker;
         loader.execute(() -> {
             Map<String, String> loaded = null;
@@ -182,7 +180,46 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 ready = true;
             });
         });
-        commands.setActive(config, true);
+    }
+
+    private void updateActivation() {
+        boolean enabled = started && config.enabled();
+        if (active != enabled) {
+            active = enabled;
+            if (active) {
+                if (storageWorker == null) {
+                    loadCache();
+                }
+                nicks.addListener(this);
+                presence.addListener(this);
+                session.addListener(sessionChanged);
+                MinecraftForge.EVENT_BUS.register(this);
+                resetWorld();
+                presence.players().forEach((id, name) -> onPlayerSeen(id, name, true));
+            } else {
+                MinecraftForge.EVENT_BUS.unregister(this);
+                session.removeListener(sessionChanged);
+                presence.removeListener(this);
+                nicks.removeListener(this);
+                generation++;
+                for (Target target : targets.values()) {
+                    target.cancel();
+                }
+                targets.clear();
+                inPit = false;
+                changed();
+            }
+        }
+        boolean monitor = active && config.automatic.get() && config.monitor.get();
+        if (monitoring != monitor) {
+            monitoring = monitor;
+            if (monitoring) {
+                equipment.addListener(this);
+            } else {
+                equipment.removeListener(this);
+            }
+        }
+        binding.pit12$bindDenickNames(active && config.nickMarker.get() ? this : null);
     }
 
     @Override
@@ -190,21 +227,8 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         client.check();
         started = false;
         commands.setActive(config, false);
-        generation++;
-        if (namesBound) {
-            binding.pit12$bindDenickNames(null);
-            namesBound = false;
-        }
-        MinecraftForge.EVENT_BUS.unregister(this);
         configs.removeListener(this);
-        session.removeListener(sessionChanged);
-        equipment.removeListener(this);
-        presence.removeListener(this);
-        nicks.removeListener(this);
-        for (Target target : targets.values()) {
-            target.cancel();
-        }
-        targets.clear();
+        updateActivation();
         if (queryWorker != null) {
             queryWorker.shutdownNow();
             queryWorker = null;
@@ -262,7 +286,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             target.nick = previous.nick;
             return target;
         });
-        if (config.enabled() && config.automatic.get()) {
+        if (config.automatic.get()) {
             for (Target target : targets.values()) {
                 if (target.nick) {
                     begin(target, null, false);
@@ -284,7 +308,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
             return;
         }
         target.nick = true;
-        if (config.enabled() && config.automatic.get()) {
+        if (config.automatic.get()) {
             begin(target, null, false);
         }
         changed();
@@ -311,8 +335,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     @Override
     public void onPlayerEquipmentReceived(UUID playerId, ItemStack stack) {
         Target target = targets.get(playerId);
-        if (target != null && target.automatic && target.search != null && config.enabled()
-                && config.monitor.get()) {
+        if (target != null && target.automatic && target.search != null) {
             enqueue(target.search, stack);
         }
     }
@@ -320,8 +343,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     @Override
     public void onPlayerEquipmentChanged(UUID playerId, int changedSlots, long revision) {
         Target target = targets.get(playerId);
-        if (target == null || !target.automatic || target.search == null || !config.enabled()
-                || !config.monitor.get()) {
+        if (target == null || !target.automatic || target.search == null) {
             return;
         }
         PlayerEquipmentSnapshot snapshot = equipment.loadedEquipment(playerId);
@@ -361,18 +383,13 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         if (!started) {
             return;
         }
-        boolean relevant = false;
-        for (Setting<?> setting : config.settings()) {
-            if (changes.affects("denick", setting.id())) {
-                relevant = true;
-                break;
-            }
+        if (changes.affects("denick", "enabled") || changes.affects("denick", "automatic")
+                || changes.affects("denick", "monitor")
+                || changes.affects("denick", "nick_marker")) {
+            updateActivation();
         }
-        if (!relevant) {
+        if (!active) {
             return;
-        }
-        if (changes.affects("denick", "enabled")) {
-            resetWorld();
         }
         if (changes.affects("denick", "automatic") && !config.automatic.get()) {
             for (Target target : targets.values()) {
@@ -387,8 +404,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 if (!target.automatic || target.confirmed) {
                     continue;
                 }
-                if (config.monitor.get() && config.enabled() && config.automatic.get()
-                        && target.search == null) {
+                if (config.monitor.get() && config.automatic.get() && target.search == null) {
                     begin(target, null, false);
                 } else if (!config.monitor.get() && target.search != null
                         && !target.search.initial) {
@@ -396,22 +412,16 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 }
             }
         }
-        changed();
     }
 
     @SubscribeEvent
     public void onTick(ClientTickEvent event) {
-        if (event.phase != Phase.END) {
+        if (!active || event.phase != Phase.END) {
             return;
         }
         client.check();
-        if (!namesBound) {
-            // The in-game GUI doesn't exist yet during start().
-            binding.pit12$bindDenickNames(this);
-            namesBound = true;
-        }
         inPit = pit.current().pitState() == PitState.IN_PIT;
-        if (!ready || !config.enabled()) {
+        if (!ready) {
             return;
         }
         for (Target target : targets.values()) {
@@ -476,6 +486,9 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                         cachedDisplayName = api.displayName(cached, cancelled);
                         String name = cachedDisplayName;
                         client.execute(() -> {
+                            if (generation != requestGeneration || target.request != request) {
+                                return;
+                            }
                             String display = displayName(target);
                             if (valid(target, requestGeneration, request)) {
                                 target.realDisplayName = name;
@@ -493,6 +506,9 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 DenickQuery result = DenickQuery.run(api, items, search.force ? null : cached,
                         cachedDisplayName, cancelled);
                 client.execute(() -> {
+                    if (generation != requestGeneration || target.request != request) {
+                        return;
+                    }
                     String display = displayName(target);
                     if (valid(target, requestGeneration, request)) {
                         complete(target, search, items, cached, result, display);
@@ -600,18 +616,17 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
     @Override
     public String listName(UUID playerId, String original) {
         client.check();
-        Target target = targets.get(playerId);
-        if (!config.enabled() || target == null || !target.nick) {
-            return original;
-        }
-        return config.nickMarker.get() ? original.trim() + " §e§lN" : original;
+        return nicks.isNicked(playerId) ? original.trim() + " §e§lN" : original;
     }
 
     @Override
     public String realDisplayName(UUID playerId) {
         client.check();
+        if (!active) {
+            return null;
+        }
         Target target = targets.get(playerId);
-        return config.enabled() && target != null && target.nick ? target.realDisplayName : null;
+        return target != null && target.nick ? target.realDisplayName : null;
     }
 
     @Override

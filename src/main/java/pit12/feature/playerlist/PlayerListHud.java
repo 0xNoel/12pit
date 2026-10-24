@@ -58,6 +58,7 @@ final class PlayerListHud implements HudElement {
     private final HudConfig hudConfig;
     private final Minecraft minecraft;
     private final HudRenderer renderer;
+    private final Languages language;
     private final String[] groupNames = new String[PlayerListGroup.values().length];
     private final Map<PlayerListGroup, int[]> distanceTextWidths =
             new EnumMap<>(PlayerListGroup.class);
@@ -83,24 +84,19 @@ final class PlayerListHud implements HudElement {
     private boolean renderDirectionReady;
     private boolean sampleLayout;
     private boolean layoutDirty = true;
+    private boolean languageDirty = true;
     private boolean unicodeFont;
 
-    PlayerListHud(PlayerListConfig config, HudRenderer renderer) {
+    PlayerListHud(PlayerListConfig config, HudRenderer renderer, Languages language) {
         this.config = config;
         hudConfig = config.hud();
         minecraft = Minecraft.getMinecraft();
         this.renderer = renderer;
-        sample = sampleSnapshot();
+        this.language = language;
     }
 
-    void localize(Languages language) {
-        boolean translate = hudConfig.translateText().get();
-        for (PlayerListGroup group : PlayerListGroup.values()) {
-            groupNames[group.ordinal()] = group == PlayerListGroup.FRIEND
-                    || group == PlayerListGroup.ENEMY || group == PlayerListGroup.NICK
-                            ? language.translate(group.displayName(), translate)
-                            : group.displayName();
-        }
+    void localize() {
+        languageDirty = true;
         layoutDirty = true;
     }
 
@@ -112,7 +108,7 @@ final class PlayerListHud implements HudElement {
     }
 
     void configurationChanged() {
-        sample = sampleSnapshot();
+        sample = null;
         layoutDirty = true;
     }
 
@@ -158,6 +154,16 @@ final class PlayerListHud implements HudElement {
     @Override
     public void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
+        if (languageDirty) {
+            boolean translate = hudConfig.translateText().get();
+            for (PlayerListGroup group : PlayerListGroup.values()) {
+                groupNames[group.ordinal()] = group == PlayerListGroup.FRIEND
+                        || group == PlayerListGroup.ENEMY || group == PlayerListGroup.NICK
+                                ? language.translate(group.displayName(), translate)
+                                : group.displayName();
+            }
+            languageDirty = false;
+        }
         boolean unicode = minecraft.fontRendererObj.getUnicodeFlag();
         if (unicode != unicodeFont) {
             unicodeFont = unicode;
@@ -165,6 +171,9 @@ final class PlayerListHud implements HudElement {
         }
         if (layoutDirty || editing != sampleLayout) {
             sampleLayout = editing;
+            if (editing && sample == null) {
+                sample = sampleSnapshot();
+            }
             recalculateLayout(editing ? sample : snapshot);
         }
     }

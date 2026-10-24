@@ -29,19 +29,25 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import pit12.runtime.config.ConfigCatalog;
+import pit12.runtime.config.ConfigChangeListener;
+import pit12.runtime.config.ConfigChangeSet;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-public final class AutoQuickMathFeature implements ClientLifecycle {
+public final class AutoQuickMathFeature implements ClientLifecycle, ConfigChangeListener {
     private static final Logger LOGGER = Logger.getLogger(AutoQuickMathFeature.class.getName());
     private static final Pattern QUICK_MATHS_PATTERN = Pattern.compile(
             "^QUICK MATHS!\\s+Solve:\\s*([0-9+\\-*x×÷/()\\s]+?)\\s*$", Pattern.CASE_INSENSITIVE);
     private static final int TICKS_PER_SECOND = 20;
+    private final ConfigCatalog configs;
     private final AutoQuickMathConfig config;
     private boolean started;
+    private boolean active;
     private String pendingAnswer;
     private int delayTicks;
 
-    public AutoQuickMathFeature(AutoQuickMathConfig config) {
+    public AutoQuickMathFeature(ConfigCatalog configs, AutoQuickMathConfig config) {
+        this.configs = configs;
         this.config = config;
     }
 
@@ -50,8 +56,9 @@ public final class AutoQuickMathFeature implements ClientLifecycle {
         if (started) {
             return;
         }
-        MinecraftForge.EVENT_BUS.register(this);
         started = true;
+        configs.addListener(this);
+        updateActivation();
     }
 
     @Override
@@ -60,14 +67,34 @@ public final class AutoQuickMathFeature implements ClientLifecycle {
             return;
         }
         started = false;
-        MinecraftForge.EVENT_BUS.unregister(this);
-        clearPendingAnswer();
+        configs.removeListener(this);
+        updateActivation();
+    }
+
+    @Override
+    public void onConfigChanged(ConfigChangeSet changes) {
+        if (changes.affects("auto_quick_math", "enabled")) {
+            updateActivation();
+        }
+    }
+
+    private void updateActivation() {
+        boolean enabled = started && config.enabled();
+        if (active == enabled) {
+            return;
+        }
+        active = enabled;
+        if (active) {
+            MinecraftForge.EVENT_BUS.register(this);
+        } else {
+            MinecraftForge.EVENT_BUS.unregister(this);
+            clearPendingAnswer();
+        }
     }
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
-        if (!config.enabled()) {
-            clearPendingAnswer();
+        if (!active) {
             return;
         }
         Matcher matcher = QUICK_MATHS_PATTERN.matcher(event.message.getUnformattedText());
@@ -89,11 +116,7 @@ public final class AutoQuickMathFeature implements ClientLifecycle {
 
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        if (event.phase != Phase.START) {
-            return;
-        }
-        if (!config.enabled()) {
-            clearPendingAnswer();
+        if (!active || event.phase != Phase.START) {
             return;
         }
         if (pendingAnswer == null) {

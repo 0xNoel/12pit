@@ -58,8 +58,8 @@ final class TelebowAim {
 
     void update(Collection<TelebowPath> paths) {
         EntityPlayer shooter = minecraft.thePlayer;
-        if (!config.aimPoints.get() || shooter == null || minecraft.theWorld == null
-                || !shooter.isEntityAlive() || shooter.isPlayerSleeping()) {
+        if (shooter == null || minecraft.theWorld == null || !shooter.isEntityAlive()
+                || shooter.isPlayerSleeping()) {
             clear();
             return;
         }
@@ -224,7 +224,8 @@ final class TelebowAim {
     }
 
     void clear() {
-        targets.clear();
+        if (!targets.isEmpty())
+            targets.clear();
     }
 
     static final class Target {

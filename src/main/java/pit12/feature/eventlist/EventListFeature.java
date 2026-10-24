@@ -80,7 +80,9 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
         commands.register(new EventListCommand(this, language).definition(), config, false);
         languageListener = () -> {
             hud.localize();
-            rebuild(System.currentTimeMillis());
+            if (active) {
+                rebuild(System.currentTimeMillis());
+            }
         };
     }
 
@@ -176,8 +178,10 @@ public final class EventListFeature implements ClientLifecycle, ConfigChangeList
                     activate();
                 } else if (!config.enabled() && active) {
                     deactivate();
-                } else {
+                } else if (active) {
                     rebuild(System.currentTimeMillis());
+                } else {
+                    hud.close();
                 }
                 return;
             }

@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.common.util.Constants;
+import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
@@ -69,13 +70,6 @@ final class AutoSwapController {
     }
 
     void tick() {
-        if (!config.enabled() || !config.autoSwap.get()) {
-            if (automaticPending)
-                swaps.cancel();
-            if (automaticPending || player != null)
-                reset();
-            return;
-        }
         tick++;
         if (player != minecraft.thePlayer) {
             if (automaticPending)
@@ -100,11 +94,6 @@ final class AutoSwapController {
             reset();
             return;
         }
-        if (!config.dark.get()) {
-            darkTargets.reset();
-            if (pending != null && pending.type == PitEnchantment.Somber)
-                swaps.cancel();
-        }
         boolean nowPoisoned = player.isPotionActive(Potion.poison);
         if (nowPoisoned && !poisoned) {
             venomPending = true;
@@ -124,8 +113,7 @@ final class AutoSwapController {
             if (poisoned && venomPending)
                 retryAt = tick;
         }
-        if (activeType == PitEnchantment.Somber && !config.dark.get()
-                || activePants != null && !activePants.matches(leggings()))
+        if (activePants != null && !activePants.matches(leggings()))
             clearActive();
         if (tick < retryAt || minecraft.currentScreen != null || !minecraft.inGameHasFocus
                 || !swaps.acceptsInput())
@@ -136,7 +124,7 @@ final class AutoSwapController {
                 swapVenom();
             return;
         }
-        boolean darkNeeded = darkTargets.needed();
+        boolean darkNeeded = config.dark.get() && darkTargets.needed();
         PitEnchantment requested = requestedType(darkNeeded);
         if (requested != null) {
             if (requested != activeType)
@@ -149,6 +137,24 @@ final class AutoSwapController {
         }
         if (eligible(PitEnchantment.Escape_Pod) || eligible(PitEnchantment.Phoenix) || darkNeeded)
             retryAt = tick + 10;
+    }
+
+    void onConfigChanged(ConfigChangeSet changes) {
+        if (changes.affects("swap", "auto_swap") && !config.autoSwap.get()) {
+            if (automaticPending)
+                swaps.cancel();
+            reset();
+        }
+        if (changes.affects("swap", "use_dark") && !config.dark.get()) {
+            darkTargets.reset();
+            if (pending != null && pending.type == PitEnchantment.Somber) {
+                swaps.cancel();
+                pending = null;
+                automaticPending = false;
+            }
+            if (activeType == PitEnchantment.Somber)
+                clearActive();
+        }
     }
 
     private boolean isActive(EntityPlayerSP candidate) {
@@ -265,7 +271,7 @@ final class AutoSwapController {
                 type == PitEnchantment.Somber ? language.translate("low target health")
                         : language.translate("low health"),
                 () -> canSwap(player) && !player.isPotionActive(Potion.poison)
-                        && requestedType(darkTargets.needed()) == type
+                        && requestedType(config.dark.get() && darkTargets.needed()) == type
                         && (wornIdentity == null ? leggings() == null
                                 : wornIdentity.matches(leggings())))) {
             pending = new Pending(type, target.binding.identity, previous, false);
@@ -368,7 +374,7 @@ final class AutoSwapController {
                         : config.restorePants.get())
                 || activePants == null || !activePants.matches(leggings()))
             return false;
-        boolean darkNeeded = darkTargets.needed();
+        boolean darkNeeded = config.dark.get() && darkTargets.needed();
         return shouldRestore(darkNeeded) && requestedType(darkNeeded) == null;
     }
 

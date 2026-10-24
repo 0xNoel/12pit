@@ -22,4 +22,6 @@ import pit12.feature.denick.api.DenickNames;
 
 public interface DenickNamesBinding {
     void pit12$bindDenickNames(DenickNames names);
+
+    DenickNames pit12$denickNames();
 }

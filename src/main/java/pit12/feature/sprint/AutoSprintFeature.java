@@ -18,52 +18,24 @@
  */
 package pit12.feature.sprint;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class AutoSprintFeature implements ClientLifecycle {
     private final AutoSprintConfig config;
-    private boolean started;
+    private final AutoSprintBinding binding;
 
-    public AutoSprintFeature(AutoSprintConfig config) {
+    public AutoSprintFeature(AutoSprintConfig config, AutoSprintBinding binding) {
         this.config = config;
+        this.binding = binding;
     }
 
     @Override
     public void start() {
-        if (started) {
-            return;
-        }
-        MinecraftForge.EVENT_BUS.register(this);
-        started = true;
+        binding.pit12$bindSprintConfig(config);
     }
 
     @Override
     public void stop() {
-        if (!started) {
-            return;
-        }
-        started = false;
-        MinecraftForge.EVENT_BUS.unregister(this);
-        Object player = Minecraft.getMinecraft().thePlayer;
-        if (player instanceof AutoSprintBinding) {
-            ((AutoSprintBinding) player).pit12$bindSprintConfig(null);
-        }
-    }
-
-    @SubscribeEvent
-    public void onClientTick(ClientTickEvent event) {
-        if (event.phase != Phase.START) {
-            return;
-        }
-        // Respawns and dimension changes replace the player entity.
-        Object player = Minecraft.getMinecraft().thePlayer;
-        if (player instanceof AutoSprintBinding) {
-            ((AutoSprintBinding) player).pit12$bindSprintConfig(config);
-        }
+        binding.pit12$bindSprintConfig(null);
     }
 }

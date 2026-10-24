@@ -59,11 +59,12 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
     private final Runnable sessionChanged = this::reset;
     private final ConfigChangeListener configChanged = changes -> {
         if (changes.affects("ban_alert", "enabled")) {
-            reset();
+            updateActivation();
         }
     };
     private long sessionRevision;
     private boolean started;
+    private boolean active;
 
     public BanAlertFeature(Minecraft minecraft, ConfigCatalog configs, BanAlertConfig config,
             ClientSession session, TabPresence presence, Languages language) {
@@ -83,10 +84,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
         }
         started = true;
         configs.addListener(configChanged);
-        session.addListener(sessionChanged);
-        presence.addListener(this);
-        MinecraftForge.EVENT_BUS.register(this);
-        reset();
+        updateActivation();
     }
 
     @Override
@@ -96,19 +94,35 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
             return;
         }
         started = false;
-        MinecraftForge.EVENT_BUS.unregister(this);
-        presence.removeListener(this);
-        session.removeListener(sessionChanged);
         configs.removeListener(configChanged);
-        onlineNames.clear();
-        departures.clear();
-        pendingMessages.clear();
+        updateActivation();
+    }
+
+    private void updateActivation() {
+        boolean enabled = started && config.enabled();
+        if (active == enabled) {
+            return;
+        }
+        active = enabled;
+        if (active) {
+            session.addListener(sessionChanged);
+            presence.addListener(this);
+            MinecraftForge.EVENT_BUS.register(this);
+            reset();
+        } else {
+            MinecraftForge.EVENT_BUS.unregister(this);
+            presence.removeListener(this);
+            session.removeListener(sessionChanged);
+            onlineNames.clear();
+            departures.clear();
+            pendingMessages.clear();
+        }
     }
 
     @Override
     public void onPlayerSeen(UUID playerId, String name, boolean joined) {
         session.checkThread();
-        if (!config.enabled() || sessionRevision != session.revision()) {
+        if (!active || sessionRevision != session.revision()) {
             return;
         }
         if (name != null) {
@@ -121,7 +135,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
     public void onPlayerLeft(UUID playerId) {
         session.checkThread();
         // Tab reports departures on reset before our session listener runs.
-        if (!config.enabled() || sessionRevision != session.revision()) {
+        if (!active || sessionRevision != session.revision()) {
             return;
         }
         String name = onlineNames.remove(playerId);
@@ -135,7 +149,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
 
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
-        if (!config.enabled() || event.type == 2) {
+        if (!active || event.type == 2) {
             return;
         }
         String message = event.message.getUnformattedText();
@@ -154,7 +168,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
 
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        if (event.phase != Phase.END || pendingMessages.isEmpty()) {
+        if (!active || event.phase != Phase.END || pendingMessages.isEmpty()) {
             return;
         }
         session.refresh();
@@ -191,9 +205,7 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
         onlineNames.clear();
         departures.clear();
         pendingMessages.clear();
-        if (config.enabled()) {
-            onlineNames.putAll(presence.players());
-        }
+        onlineNames.putAll(presence.players());
     }
 
     private void discardExpired(long now) {

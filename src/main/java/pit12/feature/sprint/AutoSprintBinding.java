@@ -20,4 +20,6 @@ package pit12.feature.sprint;
 
 public interface AutoSprintBinding {
     void pit12$bindSprintConfig(AutoSprintConfig config);
+
+    boolean pit12$autoSprintEnabled();
 }

@@ -88,7 +88,7 @@ public final class SwapFeature
         DarkTargets darkTargets = new DarkTargets(minecraft, config, equipment, relations);
         automatic =
                 new AutoSwapController(minecraft, config, controller, pit, darkTargets, language);
-        overlay = new SwapOverlay(minecraft, bindings, config);
+        overlay = new SwapOverlay(minecraft, bindings);
         commands.register(
                 new SwapCommand(minecraft, bindings, config, automatic, language).definition(),
                 config, true);
@@ -105,7 +105,6 @@ public final class SwapFeature
             return;
         started = true;
         configs.addListener(this);
-        session.addListener(sessionListener);
         bindings.start();
         updateListening();
         commands.setActive(config, true);
@@ -120,7 +119,6 @@ public final class SwapFeature
         commands.setActive(config, false);
         controller.finish(false);
         configs.removeListener(this);
-        session.removeListener(sessionListener);
         updateListening();
         bindings.stop();
     }
@@ -135,6 +133,9 @@ public final class SwapFeature
             }
             updateListening();
         }
+        if (changes.affects("swap", "highlight_bindings") && !config.highlight.get())
+            overlay.clear();
+        automatic.onConfigChanged(changes);
     }
 
     private void updateListening() {
@@ -143,10 +144,12 @@ public final class SwapFeature
             return;
         listening = enabled;
         if (enabled) {
+            session.addListener(sessionListener);
             MinecraftForge.EVENT_BUS.register(this);
             hookBinding.pit12$bindSwapHooks(this);
             input.addHandler(this);
         } else {
+            session.removeListener(sessionListener);
             input.removeHandler(this);
             hookBinding.pit12$bindSwapHooks(null);
             MinecraftForge.EVENT_BUS.unregister(this);
@@ -214,7 +217,8 @@ public final class SwapFeature
 
     @Override
     public void drawBinding(ItemStack stack, int x, int y) {
-        overlay.draw(stack, x, y);
+        if (config.enabled() && config.highlight.get())
+            overlay.draw(stack, x, y);
     }
 
     @Override
@@ -234,18 +238,23 @@ public final class SwapFeature
     public void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        if (!input.locked()
-                && !InputBlocker.held(minecraft.gameSettings.keyBindUseItem.getKeyCode()))
-            rightClickHeld = false;
-        if (!input.blockedFor(this))
-            automatic.tick();
+        if (config.enabled()) {
+            if (!input.locked()
+                    && !InputBlocker.held(minecraft.gameSettings.keyBindUseItem.getKeyCode()))
+                rightClickHeld = false;
+            if (config.autoSwap.get() && !input.blockedFor(this))
+                automatic.tick();
+            if (config.highlight.get())
+                overlay.refresh();
+        }
         updateMouseGrab();
-        overlay.refresh();
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onAttack(AttackEntityEvent event) {
-        if (event.entityPlayer != minecraft.thePlayer || !(event.target instanceof EntityPlayer))
+        if (!config.enabled() || !config.autoSwap.get() || !config.dark.get()
+                || event.entityPlayer != minecraft.thePlayer
+                || !(event.target instanceof EntityPlayer))
             return;
         session.checkThread();
         automatic.attack((EntityPlayer) event.target);

@@ -19,6 +19,7 @@
 package pit12.platform.mixin.feature.nametag;
 
 import java.util.UUID;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,15 +41,20 @@ public abstract class VanillaRendererLivingEntityMixin {
             target = "Lnet/minecraft/util/IChatComponent;getFormattedText()Ljava/lang/String;"))
     private void pit12$capturePlayer(EntityLivingBase entity, double x, double y, double z,
             CallbackInfo ci) {
-        pit12$nametagPlayer = entity instanceof EntityPlayer ? entity.getUniqueID() : null;
+        if (((NametagNamesBinding) Minecraft.getMinecraft()).pit12$nametagNames() != null) {
+            pit12$nametagPlayer = entity instanceof EntityPlayer ? entity.getUniqueID() : null;
+        }
     }
 
     @ModifyVariable(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V",
             at = @At("STORE"), ordinal = 0)
     private String pit12$displayName(String original) {
         UUID playerId = pit12$nametagPlayer;
+        if (playerId == null) {
+            return original;
+        }
         pit12$nametagPlayer = null;
-        return playerId == null ? original
-                : original.concat(((NametagNamesBinding) this).pit12$nametagSuffix(playerId));
+        return original.concat(((NametagNamesBinding) Minecraft.getMinecraft()).pit12$nametagNames()
+                .apply(playerId));
     }
 }

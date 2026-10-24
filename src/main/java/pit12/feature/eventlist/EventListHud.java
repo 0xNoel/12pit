@@ -39,6 +39,7 @@ final class EventListHud implements HudElement {
     private EventListSnapshot content;
     private float pixelScale = Float.NaN;
     private boolean dirty = true;
+    private boolean languageDirty = true;
     private boolean sampleLayout;
     private boolean unicodeFont;
     private int iconWidth;
@@ -61,10 +62,7 @@ final class EventListHud implements HudElement {
     }
 
     void localize() {
-        boolean translate = hudConfig.translateText().get();
-        for (EventType type : EventType.values()) {
-            eventNames[type.ordinal()] = language.translate(type.displayName, translate);
-        }
+        languageDirty = true;
         dirty = true;
     }
 
@@ -110,6 +108,13 @@ final class EventListHud implements HudElement {
     @Override
     public void prepare(float pixelScale, boolean editing) {
         resize(pixelScale);
+        if (languageDirty) {
+            boolean translate = hudConfig.translateText().get();
+            for (EventType type : EventType.values()) {
+                eventNames[type.ordinal()] = language.translate(type.displayName, translate);
+            }
+            languageDirty = false;
+        }
         FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
         boolean unicode = font.getUnicodeFlag();
         if (unicode != unicodeFont) {
