@@ -222,7 +222,6 @@ public final class CommandRegistry implements ClientLifecycle, ConfigChangeListe
             for (CommandNode child : command.children) {
                 if (available(child) && child.canUse(sender)) {
                     options.add(child.name);
-                    options.addAll(child.aliases);
                 }
             }
         }
@@ -250,7 +249,9 @@ public final class CommandRegistry implements ClientLifecycle, ConfigChangeListe
         reply(sender, Tone.INFO, path + " - " + language.translate(command.description));
         for (CommandNode child : command.children) {
             if (available(child) && child.canUse(sender)) {
-                reply(sender, Tone.INFO, usage(child, path + " " + child.name) + " - "
+                String aliases = child.aliases.isEmpty() ? ""
+                        : language.format(" (aliases: {0})", String.join(", ", child.aliases));
+                reply(sender, Tone.INFO, usage(child, path + " " + child.name) + aliases + " - "
                         + language.translate(child.description));
             }
         }

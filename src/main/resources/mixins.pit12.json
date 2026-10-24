@@ -11,6 +11,7 @@
     "accessor.CommandHandlerAccessor",
     "accessor.MinecraftAccessor",
     "accessor.FMLModContainerAccessor",
+    "client.CommandHandlerMixin",
     "client.MinecraftMixin",
     "network.FMLHandshakeClientStateMixin",
     "network.NetHandlerPlayClientMixin",
