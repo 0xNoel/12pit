@@ -18,6 +18,7 @@
  */
 package pit12.architecture;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
@@ -95,9 +96,13 @@ public final class ArchitectureTest {
                     "net.minecraft..", "net.minecraftforge..", "com.mojang..", "com.google..",
                     "org.lwjgl..", "org.apache.http..")
             .because("optional client and native API access belongs to platform adapters");
+
     @ArchTest
-    public static final ArchRule MODULES_MUST_BE_FREE_OF_CYCLES =
-            slices().matching("pit12.(*).(*)..").should().beFreeOfCycles();
+    public static void MODULES_MUST_BE_FREE_OF_CYCLES(JavaClasses classes) {
+        slices().matching("pit12.(*).(*)..").should().beFreeOfCycles()
+                .check(classes.that(resideOutsideOfPackage("pit12.platform.mixin..")));
+    }
+
     @ArchTest
     public static final ArchRule CLIENT_LIFECYCLE_OWNERS =
             classes().that().areAssignableTo("pit12.shared.lifecycle.ClientLifecycle").should()

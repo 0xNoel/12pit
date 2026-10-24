@@ -54,6 +54,8 @@ final class RelationCommand {
                 .command(name,
                         relation == Relation.FRIEND ? source("Manage friend relations")
                                 : source("Manage enemy relations"))
+                .aliases(relation == Relation.FRIEND ? "friends" : "enemies",
+                        relation == Relation.FRIEND ? "f" : "e")
                 .arguments("<player>", 1, 1)
                 .executes((sender, args) -> change(sender, "toggle", args[0]))
                 .suggests((sender, args) -> playerNames(true))

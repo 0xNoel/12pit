@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import pit12.feature.autoclick.AutoClickBinding;
 import pit12.feature.autoclick.AutoClickConfig;
@@ -36,6 +37,9 @@ import pit12.feature.banalert.BanAlertConfig;
 import pit12.feature.banalert.BanAlertFeature;
 import pit12.feature.chatmacro.ChatMacroConfig;
 import pit12.feature.chatmacro.ChatMacroFeature;
+import pit12.feature.commandfix.CommandFixBinding;
+import pit12.feature.commandfix.CommandFixConfig;
+import pit12.feature.commandfix.CommandFixFeature;
 import pit12.feature.contractreroll.ContractRerollConfig;
 import pit12.feature.contractreroll.ContractRerollFeature;
 import pit12.feature.denick.DenickConfig;
@@ -232,6 +236,7 @@ public final class ClientBootstrap {
         registerAutoQuickMath(configs);
         registerBanAlert(minecraft, configs, session, presence);
         // Category: Patch
+        registerCommandFix(configs, (CommandFixBinding) ClientCommandHandler.instance);
         if (FMLClientHandler.instance().hasOptifine()) {
             registerResourceLeakFix(configs,
                     (ResourceLeakFixBinding) minecraft.getTextureMapBlocks());
@@ -470,6 +475,12 @@ public final class ClientBootstrap {
     }
 
     // Category: Patch
+    private void registerCommandFix(ConfigCatalog configs, CommandFixBinding binding) {
+        CommandFixConfig config = new CommandFixConfig();
+        configs.register(config);
+        components.add(new CommandFixFeature(config, binding));
+    }
+
     private void registerResourceLeakFix(ConfigCatalog configs, ResourceLeakFixBinding binding) {
         ResourceLeakFixConfig config = new ResourceLeakFixConfig();
         configs.register(config);
