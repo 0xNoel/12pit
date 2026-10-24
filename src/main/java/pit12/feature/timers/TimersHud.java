@@ -130,14 +130,11 @@ final class TimersHud implements HudElement {
         int titleWidth = 0;
         int lines = content.size();
         TimerType previousType = null;
-        Group previous = null;
         for (Row row : content) {
             if (metricsDirty) {
                 row.nameWidth = -1;
                 row.timeWidth = -1;
             }
-            if (previous != null && (previousType != row.type || previous != row.group))
-                lines++;
             if (previousType != row.type && config.showGroupNames.get()) {
                 lines++;
                 int index = row.type.ordinal();
@@ -146,7 +143,6 @@ final class TimersHud implements HudElement {
                 titleWidth = Math.max(titleWidth, titleWidths[index]);
             }
             previousType = row.type;
-            previous = row.group;
             if (row.nameWidth < 0)
                 row.nameWidth = FontWidths.measure(font, row.name);
             nameWidth = Math.max(nameWidth, row.nameWidth);
@@ -173,10 +169,7 @@ final class TimersHud implements HudElement {
     public void render(float partialTicks, boolean editing) {
         int y = 4;
         TimerType previousType = null;
-        Group previous = null;
         for (Row row : content) {
-            if (previous != null && (previousType != row.type || previous != row.group))
-                y += lineHeight;
             if (!editing && y >= visibleHeight + lineHeight)
                 break;
             if (previousType != row.type && config.showGroupNames.get()) {
@@ -184,7 +177,6 @@ final class TimersHud implements HudElement {
                 y += lineHeight;
             }
             previousType = row.type;
-            previous = row.group;
             renderer.text(row.name, 4, y, 0xFFFFFFFF, config.hud);
             renderer.text(row.time, width - 4 - row.timeWidth, y, row.group.color(config),
                     config.hud);
