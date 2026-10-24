@@ -18,24 +18,24 @@ On Linux/macOS, run:
 ./gradlew runClient
 ```
 
-The development game directory is `run/`. Look into `run/logs/latest.log` for any client errors and the configuration interface address.
+The development game directory is `run/`. Check `run/logs/latest.log` for client errors and the configuration interface address.
 
-[DevAuth](https://github.com/DJtheRedstoner/DevAuth) is provided in the development environment. To test with an authenticated account, enable the `devauth.enabled` JVM property and follow the [DevAuth configuration guide](https://github.com/DJtheRedstoner/DevAuth#configuration).
+[DevAuth](https://github.com/DJtheRedstoner/DevAuth) is included in the development environment. To test with an authenticated account, enable the `devauth.enabled` JVM property and follow the [DevAuth configuration guide](https://github.com/DJtheRedstoner/DevAuth#configuration).
 
 ## Develop the configuration interface
 
-Start the game, then press Right Shift (the default key) to open the HUD editor. Press it again with no HUD selected to open the configuration interface. Click empty space to clear a selection. If the key does not open the browser, use the URL from the log.
+Start the game, then press Right Shift (the default key) to open the HUD editor. Clear the HUD selection by clicking empty space, then press the key again to open the configuration interface. If the browser stays closed, open the URL from the log.
 
-By default, the server listens to `http://127.0.0.1:60916/`. In case the port is already occupied, the server uses some other available port. The current address is shown in the log.
+The server listens at `http://127.0.0.1:60916/` by default. If that port is in use, it picks another available port. Check the log for the current address.
 
-For live changes in the frontend, launch Vite in a separate terminal window:
+To see frontend changes as you work, start Vite in a separate terminal:
 
 ```powershell
 npm ci --prefix web-ui
 npm run dev --prefix web-ui
 ```
 
-Launch the URL printed by Vite. By default, the `/api` proxy listens to port `60916`. In case the game runs on another port, set the `target` variable before starting Vite.
+Open the URL printed by Vite. The `/api` proxy forwards requests to port `60916` by default. If the game uses another port, set the proxy's `target` before starting Vite.
 
 ```powershell
 $env:WEB_UI_TARGET = 'http://127.0.0.1:<game-port>'
@@ -54,7 +54,7 @@ On Windows, run the following commands from the repository root. On Linux or mac
 npm run format:check --prefix web-ui
 ```
 
-The command `check` runs the Java tests, including `ArchitectureTest`. The command `assemble` builds the configuration interface and produces the jar file in `build/libs/`.
+`check` runs the Java tests, including `ArchitectureTest`. `assemble` builds the configuration interface and creates the jar file in `build/libs/`.
 
 Install dependencies with `npm ci --prefix web-ui` before running the npm check.
 
@@ -62,8 +62,8 @@ Install dependencies with `npm ci --prefix web-ui` before running the npm check.
 
 If Gradle sync fails or reports a toolchain error, check that Gradle uses JDK 21 and can find or download the Java 8 toolchain.
 
-In case the Vite page is opened, but the requests fail, make sure that the game is launched and the `WEB_UI_TARGET` matches the current address of the game. If the configuration interface fails to launch, look for the "Configuration interface is unavailable" message in the game log.
+If the Vite page opens but requests fail, check that the game is running and `WEB_UI_TARGET` matches its current address. If the configuration interface fails to open, look for "Configuration interface is unavailable" in the game log.
 
-The saved data is in `12pit/` directory in the Minecraft game directory. Profiles are stored in `12pit/config/`, relations are stored in `12pit/relations.json`, and swap bindings are stored in `12pit/swap-bindings.json`.
+Saved data is in the `12pit/` folder inside the Minecraft game directory. Profiles are in `12pit/config/`, relations in `12pit/relations.json`, and swap bindings in `12pit/swap-bindings.json`.
 
-Create a backup copy of these files before changing them in order to diagnose a load error.
+Back up these files before editing them to diagnose a load error.

@@ -4,17 +4,17 @@
 
 English | [简体中文](docs/zh-CN/README.md)
 
-12pit is a lightweight, open-source Forge mod for The Pit on Minecraft 1.8.9, with a configuration interface and [OneConfig](https://github.com/Polyfrost/OneConfig) support.
+12pit is a lightweight, open-source Forge mod for The Pit on Minecraft 1.8.9. It includes a configuration interface and supports [OneConfig](https://github.com/Polyfrost/OneConfig).
 
-We recommend using 12pit with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home) for better performance and a smoother experience.
+We recommend using 12pit with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home) for better performance and smoother gameplay.
 
-You can join our Discord [here](https://discord.gg/e9PRKMUenc) and seek help or discuss development related matters on the `#developer` channel.
+Join our [Discord](https://discord.gg/e9PRKMUenc) and visit `#developer` for help or development discussions.
 
 ## Requirements
 
 Use JDK 21 to run Gradle. Compiling the mod requires a Java 8 toolchain. Gradle will find or download it automatically. The Minecraft client also runs on Java 8.
 
-Node.js and npm are required for `assemble` and `runClient` because those tasks build the configuration interface. Java tests require them as well. Node.js 24 is used in CI.
+Node.js and npm are required for `assemble` and `runClient` because those tasks build the configuration interface. Java tests also require them. CI uses Node.js 24.
 
 ## Building
 
@@ -30,7 +30,7 @@ On Linux/macOS, run:
 ./gradlew assemble
 ```
 
-Output jar file will be located at `build/libs/`.
+The jar file is in `build/libs/`.
 
 ## Development
 
@@ -38,16 +38,15 @@ Use PolyPatcher and OptiFine during development. At a minimum, ensure compatibil
 
 ### IntelliJ IDEA
 
-Load the project via Gradle and specify JDK 21 as Gradle's JVM. Use Gradle window to run `assemble`, `check` or `runClient`.
+Import the project through Gradle and set the Gradle JVM to JDK 21. Use the Gradle tool window to run `assemble`, `check`, or `runClient`.
 
 ### VS Code
 
-Install the recommended extensions if prompted. `Ctrl+Shift+B` runs `assemble` task. Use Command Palette to run `check` or `runClient` as Gradle tasks. On macOS, `Cmd+Shift+B` should be used for build task.
+Install the recommended extensions when prompted. Press `Ctrl+Shift+B` to run `assemble`. Use the Command Palette to run `check` or `runClient` as Gradle tasks. On macOS, press `Cmd+Shift+B` to build.
 
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
-- [Implementation](docs/IMPLEMENTATION.md)
 - [Contributing](docs/CONTRIBUTING.md)
 - [Translating](docs/TRANSLATING.md)
 - [Issues](docs/ISSUES.md)

@@ -4,54 +4,58 @@ For translations, see the [translation guide](https://github.com/12src/12pit/blo
 
 ## Getting Started
 
-Contributions to bug fixes, documentation, tests, maintenance, and new features are welcome.
+Bug fixes, documentation, tests, maintenance, and new features are all welcome.
 
-Find an open issue labeled as https://github.com/12src/12pit/labels/confirmed and https://github.com/12src/12pit/labels/help%20wanted. Contributors new to the project can start with issues labeled as https://github.com/12src/12pit/labels/confirmed and https://github.com/12src/12pit/labels/good%20first%20issue. Look at assignees, comments, and referenced pull requests first.
+Look for an open issue labeled https://github.com/12src/12pit/labels/confirmed and https://github.com/12src/12pit/labels/help%20wanted. New contributors can start with issues labeled https://github.com/12src/12pit/labels/confirmed and https://github.com/12src/12pit/labels/good%20first%20issue. Check the assignees, comments, and linked pull requests before starting.
 
-If the contribution is a larger feature or a change that needs design decisions, create an issue before implementing it. The [issue guide](https://github.com/12src/12pit/blob/main/docs/ISSUES.md) outlines everything you need to include. Ask for clarification in the issue or `#developer` channel on [Discord](https://discord.gg/e9PRKMUenc) if the scope of the change is unclear.
+Open an issue before starting a large feature or a change that needs design decisions. The [issue guide](https://github.com/12src/12pit/blob/main/docs/ISSUES.md) explains what to include. If the scope is unclear, ask in the issue or in `#developer` on [Discord](https://discord.gg/e9PRKMUenc).
 
 ## Claiming an Issue
 
-Leave a comment when you start working on an issue. If your contribution may overlap with another contributor's work, submit a draft pull request to let others know you are working on it.
+Leave a comment when you start working on an issue. If your work may overlap with someone else's, open a draft pull request to let them know what you're working on.
 
 ## Working on Your Change
 
-Each commit should represent one change only. Messages that follow the [conventional commit format](https://www.conventionalcommits.org/) are preferred: `fix: correct profile loading`, `docs: clarify build steps`, etc. A pull request should generally have one goal. A couple of changes are okay if they are easy to review together.
+Keep each commit focused on one change. We prefer the [conventional commit format](https://www.conventionalcommits.org/), such as `fix: correct profile loading` or `docs: clarify build steps`. A pull request should usually have one goal. A few related changes can go together if they are easy to review.
 
-The [architecture guide](https://github.com/12src/12pit/blob/main/docs/ARCHITECTURE.md) outlines package roles and dependencies. The [implementation guide](https://github.com/12src/12pit/blob/main/docs/IMPLEMENTATION.md) covers the shared APIs and calling conventions used to develop features. The [debugging guide](https://github.com/12src/12pit/blob/main/docs/DEBUGGING.md) outlines the development client and checks.
+The [architecture guide](https://github.com/12src/12pit/blob/main/docs/ARCHITECTURE.md) explains package roles and dependencies. The [debugging guide](https://github.com/12src/12pit/blob/main/docs/DEBUGGING.md) covers the development client and checks.
 
-Read through the relevant code and use existing helpers when appropriate. Keep all new behavior within its feature. Extract any shared code when really necessary. Do not add any unrelated code cleanup in the pull request.
+Read the relevant code and reuse existing helpers where they fit. Keep new behavior in the feature that owns it. Extract shared code when there is a clear need, and keep code cleanup focused on the change.
 
-[BootstrapLayoutTest](../src/test/java/pit12/architecture/BootstrapLayoutTest.java) constructs configs to check their categories. Configs without injected dependencies use a public no-argument constructor. If a new config needs injected dependencies, update its construction in that test.
+[BootstrapLayoutTest](../src/test/java/pit12/architecture/BootstrapLayoutTest.java) creates configs to check their categories. Configs without injected dependencies use a public no-argument constructor. When adding a config with injected dependencies, update the test to pass them.
 
-Write short sentences in all prose in the project. Use common words and project terminology where it helps to explain things clearly, naturally, and concisely.
+Use short, natural sentences throughout the project. Prefer common words and use project terms when they make the meaning clearer.
 
 ## Coding Standards
 
-Implement what the feature needs now. Add interfaces or wrappers when they serve a concrete need, such as a second implementation or testing. Let Spotless add copyright notices.
+Write the code the feature needs now. Add interfaces or wrappers for a concrete need, such as a second implementation or testing.
 
-Extract a method, constant or variable if that improves the readability of the code or is used in several places. If it is used in just one place and is clearly written inline then it should remain there. Do not keep two methods that do the same job or a method that simply calls another one.
+Extract a method, constant, or variable when it improves readability or is used in several places. Keep one-off expressions inline when they read clearly. Combine methods that do the same job, and call a method directly when a wrapper only forwards the call.
 
-Validate user input, file and network data, and potentially missing Minecraft values where they enter the project. Trust internal callers instead of repeating those checks. Treat broken internal invariants as bugs and handle them where they occur. Avoid fallbacks that hide them. `stop()` must tolerate resources that were never created because initialization may have failed.
+Validate user input, file and network data, and potentially missing Minecraft values where they enter the project. Rely on internal callers to pass valid data. Treat broken internal invariants as bugs and handle them where they occur. Let these failures surface. `stop()` must handle resources that were never created because initialization may have failed.
 
 Copy a collection only when another consumer may modify it or when passing it to another thread.
 
-Catch an exception only if you can do something with it, handle it or provide more information to the caller. A `catch` block that either rethrows an exception or ignores it should be removed.
+Access live state on the client thread. Run file I/O, HTTP requests, and expensive computations on workers owned by the component. Before applying worker results, check that the owner is still running and the request or generation is current. Check connection and world identities when the work depends on them.
 
-Avoid obvious waste, like parsing or scanning the whole world on every frame. Do not add any caches or specific cases for unmeasured gain. In case of small gain and complicated code use a simpler approach.
+Complete state changes before notifying listeners. Callbacks should see the new state.
 
-Remove unused code in your changes, including methods, fields, parameters, imports and classes. Before removing a public member, search the entire repository for it, including tests, documentation and Mixin configuration.
+Preserve existing files when loading fails, and keep unsaved changes when writing fails. Check the save revision before marking data saved. When changing a file format, handle older versions and keep saved IDs stable.
 
-Use plain forms provided by the language. Rely on autoboxing instead of performing boxing operations yourself, and prefer imports over fully qualified names.
+Catch an exception when you can handle it or give the caller more information. Remove a `catch` block that only rethrows or ignores the exception.
+
+Avoid obvious waste, such as parsing or scanning the whole world every frame. Measure the benefit before adding caches or special cases. Choose the simpler approach when the gain is small and the extra complexity is high.
+
+Remove unused code from your changes, including methods, fields, parameters, imports, and classes. Before removing a public member, search the entire repository for uses, including tests, documentation, and Mixin configuration.
+
+Use standard language features. Let autoboxing handle boxing, and use imports for type names.
 
 ## Comments
 
-Read the code as someone seeing it for the first time. Add a short comment if its purpose, behavior, or contract is unclear or easy to misread. If the code already makes those points clear, no comment is needed. Update comments with the code.
+Read the code as someone seeing it for the first time. Add a short comment where the purpose, behavior, or contract would be unclear or easy to misread. Let clear code speak for itself. Keep comments up to date when the code changes.
 
 ## Submitting a Pull Request
 
-Format code with `./gradlew spotlessApply` and `npm run format --prefix web-ui`, run the checks relevant to your change, and do a build once before submitting the pull request. Mention what you ran and any known limitations. Submit focused tests if the behavior has changed.
-
-Update the architecture guide and relevant tests if package role or dependencies change. Update the implementation guide if some basic interface, calling convention, or registration step changes.
+Format code with `./gradlew spotlessApply` and `npm run format --prefix web-ui`. Run the checks relevant to your change and build once before submitting the pull request. State what you ran and any known limitations. Include focused tests when behavior changes.
 
 Describe what changed and why, and report any failed checks. Mark the draft pull request ready for review when the work is complete.

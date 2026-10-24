@@ -1,4 +1,4 @@
-<!-- Source: README.md; Based on: 482e314bf954829cf6418f09c9d7a74d3bb1f9da -->
+<!-- Source: README.md; Based on: 5c8bce221aa767a7dad58c3d23b817d9c07395d9 -->
 
 # 12pit
 
@@ -6,17 +6,17 @@
 
 [English](../../README.md) | 简体中文
 
-12pit 是一款基于 Forge、专为 Minecraft 1.8.9 The Pit 打造的轻量级开源模组，提供配置界面，并兼容 [OneConfig](https://github.com/Polyfrost/OneConfig)。
+12pit 是一款用于 Minecraft 1.8.9 The Pit 的轻量开源 Forge 模组，提供配置界面，并支持 [OneConfig](https://github.com/Polyfrost/OneConfig)。
 
-建议搭配 [PolyPatcher](https://modrinth.com/mod/patcher) 和 [OptiFine](https://optifine.net/home) 使用，以获得更好的体验和性能。
+建议搭配 [PolyPatcher](https://modrinth.com/mod/patcher) 和 [OptiFine](https://optifine.net/home) 使用，改善性能和游戏体验。
 
-你可以点[这里](https://discord.gg/e9PRKMUenc)加入我们的 Discord，并在 `#developer` 频道求助或讨论开发相关话题。
+欢迎加入我们的 [Discord](https://discord.gg/e9PRKMUenc)，在 `#developer` 频道求助或讨论开发问题。
 
 ## 环境要求
 
 请使用 JDK 21 运行 Gradle。编译模组需要 Java 8 工具链，Gradle 会自动查找或下载。Minecraft 客户端也使用 Java 8。
 
-此外，由于需要构建配置界面，执行 `assemble`、`runClient` 以及相关 Java 测试时均依赖 Node.js 和 npm（CI 环境使用的是 Node.js 24）。
+运行 `assemble`、`runClient` 和相关 Java 测试都需要 Node.js 和 npm，用于构建配置界面。CI 使用 Node.js 24。
 
 ## 构建
 
@@ -40,16 +40,15 @@
 
 ### IntelliJ IDEA
 
-以 Gradle 项目形式导入本项目，并将 Gradle JVM 指定为 JDK 21。随后即可在 Gradle 工具窗口中直接运行 `assemble`、`check` 或 `runClient`。
+通过 Gradle 导入项目，将 Gradle JVM 设为 JDK 21。在 Gradle 工具窗口中运行 `assemble`、`check` 或 `runClient`。
 
 ### VS Code
 
-打开项目时若弹出提示，请安装推荐的扩展。可直接按 `Ctrl+Shift+B`（macOS 为 `Cmd+Shift+B`）执行 `assemble` 构建任务；如需运行 `check` 或 `runClient`，可通过命令面板调用对应的 Gradle 任务。
+打开项目时，按提示安装推荐扩展。按 `Ctrl+Shift+B`（macOS 为 `Cmd+Shift+B`）运行 `assemble`。通过命令面板运行 `check` 或 `runClient` 对应的 Gradle 任务。
 
 ## 文档
 
 - [架构](ARCHITECTURE.md)
-- [实现](IMPLEMENTATION.md)
 - [贡献指南](CONTRIBUTING.md)
 - [翻译指南](TRANSLATING.md)
 - [议题](ISSUES.md)
@@ -57,7 +56,7 @@
 
 ## 第三方声明
 
-12pit 使用了以下第三方开源组件:
+12pit 使用了以下第三方开源组件：
 
 - [SpongePowered Mixin](https://github.com/SpongePowered/Mixin)，MIT。许可证文本：[MIXIN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt)。
 - [ASM](https://asm.ow2.io/)，随 Mixin 打包，BSD 3-Clause。许可证文本：[ASM-BSD-3-CLAUSE.txt](../../src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt)。
