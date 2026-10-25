@@ -33,17 +33,17 @@ public final class ItemEspConfig extends FeatureConfig {
 
     public ItemEspConfig() {
         super("itemesp", source("Item ESP"), new ConfigCategory("render", source("Render")),
-                source("Shows dropped raffle tickets and gold ingots through blocks."), true,
-                false);
+                source("Shows dropped name tags and gold ingots through blocks."), true, false);
         subsubcategory("raffle_tickets", source("Raffle tickets"));
         showRaffle = booleanSetting("show_raffle", source("Show raffle tickets"),
                 source("Marks dropped name tags."), true);
-        raffleColor =
-                colorPickerSetting("raffle_color", source("Raffle ticket color"), "", 0x80FF8000);
+        raffleColor = colorPickerSetting("raffle_color", source("Raffle ticket color"),
+                source("Color and opacity of dropped name tag boxes."), 0x80FF8000);
         subsubcategory("gold_ingots", source("Gold ingots"));
         showGold = booleanSetting("show_gold", source("Show gold ingots"),
                 source("Marks dropped gold ingots."), true);
-        goldColor = colorPickerSetting("gold_color", source("Gold ingot color"), "", 0x80FFD700);
+        goldColor = colorPickerSetting("gold_color", source("Gold ingot color"),
+                source("Color and opacity of dropped gold ingot boxes."), 0x80FFD700);
     }
 
     public boolean hasTargets() {

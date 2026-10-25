@@ -47,24 +47,22 @@ public final class EventListConfig extends FeatureConfig {
 
     public EventListConfig() {
         super("eventlist", source("Event List"), new ConfigCategory("render", source("Render")),
-                source("Shows upcoming Pit events and their current stages."));
+                source("Shows upcoming and active Pit events."));
         subcategory("display", source("Display"));
         hud = hudConfig("event_list", HudAnchor.TOP_RIGHT, -6, 6, true);
         eventCount = integerSliderSetting("event_count", source("Event count"),
-                source("Sets the number of event rows. The day and night row is separate."), 6, 1,
-                20, 1);
+                source("Number of event rows shown."), 6, 1, 20, 1);
         showDayNight = booleanSetting("show_day_night", source("Show day and night"),
-                source("Shows the Pit day and night cycle above the events."), true);
+                source("Shows Day or Night and the time remaining above the events."), true);
         showIcons = booleanSetting("show_icons", source("Show status icons"),
-                source("Marks upcoming major and minor events, preparation, and active events."),
-                true);
+                source("Shows icons for upcoming, preparing, and active events."), true);
         showColors = booleanSetting("show_colors", source("Show event colors"),
                 source("Uses each event's color for its name."), true);
         zeroPadding = booleanSetting("zero_padding", source("Pad time with zeros"),
-                source("Shows two digits for each part of a countdown."), true);
+                source("Pads each part of a countdown to at least two digits."), true);
         timeFormat = choiceSetting("time_format", source("Time format"),
-                source("Sets how event times are shown."), 0, new Choice(0, source("Countdown")),
-                new Choice(1, source("Local time (24-hour)")),
+                source("Displays countdowns, local times, or both."), 0,
+                new Choice(0, source("Countdown")), new Choice(1, source("Local time (24-hour)")),
                 new Choice(2, source("Countdown and local time")));
         subcategory("filter", source("Filter"));
         subsubcategory("major_events", source("Major events"));
@@ -87,7 +85,7 @@ public final class EventListConfig extends FeatureConfig {
         }
         subcategory("source", source("Source"));
         endpoint = stringSetting("endpoint", source("Endpoint"),
-                source("Leave blank to use the service hosted by 12pit."), "");
+                source("Event feed URL. Leave blank to use 12pit's service."), "");
     }
 
     HudConfig hud() {

@@ -26,7 +26,6 @@ import pit12.runtime.config.FeatureConfig;
 public final class AutoSprintConfig extends FeatureConfig {
     public AutoSprintConfig() {
         super("autosprint", source("Auto Sprint"), new ConfigCategory("player", source("Player")),
-                source("Sprints automatically while moving forward, without holding the sprint key."),
-                true, false);
+                source("Sprints automatically while moving forward."), true, false);
     }
 }

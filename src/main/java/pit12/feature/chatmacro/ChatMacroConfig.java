@@ -36,7 +36,7 @@ public final class ChatMacroConfig extends FeatureConfig {
         blockInputs = booleanSetting("block_inputs", source("Block inputs"),
                 source("Blocks all input for one tick before sending a macro."), true);
         spawnKey = keybindSetting("spawn_key", source("Spawn macro key"), source(
-                "Sends /spawn when you are not fighting. Press again to cancel while waiting."),
+                "Sends /spawn when the scoreboard's combat status clears. Press again to cancel while waiting."),
                 Keyboard.KEY_NONE);
     }
 }

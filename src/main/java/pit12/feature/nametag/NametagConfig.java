@@ -62,11 +62,12 @@ public final class NametagConfig extends FeatureConfig {
                 source("Shows the leggings' Pit enchantments."), true);
         subsubcategory("timers", source("Timers"));
         pinTimer = booleanSetting("pin_timer", source("Show Pin timer"),
-                source("Shows Pin after player names while Timers is enabled."), true);
+                source("Shows Pin timers after player names while Timers is enabled."), true);
         venomTimer = booleanSetting("venom_timer", source("Show Venom timer"),
-                source("Shows Venom after player names while Timers is enabled."), true);
+                source("Shows Venom timers after player names while Timers is enabled."), true);
         jumpBoostTimer = booleanSetting("jump_boost_timer", source("Show Jump Boost timer"),
-                source("Shows Jump Boost after player names while Timers is enabled."), true);
+                source("Shows Jump Boost timers after player names while Timers is enabled."),
+                true);
         telebowTimer = booleanSetting("telebow_timer", source("Show Telebow cooldown"),
                 source("Shows Telebow cooldowns after player names while Timers is enabled."),
                 true);

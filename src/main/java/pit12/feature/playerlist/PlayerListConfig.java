@@ -53,7 +53,7 @@ public final class PlayerListConfig extends FeatureConfig {
 
     public PlayerListConfig() {
         super("playerlist", source("Player List"), new ConfigCategory("render", source("Render")),
-                source("Shows loaded player equipment and direction in a compact HUD."));
+                source("Shows player names, equipment, distance, and direction in a HUD."));
         subcategory("display", source("Display"));
         hud = hudConfig("player_list", HudAnchor.TOP_LEFT, 6, 6, true);
         subsubcategory("enchantments", source("Enchantments"));
@@ -74,7 +74,7 @@ public final class PlayerListConfig extends FeatureConfig {
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
-                source("Shows the continuous direction to each loaded player."), true);
+                source("Shows an arrow pointing toward each loaded player."), true);
         showSpawn = booleanSetting("show_spawn", source("Show spawn marker"),
                 source("Shows SPAWN instead of distance and direction for players in spawn."),
                 true);
@@ -93,11 +93,11 @@ public final class PlayerListConfig extends FeatureConfig {
         showNick = booleanSetting("show_nick", source("Show Nick group"),
                 source("Shows nicked players in the player list."), true);
         showRegularity = booleanSetting("show_regularity", source("Show Regularity group"),
-                source("Shows the Regularity equipment group."), true);
+                source("Shows players wearing Regularity leggings."), true);
         showDark = booleanSetting("show_dark", source("Show Dark group"),
-                source("Shows the Dark equipment group."), true);
+                source("Shows players wearing Somber leggings."), true);
         showBountyHunter = booleanSetting("show_bounty_hunter", source("Show Bounty Hunter group"),
-                source("Shows the Bounty Hunter equipment group."), false);
+                source("Shows players wearing golden leggings."), false);
     }
 
     public boolean showHeldItem() {

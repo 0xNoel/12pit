@@ -33,10 +33,10 @@ public final class TooltipConfig extends FeatureConfig {
     public TooltipConfig() {
         super("tooltip", source("Held Item Tooltip"),
                 new ConfigCategory("render", source("Render")),
-                source("Customizes the held item tooltip above the hotbar."));
+                source("Changes the text and position of the held item tooltip."));
         showEnchantments = booleanSetting("show_enchantments",
                 source("Show enchantments instead of item name"),
-                source("Replaces the held item name with known Pit enchantments."), true);
+                source("Shows Pit enchantments in place of the held item name."), true);
         showGem = booleanSetting("show_gem", source("Show gem"),
                 source("Shows a green diamond on gemmed items."), true);
         upwardOffset = integerSliderSetting("upward_offset", source("Move tooltip upward"),

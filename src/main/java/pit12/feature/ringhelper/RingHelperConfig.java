@@ -31,11 +31,12 @@ public final class RingHelperConfig extends FeatureConfig {
 
     public RingHelperConfig() {
         super("ringhelper", source("Ring Helper"), new ConfigCategory("render", source("Render")),
-                source("Outlines two blocks above the middle ring until the upper block is filled."));
+                source("Outlines two blocks above the middle ring where the upper block is empty."));
         holdingBlocksOnly =
                 booleanSetting("holding_blocks_only", source("Only while holding blocks"),
                         source("Shows the ring only while holding a block."), true);
-        color = colorPickerSetting("color", source("Ring color"), "", 0xB0C2E7FF);
+        color = colorPickerSetting("color", source("Ring color"),
+                source("Color and opacity of the ring outlines."), 0xB0C2E7FF);
     }
 
     public boolean holdingBlocksOnly() {
