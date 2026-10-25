@@ -44,7 +44,7 @@ const {
   profileAction,
   hideLanguageHint,
   updateRelations,
-  imported,
+  importData,
   reportError,
 } = useWebUiState()
 const { capturing, startCapture, cancelCapture } = useKeyCapture(
@@ -292,7 +292,7 @@ function closeTransfer() {
     v-if="state && transferMode"
     :mode="transferMode"
     :state="state"
-    :accept-import="imported"
+    :apply-import="importData"
     @close="closeTransfer"
   />
 </template>

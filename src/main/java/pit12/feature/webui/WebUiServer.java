@@ -18,13 +18,12 @@
  */
 package pit12.feature.webui;
 
+import static pit12.feature.webui.WebUiJson.object;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import java.io.ByteArrayOutputStream;
@@ -36,84 +35,29 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import net.minecraft.client.Minecraft;
-import pit12.feature.profile.api.ProfileCreateSession;
-import pit12.feature.profile.api.ProfileMutationResult;
-import pit12.feature.profile.api.ProfileSummary;
-import pit12.feature.profile.api.Profiles;
-import pit12.feature.profile.api.ProfilesSnapshot;
-import pit12.feature.relation.api.Relation;
-import pit12.feature.relation.api.RelationEntry;
-import pit12.feature.relation.api.RelationReadiness;
-import pit12.feature.relation.api.Relations;
-import pit12.feature.swap.api.SwapBindings;
-import pit12.runtime.config.ChoiceSetting;
-import pit12.runtime.config.ConfigCatalog;
-import pit12.runtime.config.ConfigCategory;
-import pit12.runtime.config.ConfigChangeListener;
-import pit12.runtime.config.ConfigOption;
-import pit12.runtime.config.FeatureConfig;
-import pit12.runtime.config.NumberSetting;
-import pit12.runtime.config.Setting;
-import pit12.runtime.languages.Languages;
-import pit12.shared.build.BuildConfig;
-import pit12.shared.input.Keybind;
-import pit12.shared.result.OperationResult;
 
 final class WebUiServer {
     private static final String RESOURCES = "assets/pit12/web";
-    private static final String BUILD_LABEL = buildLabel();
     private static final int PORT = 60916;
-    private static final int MAX_STREAMS = 8;
-    private static final byte[] CONNECTED = ": connected\n\n".getBytes(StandardCharsets.UTF_8);
-    private static final byte[] UPDATE = "data: update\n\n".getBytes(StandardCharsets.UTF_8);
     private static final byte[] HEARTBEAT = ": keep-alive\n\n".getBytes(StandardCharsets.UTF_8);
     private final Minecraft minecraft;
-    private final Languages language;
-    private final ConfigCatalog catalog;
-    private final ConfigCatalog settings;
-    private final WebUiConfig config;
-    private final Profiles profiles;
-    private final Relations relations;
-    private final SwapBindings swapBindings;
-    private final SettingsTransfer transfer;
-    private final WebUiPreferences preferences;
+    private final WebUiRoutes routes;
+    private final WebUiEvents events;
     private final Gson gson = new Gson();
-    private final Set<BlockingQueue<Boolean>> streams = new HashSet<>();
-    private final ConfigChangeListener configListener = ignored -> notifyStreams();
-    private final Runnable changeListener = this::notifyStreams;
     private HttpServer server;
     private ExecutorService executor;
 
-    WebUiServer(Minecraft minecraft, ConfigCatalog catalog, ConfigCatalog settings,
-            WebUiConfig config, Profiles profiles, Relations relations, SwapBindings swapBindings,
-            Languages language, WebUiPreferences preferences) {
-        this.language = language;
+    WebUiServer(Minecraft minecraft, WebUiRoutes routes, WebUiEvents events) {
         this.minecraft = minecraft;
-        this.catalog = catalog;
-        this.settings = settings;
-        this.config = config;
-        this.profiles = profiles;
-        this.relations = relations;
-        this.swapBindings = swapBindings;
-        this.preferences = preferences;
-        transfer = new SettingsTransfer(profiles, relations, swapBindings);
+        this.routes = routes;
+        this.events = events;
     }
 
     void start() throws IOException {
@@ -124,7 +68,7 @@ final class WebUiServer {
         } catch (BindException occupied) {
             created = HttpServer.create(new InetSocketAddress(loopback, 0), 0);
         }
-        executor = Executors.newFixedThreadPool(MAX_STREAMS + 2, runnable -> {
+        executor = Executors.newFixedThreadPool(WebUiEvents.MAX_STREAMS + 2, runnable -> {
             Thread thread = new Thread(runnable, "12pit-web-server");
             thread.setDaemon(true);
             return thread;
@@ -133,21 +77,10 @@ final class WebUiServer {
         created.createContext("/", this::handle);
         created.start();
         server = created;
-        catalog.addListener(configListener);
-        settings.addListener(configListener);
-        language.addListener(changeListener);
-        profiles.addListener(changeListener);
-        relations.addChangeListener(changeListener);
-        swapBindings.addChangeListener(changeListener);
     }
 
     void stop() {
-        catalog.removeListener(configListener);
-        settings.removeListener(configListener);
-        language.removeListener(changeListener);
-        profiles.removeListener(changeListener);
-        relations.removeChangeListener(changeListener);
-        swapBindings.removeChangeListener(changeListener);
+        events.clear();
         if (server != null) {
             server.stop(0);
             server = null;
@@ -164,6 +97,20 @@ final class WebUiServer {
 
     private void handle(HttpExchange exchange) throws IOException {
         try {
+            exchange.getResponseHeaders().set("Content-Security-Policy", "frame-ancestors 'none'");
+            exchange.getResponseHeaders().set("X-Frame-Options", "DENY");
+            String authority = "127.0.0.1:" + exchange.getLocalAddress().getPort();
+            List<String> hosts = exchange.getRequestHeaders().get("Host");
+            if (hosts == null || hosts.size() != 1 || !authority.equals(hosts.get(0))) {
+                sendJson(exchange, 403, object("error", "Unexpected host"));
+                return;
+            }
+            String origin = exchange.getRequestHeaders().getFirst("Origin");
+            // noinspection HttpClientInappropriateProtocolUsageInspection
+            if (origin != null && !("http://" + authority).equals(origin)) {
+                sendJson(exchange, 403, object("error", "Unexpected origin"));
+                return;
+            }
             String path = exchange.getRequestURI().getPath();
             if (path.startsWith("/api/")) {
                 handleApi(exchange, path);
@@ -194,30 +141,30 @@ final class WebUiServer {
     private void handleApi(HttpExchange exchange, String path)
             throws IOException, ExecutionException, InterruptedException {
         exchange.getResponseHeaders().set("Cache-Control", "no-store");
+        // Browsers can omit Origin on cross-origin GETs.
+        String site = exchange.getRequestHeaders().getFirst("Sec-Fetch-Site");
+        if ("cross-site".equals(site) || "same-site".equals(site)) {
+            sendJson(exchange, 403, object("error", "Unexpected request site"));
+            return;
+        }
         if ("GET".equals(exchange.getRequestMethod()) && "/api/events".equals(path)) {
             serveEvents(exchange);
             return;
         }
-        if ("GET".equals(exchange.getRequestMethod()) && "/api/state".equals(path)) {
-            sendJson(exchange, 200, onClient(this::state));
+        WebUiRoutes.Request request =
+                routes.find(exchange.getRequestMethod(), exchange.getRequestURI());
+        if (request == null) {
+            String allowed = routes.allowedMethods(path);
+            if (allowed.isEmpty()) {
+                sendJson(exchange, 404, object("error", "Unknown endpoint"));
+            } else {
+                exchange.getResponseHeaders().set("Allow", allowed);
+                sendJson(exchange, 405, object("error", "Method not allowed"));
+            }
             return;
         }
-        if ("GET".equals(exchange.getRequestMethod()) && path.startsWith("/api/languages/")) {
-            String locale = path.substring("/api/languages/".length());
-            sendJson(exchange, 200, onClient(() -> language.texts(locale)));
-            return;
-        }
-        if (!"POST".equals(exchange.getRequestMethod()) || !"/api/setting".equals(path)
-                && !"/api/favorite".equals(path) && !"/api/profile".equals(path)
-                && !"/api/language-hint/dismiss".equals(path) && !"/api/relation".equals(path)
-                && !"/api/transfer/export".equals(path) && !"/api/transfer/preview".equals(path)
-                && !"/api/transfer/apply".equals(path)) {
-            sendJson(exchange, 404, object("error", "Unknown endpoint"));
-            return;
-        }
-        String origin = exchange.getRequestHeaders().getFirst("Origin");
-        if (origin != null && !address().toString().equals(origin + "/")) {
-            sendJson(exchange, 403, object("error", "Unexpected origin"));
+        if (request.route.bodyLimit == 0) {
+            sendJson(exchange, 200, onClient(() -> request.route.handler.apply(request)));
             return;
         }
         String type = exchange.getRequestHeaders().getFirst("Content-Type");
@@ -225,67 +172,20 @@ final class WebUiServer {
             sendJson(exchange, 415, object("error", "Expected JSON"));
             return;
         }
-        JsonElement parsed = new JsonParser().parse(new String(
-                readLimited(exchange.getRequestBody(),
-                        path.startsWith("/api/transfer/") ? 4 * 1024 * 1024
-                                : "/api/relation".equals(path) ? 32768 : 8192),
-                StandardCharsets.UTF_8));
+        JsonElement parsed = new JsonParser()
+                .parse(new String(readLimited(exchange.getRequestBody(), request.route.bodyLimit),
+                        StandardCharsets.UTF_8));
         if (!parsed.isJsonObject()) {
             throw new IllegalArgumentException("Expected a JSON object");
         }
-        JsonObject request = parsed.getAsJsonObject();
-        sendJson(exchange, 200, onClient(() -> {
-            switch (path) {
-                case "/api/transfer/export":
-                    return transfer.exportData(request);
-                case "/api/transfer/preview":
-                    return transfer.preview(request);
-                case "/api/transfer/apply":
-                    transfer.apply(request);
-                    return state();
-                case "/api/relation":
-                    List<Object> results = changeRelations(request);
-                    return object("state", state(), "results", results);
-                case "/api/language-hint/dismiss":
-                    if (!preferences.ready())
-                        throw new IllegalArgumentException(
-                                "Configuration interface settings are unavailable");
-                    config.languageHint().set(false);
-                    return state();
-                case "/api/favorite":
-                    String id = requiredString(request, "featureId");
-                    if (catalog.feature(id) == null)
-                        throw new IllegalArgumentException("Unknown feature");
-                    JsonElement favorite = request.get("favorite");
-                    if (favorite == null || !favorite.isJsonPrimitive()
-                            || !favorite.getAsJsonPrimitive().isBoolean())
-                        throw new IllegalArgumentException("Expected a boolean");
-                    if (!preferences.ready())
-                        throw new IllegalArgumentException(
-                                "Configuration interface settings are unavailable");
-                    preferences.setFavorite(id, favorite.getAsBoolean());
-                    break;
-                case "/api/setting":
-                    changeSetting(request);
-                    break;
-                default:
-                    changeProfile(request);
-                    break;
-            }
-            return state();
-        }));
+        request.body = parsed.getAsJsonObject();
+        sendJson(exchange, 200, onClient(() -> request.route.handler.apply(request)));
     }
 
-    private void serveEvents(HttpExchange exchange) throws IOException {
-        BlockingQueue<Boolean> signal = new ArrayBlockingQueue<>(1);
-        boolean accepted;
-        synchronized (streams) {
-            accepted = streams.size() < MAX_STREAMS;
-            if (accepted) {
-                streams.add(signal);
-            }
-        }
-        if (!accepted) {
+    private void serveEvents(HttpExchange exchange)
+            throws IOException, ExecutionException, InterruptedException {
+        WebUiEvents.Stream stream = onClient(events::subscribe);
+        if (stream == null) {
             sendJson(exchange, 503, object("error", "Too many open pages"));
             return;
         }
@@ -294,307 +194,32 @@ final class WebUiServer {
             exchange.getResponseHeaders().set("Cache-Control", "no-cache");
             exchange.sendResponseHeaders(200, 0);
             try (OutputStream output = exchange.getResponseBody()) {
-                output.write(CONNECTED);
+                output.write(": connected\n\n".getBytes(StandardCharsets.UTF_8));
                 output.flush();
                 while (!Thread.currentThread().isInterrupted()) {
-                    output.write(signal.poll(5, TimeUnit.SECONDS) == null ? HEARTBEAT : UPDATE);
+                    if (stream.wakeup.poll(5, TimeUnit.SECONDS) == null) {
+                        output.write(HEARTBEAT);
+                    } else {
+                        List<String> resources = onClient(() -> events.read(stream));
+                        output.write(("event: change\ndata: " + gson.toJson(resources) + "\n\n")
+                                .getBytes(StandardCharsets.UTF_8));
+                    }
                     output.flush();
                 }
             }
         } catch (InterruptedException stopping) {
             Thread.currentThread().interrupt();
+        } catch (ExecutionException failure) {
+            throw new IOException("Could not read configuration interface state",
+                    failure.getCause());
         } finally {
-            synchronized (streams) {
-                streams.remove(signal);
-            }
-        }
-    }
-
-    void notifyStreams() {
-        synchronized (streams) {
-            for (BlockingQueue<Boolean> signal : streams) {
-                // Capacity is 1. A rejected offer just means a wakeup is already queued.
-                // noinspection ResultOfMethodCallIgnored
-                signal.offer(Boolean.TRUE);
-            }
+            // The client thread also stops these workers.
+            minecraft.addScheduledTask(() -> events.unsubscribe(stream));
         }
     }
 
     private <T> T onClient(Callable<T> action) throws ExecutionException, InterruptedException {
         return minecraft.addScheduledTask(action).get();
-    }
-
-    private void changeSetting(JsonObject request) {
-        String featureId = requiredString(request, "featureId");
-        String settingId = requiredString(request, "settingId");
-        FeatureConfig feature = config.id().equals(featureId) ? config : catalog.feature(featureId);
-        if (feature == null) {
-            throw new IllegalArgumentException("Unknown feature");
-        }
-        if (feature == config && !preferences.ready())
-            throw new IllegalArgumentException("Configuration interface settings are unavailable");
-        JsonElement value = request.get("value");
-        if (value == null || !value.isJsonPrimitive()) {
-            throw new IllegalArgumentException("Expected a setting value");
-        }
-        JsonPrimitive primitive = value.getAsJsonPrimitive();
-        if ("enabled".equals(settingId) && feature.toggleable()) {
-            if (!primitive.isBoolean()) {
-                throw new IllegalArgumentException("Expected a boolean");
-            }
-            feature.setEnabled(primitive.getAsBoolean());
-            return;
-        }
-        for (ConfigOption<?> option : feature.options()) {
-            if (!option.setting().id().equals(settingId)) {
-                continue;
-            }
-            Object candidate;
-            if (option.kind() == ConfigOption.Kind.KEYBIND) {
-                if (!primitive.isString()) {
-                    throw new IllegalArgumentException("Expected a key name");
-                }
-                candidate = Keybind.parse(primitive.getAsString());
-            } else if (primitive.isBoolean()) {
-                candidate = primitive.getAsBoolean();
-            } else if (primitive.isNumber()) {
-                candidate = primitive.getAsNumber();
-            } else {
-                candidate = primitive.getAsString();
-            }
-            setValue(option.setting(), candidate);
-            return;
-        }
-        throw new IllegalArgumentException("Unknown setting");
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static void setValue(Setting<?> setting, Object value) {
-        ((Setting) setting).set(value);
-    }
-
-    private void changeProfile(JsonObject request) {
-        String action = requiredString(request, "action");
-        ProfileMutationResult result;
-        if ("create".equals(action)) {
-            result = profiles.beginCreate();
-            if (!result.succeeded()) {
-                throw new IllegalArgumentException(
-                        "Could not begin profile creation: " + result.status());
-            }
-            ProfileCreateSession session = result.createSession();
-            try {
-                session.setName(requiredString(request, "name"));
-                result = session.commit();
-            } finally {
-                if (!session.isClosed()) {
-                    session.cancel();
-                }
-            }
-        } else if ("reset".equals(action)) {
-            result = profiles.resetActive();
-        } else {
-            UUID id = UUID.fromString(requiredString(request, "id"));
-            switch (action) {
-                case "switch":
-                    result = profiles.switchTo(id);
-                    break;
-                case "rename":
-                    result = profiles.rename(id, requiredString(request, "name"));
-                    break;
-                case "delete":
-                    result = profiles.delete(id);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown profile action");
-            }
-        }
-        if (!result.succeeded()) {
-            throw new IllegalArgumentException(
-                    "Could not " + action + " profile: " + result.status());
-        }
-    }
-
-    private List<Object> changeRelations(JsonObject request) {
-        if (relations.readiness() != RelationReadiness.READY) {
-            throw new IllegalArgumentException("Relations are not ready");
-        }
-        Relation relation = Relation.valueOf(requiredString(request, "relation"));
-        if (relation == Relation.NONE) {
-            throw new IllegalArgumentException("Choose Friend or Enemy");
-        }
-        String action = requiredString(request, "action");
-        if (!"add".equals(action) && !"remove".equals(action)) {
-            throw new IllegalArgumentException("Unknown relation action");
-        }
-        JsonElement value = request.get("entries");
-        if (value == null || !value.isJsonArray()) {
-            throw new IllegalArgumentException("Expected a list of players");
-        }
-        JsonArray entries = value.getAsJsonArray();
-        if (entries.size() > 100) {
-            throw new IllegalArgumentException("Select at most 100 players at a time");
-        }
-        List<Object> results = new ArrayList<>(Collections.nCopies(entries.size(), null));
-        List<RelationEntry> changes = new ArrayList<>();
-        List<Integer> positions = new ArrayList<>();
-        Set<String> seen = new HashSet<>();
-        Set<String> existing = new HashSet<>();
-        if ("add".equals(action)) {
-            for (RelationEntry saved : relations.entries(relation)) {
-                if (saved.playerId() != null)
-                    existing.add(saved.name().toLowerCase(Locale.ROOT));
-            }
-        }
-        for (int index = 0; index < entries.size(); index++) {
-            JsonElement element = entries.get(index);
-            if (!element.isJsonObject()) {
-                throw new IllegalArgumentException("Expected a player entry");
-            }
-            JsonObject entry = element.getAsJsonObject();
-            String name = requiredString(entry, "name").trim();
-            JsonElement idValue = entry.get("uuid");
-            UUID id = null;
-            if (idValue != null && !idValue.isJsonNull()) {
-                if ("add".equals(action)) {
-                    throw new IllegalArgumentException("Cannot add a player by UUID");
-                }
-                id = UUID.fromString(requiredString(entry, "uuid"));
-            }
-            String identity = id == null ? name.toLowerCase(Locale.ROOT) : id.toString();
-            if (name.isEmpty() || name.length() > 48
-                    || id == null && "add".equals(action) && !name.matches("[A-Za-z0-9_]{1,48}")) {
-                results.set(index, object("name", name, "message", "Invalid player name"));
-            } else if (!seen.add(identity)) {
-                results.set(index, object("name", name, "message", "Duplicate entry skipped"));
-            } else if ("add".equals(action) && existing.contains(identity)) {
-                results.set(index, object("name", name, "message", "Already on this list"));
-            } else {
-                changes.add(new RelationEntry(id, name, relation));
-                positions.add(index);
-            }
-        }
-        OperationResult<List<OperationResult<Void>>> batch =
-                relations.changeMany(relation, action, changes);
-        if (!batch.succeeded())
-            throw new IllegalArgumentException(
-                    "Could not " + action + " relations: " + batch.status());
-        List<OperationResult<Void>> messages = batch.value();
-        for (int index = 0; index < messages.size(); index++) {
-            results.set(positions.get(index), object("name", changes.get(index).name(), "message",
-                    messages.get(index).message()));
-        }
-        return results;
-    }
-
-    private Map<String, Object> state() {
-        List<Object> features = new ArrayList<>();
-        for (FeatureConfig feature : catalog.features()) {
-            features.add(featureState(feature));
-        }
-        ProfilesSnapshot snapshot = profiles.snapshot();
-        List<Object> entries = new ArrayList<>();
-        for (ProfileSummary profile : snapshot.profiles()) {
-            entries.add(object("id", profile.id().toString(), "name", profile.name()));
-        }
-        List<Object> relationEntries = new ArrayList<>();
-        for (Relation type : new Relation[] {Relation.FRIEND, Relation.ENEMY}) {
-            for (RelationEntry entry : relations.entries(type)) {
-                relationEntries.add(object("uuid",
-                        entry.playerId() == null ? null : entry.playerId().toString(), "name",
-                        entry.name(), "relation", type.name()));
-            }
-        }
-        return object("version", BUILD_LABEL, "language", language.locale(), "features", features,
-                "webui",
-                object("settings", featureState(config), "favorites", preferences.favorites(),
-                        "systemLanguage", Locale.getDefault().toLanguageTag(), "languageHint",
-                        config.languageHint().get(), "ready", preferences.ready(), "problem",
-                        Languages.sourceText(preferences.problem())),
-                "relations",
-                object("problem", relations.readinessProblem(), "lookupProblems",
-                        relations.lookupProblems(), "entries", relationEntries),
-                "swapBindings",
-                object("problem", swapBindings.readinessProblem(), "count", swapBindings.count()),
-                "profiles",
-                object("loadState", snapshot.loadState().name(), "activeId",
-                        snapshot.activeProfileId() == null ? null
-                                : snapshot.activeProfileId().toString(),
-                        "entries", entries, "problems", snapshot.problems(), "unpersisted",
-                        snapshot.hasUnpersistedChanges()));
-    }
-
-    private Map<String, Object> featureState(FeatureConfig feature) {
-        List<Object> sections = new ArrayList<>();
-        Map<String, Map<String, Object>> byId = new LinkedHashMap<>();
-        for (ConfigOption<?> option : feature.options()) {
-            String sectionId =
-                    option.subsubcategory() == null ? null : option.subsubcategory().id();
-            String groupId = (option.subcategory() == null ? "" : option.subcategory().id()) + "/"
-                    + (sectionId == null ? "" : sectionId);
-            Map<String, Object> section = byId.get(groupId);
-            if (section == null) {
-                section = object("id", sectionId, "name",
-                        option.subsubcategory() == null ? null
-                                : option.subsubcategory().displayName(),
-                        "subcategory",
-                        option.subcategory() == null ? null
-                                : object("id", option.subcategory().id(), "name",
-                                        option.subcategory().displayName()),
-                        "options", new ArrayList<>());
-                byId.put(groupId, section);
-                sections.add(section);
-            }
-            @SuppressWarnings("unchecked")
-            List<Object> options = (List<Object>) section.get("options");
-            options.add(optionState(option));
-        }
-        ConfigCategory category = feature.category();
-        return object("id", feature.id(), "name", feature.displayName(), "description",
-                feature.description(), "categoryId", category == null ? "" : category.id(),
-                "category", category == null ? "" : category.displayName(), "toggleable",
-                feature.toggleable(), "enabled", feature.enabled(), "sections", sections);
-    }
-
-    private static String buildLabel() {
-        if (BuildConfig.RELEASE_BUILD) {
-            return BuildConfig.VERSION;
-        }
-        if (!BuildConfig.GIT_COMMIT.isEmpty()) {
-            return BuildConfig.GIT_COMMIT.substring(0,
-                    Math.min(7, BuildConfig.GIT_COMMIT.length()));
-        }
-        return "dev";
-    }
-
-    private Map<String, Object> optionState(ConfigOption<?> option) {
-        Setting<?> setting = option.setting();
-        Map<String, Object> value = object("id", setting.id(), "name", setting.displayName(),
-                "description", setting.description(), "kind", option.kind().name(), "value",
-                setting.get());
-        if (setting instanceof NumberSetting<?>) {
-            NumberSetting<?> number = (NumberSetting<?>) setting;
-            value.put("min", number.minimumValue());
-            value.put("max", number.maximumValue());
-            value.put("step", number.stepValue());
-        }
-        if (setting instanceof ChoiceSetting) {
-            List<Object> choices = new ArrayList<>();
-            for (ChoiceSetting.Choice choice : ((ChoiceSetting) setting).choices()) {
-                Map<String, Object> entry =
-                        object("value", choice.value(), "name", choice.displayName());
-                if (setting == config.language()) {
-                    entry.put("locale", language.locale(choice.value()));
-                    entry.put("displayName", language.displayNameSource(choice.value()));
-                }
-                choices.add(entry);
-            }
-            value.put("choices", choices);
-        }
-        if (option.kind() == ConfigOption.Kind.KEYBIND) {
-            value.put("keyName", Keybind.name((Integer) setting.get()));
-        }
-        return value;
     }
 
     private void serveResource(HttpExchange exchange, String path) throws IOException {
@@ -646,21 +271,5 @@ final class WebUiServer {
             bytes.write(chunk, 0, count);
         }
         return bytes.toByteArray();
-    }
-
-    private static String requiredString(JsonObject object, String key) {
-        JsonElement value = object.get(key);
-        if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) {
-            throw new IllegalArgumentException("Expected " + key);
-        }
-        return value.getAsString();
-    }
-
-    private static Map<String, Object> object(Object... pairs) {
-        Map<String, Object> value = new LinkedHashMap<>();
-        for (int index = 0; index < pairs.length; index += 2) {
-            value.put((String) pairs[index], pairs[index + 1]);
-        }
-        return value;
     }
 }

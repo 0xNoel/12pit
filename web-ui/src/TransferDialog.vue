@@ -31,20 +31,20 @@ import {
   X,
 } from '@lucide/vue'
 import {
-  applyData,
+  type applyData,
   exportData,
   previewData,
   type RelationConflict,
   type RelationEntry,
   type RelationType,
-  type State,
   type TransferPreview,
 } from './api'
+import type { WebUiState } from './useWebUiState'
 
 const props = defineProps<{
   mode: 'export' | 'import'
-  state: State
-  acceptImport: (state: State) => Promise<boolean>
+  state: WebUiState
+  applyImport: (...args: Parameters<typeof applyData>) => Promise<boolean>
 }>()
 const emit = defineEmits<{
   close: []
@@ -76,11 +76,11 @@ const selectedRelations = ref<RelationType[]>(
 const expandedProfiles = ref(false)
 const expandedRelations = ref(true)
 const selectedSwap = ref(
-  props.mode === 'export' && !props.state.swapBindings.problem,
+  props.mode === 'export' && !props.state.transfer.swapBindings.problem,
 )
 const availableSwap = computed(() =>
   props.mode === 'export'
-    ? !props.state.swapBindings.problem
+    ? !props.state.transfer.swapBindings.problem
     : !!preview.value?.swapBindings,
 )
 const relationMode = ref<'merge' | 'replace'>('merge')
@@ -227,7 +227,7 @@ async function submit() {
       setTimeout(() => URL.revokeObjectURL(url), 1000)
       emit('close')
     } else if (fileData.value && preview.value) {
-      const next = await applyData(
+      const applied = await props.applyImport(
         fileData.value,
         selectedProfiles.value,
         selectedRelations.value,
@@ -236,7 +236,7 @@ async function submit() {
         preview.value.fingerprint,
         selectedSwap.value && availableSwap.value,
       )
-      if (await props.acceptImport(next)) emit('close')
+      if (applied) emit('close')
     }
   } catch (cause) {
     error.value = cause instanceof Error ? cause.message : t('Transfer failed')

@@ -88,6 +88,13 @@ public final class ArchitectureTest {
                     .dependOnClassesThat().resideInAPackage("net.minecraftforge..")
                     .because("Forge command registration belongs to the platform adapter");
     @ArchTest
+    public static final ArchRule WEB_SERVER_DEPENDENCIES =
+            classes().that().haveFullyQualifiedName("pit12.feature.webui.WebUiServer").should()
+                    .onlyDependOnClassesThat()
+                    .resideInAnyPackage("pit12.feature.webui..", "java..", "com.google..",
+                            "com.sun.net.httpserver..", "net.minecraft.client..")
+                    .because("business endpoints belong to registered API adapters");
+    @ArchTest
     public static final ArchRule EXTERNAL_APIS_BELONG_TO_PLATFORM = noClasses().that()
             .resideInAnyPackage("pit12.bootstrap..", "pit12.runtime..", "pit12.feature..",
                     "pit12.shared..")

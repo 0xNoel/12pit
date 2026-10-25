@@ -18,6 +18,8 @@
  */
 package pit12.feature.webui;
 
+import static pit12.feature.webui.WebUiJson.requiredString;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -120,10 +122,10 @@ final class SettingsTransfer {
         requireSelection(selectedProfiles, selectedTypes, includeSwap);
         if (includeSwap && bundle.swapBindings == null)
             throw new IllegalArgumentException("File has no swap bindings");
-        if (!string(request, "fingerprint").equals(fingerprint())) {
+        if (!requiredString(request, "fingerprint").equals(fingerprint())) {
             throw new IllegalArgumentException("Settings changed. Preview the file again");
         }
-        String mode = string(request, "mode");
+        String mode = requiredString(request, "mode");
         if (!"merge".equals(mode) && !"replace".equals(mode)) {
             throw new IllegalArgumentException("Choose a relation import mode");
         }
@@ -205,7 +207,7 @@ final class SettingsTransfer {
                     throw new IllegalArgumentException("Relation entry must be an object");
                 }
                 JsonObject value = item.getAsJsonObject();
-                if (!type.name().equals(string(value, "relation"))) {
+                if (!type.name().equals(requiredString(value, "relation"))) {
                     throw new IllegalArgumentException("Relation is in the wrong group");
                 }
                 JsonElement uuid = value.get("uuid");
@@ -213,8 +215,8 @@ final class SettingsTransfer {
                     throw new IllegalArgumentException("Relation UUID is missing");
                 }
                 entries.add(new RelationEntry(
-                        uuid.isJsonNull() ? null : UUID.fromString(string(value, "uuid")),
-                        string(value, "name"), type));
+                        uuid.isJsonNull() ? null : UUID.fromString(requiredString(value, "uuid")),
+                        requiredString(value, "name"), type));
             }
             groups.put(type, entries);
         }
@@ -292,7 +294,7 @@ final class SettingsTransfer {
                 RelationEntry incoming = imported.get(index);
                 List<RelationEntry> matches = matches(local, incoming);
                 if (conflict(matches, incoming)) {
-                    String choice = string(decisions, type.name() + ":" + index);
+                    String choice = requiredString(decisions, type.name() + ":" + index);
                     if (!"local".equals(choice) && !"imported".equals(choice)) {
                         throw new IllegalArgumentException("Resolve every relation conflict");
                     }
@@ -432,14 +434,6 @@ final class SettingsTransfer {
             throw new IllegalArgumentException("Expected " + key + " list");
         }
         return value.getAsJsonArray();
-    }
-
-    private static String string(JsonObject parent, String key) {
-        JsonElement value = parent.get(key);
-        if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) {
-            throw new IllegalArgumentException("Expected " + key);
-        }
-        return value.getAsString();
     }
 
     private static List<UUID> ids(JsonArray values) {

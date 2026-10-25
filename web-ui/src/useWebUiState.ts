@@ -18,35 +18,82 @@
  */
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import {
+  applyData,
   changeFavorite,
-  changeProfile,
   changeRelations,
   changeSetting,
+  createProfile,
+  deleteProfile,
   dismissLanguageHint,
-  loadState,
+  loadCatalog,
+  loadPreferences,
+  loadProfiles,
+  loadRelations,
+  loadSettingValues,
+  loadTransfer,
+  renameProfile,
+  resetSettings,
+  selectProfile,
+  subscribe,
+  type ConfigurationCatalog,
+  type Feature,
+  type Option,
+  type ProfilesState,
   type RelationInput,
   type RelationResult,
+  type RelationsState,
   type RelationType,
-  type State,
+  type SettingValue,
+  type TransferState,
+  type WebUiPreferences,
 } from './api'
 import { applyLanguage, loadLanguage, t, type Catalog } from './languages'
 
-type SettingEdit = {
-  featureId: string
-  optionId: string
-  value: boolean | number | string
+export interface WebUiState {
+  language: string
+  version: string
+  features: Feature[]
+  webui: WebUiPreferences & { settings: Feature }
+  profiles: ProfilesState
+  relations: RelationsState
+  transfer: TransferState
 }
 
+export type ProfileAction = 'create' | 'rename' | 'delete' | 'switch' | 'reset'
+
 export function useWebUiState() {
-  const state = ref<State | null>(null)
+  const catalog = ref<ConfigurationCatalog | null>(null)
+  const preferences = ref<WebUiPreferences | null>(null)
+  const profiles = ref<ProfilesState | null>(null)
+  const relations = ref<RelationsState | null>(null)
+  const transfer = ref<TransferState | null>(null)
+  const state = computed<WebUiState | null>(() => {
+    if (
+      !catalog.value ||
+      !preferences.value ||
+      !profiles.value ||
+      !relations.value ||
+      !transfer.value
+    )
+      return null
+    return {
+      language: catalog.value.language,
+      version: catalog.value.version,
+      features: catalog.value.features,
+      webui: { ...preferences.value, settings: catalog.value.settings },
+      profiles: profiles.value,
+      relations: relations.value,
+      transfer: transfer.value,
+    }
+  })
   const error = ref('')
-  const favorites = computed(() => new Set(state.value?.webui.favorites ?? []))
+  const favorites = computed(() => new Set(preferences.value?.favorites ?? []))
   const pending = ref(false)
   const sendingSetting = ref(false)
   const busy = computed(() => pending.value || sendingSetting.value)
-  const features = computed(() => state.value?.features ?? [])
+  const features = computed(() => catalog.value?.features ?? [])
   const settingsOptions = computed(() =>
-    state.value?.webui.settings.sections.flatMap((section) => section.options),
+    catalog.value?.settings.sections.flatMap((section) => section.options),
   )
   const color = computed(
     () =>
@@ -58,11 +105,24 @@ export function useWebUiState() {
         .value,
     ),
   )
-  const pendingSettings = new Map<string, SettingEdit>()
-  const queuedSettings = new Map<string, SettingEdit>()
+  const featuresById = new Map<string, Feature>()
+  const optionsById = new Map<string, Option>()
+  const confirmedSettings = new Map<string, SettingValue>()
+  const pendingSettings = new Map<string, SettingValue>()
+  const queuedSettings = new Map<string, SettingValue>()
+  const refreshQueue = new Set<string>()
+  const resources = [
+    '/api/settings',
+    '/api/preferences',
+    '/api/profiles',
+    '/api/relations',
+    '/api/transfer',
+  ]
   let stream: EventSource | undefined
-  let requestVersion = 0
-  let refreshQueued = false
+  let generation = 0
+  let refreshing = false
+  let languageProblem = ''
+  let streamProblem = ''
   let stopped = false
 
   watch(color, (value) => {
@@ -85,105 +145,224 @@ export function useWebUiState() {
     error.value = cause instanceof Error ? cause.message : t('Request failed')
   }
 
-  async function toggleFavorite(id: string) {
-    await mutate(
-      () => changeFavorite(id, !favorites.value.has(id)),
-      (result) => result,
-    )
+  function clearError() {
+    error.value =
+      languageProblem ||
+      (preferences.value?.problem ? t(preferences.value.problem) : '')
   }
 
-  function applySetting(next: State, edit: SettingEdit) {
-    // The catalog can't change once the UI is running.
-    const feature =
-      next.webui.settings.id === edit.featureId
-        ? next.webui.settings
-        : next.features.find((item) => item.id === edit.featureId)!
-    if (edit.optionId === 'enabled') {
-      feature.enabled = Boolean(edit.value)
+  function applySetting(edit: SettingValue) {
+    const key = `${edit.featureId}:${edit.settingId}`
+    if (edit.settingId === 'enabled') {
+      featuresById.get(edit.featureId)!.enabled = Boolean(edit.value)
       return
     }
-    const option = feature.sections
-      .flatMap((section) => section.options)
-      .find((item) => item.id === edit.optionId)!
-    if (option.kind === 'KEYBIND') option.keyName = String(edit.value)
-    else option.value = edit.value
-  }
-
-  async function displayState(next: State, version: number, clearError = true) {
-    let catalog: Catalog | null = null
-    let languageError: unknown
-    try {
-      catalog = await loadLanguage(next.language)
-    } catch (cause) {
-      languageError = cause
+    const option = optionsById.get(key)!
+    if (option.kind === 'KEYBIND' && edit.keyName === undefined) {
+      option.keyName = String(edit.value)
+    } else {
+      option.value = edit.value
+      if (edit.keyName !== undefined) option.keyName = edit.keyName
     }
-    if (stopped || version !== requestVersion) return false
-    for (const edit of pendingSettings.values()) applySetting(next, edit)
-    applyLanguage(catalog)
-    state.value = next
-    if (languageError) reportError(languageError)
-    else if (next.webui.problem) error.value = t(next.webui.problem)
-    else if (clearError) error.value = ''
-    return true
   }
 
-  async function refresh(clearError = true) {
-    const version = ++requestVersion
-    try {
-      const next = await loadState()
-      if (stopped || version !== requestVersion) return
-      if (busy.value) {
-        refreshQueued = true
+  function applyValues(values: SettingValue[]) {
+    for (const edit of values) {
+      const key = `${edit.featureId}:${edit.settingId}`
+      confirmedSettings.set(key, edit)
+      if (!pendingSettings.has(key)) applySetting(edit)
+    }
+  }
+
+  function displayCatalog(next: ConfigurationCatalog) {
+    catalog.value = next
+    featuresById.clear()
+    optionsById.clear()
+    confirmedSettings.clear()
+    for (const feature of [...catalog.value.features, catalog.value.settings]) {
+      featuresById.set(feature.id, feature)
+      if (feature.toggleable) {
+        confirmedSettings.set(`${feature.id}:enabled`, {
+          featureId: feature.id,
+          settingId: 'enabled',
+          value: feature.enabled,
+        })
+      }
+      for (const section of feature.sections) {
+        for (const option of section.options) {
+          const key = `${feature.id}:${option.id}`
+          optionsById.set(key, option)
+          confirmedSettings.set(key, {
+            featureId: feature.id,
+            settingId: option.id,
+            value: option.value,
+            keyName: option.keyName,
+          })
+        }
+      }
+    }
+    for (const edit of pendingSettings.values()) applySetting(edit)
+  }
+
+  async function readResource(path: string, version: number) {
+    let apply: () => void
+    if (path === '/api/settings') {
+      const next = await loadCatalog()
+      let texts: Catalog | null = null
+      let failure: unknown
+      try {
+        texts = await loadLanguage(next.language)
+      } catch (cause) {
+        failure = cause
+      }
+      apply = () => {
+        applyLanguage(texts)
+        languageProblem = ''
+        if (failure) {
+          reportError(failure)
+          languageProblem = error.value
+        }
+        displayCatalog(next)
+      }
+    } else if (path.startsWith('/api/settings/')) {
+      if (!catalog.value) {
+        refreshQueue.add('/api/settings')
         return
       }
-      await displayState(next, version, clearError)
-    } catch (cause) {
-      if (!stopped && version === requestVersion) reportError(cause)
-    }
+      const featureId = decodeURIComponent(path.slice('/api/settings/'.length))
+      if (featureId !== 'values' && !featuresById.has(featureId)) return
+      const values = await loadSettingValues(featureId)
+      apply = () => applyValues(values)
+    } else if (path === '/api/preferences') {
+      const next = await loadPreferences()
+      apply = () => {
+        preferences.value = next
+        if (next.problem) error.value = t(next.problem)
+      }
+    } else if (path === '/api/profiles') {
+      const next = await loadProfiles()
+      apply = () => {
+        profiles.value = next
+      }
+    } else if (path === '/api/relations') {
+      const next = await loadRelations()
+      apply = () => {
+        relations.value = next
+      }
+    } else if (path === '/api/transfer') {
+      const next = await loadTransfer()
+      apply = () => {
+        transfer.value = next
+      }
+    } else return
+    if (stopped) return
+    if (version !== generation) refreshQueue.add(path)
+    else apply()
   }
 
-  function refreshAfterMutation(clearError = true) {
-    if (!stopped && refreshQueued && !busy.value) {
-      refreshQueued = false
-      void refresh(clearError)
-    }
+  function queueRefresh(paths: string[]) {
+    for (const path of paths) refreshQueue.add(path)
+    void flushRefreshes()
   }
 
-  function serverChanged() {
-    if (busy.value) refreshQueued = true
-    else void refresh(false)
+  async function flushRefreshes() {
+    if (refreshing || busy.value || stopped) return
+    refreshing = true
+    try {
+      while (refreshQueue.size && !busy.value && !stopped) {
+        const paths = [...refreshQueue]
+        refreshQueue.clear()
+        const version = generation
+        await Promise.all(
+          paths
+            .filter(
+              (path) =>
+                !paths.includes('/api/settings') ||
+                !path.startsWith('/api/settings/'),
+            )
+            .map(async (path) => {
+              try {
+                await readResource(path, version)
+              } catch (cause) {
+                if (stopped) return
+                if (version === generation) reportError(cause)
+                else refreshQueue.add(path)
+              }
+            }),
+        )
+      }
+    } finally {
+      refreshing = false
+    }
   }
 
   async function mutate<T>(
     action: () => Promise<T>,
-    snapshot: (result: T) => State,
-  ): Promise<T | null> {
-    if (busy.value || stopped) return null
+    accept: (result: T) => void | Promise<void>,
+  ) {
+    if (busy.value || stopped) return false
     pending.value = true
-    const version = ++requestVersion
+    generation++
     try {
       const result = await action()
-      return (await displayState(snapshot(result), version)) ? result : null
+      if (stopped) return false
+      await accept(result)
+      clearError()
+      return true
     } catch (cause) {
       if (!stopped) reportError(cause)
-      return null
+      return false
     } finally {
       pending.value = false
-      refreshAfterMutation(false)
+      void flushRefreshes()
     }
   }
 
-  async function profileAction(action: string, id?: string, name?: string) {
-    return (
-      (await mutate(
-        () => changeProfile(action, id, name),
-        (result) => result,
-      )) !== null
+  async function toggleFavorite(id: string) {
+    await mutate(
+      () => changeFavorite(id, !favorites.value.has(id)),
+      (next) => {
+        preferences.value = next
+      },
+    )
+  }
+
+  async function profileAction(
+    action: ProfileAction,
+    id?: string,
+    name?: string,
+  ) {
+    if (action === 'reset') {
+      return mutate(resetSettings, async (values) => {
+        applyValues(values)
+        await readResource('/api/profiles', generation)
+      })
+    }
+    return mutate(
+      () => {
+        switch (action) {
+          case 'create':
+            return createProfile(name!)
+          case 'rename':
+            return renameProfile(id!, name!)
+          case 'delete':
+            return deleteProfile(id!)
+          case 'switch':
+            return selectProfile(id!)
+        }
+      },
+      async (next) => {
+        profiles.value = next
+        if (action === 'switch' || action === 'create')
+          await readResource('/api/settings/values', generation)
+      },
     )
   }
 
   async function hideLanguageHint() {
-    return (await mutate(dismissLanguageHint, (result) => result)) !== null
+    return mutate(dismissLanguageHint, (next) => {
+      preferences.value = next
+    })
   }
 
   async function updateRelations(
@@ -191,78 +370,113 @@ export function useWebUiState() {
     relation: RelationType,
     entries: RelationInput[],
   ): Promise<RelationResult[] | null> {
-    const result = await mutate(
+    let results: RelationResult[] | null = null
+    await mutate(
       () => changeRelations(action, relation, entries),
-      (result) => result.state,
+      (next) => {
+        relations.value = next.relations
+        results = next.results
+      },
     )
-    return result?.results ?? null
+    return results
   }
 
   function setting(
     featureId: string,
-    optionId: string,
+    settingId: string,
     value: boolean | number | string,
   ) {
     if (pending.value || stopped) return
-    const key = `${featureId}:${optionId}`
-    const edit = { featureId, optionId, value }
+    const key = `${featureId}:${settingId}`
+    const edit = { featureId, settingId, value }
     pendingSettings.set(key, edit)
     queuedSettings.set(key, edit)
-    applySetting(state.value!, edit)
+    applySetting(edit)
     void flushSettings()
   }
 
   async function flushSettings() {
     if (sendingSetting.value) return
     sendingSetting.value = true
+    generation++
     let failed = false
     try {
       while (queuedSettings.size && !stopped) {
         const [key, edit] = queuedSettings.entries().next().value!
         queuedSettings.delete(key)
-        const version = ++requestVersion
         try {
-          const next = await changeSetting(
+          const values = await changeSetting(
             edit.featureId,
-            edit.optionId,
+            edit.settingId,
             edit.value,
           )
-          if (pendingSettings.get(key) === edit) pendingSettings.delete(key)
-          await displayState(next, version, !failed)
+          if (stopped) return
+          applyValues(values)
+          if (edit.featureId === 'webui' && edit.settingId === 'language')
+            await readResource('/api/settings', generation)
+          if (!failed) clearError()
         } catch (cause) {
-          if (pendingSettings.get(key) === edit) pendingSettings.delete(key)
           if (!stopped) reportError(cause)
-          refreshQueued = true
+          refreshQueue.add(
+            `/api/settings/${encodeURIComponent(edit.featureId)}`,
+          )
           failed = true
+        } finally {
+          if (!stopped && pendingSettings.get(key) === edit) {
+            pendingSettings.delete(key)
+            applySetting(confirmedSettings.get(key)!)
+          }
         }
       }
     } finally {
       sendingSetting.value = false
-      refreshAfterMutation(!failed)
+      void flushRefreshes()
     }
   }
 
-  async function imported(next: State) {
-    if (stopped) return false
+  async function importData(...args: Parameters<typeof applyData>) {
+    if (busy.value || stopped) return false
     pending.value = true
+    generation++
     try {
-      return await displayState(next, ++requestVersion)
+      await applyData(...args)
+      if (stopped) return false
+      await Promise.all(
+        [
+          '/api/settings/values',
+          '/api/profiles',
+          '/api/relations',
+          '/api/transfer',
+        ].map((path) => readResource(path, generation)),
+      )
+      clearError()
+      return !stopped
     } finally {
       pending.value = false
-      refreshAfterMutation(false)
+      void flushRefreshes()
     }
   }
 
   onMounted(() => {
-    void refresh()
-    stream = new EventSource('/api/events')
-    stream.onopen = serverChanged
-    stream.onmessage = serverChanged
+    queueRefresh(resources)
+    stream = subscribe(
+      queueRefresh,
+      () => {
+        if (streamProblem && error.value === streamProblem) clearError()
+        streamProblem = ''
+        queueRefresh(resources)
+      },
+      (cause) => {
+        reportError(cause)
+        streamProblem = error.value
+      },
+    )
   })
   onUnmounted(() => {
     stopped = true
-    requestVersion++
+    generation++
     stream?.close()
+    refreshQueue.clear()
     pendingSettings.clear()
     queuedSettings.clear()
   })
@@ -279,7 +493,7 @@ export function useWebUiState() {
     profileAction,
     hideLanguageHint,
     updateRelations,
-    imported,
+    importData,
     reportError,
   }
 }

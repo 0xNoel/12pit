@@ -19,15 +19,20 @@ along with 12pit. If not, see <https://www.gnu.org/licenses/>.
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
 import { ArrowRight, Check, Pencil, Plus, Trash2, X } from '@lucide/vue'
-import type { State } from './api'
+import type { ProfilesState } from './api'
+import type { ProfileAction } from './useWebUiState'
 import { t } from './languages'
 import FormattedText from './FormattedText.vue'
 import UiNotice from './UiNotice.vue'
 
 const props = defineProps<{
-  profiles: State['profiles']
+  profiles: ProfilesState
   busy: boolean
-  action: (action: string, id?: string, name?: string) => Promise<boolean>
+  action: (
+    action: ProfileAction,
+    id?: string,
+    name?: string,
+  ) => Promise<boolean>
 }>()
 const newName = ref('')
 const showCreate = ref(false)

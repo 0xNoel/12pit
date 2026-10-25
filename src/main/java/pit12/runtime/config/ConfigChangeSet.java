@@ -19,6 +19,7 @@
 package pit12.runtime.config;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public final class ConfigChangeSet {
     static final class Change {
@@ -41,6 +42,12 @@ public final class ConfigChangeSet {
 
     public long revision() {
         return revision;
+    }
+
+    public void forEach(BiConsumer<String, String> consumer) {
+        for (Change change : changes) {
+            consumer.accept(change.featureId, change.settingId);
+        }
     }
 
     public boolean affects(String featureId, String settingId) {
