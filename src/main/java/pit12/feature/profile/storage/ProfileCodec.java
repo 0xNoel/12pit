@@ -86,9 +86,8 @@ public final class ProfileCodec {
         }
         int order = requiredInt(root, "order", 0);
         long updatedAt = optionalLong(root, "updatedAt", 0L);
-        ArrayList<String> warnings = new ArrayList<String>();
-        LinkedHashMap<String, Map<String, Object>> configValues =
-                new LinkedHashMap<String, Map<String, Object>>();
+        ArrayList<String> warnings = new ArrayList<>();
+        LinkedHashMap<String, Map<String, Object>> configValues = new LinkedHashMap<>();
         JsonElement featuresElement = root.get("features");
         JsonObject features = featuresElement != null && featuresElement.isJsonObject()
                 ? featuresElement.getAsJsonObject()
@@ -98,7 +97,7 @@ public final class ProfileCodec {
         }
         for (Map.Entry<String, Map<String, Setting.StorageType>> featureEntry : schema.features()
                 .entrySet()) {
-            LinkedHashMap<String, Object> settingValues = new LinkedHashMap<String, Object>();
+            LinkedHashMap<String, Object> settingValues = new LinkedHashMap<>();
             JsonElement featureElement = features.get(featureEntry.getKey());
             JsonObject featureObject = featureElement != null && featureElement.isJsonObject()
                     ? featureElement.getAsJsonObject()

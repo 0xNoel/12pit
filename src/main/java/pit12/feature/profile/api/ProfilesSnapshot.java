@@ -38,14 +38,14 @@ public final class ProfilesSnapshot {
             List<ProfileSummary> profiles, List<String> problems, boolean unpersistedChanges) {
         this.loadState = loadState;
         this.activeProfileId = activeProfileId;
-        this.profiles = Collections.unmodifiableList(new ArrayList<ProfileSummary>(profiles));
-        this.problems = Collections.unmodifiableList(new ArrayList<String>(problems));
+        this.profiles = Collections.unmodifiableList(new ArrayList<>(profiles));
+        this.problems = Collections.unmodifiableList(new ArrayList<>(problems));
         this.unpersistedChanges = unpersistedChanges;
     }
 
     public static ProfilesSnapshot loading() {
-        return new ProfilesSnapshot(LoadState.LOADING, null,
-                Collections.<ProfileSummary>emptyList(), Collections.<String>emptyList(), false);
+        return new ProfilesSnapshot(LoadState.LOADING, null, Collections.emptyList(),
+                Collections.emptyList(), false);
     }
 
     public LoadState loadState() {

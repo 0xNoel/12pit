@@ -32,11 +32,9 @@ public final class ProfileSchema {
     }
 
     public static ProfileSchema capture(ConfigCatalog catalog) {
-        LinkedHashMap<String, Map<String, Setting.StorageType>> features =
-                new LinkedHashMap<String, Map<String, Setting.StorageType>>();
+        LinkedHashMap<String, Map<String, Setting.StorageType>> features = new LinkedHashMap<>();
         for (FeatureConfig feature : catalog.features()) {
-            LinkedHashMap<String, Setting.StorageType> settings =
-                    new LinkedHashMap<String, Setting.StorageType>();
+            LinkedHashMap<String, Setting.StorageType> settings = new LinkedHashMap<>();
             for (Setting<?> setting : feature.settings()) {
                 settings.put(setting.id(), setting.storageType());
             }

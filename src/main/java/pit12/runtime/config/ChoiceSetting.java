@@ -50,7 +50,7 @@ public final class ChoiceSetting extends Setting<Integer> {
     }
 
     private final List<Choice> choices;
-    private final Set<Integer> values = new HashSet<Integer>();
+    private final Set<Integer> values = new HashSet<>();
 
     ChoiceSetting(String id, String displayName, String description, int defaultValue,
             Choice... choices) {

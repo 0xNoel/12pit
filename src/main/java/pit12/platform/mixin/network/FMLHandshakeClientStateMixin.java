@@ -25,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLModContainer;
 import net.minecraftforge.fml.common.ModContainer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import pit12.platform.mixin.accessor.FMLModContainerAccessor;
@@ -52,6 +53,7 @@ public abstract class FMLHandshakeClientStateMixin {
         return filtered;
     }
 
+    @Unique
     private static boolean pit12$isClientSideOnly(ModContainer mod) {
         if (!(mod instanceof FMLModContainer)) {
             return false;

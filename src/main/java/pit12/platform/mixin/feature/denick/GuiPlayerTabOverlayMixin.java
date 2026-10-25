@@ -49,9 +49,7 @@ public abstract class GuiPlayerTabOverlayMixin {
             target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;getPlayerName(Lnet/minecraft/client/network/NetworkPlayerInfo;)Ljava/lang/String;",
             shift = At.Shift.AFTER))
     private void pit12$endName(CallbackInfo callback) {
-        if (pit12$renderingNames != null) {
-            pit12$renderingNames = null;
-        }
+        pit12$renderingNames = null;
     }
 
     @Inject(method = "getPlayerName", at = @At("RETURN"), cancellable = true)

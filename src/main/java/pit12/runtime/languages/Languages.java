@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -39,11 +40,11 @@ import java.util.regex.Pattern;
 import pit12.shared.concurrent.ClientThread;
 
 public final class Languages {
-    private static final Pattern PARAMETER = Pattern.compile("\\{([0-9]+)\\}");
-    private static final Pattern LOCATION = Pattern.compile("(?:src/main/java/.+\\.java:[1-9][0-9]*"
+    private static final Pattern PARAMETER = Pattern.compile("\\{([0-9]+)}");
+    private static final Pattern LOCATION = Pattern.compile("src/main/java/.+\\.java:[1-9][0-9]*"
             + "|web-ui/src/.+\\.(?:vue|ts):[1-9][0-9]*(?::[1-9][0-9]*)?"
             + "|src/main/resources/assets/pit12/languages/languages\\.json:"
-            + "[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*)");
+            + "[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*");
     private static final Pattern PO_FIELD = Pattern.compile("(msgctxt|msgid|msgstr)\\s+(\".*\")");
     private static final Map<String, String> MARKED_TEXTS = new HashMap<>();
     private static final Map<String, String> SOURCE_LOCATIONS = new IdentityHashMap<>();
@@ -120,6 +121,8 @@ public final class Languages {
         synchronized (SOURCE_LOCATIONS) {
             String marked = MARKED_TEXTS.get(key);
             if (marked == null) {
+                // The fresh identity is the point. See the comment above.
+                // noinspection RedundantStringConstructorCall
                 marked = new String(text);
                 MARKED_TEXTS.put(key, marked);
                 SOURCE_LOCATIONS.put(marked, location);
@@ -152,7 +155,7 @@ public final class Languages {
         Catalog values = load(entry);
         translations = value == 0 ? null : values;
         locale = entry.locale;
-        for (Runnable listener : listeners.toArray(new Runnable[listeners.size()])) {
+        for (Runnable listener : listeners.toArray(new Runnable[0])) {
             listener.run();
         }
     }
@@ -261,14 +264,13 @@ public final class Languages {
                     if (line.startsWith("#:")) {
                         String references = line.substring(2).trim();
                         if (!references.isEmpty()) {
-                            for (String reference : references.split("\\s+")) {
-                                message.locations.add(reference);
-                            }
+                            Collections.addAll(message.locations, references.split("\\s+"));
                         }
                     } else if (line.startsWith("#,")) {
                         for (String flag : line.substring(2).split(",")) {
                             if (flag.trim().equals("fuzzy")) {
                                 message.fuzzy = true;
+                                break;
                             }
                         }
                     }

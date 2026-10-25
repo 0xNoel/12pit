@@ -55,6 +55,7 @@ final class UnixSocketTransport implements Closeable {
         }
 
         @Override
+        // noinspection UnannotatedParameterOverridesNotNullParameter
         public int read(byte[] bytes, int offset, int length) throws IOException {
             if (length == 0) {
                 return 0;
@@ -92,6 +93,7 @@ final class UnixSocketTransport implements Closeable {
         }
 
         @Override
+        // noinspection UnannotatedParameterOverridesNotNullParameter
         public void write(byte[] bytes, int offset, int length) throws IOException {
             while (length > 0) {
                 int count = (int) Math.min(length, buffer.size());
@@ -234,14 +236,14 @@ final class UnixSocketTransport implements Closeable {
     public interface LibC extends Library {
         int socket(int domain, int type, int protocol) throws LastErrorException;
 
-        int fcntl(int descriptor, int command, Object... arguments) throws LastErrorException;
+        void fcntl(int descriptor, int command, Object... arguments) throws LastErrorException;
 
-        int connect(int descriptor, Pointer address, int length) throws LastErrorException;
+        void connect(int descriptor, Pointer address, int length) throws LastErrorException;
 
-        int setsockopt(int descriptor, int level, int option, IntByReference value, int length)
+        void setsockopt(int descriptor, int level, int option, IntByReference value, int length)
                 throws LastErrorException;
 
-        int getsockopt(int descriptor, int level, int option, IntByReference value,
+        void getsockopt(int descriptor, int level, int option, IntByReference value,
                 IntByReference length) throws LastErrorException;
 
         // size_t and ssize_t use native long on Linux and macOS.

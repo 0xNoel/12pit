@@ -54,7 +54,7 @@ public final class RelationIoWorker {
     public void requestWrite(List<RelationEntry> entries) {
         synchronized (lock) {
             if (!closing) {
-                pendingWrite = new ArrayList<RelationEntry>(entries);
+                pendingWrite = new ArrayList<>(entries);
                 writeDeadline = System.currentTimeMillis() + 300L;
                 lock.notifyAll();
             }
@@ -64,7 +64,7 @@ public final class RelationIoWorker {
     public void closeAfter(List<RelationEntry> entries) {
         synchronized (lock) {
             if (entries != null) {
-                pendingWrite = new ArrayList<RelationEntry>(entries);
+                pendingWrite = new ArrayList<>(entries);
             }
             closing = true;
             lock.notifyAll();

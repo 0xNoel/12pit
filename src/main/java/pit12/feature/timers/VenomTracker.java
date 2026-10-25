@@ -213,8 +213,8 @@ public final class VenomTracker implements PlayerEquipmentListener {
                 double reach = config.venomReach.get();
                 if (x * x + y * y + z * z > reach * reach)
                     continue;
-            } else if (!intersects(combo, serverBox)
-                    && (serverBox == displayBox || !intersects(combo, displayBox))) {
+            } else if (misses(combo, serverBox)
+                    && (serverBox == displayBox || misses(combo, displayBox))) {
                 continue;
             }
             // Hurt packets do not name the attacker. Leave ambiguous hits uncounted.
@@ -244,15 +244,15 @@ public final class VenomTracker implements PlayerEquipmentListener {
                 || players.loadedPlayer(combo.player.getUniqueID()) != combo.player);
     }
 
-    private static boolean intersects(Combo combo, AxisAlignedBB box) {
+    private static boolean misses(Combo combo, AxisAlignedBB box) {
         if (Math.max(combo.from.xCoord, combo.to.xCoord) < box.minX
                 || Math.min(combo.from.xCoord, combo.to.xCoord) > box.maxX
                 || Math.max(combo.from.yCoord, combo.to.yCoord) < box.minY
                 || Math.min(combo.from.yCoord, combo.to.yCoord) > box.maxY
                 || Math.max(combo.from.zCoord, combo.to.zCoord) < box.minZ
                 || Math.min(combo.from.zCoord, combo.to.zCoord) > box.maxZ)
-            return false;
-        return box.isVecInside(combo.from) || box.calculateIntercept(combo.from, combo.to) != null;
+            return true;
+        return !box.isVecInside(combo.from) && box.calculateIntercept(combo.from, combo.to) == null;
     }
 
     private static final class Combo {

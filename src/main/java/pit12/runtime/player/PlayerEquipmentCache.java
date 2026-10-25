@@ -35,13 +35,11 @@ public final class PlayerEquipmentCache {
     public static final int CHESTPLATE = 1 << 3;
     public static final int HELMET = 1 << 4;
     public static final int ALL = HELD_ITEM | LEGGINGS | BOOTS | CHESTPLATE | HELMET;
-    private final Map<UUID, PlayerEquipmentSnapshot> entries =
-            new LinkedHashMap<UUID, PlayerEquipmentSnapshot>();
-    private final Map<UUID, Integer> dirty = new LinkedHashMap<UUID, Integer>();
+    private final Map<UUID, PlayerEquipmentSnapshot> entries = new LinkedHashMap<>();
+    private final Map<UUID, Integer> dirty = new LinkedHashMap<>();
 
     public void markDirty(UUID playerId, int slots) {
-        Integer previous = dirty.get(playerId);
-        dirty.put(playerId, (previous == null ? 0 : previous) | slots);
+        dirty.merge(playerId, slots, (existing, added) -> existing | added);
     }
 
     /** Call once per tick to group each player's equipment changes. */
@@ -49,7 +47,7 @@ public final class PlayerEquipmentCache {
         if (dirty.isEmpty()) {
             return Collections.emptyMap();
         }
-        Map<UUID, Integer> pending = new LinkedHashMap<UUID, Integer>(dirty);
+        Map<UUID, Integer> pending = new LinkedHashMap<>(dirty);
         dirty.clear();
         return pending;
     }

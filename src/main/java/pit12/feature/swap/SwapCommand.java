@@ -74,7 +74,7 @@ final class SwapCommand {
             try {
                 handler.execute(sender, args);
             } catch (IllegalArgumentException failure) {
-                // Bindings also use this exception when input is bad or they aren't ready yet.
+                // Bindings also use this exception when input is bad, or they aren't ready yet.
                 reply(sender, Tone.ERROR, failure.getMessage());
             }
         });

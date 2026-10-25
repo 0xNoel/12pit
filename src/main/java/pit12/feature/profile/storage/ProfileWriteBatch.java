@@ -57,7 +57,7 @@ public final class ProfileWriteBatch {
     }
 
     ProfileWriteBatch without(UUID profileId) {
-        ArrayList<StoredProfile> retained = new ArrayList<StoredProfile>();
+        ArrayList<StoredProfile> retained = new ArrayList<>();
         for (StoredProfile profile : profiles) {
             if (!profile.id().equals(profileId)) {
                 retained.add(profile);

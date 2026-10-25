@@ -403,8 +403,7 @@ public final class RelationFeature implements ClientLifecycle, Relations, TabPre
         }
         if (loaded)
             Listeners.notify(listeners, RelationListener::onRelationsLoaded);
-        if (changed || loaded)
-            notifyChanged();
+        notifyChanged();
     }
 
     private static Map<UUID, Relation> relationsById(List<RelationEntry> entries) {

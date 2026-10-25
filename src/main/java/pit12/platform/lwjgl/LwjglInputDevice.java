@@ -211,11 +211,13 @@ public final class LwjglInputDevice implements InputDevice {
     private static void pollAndDrain() {
         if (Keyboard.isCreated()) {
             Keyboard.poll();
+            // noinspection StatementWithEmptyBody
             while (Keyboard.next()) {
             }
         }
         if (Mouse.isCreated()) {
             Mouse.poll();
+            // noinspection StatementWithEmptyBody
             while (Mouse.next()) {
             }
             Mouse.getDX();

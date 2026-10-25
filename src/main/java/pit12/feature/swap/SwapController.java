@@ -91,16 +91,16 @@ final class SwapController {
         this.inputOwner = inputOwner;
     }
 
-    boolean acceptsInput() {
-        return minecraft.thePlayer != null && minecraft.theWorld != null
-                && !minecraft.thePlayer.isSpectator()
-                && minecraft.thePlayer.openContainer == minecraft.thePlayer.inventoryContainer
-                && minecraft.thePlayer.inventory.getItemStack() == null
-                && (minecraft.currentScreen == null || owns(minecraft.currentScreen));
+    boolean inputBlocked() {
+        return minecraft.thePlayer == null || minecraft.theWorld == null
+                || minecraft.thePlayer.isSpectator()
+                || minecraft.thePlayer.openContainer != minecraft.thePlayer.inventoryContainer
+                || minecraft.thePlayer.inventory.getItemStack() != null
+                || (minecraft.currentScreen != null && !owns(minecraft.currentScreen));
     }
 
-    boolean idle() {
-        return options == null;
+    boolean busy() {
+        return options != null;
     }
 
     boolean owns(GuiScreen candidate) {
@@ -120,7 +120,7 @@ final class SwapController {
     }
 
     void enqueueKey(int key) {
-        if (!acceptsInput())
+        if (inputBlocked())
             return;
         for (SwapBinding binding : bindings.forKey(key)) {
             if (!binding.identity.matches(minecraft.thePlayer.inventoryContainer
@@ -140,21 +140,21 @@ final class SwapController {
     }
 
     boolean enqueueAutomatic(List<Target> targets, String reason, BooleanSupplier ready) {
-        if (!idle() || !acceptsInput() || !ready.getAsBoolean())
+        if (busy() || inputBlocked() || !ready.getAsBoolean())
             return false;
         enqueue(new Request(0, null, targets, 0, reason, ready), targets);
         return true;
     }
 
-    boolean enqueueAutomaticUnequip(int slot, String reason, BooleanSupplier ready) {
-        if (!idle() || !acceptsInput() || !ready.getAsBoolean())
+    boolean enqueueAutomaticUnequip(String reason, BooleanSupplier ready) {
+        if (busy() || inputBlocked() || !ready.getAsBoolean())
             return false;
-        enqueue(new Request(0, null, null, slot, reason, ready), slot);
+        enqueue(new Request(0, null, null, 7, reason, ready), 7);
         return true;
     }
 
     private void enqueue(Request request, Object identity) {
-        if (cancelling || waitingToResume || !acceptsInput() || !accepted.add(identity))
+        if (cancelling || waitingToResume || inputBlocked() || !accepted.add(identity))
             return;
         if (options == null) {
             options = new SwapConfig.Options(config);
@@ -196,7 +196,7 @@ final class SwapController {
             finish(false);
             return;
         }
-        if (!failed && (!acceptsInput() || screen != null && minecraft.currentScreen != screen)) {
+        if (!failed && (inputBlocked() || screen != null && minecraft.currentScreen != screen)) {
             throw new IllegalStateException("Inventory changed");
         }
         if (cancelling) {
@@ -237,7 +237,7 @@ final class SwapController {
                 minecraft.displayGuiScreen(screen);
                 if (options == null || cancelling)
                     return;
-                if (!owns(minecraft.currentScreen) || !acceptsInput()) {
+                if (!owns(minecraft.currentScreen) || inputBlocked()) {
                     throw new IllegalStateException("Inventory did not open");
                 }
                 lastClickTick = tick;
@@ -257,10 +257,12 @@ final class SwapController {
         }
     }
 
+    // noinspection BooleanMethodIsAlwaysInverted
     private boolean randomClickTiming() {
         return options.randomClickTiming && (current != null || !queue.isEmpty());
     }
 
+    // noinspection BooleanMethodIsAlwaysInverted
     private boolean clickReady(int delay, int phase) {
         if (tick - lastClickTick < delay)
             return false;

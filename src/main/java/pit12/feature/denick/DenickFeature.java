@@ -201,6 +201,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
                 session.removeListener(sessionChanged);
                 presence.removeListener(this);
                 nicks.removeListener(this);
+                // noinspection NonAtomicOperationOnVolatileField
                 generation++;
                 for (Target target : targets.values()) {
                     target.cancel();
@@ -279,6 +280,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     private void resetWorld() {
         client.check();
+        // noinspection NonAtomicOperationOnVolatileField
         generation++;
         targets.replaceAll((id, previous) -> {
             previous.cancel();
@@ -475,6 +477,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         String cached = mappings.get(target.name.toLowerCase(Locale.ROOT));
         search.busy = true;
         long requestGeneration = generation;
+        // noinspection NonAtomicOperationOnVolatileField
         long request = ++target.request;
         BooleanSupplier cancelled = () -> !started || generation != requestGeneration
                 || target.request != request || Thread.currentThread().isInterrupted();
@@ -682,6 +685,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         }
 
         void cancel() {
+            // noinspection NonAtomicOperationOnVolatileField
             request++;
             if (task != null) {
                 task.cancel(true);

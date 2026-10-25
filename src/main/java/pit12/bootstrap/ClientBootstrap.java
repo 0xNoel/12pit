@@ -136,8 +136,8 @@ import pit12.shared.rendering.TextureState;
 
 public final class ClientBootstrap {
     private static final Logger LOGGER = Logger.getLogger(ClientBootstrap.class.getName());
-    private final List<ClientLifecycle> components = new ArrayList<ClientLifecycle>();
-    private final List<ClientLifecycle> startedComponents = new ArrayList<ClientLifecycle>();
+    private final List<ClientLifecycle> components = new ArrayList<>();
+    private final List<ClientLifecycle> startedComponents = new ArrayList<>();
     private final ClientThread client;
     private final Languages language;
     private final ClientShutdownBinding shutdown;
@@ -148,7 +148,7 @@ public final class ClientBootstrap {
         // Shared runtime
         Minecraft minecraft = Minecraft.getMinecraft();
         client = new ClientThread(minecraft::isCallingFromMinecraftThread,
-                task -> minecraft.addScheduledTask(task));
+                minecraft::addScheduledTask);
         language = new Languages(client);
         ConfigCatalog configs = new ConfigCatalog(client);
         ConfigCatalog webUiConfigs = new ConfigCatalog(client);

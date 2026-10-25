@@ -54,17 +54,16 @@ public final class JsonProfileStore implements ProfileStore {
     }
 
     public LoadedProfiles load() {
-        ArrayList<ProfileLoadProblem> problems = new ArrayList<ProfileLoadProblem>();
+        ArrayList<ProfileLoadProblem> problems = new ArrayList<>();
         try {
             Files.createDirectories(directory);
         } catch (IOException failure) {
             LOGGER.log(Level.WARNING, "Failed to create profile directory " + directory, failure);
             problems.add(new ProfileLoadProblem(directory, "Profile directory is unavailable"));
-            return new LoadedProfiles(Collections.<StoredProfile>emptyList(), null, problems,
-                    false);
+            return new LoadedProfiles(Collections.emptyList(), null, problems, false);
         }
         UUID activeProfileId = readActiveProfileId(problems);
-        ArrayList<Path> files = new ArrayList<Path>();
+        ArrayList<Path> files = new ArrayList<>();
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(directory, "*.json")) {
             for (Path entry : entries) {
                 if (Files.isRegularFile(entry)
@@ -75,11 +74,10 @@ public final class JsonProfileStore implements ProfileStore {
         } catch (IOException failure) {
             LOGGER.log(Level.WARNING, "Failed to scan profile directory " + directory, failure);
             problems.add(new ProfileLoadProblem(directory, "Profile directory cannot be read"));
-            return new LoadedProfiles(Collections.<StoredProfile>emptyList(), activeProfileId,
-                    problems, false);
+            return new LoadedProfiles(Collections.emptyList(), activeProfileId, problems, false);
         }
-        Collections.sort(files, Comparator.comparing(path -> path.getFileName().toString()));
-        ArrayList<StoredProfile> profiles = new ArrayList<StoredProfile>();
+        files.sort(Comparator.comparing(path -> path.getFileName().toString()));
+        ArrayList<StoredProfile> profiles = new ArrayList<>();
         for (Path file : files) {
             String filename = file.getFileName().toString();
             String idText = filename.substring(0, filename.length() - ".json".length());
@@ -102,8 +100,7 @@ public final class JsonProfileStore implements ProfileStore {
     }
 
     public void writeProfile(StoredProfile profile) throws IOException {
-        AtomicFile.write(directory.resolve(profile.id().toString() + ".json"),
-                codec.encode(profile));
+        AtomicFile.write(directory.resolve(profile.id() + ".json"), codec.encode(profile));
     }
 
     public void writeState(UUID activeProfileId) throws IOException {
@@ -114,13 +111,13 @@ public final class JsonProfileStore implements ProfileStore {
     }
 
     public void moveToTrash(UUID profileId) throws IOException {
-        Path source = directory.resolve(profileId.toString() + ".json");
+        Path source = directory.resolve(profileId + ".json");
         if (!Files.exists(source)) {
             return;
         }
         Path trash = directory.resolve("trash");
         Files.createDirectories(trash);
-        String baseName = profileId.toString() + "-" + System.currentTimeMillis();
+        String baseName = profileId + "-" + System.currentTimeMillis();
         Path target = trash.resolve(baseName + ".json");
         int suffix = 1;
         while (Files.exists(target)) {

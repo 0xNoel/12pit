@@ -51,6 +51,7 @@ final class WindowsPipeTransport implements Closeable {
         }
 
         @Override
+        // noinspection UnannotatedParameterOverridesNotNullParameter
         public int read(byte[] bytes, int offset, int length) throws IOException {
             if (length == 0) {
                 return 0;
@@ -87,6 +88,7 @@ final class WindowsPipeTransport implements Closeable {
         }
 
         @Override
+        // noinspection UnannotatedParameterOverridesNotNullParameter
         public void write(byte[] bytes, int offset, int length) throws IOException {
             synchronized (WindowsPipeTransport.this) {
                 while (length > 0) {

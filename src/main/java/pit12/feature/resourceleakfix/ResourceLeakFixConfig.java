@@ -26,6 +26,6 @@ import pit12.runtime.config.FeatureConfig;
 public final class ResourceLeakFixConfig extends FeatureConfig {
     public ResourceLeakFixConfig() {
         super("resourceleakfix", source("Resource Leak Fix"),
-                new ConfigCategory("patch", source("Patch")), source("for Optifine"));
+                new ConfigCategory("patch", source("Patch")), "");
     }
 }

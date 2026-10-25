@@ -38,7 +38,7 @@ final class RingRenderer {
     }
 
     void render(Minecraft minecraft, List<BlockPos> blocks, int color, long revision) {
-        if (minecraft.getRenderViewEntity() == null || (color >>> 24) == 0) {
+        if (minecraft.getRenderViewEntity() == null) {
             return;
         }
         if (displayList == 0) {
@@ -84,8 +84,7 @@ final class RingRenderer {
     private static void draw(List<BlockPos> blocks) {
         GL11.glBegin(GL11.GL_LINES);
         try {
-            for (int index = 0; index < blocks.size(); index++) {
-                BlockPos position = blocks.get(index);
+            for (BlockPos position : blocks) {
                 double x = position.getX();
                 double bottomY = position.getY() + 1.0D;
                 double z = position.getZ();

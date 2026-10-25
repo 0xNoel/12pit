@@ -55,7 +55,7 @@ final class DarkTargets {
         if (!ready() || minecraft.theWorld == null || target.worldObj != minecraft.theWorld
                 || minecraft.theWorld.getEntityByID(target.getEntityId()) != target
                 || target == minecraft.thePlayer || target.isDead || target.isSpectator()
-                || target.getHealth() <= 0 || !allowed(target))
+                || target.getHealth() <= 0 || blocked(target))
             return;
         lastAttackedId = target.getUniqueID();
         lastAttackedEntityId = target.getEntityId();
@@ -100,16 +100,16 @@ final class DarkTargets {
         return !targets.isEmpty();
     }
 
-    private boolean allowed(EntityPlayer target) {
+    private boolean blocked(EntityPlayer target) {
         Relation relation = relations.relationOf(target.getUniqueID());
-        return (!config.darkEnemiesOnly.get() || relation == Relation.ENEMY)
-                && (!config.darkIgnoreFriends.get() || relation != Relation.FRIEND);
+        return config.darkEnemiesOnly.get() && relation != Relation.ENEMY
+                || config.darkIgnoreFriends.get() && relation == Relation.FRIEND;
     }
 
     private boolean matches(EntityPlayer target, boolean retained) {
         if (target == minecraft.thePlayer || target.isDead || target.isSpectator()
                 || minecraft.theWorld.getEntityByID(target.getEntityId()) != target
-                || !allowed(target))
+                || blocked(target))
             return false;
         float health = target.getHealth();
         int range = config.darkRange.get();

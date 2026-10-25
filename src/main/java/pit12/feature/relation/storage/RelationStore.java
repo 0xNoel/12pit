@@ -50,7 +50,7 @@ public final class RelationStore implements RelationStorage {
 
     public List<RelationEntry> load() throws IOException {
         if (Files.notExists(path)) {
-            return new ArrayList<RelationEntry>();
+            return new ArrayList<>();
         }
         try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
             JsonElement parsed = new JsonParser().parse(reader);
@@ -68,9 +68,9 @@ public final class RelationStore implements RelationStorage {
             if (entries == null || !entries.isJsonArray()) {
                 throw new IllegalArgumentException("Relation entries must be an array");
             }
-            List<RelationEntry> loaded = new ArrayList<RelationEntry>();
-            Set<UUID> ids = new HashSet<UUID>();
-            Set<String> pendingNames = new HashSet<String>();
+            List<RelationEntry> loaded = new ArrayList<>();
+            Set<UUID> ids = new HashSet<>();
+            Set<String> pendingNames = new HashSet<>();
             for (JsonElement element : entries.getAsJsonArray()) {
                 if (!element.isJsonObject()) {
                     throw new IllegalArgumentException("Relation entry must be an object");

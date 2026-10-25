@@ -204,6 +204,8 @@ public final class TelebowCooldownTracker
             shooter = shot.shooter;
             firstShot = Math.min(firstShot, shot.firedAt);
         }
+        // Callers skip empty candidate lists, so the loop always assigns shooter.
+        // noinspection DataFlowIssue
         Cooldown cooldown = cooldowns.get(shooter.getUniqueID());
         if (cooldown != null && System.nanoTime() < cooldown.until
                 && firstShot >= cooldown.startedAt) {

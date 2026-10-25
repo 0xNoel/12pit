@@ -54,7 +54,7 @@ public final class DiscordIpcConnection implements DiscordRpcConnection {
     }
 
     /** Returns null if there's no local Discord IPC endpoint. */
-    public static DiscordRpcConnection open() throws IOException {
+    public static DiscordRpcConnection open() {
         if (System.getProperty("os.name").toLowerCase(Locale.ROOT).startsWith("windows")) {
             for (int index = 0; index < 10; index++) {
                 try {

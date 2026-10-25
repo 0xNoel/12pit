@@ -102,7 +102,7 @@ final class AutoSwapController {
             venomPending = false;
         }
         poisoned = nowPoisoned;
-        if (!swaps.idle()) {
+        if (swaps.busy()) {
             if (!poisoned || !automaticPending || pending == null)
                 return;
             swaps.cancel();
@@ -116,7 +116,7 @@ final class AutoSwapController {
         if (activePants != null && !activePants.matches(leggings()))
             clearActive();
         if (tick < retryAt || minecraft.currentScreen != null || !minecraft.inGameHasFocus
-                || !swaps.acceptsInput())
+                || swaps.inputBlocked())
             return;
         // Poison disables leggings enchantments.
         if (poisoned) {
@@ -331,7 +331,7 @@ final class AutoSwapController {
                 retryAt = tick + 10;
                 return;
             }
-            if (swaps.enqueueAutomaticUnequip(7, reason, this::readyToRestore)) {
+            if (swaps.enqueueAutomaticUnequip(reason, this::readyToRestore)) {
                 pending = new Pending(activeType, activePants, null, true);
                 automaticPending = true;
             }

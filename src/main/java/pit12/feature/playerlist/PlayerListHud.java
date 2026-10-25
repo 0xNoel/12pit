@@ -321,7 +321,8 @@ final class PlayerListHud implements HudElement {
         directionWidth = config.showDirection() ? ARROW_SIZE : 0;
         directionGap = Math.max(1, FontWidths.measure(font, " "));
         unknownDirectionWidth = FontWidths.measure(font, "?");
-        if (!config.showDistance()) {
+        boolean showDistance = config.showDistance();
+        if (!showDistance) {
             distanceTextWidths.clear();
         } else {
             distanceTextWidths.keySet().retainAll(content.entries().keySet());
@@ -329,10 +330,8 @@ final class PlayerListHud implements HudElement {
         for (Map.Entry<PlayerListGroup, List<PlayerListEntry>> group : content.entries()
                 .entrySet()) {
             List<PlayerListEntry> entries = group.getValue();
-            int[] textWidths =
-                    config.showDistance() ? distanceTextWidths.get(group.getKey()) : null;
-            if (config.showDistance()
-                    && (textWidths == null || textWidths.length != entries.size())) {
+            int[] textWidths = showDistance ? distanceTextWidths.get(group.getKey()) : null;
+            if (showDistance && (textWidths == null || textWidths.length != entries.size())) {
                 textWidths = new int[entries.size()];
                 distanceTextWidths.put(group.getKey(), textWidths);
             }
@@ -347,12 +346,12 @@ final class PlayerListHud implements HudElement {
                     heldItemWidth =
                             Math.max(heldItemWidth, FontWidths.measure(font, entry.heldItemText()));
                 }
-                if (config.showDistance()) {
+                if (showDistance) {
                     String text = entry.spawn() ? SPAWN_TEXT : entry.distanceText();
                     textWidths[index] = FontWidths.measure(font, text);
                     distanceWidth = Math.max(distanceWidth, textWidths[index]);
                 }
-                if (config.showDirection() && !config.showDistance() && entry.spawn()) {
+                if (config.showDirection() && !showDistance && entry.spawn()) {
                     directionWidth = Math.max(directionWidth, FontWidths.measure(font, SPAWN_TEXT));
                 }
             }
@@ -425,8 +424,7 @@ final class PlayerListHud implements HudElement {
             darkName = PlayerNameFormatter.shorten(darkName);
         }
         firstName += " §e§lN";
-        Map<PlayerListGroup, List<PlayerListEntry>> groups =
-                new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
+        Map<PlayerListGroup, List<PlayerListEntry>> groups = new EnumMap<>(PlayerListGroup.class);
         groups.put(PlayerListGroup.REGULARITY,
                 Arrays.asList(
                         new PlayerListEntry(null, 0, firstName,
