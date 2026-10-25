@@ -67,7 +67,7 @@ public final class TimersConfig extends FeatureConfig {
     public final HudConfig hud;
 
     public TimersConfig() {
-        super("debufftimers", source("Timers"), new ConfigCategory("render", source("Render")),
+        super("debufftimers", source("Timers HUD"), new ConfigCategory("render", source("Render")),
                 source("Shows estimated Pin, Venom, and Jump Boost durations and Telebow cooldowns."));
         hud = hudConfig("debuff_timers", HudAnchor.TOP_RIGHT, 6, 6, true, HudGroup.SUBCATEGORY,
                 "HUD");

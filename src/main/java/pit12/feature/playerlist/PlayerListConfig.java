@@ -52,7 +52,8 @@ public final class PlayerListConfig extends FeatureConfig {
     private final HudConfig hud;
 
     public PlayerListConfig() {
-        super("playerlist", source("Player List"), new ConfigCategory("render", source("Render")),
+        super("playerlist", source("Player List HUD"),
+                new ConfigCategory("render", source("Render")),
                 source("Shows player names, equipment, distance, and direction in a HUD."));
         subcategory("display", source("Display"));
         hud = hudConfig("player_list", HudAnchor.TOP_LEFT, 6, 6, true);
