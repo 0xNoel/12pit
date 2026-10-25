@@ -108,7 +108,7 @@ final class HudEditorScreen extends GuiScreen {
 
     @Override
     public void updateScreen() {
-        if (!arrowsDown()) {
+        if (arrowsUp()) {
             controller.finishNudge();
         }
         updatePreview();
@@ -142,7 +142,7 @@ final class HudEditorScreen extends GuiScreen {
                 float scale = Math.min(1.0F, (hintWidth - 24.0F) / textWidth);
                 GlStateManager.translate(width / 2.0F, top + 24.0F, 0.0F);
                 GlStateManager.scale(scale, scale, 1.0F);
-                fontRendererObj.drawString(text, -textWidth / 2, 0, 0xFFE0E0E0, true);
+                fontRendererObj.drawString(text, -textWidth / 2.0F, 0, 0xFFE0E0E0, true);
             } else {
                 fontRendererObj.drawString("?", width - 20, height - 22,
                         helpHovered ? 0xFFFFFFFF : 0xFFB0B0B0, true);
@@ -232,7 +232,7 @@ final class HudEditorScreen extends GuiScreen {
         if (mc.currentScreen != this) {
             return;
         }
-        if (!arrowsDown()) {
+        if (arrowsUp()) {
             controller.finishNudge();
         }
         updatePreview();
@@ -294,9 +294,9 @@ final class HudEditorScreen extends GuiScreen {
         return false;
     }
 
-    private static boolean arrowsDown() {
-        return Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT)
-                || Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_DOWN);
+    private static boolean arrowsUp() {
+        return !Keyboard.isKeyDown(Keyboard.KEY_LEFT) && !Keyboard.isKeyDown(Keyboard.KEY_RIGHT)
+                && !Keyboard.isKeyDown(Keyboard.KEY_UP) && !Keyboard.isKeyDown(Keyboard.KEY_DOWN);
     }
 
     private boolean tipsHovered(int mouseX, int mouseY) {

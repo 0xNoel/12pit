@@ -42,7 +42,7 @@ public final class ProfileIoWorker {
     private final Listener listener;
     private final Path directory;
     private final Thread thread;
-    private final Set<UUID> pendingDeletes = new LinkedHashSet<UUID>();
+    private final Set<UUID> pendingDeletes = new LinkedHashSet<>();
     private boolean loadPending = true;
     private ProfileWriteBatch pendingWrite;
     private long writeDeadline;
@@ -140,7 +140,7 @@ public final class ProfileIoWorker {
                 return Work.load();
             }
             if (!pendingDeletes.isEmpty()) {
-                ArrayList<UUID> deletes = new ArrayList<UUID>(pendingDeletes);
+                ArrayList<UUID> deletes = new ArrayList<>(pendingDeletes);
                 pendingDeletes.clear();
                 return Work.deletes(deletes);
             }
@@ -165,6 +165,7 @@ public final class ProfileIoWorker {
         }
     }
 
+    // noinspection BooleanMethodIsAlwaysInverted
     private boolean waitForSignal(long timeoutMillis) {
         try {
             if (timeoutMillis > 0L) {
@@ -211,7 +212,7 @@ public final class ProfileIoWorker {
         }
 
         static Work load() {
-            return new Work(true, new ArrayList<UUID>(), null);
+            return new Work(true, new ArrayList<>(), null);
         }
 
         static Work deletes(ArrayList<UUID> deletes) {
@@ -219,7 +220,7 @@ public final class ProfileIoWorker {
         }
 
         static Work write(ProfileWriteBatch write) {
-            return new Work(false, new ArrayList<UUID>(), write);
+            return new Work(false, new ArrayList<>(), write);
         }
     }
 }

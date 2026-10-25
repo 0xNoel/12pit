@@ -139,7 +139,7 @@ public final class SwapFeature
     }
 
     private void updateListening() {
-        boolean enabled = started && (config.enabled() || !controller.idle());
+        boolean enabled = started && (config.enabled() || controller.busy());
         if (enabled == listening)
             return;
         listening = enabled;
@@ -178,7 +178,7 @@ public final class SwapFeature
     @Override
     public boolean key(int key, boolean pressed, boolean repeat) {
         if (!pressed || key <= 0 || key >= Keyboard.KEYBOARD_SIZE || !config.enabled()
-                || !controller.acceptsInput())
+                || controller.inputBlocked())
             return false;
         boolean unequip = Keybind.matches(controller.unequipKey(), key);
         if (!unequip && !bindings.hasKey(key))
@@ -199,7 +199,7 @@ public final class SwapFeature
         if (rightClickHeld)
             return true;
         if (!config.enabled() || !controller.rightClickEnabled() || minecraft.currentScreen != null
-                || !controller.acceptsInput() || minecraft.playerController.getIsHittingBlock())
+                || controller.inputBlocked() || minecraft.playerController.getIsHittingBlock())
             return false;
         ItemStack held = minecraft.thePlayer.getHeldItem();
         int target = SwapBinding.armorTarget(held);

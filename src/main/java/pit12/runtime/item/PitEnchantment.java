@@ -188,7 +188,7 @@ public enum PitEnchantment {
     Think_of_the_People("think_of_the_people", "§eTOTP"),
     GENTLEMEN_AGREEMENT("gentlemen_agreement", "Deal with the Devil");
 
-    private static final Map<String, PitEnchantment> BY_KEY = new HashMap<String, PitEnchantment>();
+    private static final Map<String, PitEnchantment> BY_KEY = new HashMap<>();
     static {
         for (PitEnchantment enchantment : values()) {
             BY_KEY.put(enchantment.key, enchantment);

@@ -26,8 +26,7 @@ public final class ConfigSnapshot {
     private final Map<String, Map<String, Object>> features;
 
     public ConfigSnapshot(Map<String, ? extends Map<String, ?>> features) {
-        LinkedHashMap<String, Map<String, Object>> featureCopy =
-                new LinkedHashMap<String, Map<String, Object>>();
+        LinkedHashMap<String, Map<String, Object>> featureCopy = new LinkedHashMap<>();
         for (Map.Entry<String, ? extends Map<String, ?>> featureEntry : features.entrySet()) {
             featureCopy.put(featureEntry.getKey(), Collections
                     .unmodifiableMap(new LinkedHashMap<String, Object>(featureEntry.getValue())));

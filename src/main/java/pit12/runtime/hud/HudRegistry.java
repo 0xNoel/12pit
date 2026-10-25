@@ -26,9 +26,9 @@ import java.util.Map;
 import pit12.shared.concurrent.ClientThread;
 
 public final class HudRegistry {
-    private final List<HudElement> elements = new ArrayList<HudElement>();
+    private final List<HudElement> elements = new ArrayList<>();
     private final List<HudElement> elementsView = Collections.unmodifiableList(elements);
-    private final Map<String, HudElement> elementsById = new LinkedHashMap<String, HudElement>();
+    private final Map<String, HudElement> elementsById = new LinkedHashMap<>();
     private boolean editing;
     private final ClientThread client;
 

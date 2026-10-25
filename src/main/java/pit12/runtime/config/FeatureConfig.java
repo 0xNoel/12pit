@@ -39,11 +39,11 @@ public abstract class FeatureConfig {
     private final String originalDescription;
     private String description;
     private final BooleanSetting enabled;
-    private final List<Setting<?>> settings = new ArrayList<Setting<?>>();
-    private final List<ConfigOption<?>> options = new ArrayList<ConfigOption<?>>();
+    private final List<Setting<?>> settings = new ArrayList<>();
+    private final List<ConfigOption<?>> options = new ArrayList<>();
     private final List<Setting<?>> settingsView = Collections.unmodifiableList(settings);
     private final List<ConfigOption<?>> optionsView = Collections.unmodifiableList(options);
-    private final Set<String> settingIds = new HashSet<String>();
+    private final Set<String> settingIds = new HashSet<>();
     private ConfigGroup currentSubcategory;
     private ConfigGroup currentSubsubcategory;
     private boolean hasSubcategories;
@@ -232,7 +232,7 @@ public abstract class FeatureConfig {
         }
         settings.add(setting);
         if (optionKind != null) {
-            options.add(new ConfigOption<T>(setting, optionKind, currentSubcategory,
+            options.add(new ConfigOption<>(setting, optionKind, currentSubcategory,
                     currentSubsubcategory));
         }
     }

@@ -90,11 +90,7 @@ final class TelebowRenderer {
             float alpha = (path.color >>> 24) / 255F * path.opacity(now, hold, fade);
             if (alpha <= 0 || trajectory.count < 2 && !trajectory.hasImpact)
                 continue;
-            Mesh mesh = meshes.get(path);
-            if (mesh == null) {
-                mesh = new Mesh(path);
-                meshes.put(path, mesh);
-            }
+            Mesh mesh = meshes.computeIfAbsent(path, Mesh::new);
             if (mesh.boundsRevision != path.revision) {
                 updateBounds(mesh);
                 mesh.boundsRevision = path.revision;
@@ -127,7 +123,7 @@ final class TelebowRenderer {
                 double dz = z - camera.viewerPosZ;
                 mesh.nameScale = 0.02666667F * (float) Math.max(1,
                         Math.min(4, Math.sqrt(dx * dx + dy * dy + dz * dz) / 32));
-                double halfWidth = mesh.nameWidth / 2 + 3;
+                double halfWidth = mesh.nameWidth / 2.0 + 3;
                 double height = font.FONT_HEIGHT + 2;
                 double radius = mesh.nameScale * Math.sqrt(halfWidth * halfWidth + height * height)
                         + margin;
@@ -410,10 +406,10 @@ final class TelebowRenderer {
         GL11.glColor4f(0, 0, 0, alpha * 0.5F);
         GL11.glBegin(GL11.GL_QUADS);
         try {
-            GL11.glVertex3d(-width / 2 - 3, -2, 0);
-            GL11.glVertex3d(-width / 2 - 3, font.FONT_HEIGHT + 2, 0);
-            GL11.glVertex3d(width / 2 + 3, font.FONT_HEIGHT + 2, 0);
-            GL11.glVertex3d(width / 2 + 3, -2, 0);
+            GL11.glVertex3d(-width / 2.0 - 3, -2, 0);
+            GL11.glVertex3d(-width / 2.0 - 3, font.FONT_HEIGHT + 2, 0);
+            GL11.glVertex3d(width / 2.0 + 3, font.FONT_HEIGHT + 2, 0);
+            GL11.glVertex3d(width / 2.0 + 3, -2, 0);
         } finally {
             GL11.glEnd();
         }

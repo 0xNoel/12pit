@@ -54,7 +54,7 @@ public final class ProfilesFeature
     private final Function<ProfileCodec, ProfileStore> storeFactory;
     private final ProfileController controller;
     private final ConfigChangeListener configListener;
-    private final List<Runnable> listeners = new ArrayList<Runnable>();
+    private final List<Runnable> listeners = new ArrayList<>();
     private ProfileIoWorker worker;
     private ProfileCodec codec;
     private boolean started;
@@ -157,7 +157,7 @@ public final class ProfilesFeature
     }
 
     private void notifyListeners() {
-        for (Runnable listener : listeners.toArray(new Runnable[listeners.size()])) {
+        for (Runnable listener : listeners.toArray(new Runnable[0])) {
             try {
                 listener.run();
             } catch (RuntimeException failure) {
@@ -254,7 +254,7 @@ public final class ProfilesFeature
     }
 
     private List<StoredProfile> decodeProfiles(List<String> profiles) {
-        ArrayList<StoredProfile> decoded = new ArrayList<StoredProfile>();
+        ArrayList<StoredProfile> decoded = new ArrayList<>();
         for (String text : profiles) {
             JsonElement parsed = new JsonParser().parse(text);
             if (!parsed.isJsonObject()) {

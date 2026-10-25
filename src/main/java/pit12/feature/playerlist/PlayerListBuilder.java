@@ -95,7 +95,7 @@ final class PlayerListBuilder {
             rightZ = forwardX;
         }
         EnumMap<PlayerListGroup, List<PlayerListEntry>> groups =
-                new EnumMap<PlayerListGroup, List<PlayerListEntry>>(PlayerListGroup.class);
+                new EnumMap<>(PlayerListGroup.class);
         PitSnapshot pitSnapshot = pitContext.current();
         for (NetworkPlayerInfo info : minecraft.getNetHandler().getPlayerInfoMap()) {
             UUID playerId = info.getGameProfile().getId();

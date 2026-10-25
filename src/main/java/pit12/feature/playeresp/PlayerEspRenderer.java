@@ -53,8 +53,7 @@ final class PlayerEspRenderer {
                 + (localPlayer.posZ - localPlayer.lastTickPosZ) * partialTicks;
         RenderManager manager = minecraft.getRenderManager();
         boxes.beginFrame(manager.viewerPosX, manager.viewerPosY, manager.viewerPosZ);
-        for (int index = 0; index < targets.size(); index++) {
-            PlayerEspFeature.Target target = targets.get(index);
+        for (PlayerEspFeature.Target target : targets) {
             EntityPlayer player = target.player;
             if (player == localPlayer || !player.isEntityAlive()) {
                 continue;

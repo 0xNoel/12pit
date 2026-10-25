@@ -56,8 +56,8 @@ final class RelationBook {
         this.language = language;
     }
 
-    private final Map<UUID, RelationEntry> byId = new LinkedHashMap<UUID, RelationEntry>();
-    private final Map<String, RelationEntry> pending = new LinkedHashMap<String, RelationEntry>();
+    private final Map<UUID, RelationEntry> byId = new LinkedHashMap<>();
+    private final Map<String, RelationEntry> pending = new LinkedHashMap<>();
 
     void replace(Collection<RelationEntry> loaded) {
         byId.clear();
@@ -201,13 +201,13 @@ final class RelationBook {
     }
 
     List<RelationEntry> entries() {
-        List<RelationEntry> all = new ArrayList<RelationEntry>(byId.values());
+        List<RelationEntry> all = new ArrayList<>(byId.values());
         all.addAll(pending.values());
         return all;
     }
 
     List<RelationEntry> entries(Relation relation) {
-        List<RelationEntry> result = new ArrayList<RelationEntry>();
+        List<RelationEntry> result = new ArrayList<>();
         for (RelationEntry entry : entries()) {
             if (entry.relation() == relation) {
                 result.add(entry);
@@ -217,7 +217,7 @@ final class RelationBook {
     }
 
     private List<RelationEntry> named(String name) {
-        List<RelationEntry> result = new ArrayList<RelationEntry>();
+        List<RelationEntry> result = new ArrayList<>();
         for (RelationEntry entry : entries()) {
             if (entry.name().equalsIgnoreCase(name)) {
                 result.add(entry);

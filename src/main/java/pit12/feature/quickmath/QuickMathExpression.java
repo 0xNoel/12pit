@@ -23,7 +23,7 @@ public final class QuickMathExpression {
 
     public static long evaluate(String expression) {
         String normalized =
-                expression.replaceAll("\\s+", "").replaceAll("[x×]", "*").replaceAll("÷", "/");
+                expression.replaceAll("\\s+", "").replaceAll("[x×]", "*").replace("÷", "/");
         return new Parser(normalized).parse();
     }
 

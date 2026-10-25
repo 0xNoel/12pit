@@ -20,7 +20,6 @@ package pit12.feature.telebow;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 import net.minecraft.client.Minecraft;
@@ -76,11 +75,7 @@ final class TelebowAim {
             int color = colorOf.applyAsInt(path.shooter);
             if ((color >>> 24) == 0)
                 continue;
-            Target target = targets.get(path);
-            if (target == null) {
-                target = new Target(path);
-                targets.put(path, target);
-            }
+            Target target = targets.computeIfAbsent(path, Target::new);
             target.seenAt = tick;
             target.color = color;
             if (target.bestSample >= 0 && !solve(shooter, target, target.bestSample)) {
@@ -93,11 +88,7 @@ final class TelebowAim {
                 target.nextPoint = (target.nextPoint + 1) % 11;
             }
         }
-        Iterator<Target> iterator = targets.values().iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().seenAt != tick)
-                iterator.remove();
-        }
+        targets.values().removeIf(target -> target.seenAt != tick);
     }
 
     private boolean solve(EntityPlayer shooter, Target target, int sample) {

@@ -127,12 +127,12 @@ final class SettingsTransfer {
         if (!"merge".equals(mode) && !"replace".equals(mode)) {
             throw new IllegalArgumentException("Choose a relation import mode");
         }
-        Map<UUID, String> byId = new LinkedHashMap<UUID, String>();
+        Map<UUID, String> byId = new LinkedHashMap<>();
         for (String text : bundle.profiles) {
             JsonObject profile = new JsonParser().parse(text).getAsJsonObject();
             byId.put(UUID.fromString(profile.get("id").getAsString()), text);
         }
-        ArrayList<String> chosen = new ArrayList<String>();
+        ArrayList<String> chosen = new ArrayList<>();
         for (UUID id : selectedProfiles) {
             String text = byId.get(id);
             if (text == null) {
@@ -175,7 +175,7 @@ final class SettingsTransfer {
                 || !version.getAsJsonPrimitive().isNumber() || !"1".equals(version.getAsString())) {
             throw new IllegalArgumentException("Unsupported file version");
         }
-        ArrayList<String> savedProfiles = new ArrayList<String>();
+        ArrayList<String> savedProfiles = new ArrayList<>();
         for (JsonElement element : array(data, "profiles")) {
             if (!element.isJsonObject()) {
                 throw new IllegalArgumentException("Profile must be an object");
@@ -186,8 +186,7 @@ final class SettingsTransfer {
             requireSuccess(profiles.validateImportProfiles(savedProfiles),
                     "validate profile import");
         }
-        EnumMap<Relation, List<RelationEntry>> groups =
-                new EnumMap<Relation, List<RelationEntry>>(Relation.class);
+        EnumMap<Relation, List<RelationEntry>> groups = new EnumMap<>(Relation.class);
         JsonObject source = object(data, "relations");
         for (Map.Entry<String, JsonElement> group : source.entrySet()) {
             Relation type;
@@ -200,7 +199,7 @@ final class SettingsTransfer {
                 throw new IllegalArgumentException("Invalid relation group");
             }
             requireRelations();
-            ArrayList<RelationEntry> entries = new ArrayList<RelationEntry>();
+            ArrayList<RelationEntry> entries = new ArrayList<>();
             for (JsonElement item : group.getValue().getAsJsonArray()) {
                 if (!item.isJsonObject()) {
                     throw new IllegalArgumentException("Relation entry must be an object");
@@ -219,8 +218,8 @@ final class SettingsTransfer {
             }
             groups.put(type, entries);
         }
-        Set<UUID> ids = new HashSet<UUID>();
-        Set<String> pending = new HashSet<String>();
+        Set<UUID> ids = new HashSet<>();
+        Set<String> pending = new HashSet<>();
         for (List<RelationEntry> group : groups.values()) {
             for (RelationEntry entry : group) {
                 if (entry.playerId() == null ? !pending.add(entry.name().toLowerCase(Locale.ROOT))
@@ -274,7 +273,7 @@ final class SettingsTransfer {
             return Collections.emptyList();
         }
         List<RelationEntry> local = localEntries();
-        ArrayList<RelationEntry> result = new ArrayList<RelationEntry>();
+        ArrayList<RelationEntry> result = new ArrayList<>();
         for (RelationEntry entry : local) {
             if (!"replace".equals(mode) || !selected.contains(entry.relation())) {
                 result.add(entry);
@@ -315,8 +314,8 @@ final class SettingsTransfer {
     }
 
     private static void validateResolved(List<RelationEntry> result) {
-        Set<UUID> ids = new HashSet<UUID>();
-        Set<String> pending = new HashSet<String>();
+        Set<UUID> ids = new HashSet<>();
+        Set<String> pending = new HashSet<>();
         for (RelationEntry entry : result) {
             if (entry.playerId() == null ? !pending.add(entry.name().toLowerCase(Locale.ROOT))
                     : !ids.add(entry.playerId())) {
@@ -327,7 +326,7 @@ final class SettingsTransfer {
     }
 
     private String fingerprint() {
-        List<UUID> all = new ArrayList<UUID>();
+        List<UUID> all = new ArrayList<>();
         for (ProfileSummary profile : profiles.snapshot().profiles()) {
             all.add(profile.id());
         }
@@ -359,7 +358,7 @@ final class SettingsTransfer {
 
     private List<RelationEntry> localEntries() {
         requireRelations();
-        ArrayList<RelationEntry> entries = new ArrayList<RelationEntry>();
+        ArrayList<RelationEntry> entries = new ArrayList<>();
         for (Relation type : TYPES) {
             entries.addAll(relations.entries(type));
         }
@@ -367,7 +366,7 @@ final class SettingsTransfer {
     }
 
     private static List<RelationEntry> matches(List<RelationEntry> local, RelationEntry incoming) {
-        ArrayList<RelationEntry> found = new ArrayList<RelationEntry>();
+        ArrayList<RelationEntry> found = new ArrayList<>();
         for (RelationEntry entry : local) {
             if (incoming.playerId() != null && incoming.playerId().equals(entry.playerId())
                     || incoming.name().equalsIgnoreCase(entry.name())) {
@@ -444,7 +443,7 @@ final class SettingsTransfer {
     }
 
     private static List<UUID> ids(JsonArray values) {
-        ArrayList<UUID> result = new ArrayList<UUID>();
+        ArrayList<UUID> result = new ArrayList<>();
         for (JsonElement value : values) {
             if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) {
                 throw new IllegalArgumentException("Expected profile ID");
@@ -459,7 +458,7 @@ final class SettingsTransfer {
     }
 
     private static List<Relation> types(JsonArray values) {
-        ArrayList<Relation> result = new ArrayList<Relation>();
+        ArrayList<Relation> result = new ArrayList<>();
         for (JsonElement value : values) {
             if (!value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) {
                 throw new IllegalArgumentException("Expected relation group");

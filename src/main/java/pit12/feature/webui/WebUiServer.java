@@ -95,7 +95,7 @@ final class WebUiServer {
     private final SettingsTransfer transfer;
     private final WebUiPreferences preferences;
     private final Gson gson = new Gson();
-    private final Set<BlockingQueue<Boolean>> streams = new HashSet<BlockingQueue<Boolean>>();
+    private final Set<BlockingQueue<Boolean>> streams = new HashSet<>();
     private final ConfigChangeListener configListener = ignored -> notifyStreams();
     private final Runnable changeListener = this::notifyStreams;
     private HttpServer server;
@@ -235,50 +235,49 @@ final class WebUiServer {
         }
         JsonObject request = parsed.getAsJsonObject();
         sendJson(exchange, 200, onClient(() -> {
-            if ("/api/transfer/export".equals(path)) {
-                return transfer.exportData(request);
-            }
-            if ("/api/transfer/preview".equals(path)) {
-                return transfer.preview(request);
-            }
-            if ("/api/transfer/apply".equals(path)) {
-                transfer.apply(request);
-                return state();
-            }
-            if ("/api/relation".equals(path)) {
-                List<Object> results = changeRelations(request);
-                return object("state", state(), "results", results);
-            }
-            if ("/api/language-hint/dismiss".equals(path)) {
-                if (!preferences.ready())
-                    throw new IllegalArgumentException(
-                            "Configuration interface settings are unavailable");
-                config.languageHint().set(false);
-                return state();
-            }
-            if ("/api/favorite".equals(path)) {
-                String id = requiredString(request, "featureId");
-                if (catalog.feature(id) == null)
-                    throw new IllegalArgumentException("Unknown feature");
-                JsonElement favorite = request.get("favorite");
-                if (favorite == null || !favorite.isJsonPrimitive()
-                        || !favorite.getAsJsonPrimitive().isBoolean())
-                    throw new IllegalArgumentException("Expected a boolean");
-                if (!preferences.ready())
-                    throw new IllegalArgumentException(
-                            "Configuration interface settings are unavailable");
-                preferences.setFavorite(id, favorite.getAsBoolean());
-            } else if ("/api/setting".equals(path)) {
-                changeSetting(request);
-            } else {
-                changeProfile(request);
+            switch (path) {
+                case "/api/transfer/export":
+                    return transfer.exportData(request);
+                case "/api/transfer/preview":
+                    return transfer.preview(request);
+                case "/api/transfer/apply":
+                    transfer.apply(request);
+                    return state();
+                case "/api/relation":
+                    List<Object> results = changeRelations(request);
+                    return object("state", state(), "results", results);
+                case "/api/language-hint/dismiss":
+                    if (!preferences.ready())
+                        throw new IllegalArgumentException(
+                                "Configuration interface settings are unavailable");
+                    config.languageHint().set(false);
+                    return state();
+                case "/api/favorite":
+                    String id = requiredString(request, "featureId");
+                    if (catalog.feature(id) == null)
+                        throw new IllegalArgumentException("Unknown feature");
+                    JsonElement favorite = request.get("favorite");
+                    if (favorite == null || !favorite.isJsonPrimitive()
+                            || !favorite.getAsJsonPrimitive().isBoolean())
+                        throw new IllegalArgumentException("Expected a boolean");
+                    if (!preferences.ready())
+                        throw new IllegalArgumentException(
+                                "Configuration interface settings are unavailable");
+                    preferences.setFavorite(id, favorite.getAsBoolean());
+                    break;
+                case "/api/setting":
+                    changeSetting(request);
+                    break;
+                default:
+                    changeProfile(request);
+                    break;
             }
             return state();
         }));
     }
 
     private void serveEvents(HttpExchange exchange) throws IOException {
-        BlockingQueue<Boolean> signal = new ArrayBlockingQueue<Boolean>(1);
+        BlockingQueue<Boolean> signal = new ArrayBlockingQueue<>(1);
         boolean accepted;
         synchronized (streams) {
             accepted = streams.size() < MAX_STREAMS;
@@ -314,6 +313,8 @@ final class WebUiServer {
     void notifyStreams() {
         synchronized (streams) {
             for (BlockingQueue<Boolean> signal : streams) {
+                // Capacity is 1. A rejected offer just means a wakeup is already queued.
+                // noinspection ResultOfMethodCallIgnored
                 signal.offer(Boolean.TRUE);
             }
         }
@@ -434,11 +435,11 @@ final class WebUiServer {
         if (entries.size() > 100) {
             throw new IllegalArgumentException("Select at most 100 players at a time");
         }
-        List<Object> results = new ArrayList<Object>(Collections.nCopies(entries.size(), null));
-        List<RelationEntry> changes = new ArrayList<RelationEntry>();
-        List<Integer> positions = new ArrayList<Integer>();
-        Set<String> seen = new HashSet<String>();
-        Set<String> existing = new HashSet<String>();
+        List<Object> results = new ArrayList<>(Collections.nCopies(entries.size(), null));
+        List<RelationEntry> changes = new ArrayList<>();
+        List<Integer> positions = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+        Set<String> existing = new HashSet<>();
         if ("add".equals(action)) {
             for (RelationEntry saved : relations.entries(relation)) {
                 if (saved.playerId() != null)
@@ -487,16 +488,16 @@ final class WebUiServer {
     }
 
     private Map<String, Object> state() {
-        List<Object> features = new ArrayList<Object>();
+        List<Object> features = new ArrayList<>();
         for (FeatureConfig feature : catalog.features()) {
             features.add(featureState(feature));
         }
         ProfilesSnapshot snapshot = profiles.snapshot();
-        List<Object> entries = new ArrayList<Object>();
+        List<Object> entries = new ArrayList<>();
         for (ProfileSummary profile : snapshot.profiles()) {
             entries.add(object("id", profile.id().toString(), "name", profile.name()));
         }
-        List<Object> relationEntries = new ArrayList<Object>();
+        List<Object> relationEntries = new ArrayList<>();
         for (Relation type : new Relation[] {Relation.FRIEND, Relation.ENEMY}) {
             for (RelationEntry entry : relations.entries(type)) {
                 relationEntries.add(object("uuid",
@@ -524,8 +525,8 @@ final class WebUiServer {
     }
 
     private Map<String, Object> featureState(FeatureConfig feature) {
-        List<Object> sections = new ArrayList<Object>();
-        Map<String, Map<String, Object>> byId = new LinkedHashMap<String, Map<String, Object>>();
+        List<Object> sections = new ArrayList<>();
+        Map<String, Map<String, Object>> byId = new LinkedHashMap<>();
         for (ConfigOption<?> option : feature.options()) {
             String sectionId =
                     option.subsubcategory() == null ? null : option.subsubcategory().id();
@@ -540,7 +541,7 @@ final class WebUiServer {
                         option.subcategory() == null ? null
                                 : object("id", option.subcategory().id(), "name",
                                         option.subcategory().displayName()),
-                        "options", new ArrayList<Object>());
+                        "options", new ArrayList<>());
                 byId.put(groupId, section);
                 sections.add(section);
             }
@@ -578,7 +579,7 @@ final class WebUiServer {
             value.put("step", number.stepValue());
         }
         if (setting instanceof ChoiceSetting) {
-            List<Object> choices = new ArrayList<Object>();
+            List<Object> choices = new ArrayList<>();
             for (ChoiceSetting.Choice choice : ((ChoiceSetting) setting).choices()) {
                 Map<String, Object> entry =
                         object("value", choice.value(), "name", choice.displayName());
@@ -656,7 +657,7 @@ final class WebUiServer {
     }
 
     private static Map<String, Object> object(Object... pairs) {
-        Map<String, Object> value = new LinkedHashMap<String, Object>();
+        Map<String, Object> value = new LinkedHashMap<>();
         for (int index = 0; index < pairs.length; index += 2) {
             value.put((String) pairs[index], pairs[index + 1]);
         }

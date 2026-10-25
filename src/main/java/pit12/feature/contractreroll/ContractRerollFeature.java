@@ -212,7 +212,7 @@ public final class ContractRerollFeature
                 case LANGUAGE:
                     if (now >= clickAt) {
                         enter(State.LANGUAGE_REPLY, now);
-                        player.sendChatMessage("/lang english");
+                        player.sendChatMessage("/lang English");
                     }
                     break;
                 case CONTRACT:
@@ -324,6 +324,7 @@ public final class ContractRerollFeature
         return true;
     }
 
+    // noinspection BooleanMethodIsAlwaysInverted
     private boolean acceptMenu(GuiScreen screen) {
         if (state.title == null || !(screen instanceof GuiChest)
                 || !(((GuiChest) screen).inventorySlots instanceof ContainerChest))

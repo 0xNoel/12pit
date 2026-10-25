@@ -93,7 +93,7 @@ final class PitPalClient {
                 || name.getAsString().trim().isEmpty()) {
             throw new IOException("PitPal returned an invalid owner name");
         }
-        String displayName = name.getAsString().replaceFirst("\\[[^]]*\\] *", "");
+        String displayName = name.getAsString().replaceFirst("\\[[^]]*] *", "");
         return level.getAsString().isEmpty() ? displayName
                 : level.getAsString() + " " + displayName;
     }
@@ -104,6 +104,7 @@ final class PitPalClient {
             if (cancelled.getAsBoolean()) {
                 throw new InterruptedException("Denick query was cancelled");
             }
+            // noinspection BusyWait
             Thread.sleep(Math.max(1L, Math.min(100L, nextRequest - System.currentTimeMillis())));
         }
         if (cancelled.getAsBoolean()) {

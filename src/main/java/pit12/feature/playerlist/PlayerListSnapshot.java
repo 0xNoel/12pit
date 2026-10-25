@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class PlayerListSnapshot {
-    private static final PlayerListSnapshot EMPTY =
-            new PlayerListSnapshot(Collections.<PlayerListGroup, List<PlayerListEntry>>emptyMap());
+    private static final PlayerListSnapshot EMPTY = new PlayerListSnapshot(Collections.emptyMap());
     private final Map<PlayerListGroup, List<PlayerListEntry>> entries;
 
     private PlayerListSnapshot(Map<PlayerListGroup, List<PlayerListEntry>> entries) {
@@ -46,7 +45,7 @@ public final class PlayerListSnapshot {
 
     public List<PlayerListEntry> entries(PlayerListGroup group) {
         List<PlayerListEntry> groupEntries = entries.get(group);
-        return groupEntries == null ? Collections.<PlayerListEntry>emptyList() : groupEntries;
+        return groupEntries == null ? Collections.emptyList() : groupEntries;
     }
 
     public boolean isEmpty() {

@@ -83,6 +83,7 @@ public final class ClientSession implements ClientLifecycle {
         if (started)
             return;
         started = true;
+        // noinspection NonAtomicOperationOnVolatileField
         generation++;
         binding.bindWorldChangeListener(this::refresh);
         MinecraftForge.EVENT_BUS.register(this);
@@ -95,6 +96,7 @@ public final class ClientSession implements ClientLifecycle {
         if (!started)
             return;
         started = false;
+        // noinspection NonAtomicOperationOnVolatileField
         generation++;
         binding.bindWorldChangeListener(null);
         MinecraftForge.EVENT_BUS.unregister(this);

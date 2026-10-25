@@ -169,7 +169,7 @@ public final class ConfigCatalog {
     }
 
     /** A bad value cancels the whole update. Missing values go back to defaults. */
-    public ConfigChangeSet apply(ConfigSnapshot snapshot) {
+    public void apply(ConfigSnapshot snapshot) {
         client.check();
         ConfigSnapshot normalized = normalize(snapshot);
         LinkedHashMap<Setting<?>, Object> candidates = new LinkedHashMap<Setting<?>, Object>();
@@ -189,14 +189,12 @@ public final class ConfigCatalog {
             changes.add(new ConfigChangeSet.Change(settingOwners.get(setting).id(), setting.id()));
         }
         if (changes.isEmpty()) {
-            return new ConfigChangeSet(revision, changes);
+            return;
         }
         for (Map.Entry<Setting<?>, Object> candidateEntry : candidates.entrySet()) {
             candidateEntry.getKey().applyValidated(candidateEntry.getValue());
         }
-        ConfigChangeSet changeSet = new ConfigChangeSet(++revision, changes);
-        notifyListeners(changeSet);
-        return changeSet;
+        notifyListeners(new ConfigChangeSet(++revision, changes));
     }
 
     private void onSettingChanged(Setting<?> setting) {

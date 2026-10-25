@@ -122,6 +122,7 @@ public final class PitEnchantments implements Iterable<PitEnchantments.Entry> {
     }
 
     @Override
+    // noinspection UnannotatedMethodOverridesNotNullMethod
     public Iterator<Entry> iterator() {
         return Arrays.asList(entries).iterator();
     }

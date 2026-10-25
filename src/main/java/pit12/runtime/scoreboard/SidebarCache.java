@@ -293,6 +293,7 @@ public final class SidebarCache implements ClientLifecycle {
         return null;
     }
 
+    // noinspection BooleanMethodIsAlwaysInverted
     private static boolean sameLine(SidebarLine previous, SidebarLine current) {
         return previous == current || previous != null && current != null
                 && previous.score() == current.score() && previous.entry().equals(current.entry())

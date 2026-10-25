@@ -19,7 +19,6 @@
 package pit12.feature.profile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -50,9 +49,9 @@ final class ProfileController {
     private final ConfigCatalog catalog;
     private final PersistenceSink persistence;
     private final Runnable snapshotChanged;
-    private final List<ProfileRecord> profiles = new ArrayList<ProfileRecord>();
-    private final Map<UUID, ProfileRecord> profilesById = new LinkedHashMap<UUID, ProfileRecord>();
-    private final List<String> problems = new ArrayList<String>();
+    private final List<ProfileRecord> profiles = new ArrayList<>();
+    private final Map<UUID, ProfileRecord> profilesById = new LinkedHashMap<>();
+    private final List<String> problems = new ArrayList<>();
     private ProfilesSnapshot snapshot = ProfilesSnapshot.loading();
     private LoadState loadState = LoadState.LOADING;
     private UUID activeProfileId;
@@ -74,7 +73,7 @@ final class ProfileController {
     }
 
     List<StoredProfile> exportProfiles(List<UUID> ids) {
-        ArrayList<StoredProfile> exported = new ArrayList<StoredProfile>();
+        ArrayList<StoredProfile> exported = new ArrayList<>();
         for (UUID id : ids) {
             ProfileRecord record = profilesById.get(id);
             if (record == null) {
@@ -86,8 +85,8 @@ final class ProfileController {
     }
 
     List<ProfileRecord> prepareImported(List<StoredProfile> imported) {
-        Set<UUID> ids = new HashSet<UUID>();
-        Set<String> names = new HashSet<String>();
+        Set<UUID> ids = new HashSet<>();
+        Set<String> names = new HashSet<>();
         List<ProfileRecord> records = new ArrayList<>();
         for (StoredProfile profile : imported) {
             if (!ids.add(profile.id()) || !names.add(profile.name().toLowerCase(Locale.ROOT))) {
@@ -105,7 +104,7 @@ final class ProfileController {
 
     void importProfiles(List<StoredProfile> imported) {
         List<ProfileRecord> records = prepareImported(imported);
-        ArrayList<UUID> removed = new ArrayList<UUID>();
+        ArrayList<UUID> removed = new ArrayList<>();
         boolean activeReplaced = false;
         for (ProfileRecord record : records) {
             ProfileRecord old = findByName(record.name(), null);
@@ -167,8 +166,8 @@ final class ProfileController {
         for (ProfileLoadProblem problem : loaded.problems()) {
             problems.add(problem.summary());
         }
-        ArrayList<StoredProfile> ordered = new ArrayList<StoredProfile>(loaded.profiles());
-        Collections.sort(ordered,
+        ArrayList<StoredProfile> ordered = new ArrayList<>(loaded.profiles());
+        ordered.sort(
                 Comparator.comparingInt(StoredProfile::order).thenComparing(StoredProfile::id));
         for (StoredProfile stored : ordered) {
             if (profilesById.containsKey(stored.id())) {
@@ -374,7 +373,7 @@ final class ProfileController {
     }
 
     List<StoredProfile> dirtyProfiles() {
-        ArrayList<StoredProfile> result = new ArrayList<StoredProfile>();
+        ArrayList<StoredProfile> result = new ArrayList<>();
         for (ProfileRecord record : profiles) {
             if (record.dirty()) {
                 result.add(record.stored());
@@ -440,7 +439,7 @@ final class ProfileController {
     }
 
     private void publish() {
-        ArrayList<ProfileSummary> summaries = new ArrayList<ProfileSummary>(profiles.size());
+        ArrayList<ProfileSummary> summaries = new ArrayList<>(profiles.size());
         boolean dirty = stateDirty;
         for (ProfileRecord record : profiles) {
             summaries.add(record.summary());

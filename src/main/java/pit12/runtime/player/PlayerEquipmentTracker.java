@@ -41,8 +41,7 @@ public final class PlayerEquipmentTracker implements ClientLifecycle, PlayerEqui
     private final PlayerEntityTracker players;
     private final Runnable sessionChanged;
     private final PlayerEquipmentCache cache = new PlayerEquipmentCache();
-    private final List<PlayerEquipmentListener> listeners =
-            new ArrayList<PlayerEquipmentListener>();
+    private final List<PlayerEquipmentListener> listeners = new ArrayList<>();
     private NetHandlerPlayClient boundNetHandler;
     private boolean started;
 
