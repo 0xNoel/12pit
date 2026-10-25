@@ -19,12 +19,12 @@ along with 12pit. If not, see <https://www.gnu.org/licenses/>.
 <script setup lang="ts">
 import { TriangleAlert } from '@lucide/vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
-import type { State } from './api'
+import type { WebUiState } from './useWebUiState'
 import { loadLanguage, systemLanguage, translate } from './languages'
 import UiNotice from './UiNotice.vue'
 
 const props = defineProps<{
-  state: State
+  state: WebUiState
   busy: boolean
   disable: () => Promise<boolean>
 }>()

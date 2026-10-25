@@ -48,6 +48,8 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
     private final Languages language;
     private final HudEditor hudEditor;
     private final WebUiServer server;
+    private final WebUiEvents events;
+    private final WebUiApi api;
     private final WebUiPreferences preferences;
     private boolean started;
 
@@ -59,8 +61,12 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
         this.config = config;
         this.hudEditor = hudEditor;
         preferences = new WebUiPreferences(settings, config, path);
-        server = new WebUiServer(minecraft, catalog, settings, config, profiles, relations,
-                swapBindings, language, preferences);
+        events = new WebUiEvents();
+        api = new WebUiApi(catalog, settings, config, profiles, relations, swapBindings, language,
+                preferences, events);
+        WebUiRoutes routes = new WebUiRoutes();
+        api.register(routes);
+        server = new WebUiServer(minecraft, routes, events);
     }
 
     @Override
@@ -70,7 +76,8 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
         }
         language.select(config.language().get());
         settings.addListener(this);
-        preferences.start(server::notifyStreams);
+        preferences.start(() -> events.changed("/api/preferences"));
+        api.start();
         try {
             server.start();
         } catch (IOException failure) {
@@ -89,6 +96,7 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
             started = false;
         }
         server.stop();
+        api.stop();
         settings.removeListener(this);
         preferences.stop();
     }

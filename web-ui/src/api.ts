@@ -77,33 +77,43 @@ export interface RelationResult {
   message: string
 }
 
-export interface State {
+export interface ConfigurationCatalog {
   language: string
   version: string
   features: Feature[]
-  webui: {
-    settings: Feature
-    systemLanguage: string
-    languageHint: boolean
-    favorites: string[]
-    ready: boolean
-    problem: SourceText | null
-  }
-  profiles: {
-    loadState: 'LOADING' | 'READY' | 'DEGRADED'
-    activeId: string | null
-    entries: { id: string; name: string }[]
-    problems: string[]
-    unpersisted: boolean
-  }
-  relations: {
-    problem: string | null
-    entries: RelationEntry[]
-  }
-  swapBindings: {
-    problem: string | null
-    count: number
-  }
+  settings: Feature
+}
+
+export interface WebUiPreferences {
+  systemLanguage: string
+  languageHint: boolean
+  favorites: string[]
+  ready: boolean
+  problem: SourceText | null
+}
+
+export interface ProfilesState {
+  loadState: 'LOADING' | 'READY' | 'DEGRADED'
+  activeId: string | null
+  entries: { id: string; name: string }[]
+  problems: string[]
+  unpersisted: boolean
+}
+
+export interface RelationsState {
+  problem: string | null
+  entries: RelationEntry[]
+}
+
+export interface TransferState {
+  swapBindings: { problem: string | null }
+}
+
+export interface SettingValue {
+  featureId: string
+  settingId: string
+  value: boolean | number | string
+  keyName?: string
 }
 
 export interface RelationConflict {
@@ -122,9 +132,13 @@ export interface TransferPreview {
   swapBindings: boolean
 }
 
-async function request<T = State>(path: string, body?: object): Promise<T> {
+async function request<T>(
+  path: string,
+  method = 'GET',
+  body?: object,
+): Promise<T> {
   const response = await fetch(path, {
-    method: body ? 'POST' : 'GET',
+    method,
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
     body: body ? JSON.stringify(body) : undefined,
     cache: 'no-store',
@@ -134,41 +148,72 @@ async function request<T = State>(path: string, body?: object): Promise<T> {
   return payload as T
 }
 
-export const loadState = () => request('/api/state')
+export const loadCatalog = () => request<ConfigurationCatalog>('/api/settings')
+export const loadSettingValues = (featureId?: string) =>
+  request<SettingValue[]>(
+    `/api/settings/${encodeURIComponent(featureId ?? 'values')}`,
+  )
+export const resetSettings = () =>
+  request<SettingValue[]>('/api/settings', 'DELETE')
+export const loadPreferences = () =>
+  request<WebUiPreferences>('/api/preferences')
+export const loadProfiles = () => request<ProfilesState>('/api/profiles')
+export const loadRelations = () => request<RelationsState>('/api/relations')
+export const loadTransfer = () => request<TransferState>('/api/transfer')
+
 export const changeFavorite = (featureId: string, favorite: boolean) =>
-  request('/api/favorite', { featureId, favorite })
+  request<WebUiPreferences>('/api/preferences', 'PATCH', {
+    favorites: { [featureId]: favorite },
+  })
 export const changeSetting = (
   featureId: string,
   settingId: string,
   value: boolean | number | string,
-) => request('/api/setting', { featureId, settingId, value })
+) =>
+  request<SettingValue[]>(
+    `/api/settings/${encodeURIComponent(featureId)}/${encodeURIComponent(settingId)}`,
+    'PUT',
+    { value },
+  )
 export const dismissLanguageHint = () =>
-  request('/api/language-hint/dismiss', {})
-export const changeProfile = (action: string, id?: string, name?: string) =>
-  request('/api/profile', { action, id, name })
+  request<WebUiPreferences>('/api/preferences', 'PATCH', {
+    languageHint: false,
+  })
+export const createProfile = (name: string) =>
+  request<ProfilesState>('/api/profiles', 'POST', { name })
+export const renameProfile = (id: string, name: string) =>
+  request<ProfilesState>(`/api/profiles/${encodeURIComponent(id)}`, 'PATCH', {
+    name,
+  })
+export const deleteProfile = (id: string) =>
+  request<ProfilesState>(`/api/profiles/${encodeURIComponent(id)}`, 'DELETE')
+export const selectProfile = (id: string) =>
+  request<ProfilesState>('/api/profiles/active', 'PUT', { id })
 export const changeRelations = (
   action: 'add' | 'remove',
   relation: RelationType,
   entries: RelationInput[],
 ) =>
-  request<{ state: State; results: RelationResult[] }>('/api/relation', {
-    action,
-    relation,
-    entries,
-  })
+  request<{ relations: RelationsState; results: RelationResult[] }>(
+    '/api/relations',
+    'PATCH',
+    { relation, [action]: entries },
+  )
 
 export const exportData = (
   profiles: string[],
   relations: RelationType[],
   swapBindings: boolean,
-) =>
-  request<Record<string, unknown>>('/api/transfer/export', {
-    profiles,
-    relations,
-    swapBindings,
+) => {
+  const query = new URLSearchParams({
+    profiles: profiles.join(','),
+    relations: relations.join(','),
+    swapBindings: String(swapBindings),
   })
+  return request<Record<string, unknown>>(`/api/transfer?${query}`)
+}
 export const previewData = (data: object) =>
-  request<TransferPreview>('/api/transfer/preview', { data })
+  request<TransferPreview>('/api/transfer', 'POST', { data })
 export const applyData = (
   data: object,
   profiles: string[],
@@ -178,7 +223,7 @@ export const applyData = (
   fingerprint: string,
   swapBindings: boolean,
 ) =>
-  request<State>('/api/transfer/apply', {
+  request<void>('/api/transfer', 'PUT', {
     data,
     profiles,
     relations,
@@ -187,3 +232,21 @@ export const applyData = (
     fingerprint,
     swapBindings,
   })
+
+export function subscribe(
+  receive: (resources: string[]) => void,
+  opened: () => void,
+  failed: (cause: unknown) => void,
+) {
+  const stream = new EventSource('/api/events')
+  stream.addEventListener('change', (event) => {
+    try {
+      receive(JSON.parse((event as MessageEvent<string>).data) as string[])
+    } catch (cause) {
+      failed(cause)
+    }
+  })
+  stream.onopen = opened
+  stream.onerror = () => failed(new Error('Request failed'))
+  return stream
+}

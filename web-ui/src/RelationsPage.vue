@@ -29,11 +29,11 @@ import type {
   RelationInput,
   RelationResult,
   RelationType,
-  State,
+  RelationsState,
 } from './api'
 
 const props = defineProps<{
-  relations: State['relations']
+  relations: RelationsState
   busy: boolean
   hasRequestError: boolean
   update: (
