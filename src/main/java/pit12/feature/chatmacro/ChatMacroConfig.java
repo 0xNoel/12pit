@@ -31,12 +31,12 @@ public final class ChatMacroConfig extends FeatureConfig {
     final KeybindSetting spawnKey;
 
     public ChatMacroConfig() {
-        super("chatmacro", source("Chat macro"), new ConfigCategory("player", source("Player")),
+        super("chatmacro", source("Chat macro"), new ConfigCategory("misc", source("Misc")),
                 source("Sends chat messages with key bindings."), false);
         blockInputs = booleanSetting("block_inputs", source("Block inputs"),
                 source("Blocks all input for one tick before sending a macro."), true);
         spawnKey = keybindSetting("spawn_key", source("Spawn macro key"), source(
-                "Sends /spawn when you are not fighting. Press again to cancel while waiting."),
+                "Sends /spawn when the scoreboard's combat status clears. Press again to cancel while waiting."),
                 Keyboard.KEY_NONE);
     }
 }

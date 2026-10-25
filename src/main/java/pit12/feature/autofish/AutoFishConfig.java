@@ -35,8 +35,8 @@ public final class AutoFishConfig extends FeatureConfig {
     final IntegerSetting missHookChance;
 
     public AutoFishConfig() {
-        super("autofish", source("Auto Fish"), new ConfigCategory("player", source("Player")),
-                source("Reels in when a fish bites and can cast again."));
+        super("autofish", source("Auto Fish"), new ConfigCategory("misc", source("Misc")),
+                source("Reels in when the bobber dips and can cast again."));
         subsubcategory("general", source("General"));
         autoRecast = booleanSetting("auto_recast", source("Auto recast"),
                 source("Casts once after Auto Fish reels in."), true);
@@ -50,10 +50,10 @@ public final class AutoFishConfig extends FeatureConfig {
                 source("Longest wait before casting again, in ticks."), 20, 0, 20, 1);
         subsubcategory("hook_chances", source("Hook chances"));
         emptyHookChance = integerSliderSetting("empty_hook_chance", source("Empty hook chance"),
-                source("Percent chance of waiting for the float to recover before reeling in."), 0,
-                0, 100, 1);
+                source("Percent chance of waiting for the bobber to rise and settle before reeling in."),
+                0, 0, 100, 1);
         missHookChance = integerSliderSetting("miss_hook_chance", source("Miss hook chance"),
-                source("Percent chance of ignoring a bite and waiting for the next one."), 0, 0,
-                100, 1);
+                source("Percent chance of ignoring a bobber dip and waiting for the next one."), 0,
+                0, 100, 1);
     }
 }

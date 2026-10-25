@@ -37,7 +37,9 @@ public final class WebUiConfig extends FeatureConfig {
     private final BooleanSetting discordRpc;
 
     public WebUiConfig(Languages languages) {
-        super("webui", source("Settings"), null, "", false);
+        super("webui", source("Settings"), null,
+                source("Configures language, interface appearance, key bindings, and Discord RPC."),
+                false);
         Map<Integer, String> names = languages.names();
         Choice[] choices = new Choice[names.size()];
         int index = 0;
@@ -46,12 +48,12 @@ public final class WebUiConfig extends FeatureConfig {
         }
         language = choiceSetting("language", source("Language"),
                 source("Sets the language for the interface, commands, and HUD."), 0, choices);
-        colorSetting("gui_color", source("Accent color"), source("Controls the interface accent."),
-                0x7BADE2);
+        colorSetting("gui_color", source("Accent color"),
+                source("Sets the interface accent color."), 0x7BADE2);
         booleanSetting("show_details", source("Show details"),
-                source("Shows descriptions for features and settings."), false);
+                source("Shows descriptions below features and settings."), false);
         discordRpc = booleanSetting("discord_rpc", "Discord RPC",
-                source("Shows 12pit and elapsed time on your Discord profile."), true);
+                source("Shows 12pit activity and elapsed time on your Discord profile."), true);
         keybind = keybindSetting("keybind", source("Interface key"),
                 source("Opens the HUD editor. Press again with no HUD selected to open settings."),
                 Keyboard.KEY_RSHIFT);

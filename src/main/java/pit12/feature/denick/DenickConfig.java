@@ -32,14 +32,15 @@ public final class DenickConfig extends FeatureConfig {
 
     public DenickConfig() {
         super("denick", "Denick", new ConfigCategory("misc", source("Misc")),
-                source("Finds nicked players using their current equipment."));
+                source("Looks up nicked players' real names using their equipment."));
         subsubcategory("queries", source("Queries"));
         automatic = booleanSetting("automatic", source("Auto Denick"),
-                source("Queries nicked players when you enter the Pit or they join."), true);
+                source("Looks up nicked players when you enter the Pit or they join."), true);
         successOnly = booleanSetting("success_only", source("Only show successful queries"),
                 source("Hides failed automatic queries and monitoring messages."), true);
-        monitor = booleanSetting("monitor", source("Keep monitoring"),
-                source("Queues equipment changes until a real name is found."), true);
+        monitor = booleanSetting("monitor", source("Keep monitoring"), source(
+                "Continues automatic lookups with new equipment until a real name is found."),
+                true);
         subsubcategory("display", source("Display"));
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
                 source("Adds N to nicked players' names in Tab."), true);

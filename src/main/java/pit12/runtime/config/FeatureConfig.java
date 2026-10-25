@@ -174,7 +174,7 @@ public abstract class FeatureConfig {
                 source("Font used for HUD text."), 1, new ChoiceSetting.Choice(0, "ASCII"),
                 new ChoiceSetting.Choice(1, "Unicode"));
         ChoiceSetting anchor = new ChoiceSetting(prefix + "anchor", source("Anchor"),
-                source("Auto chooses an anchor when the HUD is moved."), HudConfig.AUTO_ANCHOR,
+                source("Auto selects the HUD anchor when you move the HUD."), HudConfig.AUTO_ANCHOR,
                 new ChoiceSetting.Choice(HudConfig.AUTO_ANCHOR, source("Auto")),
                 new ChoiceSetting.Choice(0, source("Top left")),
                 new ChoiceSetting.Choice(1, source("Top center")),

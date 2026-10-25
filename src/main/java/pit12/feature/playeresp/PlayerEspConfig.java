@@ -44,16 +44,18 @@ public final class PlayerEspConfig extends FeatureConfig {
         subsubcategory("friends", source("Friends"));
         showFriend = booleanSetting("show_friend", source("Show friends"), source("Marks friends."),
                 true);
-        friendColor = colorPickerSetting("friend_color", source("Friend color"), "", 0xC000FF00);
+        friendColor = colorPickerSetting("friend_color", source("Friend color"),
+                source("Color and opacity of boxes around friends."), 0xC000FF00);
         subsubcategory("enemies", source("Enemies"));
         showEnemy = booleanSetting("show_enemy", source("Show enemies"), source("Marks enemies."),
                 true);
-        enemyColor = colorPickerSetting("enemy_color", source("Enemy color"), "", 0xC0FF0000);
+        enemyColor = colorPickerSetting("enemy_color", source("Enemy color"),
+                source("Color and opacity of boxes around enemies."), 0xC0FF0000);
         subsubcategory("other_players", source("Other players"));
         showOther = booleanSetting("show_other", source("Show other players"),
                 source("Marks players outside the friend and enemy lists."), false);
-        otherColor =
-                colorPickerSetting("other_color", source("Other player color"), "", 0xC0FFFFFF);
+        otherColor = colorPickerSetting("other_color", source("Other player color"),
+                source("Color and opacity of boxes around other players."), 0xC0FFFFFF);
         subsubcategory("distance_fade", source("Distance fade"));
         distanceFade = booleanSetting("distance_fade", source("Fade nearby players"),
                 source("Makes boxes fade out as players get closer."), true);

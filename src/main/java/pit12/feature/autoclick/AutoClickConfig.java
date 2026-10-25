@@ -41,16 +41,16 @@ public final class AutoClickConfig extends FeatureConfig {
 
     public AutoClickConfig() {
         super("auto_click", source("Auto Click"), new ConfigCategory("combat", source("Combat")),
-                source("Clicks repeatedly while holding a mouse button."), true, false);
+                source("Repeats left and right clicks while their keys are held."), true, false);
         subcategory("left", source("Left click"));
         leftEnabled = booleanSetting("left_enabled", source("Left click enabled"),
-                source("Repeats left clicks while holding the attack button."), true);
+                source("Repeats left clicks while the left-click key is held."), true);
         leftCpsMin = integerSliderSetting("left_cps_min", source("Minimum CPS"),
-                source("Lowest left click rate, in clicks per second."), 8, 1, 20, 1);
+                source("Minimum left clicks per second."), 8, 1, 20, 1);
         leftCpsMax = integerSliderSetting("left_cps_max", source("Maximum CPS"),
-                source("Highest left click rate, in clicks per second."), 12, 1, 20, 1);
+                source("Maximum left clicks per second."), 12, 1, 20, 1);
         allowWeapons = booleanSetting("weapon_only", source("Allow weapons"), source(
-                "Allows left clicks with swords and tools. Turn off all filters to allow any item."),
+                "Allows left clicks with swords and tools. Disable all left-click filters to allow any item."),
                 true);
         allowFist = booleanSetting("only_fist", source("Allow fist"),
                 source("Allows left clicks with an empty hand."), true);
@@ -58,13 +58,13 @@ public final class AutoClickConfig extends FeatureConfig {
                 source("Allows left clicks while pointing at a dragon egg."), true);
         subcategory("right", source("Right click"));
         rightEnabled = booleanSetting("right_enabled", source("Right click enabled"),
-                source("Repeats right clicks while holding the use button."), true);
+                source("Repeats right clicks while the right-click key is held."), true);
         rightCpsMin = integerSliderSetting("right_cps_min", source("Minimum CPS"),
-                source("Lowest right click rate, in clicks per second."), 8, 1, 20, 1);
+                source("Minimum right clicks per second."), 8, 1, 20, 1);
         rightCpsMax = integerSliderSetting("right_cps_max", source("Maximum CPS"),
-                source("Highest right click rate, in clicks per second."), 12, 1, 20, 1);
+                source("Maximum right clicks per second."), 12, 1, 20, 1);
         allowBlocks = booleanSetting("only_blocks", source("Allow blocks"), source(
-                "Allows right clicks while holding a block. Turn off all filters to allow any item."),
+                "Allows right clicks while holding a block. Disable all right-click filters to allow any item."),
                 true);
         allowCake = booleanSetting("only_cake", source("Allow cake"),
                 source("Allows right clicks while pointing at cake."), true);

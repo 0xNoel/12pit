@@ -26,6 +26,6 @@ import pit12.runtime.config.FeatureConfig;
 public final class CommandFixConfig extends FeatureConfig {
     public CommandFixConfig() {
         super("commandfix", source("Command Fix"), new ConfigCategory("patch", source("Patch")),
-                "");
+                source("Requires a leading slash for client commands."));
     }
 }

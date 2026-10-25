@@ -213,15 +213,9 @@ public final class ClientBootstrap {
         // Category: Combat
         registerAutoClick(minecraft, configs, session, (AutoClickBinding) minecraft,
                 (MinecraftActions) minecraft);
-        registerSmartBlock(minecraft, configs, session, (SmartBlockBinding) minecraft);
-        // Category: Player
-        registerAutoFish(configs, session, (MinecraftActions) minecraft);
         registerAutoSprint(configs, (AutoSprintBinding) minecraft);
-        registerChatMacro(minecraft, configs, session, sidebar, input, commands,
-                new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
-        registerContractReroll(minecraft, configs, session, pitContext, sidebar, input,
-                (MinecraftActions) minecraft);
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
+        registerSmartBlock(minecraft, configs, session, (SmartBlockBinding) minecraft);
         // Category: Render
         registerEventList(configs, hudRegistry, commands);
         registerGamma(configs, (GammaBinding) minecraft.entityRenderer);
@@ -233,8 +227,13 @@ public final class ClientBootstrap {
         registerRingHelper(minecraft, configs, session, pitContext, textureStates.get());
         registerTooltip(configs);
         // Category: Misc
+        registerAutoFish(configs, session, (MinecraftActions) minecraft);
         registerAutoQuickMath(configs);
         registerBanAlert(minecraft, configs, session, presence);
+        registerChatMacro(minecraft, configs, session, sidebar, input, commands,
+                new File(minecraft.mcDataDir, "12pit/chat-macros.json").toPath());
+        registerContractReroll(minecraft, configs, session, pitContext, sidebar, input,
+                (MinecraftActions) minecraft);
         // Category: Patch
         registerCommandFix(configs, (CommandFixBinding) ClientCommandHandler.instance);
         if (FMLClientHandler.instance().hasOptifine()) {
@@ -352,49 +351,23 @@ public final class ClientBootstrap {
         components.add(new AutoClickFeature(minecraft, configs, config, session, binding, actions));
     }
 
-    private void registerSmartBlock(Minecraft minecraft, ConfigCatalog configs,
-            ClientSession session, SmartBlockBinding binding) {
-        SmartBlockConfig config = new SmartBlockConfig();
-        configs.register(config);
-        components.add(new SmartBlockFeature(minecraft, configs, config, session, binding));
-    }
-
-    // Category: Player
-    private void registerAutoFish(ConfigCatalog configs, ClientSession session,
-            MinecraftActions actions) {
-        AutoFishConfig config = new AutoFishConfig();
-        configs.register(config);
-        components.add(new AutoFishFeature(configs, config, session, actions));
-    }
-
     private void registerAutoSprint(ConfigCatalog configs, AutoSprintBinding binding) {
         AutoSprintConfig config = new AutoSprintConfig();
         configs.register(config);
         components.add(new AutoSprintFeature(config, binding));
     }
 
-    private void registerChatMacro(Minecraft minecraft, ConfigCatalog configs,
-            ClientSession session, SidebarCache sidebar, InputBlocker input,
-            CommandRegistry commands, Path path) {
-        ChatMacroConfig config = new ChatMacroConfig();
-        configs.register(config);
-        components.add(new ChatMacroFeature(minecraft, client, configs, config, session, sidebar,
-                input, commands, language, path));
-    }
-
-    private void registerContractReroll(Minecraft minecraft, ConfigCatalog configs,
-            ClientSession session, PitContext pitContext, SidebarCache sidebar, InputBlocker input,
-            MinecraftActions actions) {
-        ContractRerollConfig config = new ContractRerollConfig();
-        configs.register(config);
-        components.add(new ContractRerollFeature(minecraft, configs, config, session, pitContext,
-                sidebar, input, actions, language));
-    }
-
     private void registerNoJumpDelay(ConfigCatalog configs, NoJumpDelayBinding binding) {
         NoJumpDelayConfig config = new NoJumpDelayConfig();
         configs.register(config);
         components.add(new NoJumpDelayFeature(config, binding));
+    }
+
+    private void registerSmartBlock(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, SmartBlockBinding binding) {
+        SmartBlockConfig config = new SmartBlockConfig();
+        configs.register(config);
+        components.add(new SmartBlockFeature(minecraft, configs, config, session, binding));
     }
 
     // Category: Render
@@ -460,6 +433,13 @@ public final class ClientBootstrap {
     }
 
     // Category: Misc
+    private void registerAutoFish(ConfigCatalog configs, ClientSession session,
+            MinecraftActions actions) {
+        AutoFishConfig config = new AutoFishConfig();
+        configs.register(config);
+        components.add(new AutoFishFeature(configs, config, session, actions));
+    }
+
     private void registerAutoQuickMath(ConfigCatalog configs) {
         AutoQuickMathConfig config = new AutoQuickMathConfig();
         configs.register(config);
@@ -472,6 +452,24 @@ public final class ClientBootstrap {
         configs.register(config);
         components
                 .add(new BanAlertFeature(minecraft, configs, config, session, presence, language));
+    }
+
+    private void registerChatMacro(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, SidebarCache sidebar, InputBlocker input,
+            CommandRegistry commands, Path path) {
+        ChatMacroConfig config = new ChatMacroConfig();
+        configs.register(config);
+        components.add(new ChatMacroFeature(minecraft, client, configs, config, session, sidebar,
+                input, commands, language, path));
+    }
+
+    private void registerContractReroll(Minecraft minecraft, ConfigCatalog configs,
+            ClientSession session, PitContext pitContext, SidebarCache sidebar, InputBlocker input,
+            MinecraftActions actions) {
+        ContractRerollConfig config = new ContractRerollConfig();
+        configs.register(config);
+        components.add(new ContractRerollFeature(minecraft, configs, config, session, pitContext,
+                sidebar, input, actions, language));
     }
 
     // Category: Patch

@@ -47,7 +47,7 @@ public final class SmartBlockConfig extends FeatureConfig {
         bruiser = booleanSetting("bruiser", source("Use Bruiser"),
                 source("Selects swords with Bruiser."), true);
         priority = choiceSetting("priority", source("Enchantment priority"), source(
-                "Chooses the highest level of this enchantment. Ties use the other enabled enchantment's level."),
+                "Prefers swords with the highest level of this enchantment. Ties use the other enabled enchantment's level."),
                 0, new ChoiceSetting.Choice(0, source("Bullet Time first")),
                 new ChoiceSetting.Choice(1, source("Bruiser first")));
         bulletTimeNearArrows = booleanSetting("bullet_time_near_arrows",
@@ -57,15 +57,16 @@ public final class SmartBlockConfig extends FeatureConfig {
         arrowRange = integerSliderSetting("arrow_range", source("Arrow detection range"),
                 source("Detects flying arrows within this distance, in blocks."), 12, 1, 32, 1);
         subsubcategory("switching", source("Switching"));
-        emptyHand = booleanSetting("empty_hand", source("Trigger with fist"),
-                source("Also starts Smart Block when holding use with an empty hand."), false);
+        emptyHand = booleanSetting("empty_hand", source("Trigger with fist"), source(
+                "Also starts Smart Block when the right-click key is held with an empty hand."),
+                false);
         lockSlot = booleanSetting("lock_slot", source("Prevent manual slot changes"), source(
-                "Blocks hotbar keys, scrolling and pick block during Smart Block. Otherwise, changing slots ends the current switch."),
+                "Blocks hotbar keys, scrolling, and pick block during Smart Block. Manual slot changes otherwise end the switch."),
                 true);
         switchDelay = integerSliderSetting("switch_delay", source("Switch delay"),
                 source("Waits this many ticks before selecting the blocking sword."), 1, 0, 20, 1);
         restoreDelay = integerSliderSetting("restore_delay", source("Restore delay"), source(
-                "Waits this many ticks after releasing use before restoring the original slot."), 0,
-                0, 20, 1);
+                "Waits this many ticks after releasing the right-click key before restoring the original slot."),
+                0, 0, 20, 1);
     }
 }

@@ -42,33 +42,43 @@ public final class ContractRerollConfig extends FeatureConfig {
 
     public ContractRerollConfig() {
         super("contractreroll", source("Contract reroll"),
-                new ConfigCategory("player", source("Player")),
-                source("Rerolls contracts until one matches your filters."), false);
+                new ConfigCategory("misc", source("Misc")),
+                source("Rerolls contracts until a task matches an enabled filter."), false);
         key = keybindSetting("key", source("Contract reroll key"),
-                source("Automatically rerolls contracts until one matches your filters."),
-                Keyboard.KEY_NONE);
+                source("Starts contract rerolling. Press again to stop."), Keyboard.KEY_NONE);
         requireViles = booleanSetting("require_viles", source("Require bonus viles"),
-                source("Only accepts matching contracts with a Chunk of Vile bonus."), false);
+                source("Requires a Chunk of Vile bonus as well as a matching task."), false);
         subsubcategory("tasks", source("Contract filters"));
-        kills = choiceSetting("kills", source("Kills"), "", 0, new Choice(0, source("Off")),
-                new Choice(15, source("At most 15")), new Choice(20, source("At most 20")));
-        noArmor = choiceSetting("no_armor", source("Kills without armor"), "", 0,
+        kills = choiceSetting("kills", source("Kills"),
+                source("Accepts tasks requiring at most the selected number of kills."), 0,
+                new Choice(0, source("Off")), new Choice(15, source("At most 15")),
+                new Choice(20, source("At most 20")));
+        noArmor = choiceSetting("no_armor", source("Kills without armor"), source(
+                "Accepts tasks requiring at most the selected number of kills without armor."), 0,
                 new Choice(0, source("Off")), new Choice(3, source("At most 3")),
                 new Choice(4, source("At most 4")));
-        fist = choiceSetting("fist", source("Fist kills"), "", 0, new Choice(0, source("Off")),
-                new Choice(1, source("At most 1")), new Choice(2, source("At most 2")));
-        chain = choiceSetting("chain", source("Multikills"), "", 0, new Choice(0, source("Off")),
-                new Choice(3, source("Up to Triple")), new Choice(4, source("Up to Quadra")));
-        gold = choiceSetting("gold", source("Ingots"), "", 0, new Choice(0, source("Off")),
-                new Choice(20, source("At most 20")), new Choice(25, source("At most 25")),
-                new Choice(30, source("At most 30")));
-        bow = choiceSetting("bow", source("Arrow hits"), "", 0, new Choice(0, source("Off")),
-                new Choice(100, source("At most 100")), new Choice(125, source("At most 125")),
-                new Choice(150, source("At most 150")));
-        noPerks = choiceSetting("no_perks", source("Kills without perks"), "", 0,
+        fist = choiceSetting("fist", source("Fist kills"), source(
+                "Accepts tasks requiring at most the selected number of fist kills in the small sea lantern circle."),
+                0, new Choice(0, source("Off")), new Choice(1, source("At most 1")),
+                new Choice(2, source("At most 2")));
+        chain = choiceSetting("chain", source("Multikills"),
+                source("Accepts Double, Triple, and Quadra kill tasks up to the selected limit."),
+                0, new Choice(0, source("Off")), new Choice(3, source("Up to Triple")),
+                new Choice(4, source("Up to Quadra")));
+        gold = choiceSetting("gold", source("Ingots"),
+                source("Accepts tasks requiring at most the selected number of ingots."), 0,
+                new Choice(0, source("Off")), new Choice(20, source("At most 20")),
+                new Choice(25, source("At most 25")), new Choice(30, source("At most 30")));
+        bow = choiceSetting("bow", source("Arrow hits"),
+                source("Accepts tasks requiring at most the selected number of arrow hits."), 0,
+                new Choice(0, source("Off")), new Choice(100, source("At most 100")),
+                new Choice(125, source("At most 125")), new Choice(150, source("At most 150")));
+        noPerks = choiceSetting("no_perks", source("Kills without perks"), source(
+                "Accepts tasks requiring at most the selected number of kills without perks."), 0,
                 new Choice(0, source("Off")), new Choice(8, source("At most 8")),
                 new Choice(10, source("At most 10")));
-        apples = choiceSetting("apples", source("Golden apples"), "", 0,
+        apples = choiceSetting("apples", source("Golden apples"), source(
+                "Accepts tasks requiring at most the selected number of golden apples eaten."), 0,
                 new Choice(0, source("Off")), new Choice(12, source("At most 12")),
                 new Choice(16, source("At most 16")), new Choice(18, source("At most 18")));
     }
