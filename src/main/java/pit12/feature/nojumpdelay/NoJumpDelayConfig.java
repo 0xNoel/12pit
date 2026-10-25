@@ -26,7 +26,7 @@ import pit12.runtime.config.FeatureConfig;
 public final class NoJumpDelayConfig extends FeatureConfig {
     public NoJumpDelayConfig() {
         super("nojumpdelay", source("No Jump Delay"),
-                new ConfigCategory("player", source("Player")),
+                new ConfigCategory("combat", source("Combat")),
                 source("Removes the delay between jumps while holding the jump key."));
     }
 }

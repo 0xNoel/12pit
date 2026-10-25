@@ -42,7 +42,7 @@ public final class ContractRerollConfig extends FeatureConfig {
 
     public ContractRerollConfig() {
         super("contractreroll", source("Contract reroll"),
-                new ConfigCategory("player", source("Player")),
+                new ConfigCategory("misc", source("Misc")),
                 source("Rerolls contracts until a task matches an enabled filter."), false);
         key = keybindSetting("key", source("Contract reroll key"),
                 source("Starts contract rerolling. Press again to stop."), Keyboard.KEY_NONE);
