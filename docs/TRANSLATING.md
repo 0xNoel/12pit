@@ -6,54 +6,54 @@ We recommend translating only into your native language.
 
 ## Contribute interface translations
 
-The configuration interface, configuration text, command messages, and HUD labels share the same translation files. The OneConfig settings view uses the original English text. Check translated settings in the configuration interface.
+The configuration interface, setting descriptions, command messages, and HUD labels all share the same translation files. As the OneConfig menu always uses the original English text, test your translations in the configuration interface.
 
-Translate the interface on [Crowdin](https://crowdin.com/project/12pit). Each use of a string has its own entry, so the same English text can have different translations. The entry's context shows the source file and location.
+Interface translations are handled on [Crowdin](https://crowdin.com/project/12pit). Each occurrence of a string has a separate entry and context showing which file and location it is taken from, so an English word may have multiple translations depending on its context.
 
 ### Request a language
 
-To request an interface language, open an issue with its name and region, if needed. Interface languages must be supported by [Crowdin](https://support.crowdin.com/project-settings/languages/).
+If your language hasn't been added yet, open an issue mentioning the language name and region (if applicable). Any language supported by [Crowdin](https://support.crowdin.com/project-settings/languages/) can be added.
 
 ### Write translations
 
-Translate on [Crowdin](https://crowdin.com/project/12pit) and check where each string is used. Keep numbered parameters like `{0}` and the number of times they appear. You may change their order. Preserve Minecraft color codes like `§a`. Missing or empty translations fall back to the English source. Partial translations are welcome.
+When contributing translations on [Crowdin](https://crowdin.com/project/12pit), refer to the entry's context to know how the string is used. Keep numbered placeholders such as `{0}` and ensure that each one appears the same number of times as in the original text, even though you can reorder them for your language. Leave Minecraft formatting codes such as `§a` untouched. Untouched strings will use the English texts automatically, so incomplete translations are perfectly acceptable.
 
 ## Contribute documentation translations
 
-Languages with an [ISO 639-1 two-letter code](https://www.loc.gov/standards/iso639-2/php/code_list.php) can be added directly. For other languages, get a maintainer's approval in an issue or on [Discord](https://discord.gg/e9PRKMUenc). Documentation language tags must follow [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html).
+Languages whose ISO 639-1 code is two letters can be added via pull requests. Other languages should first be discussed in an issue or on [Discord](https://discord.gg/e9PRKMUenc) with a maintainer. Directory names for languages should follow [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html).
 
 ### Paths and links
 
-Put translations in `docs/<language-tag>/`. Keep the source filename and its subdirectory structure within `docs/`.
+Translate files should be put in `docs/<language-tag>/` while keeping the same filenames and structure as the English documentation:
 
 | English source | Translation example |
-| --- | --- |
-| `README.md` | `docs/nl-NL/README.md` |
-| `docs/CONTRIBUTING.md` | `docs/nl-NL/CONTRIBUTING.md` |
+| -------------- | ------------------- |
+| `README.md`                            | `docs/nl-NL/README.md`                           |
+| `docs/CONTRIBUTING.md`                | `docs/nl-NL/CONTRIBUTING.md`                    |
 
-For a new language, translate the README first. Add a link alongside the language links in the root README, using the language's own name. Separate language links with `|` in translated documents as well.
+When introducing a new language, first translate `README.md` and then link to it from the language bar at the top of the root `README.md` (as well as other translated READMEs), using the language's own name and `|` as a separator.
 
-Link to a translated page when it exists; otherwise, link to the English page. Check relative paths and heading anchors after translating. Keep commands, code, identifiers, file paths, and external URLs unchanged.
+When linking to a page that is already translated, link to the translated version. Otherwise, fall back to English. Verify that relative links and heading anchors still work after translation, and leave commands, code snippets, identifiers, paths and external links untouched.
 
 ### Source header
 
-Start each translated file with an HTML comment:
+Each translated file should have the following HTML comment at the top:
 
 ```markdown
 <!-- Source: docs/CONTRIBUTING.md; Based on: <source-commit> -->
 ```
 
-`Source` is the English file's path relative to the repository root. `Based on` is the full commit hash for the source version you reviewed. Keep these field names in English. For a translated README, the source path is `README.md`.
+`Source` is the path to the English file starting from the repository root (`README.md` for the translated README), and `Based on` is the full commit hash of the English version you translated from. Both field names should be in English.
 
 ### Check for outdated translations
 
-From the repository root, compare the source with the commit in the header. Replace `<source-commit>` with that hash and use the file path from `Source`:
+In order to compare the changes in the English file after the last translation update, use `git diff` in the repository root with the commit hash from `Based on`:
 
 ```sh
 git diff <source-commit> -- docs/CONTRIBUTING.md
 ```
 
-Review all source changes since the recorded commit and update the translation as needed. When the translation matches the source, record the latest commit that changed the source:
+After updating the translation accordingly, obtain the most recent commit hash for the English file and update `Based on`:
 
 ```sh
 git log -1 --format=%H -- docs/CONTRIBUTING.md
@@ -61,6 +61,4 @@ git log -1 --format=%H -- docs/CONTRIBUTING.md
 
 ### Submit a translation
 
-Keep each pull request to one language and list the changed files. Review the translation, links, headings, examples, and source header.
-
-If a pull request changes both the source and its translation, use two commits: source first, then translation.
+Contribute one language per pull request and mention the files you translated. If a pull request modifies both an English doc and its translation, split them into two commits: English modification first, translation modification next.

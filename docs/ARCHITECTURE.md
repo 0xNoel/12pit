@@ -2,40 +2,36 @@
 
 ## Components
 
-`Pit12` is the Forge entry point. It passes Forge lifecycle events to `ClientBootstrap`. Bootstrap creates the top-level components, connects their dependencies, and starts and shuts down the application.
+`Pit12` is the Forge entry point. It relays Forge lifecycle events to `ClientBootstrap`, which instantiates the top-level components, wires up their dependencies, and handles start-up/shut-down.
 
-Each package directly under `feature` owns one user-facing capability, including its settings, rules, commands, rendering, and storage. It may also own Forge listeners specific to that feature.
+Each package in `feature` directory is responsible for one user facing capability, including its settings, logic, commands, rendering, storage, and Forge listeners for that particular feature.
 
-`runtime` owns live data and services that have their own lifecycle or are shared by several features. These include the client session, game state trackers, command registry, config catalog, and HUD registry.
+`runtime` is for shared services and live state with its own lifecycle, like the client session, game state trackers, command registry, config catalog, and hud registry.
 
-`shared` provides small helper interfaces and utilities for threading, listeners, rendering, and file writes. Live game state belongs to runtime and feature components.
+`shared` contains utilities and interfaces for threading, listeners, rendering, file writing. The live game state should be kept in `runtime` or `feature`, but not in `shared`.
 
-`platform` adapts external frameworks, client extensions, and native services. It handles registration, protocol details, and compatibility hooks. Adapters pass external requests to their owners through interfaces owned by features, runtime, or shared code. Group adapters by the system they adapt. An adapter can implement `ClientLifecycle` to manage its own subscriptions and registrations.
+`platform` wraps the third party frameworks, client extensions, native APIs. It deals with registration, protocol specifics and compatibility hooks, delegates calls from external systems to corresponding `feature`, `runtime` or `shared` interfaces. The adapters are organized by system they are integrating with.
 
-Features own command definitions and actions. `runtime.command` handles routing, help, completion, and command availability. `platform.forge` handles Forge registration.
+For commands, features declare their commands and actions, `runtime.command` does routing, help and tab completion for them and `platform.forge` registers the commands with Forge.
 
-`feature.webui` owns the local HTTP server and connects the configuration interface to config and feature APIs. `web-ui` contains the browser pages.
+`feature.webui` runs a local HTTP server that connects the configuration interface (`web-ui`) to config and feature APIs.
 
 ## Dependencies
 
-`Pit12` depends on Bootstrap and reads compile-time build constants from `shared.build.BuildConfig`. Bootstrap may depend on `platform`, `runtime`, `feature`, and `shared`. It passes dependencies directly to the components that need them.
+`Pit12` depends only on `bootstrap` and the compile-time constants in `shared.build.BuildConfig`. `bootstrap` depends on `platform`, `runtime`, `feature` and `shared`, passing dependencies straight to the components.
 
-Features may depend on `runtime` and `shared`. Access to another feature goes through that feature's public `api` package. `runtime` may depend on `shared`. `shared` stays independent of the other project layers.
+`feature` may depend on `runtime` and `shared`. If some feature needs access to another feature, it goes through the `api` package of that feature. `runtime` depends only on `shared`, and `shared` depends on nothing.
 
-`platform` may depend on `runtime`, `feature`, and `shared`. Features, runtime, and shared code stay independent of platform classes. They receive platform services and bind hooks through interfaces they own. Native APIs and optional framework types stay in platform adapters. Command runtime code stays independent of Forge.
+`platform` may depend on `runtime`, `feature` and `shared`, but the opposite direction of dependencies is not allowed. Platform services and binding hooks are provided to the rest of the system through the interfaces that belong to the corresponding layer. Native APIs and optional framework types are kept in `platform`, `runtime.command` does not depend on Forge.
 
-Packages directly under a project layer form modules. Keep module dependencies free of cycles. A feature-specific Mixin belongs to that feature and accesses other features through their public APIs.
+The packages directly under each layer are modules and do not have circular dependencies between each other. The Mixins are in `platform.mixin` and feature-specific Mixins are in `platform.mixin.feature.<feature>`, respecting the feature boundary.
 
 ## State and resources
 
-`ClientSession` owns connection and world identities. Trackers own the state tied to those identities. Disconnecting ends the session, and replacing the world ends the old world state. The mod keeps running through both events.
+Each piece of mutable state belongs to a single owner. Each component properly cleans up the workers, subscriptions and rendering resources created by itself.
 
-Minecraft owns current Tab entries, loaded entities, scoreboards, and inventory state. Runtime trackers own data beyond what Minecraft stores and derived data shared by features. Each piece of mutable data has one owner. Display snapshots provide views of that data.
-
-A component owns the resources it creates, such as workers, subscriptions, and rendering resources. Temporary operations manage their own progress, cancellation, and recovery. A feature tracks its startup state and enabled flag separately.
-
-Each feature defines its settings. `ConfigCatalog` owns the registered live config. The profile feature owns config snapshots and their storage. Each feature owns the other saved data it uses. User data is kept across disconnects.
+Each feature has its own settings. `ConfigCatalog` keeps track of all the live configs, `profile` feature handles config snapshots in the file system, and individual features manage any additional saved data they use.
 
 ## Architecture checks
 
-[ArchitectureTest](../src/test/java/pit12/architecture/ArchitectureTest.java) checks package ownership, dependency direction, module cycles, lifecycle ownership, and Mixin registration.
+[ArchitectureTest](../src/test/java/pit12/architecture/ArchitectureTest.java) ensures the proper package boundaries, dependency direction, module cycles, lifecycle ownership, and proper Mixin registration. [BootstrapLayoutTest](../src/test/java/pit12/architecture/BootstrapLayoutTest.java) ensures correct order of component registration and section grouping in `ClientBootstrap`.

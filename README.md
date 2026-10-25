@@ -4,45 +4,45 @@
 
 English | [简体中文](docs/zh-CN/README.md)
 
-12pit is a lightweight, open-source Forge mod for The Pit on Minecraft 1.8.9. It includes a configuration interface and supports [OneConfig](https://github.com/Polyfrost/OneConfig).
+12pit is a lightweight and open-source Forge mod for The Pit on Minecraft 1.8.9. It features a configuration interface and supports [OneConfig](https://github.com/Polyfrost/OneConfig).
 
-We recommend using 12pit with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home) for better performance and smoother gameplay.
+12pit is recommended to be run with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home).
 
-Join our [Discord](https://discord.gg/e9PRKMUenc) and visit `#developer` for help or development discussions.
+For help and discussion regarding development, please join our [Discord](https://discord.gg/e9PRKMUenc) and visit `#developer`.
 
 ## Requirements
 
-Use JDK 21 to run Gradle. Compiling the mod requires a Java 8 toolchain. Gradle will find or download it automatically. The Minecraft client also runs on Java 8.
+The build process requires JDK 21. The mod requires Java 8, which is what Minecraft 1.8.9 uses, and Gradle detects and installs it.
 
-Node.js and npm are required for `assemble` and `runClient` because those tasks build the configuration interface. Java tests also require them. CI uses Node.js 24.
+Also required are Node.js and npm because they are needed for `assemble` and `runClient` tasks which compile the configuration interface. CI is built with Node.js 24.
 
-## Building
+## Build Process
 
-On Windows, run:
+On Windows:
 
 ```powershell
 .\gradlew.bat assemble
 ```
 
-On Linux/macOS, run:
+On Linux or macOS:
 
 ```sh
 ./gradlew assemble
 ```
 
-The jar file is in `build/libs/`.
+The jar produced is put into `build/libs/`.
 
 ## Development
 
-Use PolyPatcher and OptiFine during development. At a minimum, ensure compatibility with their default settings.
+In order to test new changes, run the game with PolyPatcher and OptiFine installed and make sure your changes work with their default settings.
 
 ### IntelliJ IDEA
 
-Import the project through Gradle and set the Gradle JVM to JDK 21. Use the Gradle tool window to run `assemble`, `check`, or `runClient`.
+Import the project as a Gradle project and set the Gradle JVM to JDK 21. Run `assemble`, `check`, and `runClient` tasks using the Gradle tool window.
 
 ### VS Code
 
-Install the recommended extensions when prompted. Press `Ctrl+Shift+B` to run `assemble`. Use the Command Palette to run `check` or `runClient` as Gradle tasks. On macOS, press `Cmd+Shift+B` to build.
+Install the recommended extensions when prompted. Press `Ctrl+Shift+B` (`Cmd+Shift+B` on macOS) to run `assemble`, or use the Command Palette to run `check` and `runClient` as Gradle tasks.
 
 ## Documentation
 
@@ -50,7 +50,7 @@ Install the recommended extensions when prompted. Press `Ctrl+Shift+B` to run `a
 - [Contributing](docs/CONTRIBUTING.md)
 - [Translating](docs/TRANSLATING.md)
 - [Issues](docs/ISSUES.md)
-- [Running, testing, and debugging](docs/DEBUGGING.md)
+- [Running and debugging](docs/DEBUGGING.md)
 
 ## Third-Party Notices
 
@@ -61,6 +61,6 @@ Install the recommended extensions when prompted. Press `Ctrl+Shift+B` to run `a
 - [Vue](https://vuejs.org/), MIT. License text: [VUE-MIT.txt](src/main/resources/META-INF/third-party-notices/VUE-MIT.txt).
 - [Vite](https://vite.dev/), used for module preloading in the configuration interface, MIT. License text: [VITE-MIT.txt](src/main/resources/META-INF/third-party-notices/VITE-MIT.txt).
 - [Rolldown](https://rolldown.rs/), used for module preloading in the configuration interface, MIT. License text: [ROLLDOWN-MIT.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt).
-- [Lucide](https://lucide.dev/), ISC, with Feather icons under MIT. License texts: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt).
+- [Lucide](https://lucide.dev/), ISC, with Feather icons under MIT. License text: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt).
 
 12pit is licensed under [GPL-3.0-or-later](LICENSE).
