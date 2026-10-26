@@ -1,61 +1,61 @@
-<!-- Source: docs/TRANSLATING.md; Based on: 5c8bce221aa767a7dad58c3d23b817d9c07395d9 -->
+<!-- Source: docs/TRANSLATING.md; Based on: b89c7e1ea68fd0183c6877fdbe32f36b5d89cb2b -->
 
 # 贡献翻译
 
-## 通用规则
+## 基本原则
 
-建议只翻译成自己的母语。
+建议只翻译成你自己的母语。
 
 ## 贡献界面翻译
 
-配置界面、配置文字、命令消息和 HUD 标签共用一套语言文件。OneConfig 设置界面使用英文原文，请在配置界面中核对设置的译文。
+网页配置界面、设置项说明、命令提示和 HUD 标签共用同一套翻译文件。由于 OneConfig 菜单始终显示英文原文，核对翻译效果时请在网页配置界面中查看。
 
-界面翻译在 [Crowdin](https://crowdin.com/project/12pit) 上进行。每个使用位置都有独立条目，同一句英文可以根据上下文采用不同译文。条目会显示源文件和使用位置。
+界面翻译托管在 [Crowdin](https://crowdin.com/project/12pit) 上。每处文本调用都有独立的词条，并在上下文中标明了源文件和位置，因此相同的英文词组在不同位置可以根据语境翻译成不同的表达。
 
 ### 申请新语言
 
-需要新增界面语言时，先创建议题，说明语言名称，并按需注明地区。界面语言须由 [Crowdin](https://support.crowdin.com/project-settings/languages/) 支持。
+如果还没有你想翻译的语言，可以提一个议题，写明语言名称（有需要的话注明地区）。只要是 [Crowdin](https://support.crowdin.com/project-settings/languages/) 支持的语言都可以添加。
 
-### 填写译文
+### 翻译注意事项
 
-在 [Crowdin](https://crowdin.com/project/12pit) 上填写译文，并查看使用位置。保留 `{0}` 等编号参数及其出现次数，顺序可以调整。保留 `§a` 等 Minecraft 格式代码。译文缺失或为空时，使用英文原文。也欢迎贡献部分译文。
+在 [Crowdin](https://crowdin.com/project/12pit) 上翻译时，请结合词条的上下文确认它在游戏或界面里的实际用途。像 `{0}` 这样的编号占位符需要保留，并确保每个占位符出现的次数与原文一致，但语序可以根据目标语言的习惯调整。像 `§a` 这样的 Minecraft 格式代码也需要原样保留。未翻译的词条会自动回退显示英文原文，因此只翻译一部分也完全没问题。
 
 ## 贡献文档翻译
 
-有 [ISO 639-1 两字母代码](https://www.loc.gov/standards/iso639-2/php/code_list.php) 的语言可以直接添加。其他语言须先在议题或 [Discord](https://discord.gg/e9PRKMUenc) 取得维护者同意。文档的语言标签须符合 [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html)。
+拥有两字母 [ISO 639-1 代码](https://www.loc.gov/standards/iso639-2/php/code_list.php)的语言可以直接提交拉取请求；其他语言请先在议题或 [Discord](https://discord.gg/e9PRKMUenc) 上征得维护者同意。文档语言目录名需符合 [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html) 规范。
 
-### 路径和链接
+### 路径与链接
 
-译文放在 `docs/<语言标签>/` 下。保留原文的文件名和它在 `docs/` 内的子目录。
+翻译后的文档放在 `docs/<语言标签>/` 下，文件名和子目录结构与英文文档保持一致：
 
-| 英文原文 | 译文示例 |
+| 英文原文 | 译文路径示例 |
 | --- | --- |
 | `README.md` | `docs/nl-NL/README.md` |
 | `docs/CONTRIBUTING.md` | `docs/nl-NL/CONTRIBUTING.md` |
 
-添加新语言时，先翻译 README。在根目录 README 的语言链接旁添加入口，使用该语言自己的名称。译文中的语言链接也用 `|` 分隔，与根目录 README 保持一致。
+新增一门语言时，请先翻译 `README.md`，并在根目录 `README.md`（以及其他已翻译的 README）顶部的语言栏里加上链接，链接文字使用该语言自己的名称，用 `|` 分隔。
 
-目标页面已有译文时，链接到译文，否则链接到英文原文。翻译后检查相对路径和标题锚点。命令、代码、标识符、文件路径和外部 URL 保持不变。
+文档内的链接优先指向已有的同语言译文，还没有译文的则指向英文原版。翻译完后请检查相对路径和标题锚点是否有效，命令、代码、标识符、文件路径和外部链接保持原样不要改动。
 
 ### 源文件页头
 
-每篇译文都以 HTML 注释开头：
+每篇译文文件的最顶部都需要加上一行 HTML 注释，用来记录所依据的英文原版提交版本：
 
 ```markdown
 <!-- Source: docs/CONTRIBUTING.md; Based on: <原文提交号> -->
 ```
 
-`Source` 填写英文原文相对于仓库根目录的路径。`Based on` 填写已核对的原文版本对应的完整提交号。两个字段名都使用英文。README 译文的源文件路径是 `README.md`。
+其中 `Source` 是英文原文相对于仓库根目录的路径（README 译文填 `README.md`），`Based on` 是你参照的英文原文对应的完整提交哈希。注意 `Source` 和 `Based on` 这两个字段名需要保持英文。
 
 ### 检查译文是否过时
 
-在仓库根目录中，比较当前原文与页头记录的版本。将 `<原文提交号>` 替换为页头中的提交号，文件路径使用 `Source` 的值：
+想查看英文原文自上次翻译以来改了哪些内容，可以在仓库根目录下用页头里的提交哈希运行 `git diff`：
 
 ```sh
 git diff <原文提交号> -- docs/CONTRIBUTING.md
 ```
 
-核对原文自该提交以来的所有改动，并按需更新译文。确认译文与原文一致后，记录最近一次修改原文的完整提交号：
+把译文同步更新到最新内容后，获取该英文文件最近一次修改的提交哈希并更新 `Based on`：
 
 ```sh
 git log -1 --format=%H -- docs/CONTRIBUTING.md
@@ -63,6 +63,4 @@ git log -1 --format=%H -- docs/CONTRIBUTING.md
 
 ### 提交译文
 
-每个拉取请求尽量只包含一种语言的翻译，并列出新增或更新的文件。通读译文，检查链接、标题、示例和源文件页头。
-
-同一拉取请求同时更新原文和译文时，分成两个提交：先提交原文，再提交译文。译文的 `Based on` 填写原文提交的完整提交号。
+每个翻译拉取请求请只包含一种语言，并在描述中列出改动的文件。如果同一个拉取请求同时修改了英文文档和对应的译文，请拆成两个提交：先提交英文改动，再提交译文更新。

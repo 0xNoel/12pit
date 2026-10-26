@@ -1,43 +1,39 @@
-<!-- Source: docs/ARCHITECTURE.md; Based on: f59d0c6d77b5f37fe9637bea07f2965f1fbdd33c -->
+<!-- Source: docs/ARCHITECTURE.md; Based on: b89c7e1ea68fd0183c6877fdbe32f36b5d89cb2b -->
 
 # 12pit 架构
 
 ## 组件
 
-`Pit12` 是 Forge 入口，将 Forge 生命周期事件转发给 `ClientBootstrap`。Bootstrap 创建顶层组件，连接它们的依赖，并负责应用的启动和关闭。
+`Pit12` 是 Forge 入口类，负责将 Forge 生命周期事件转发给 `ClientBootstrap`。`ClientBootstrap` 创建顶层组件、组装依赖，并管理应用的启动和关闭。
 
-`feature` 的每个直接子包负责一项面向用户的功能，管理该功能的设置、规则、命令、渲染和存储。功能专用的 Forge 监听器也可以放在其中。
+`feature` 下的每个直接子包对应一项具体功能，管理自己的配置、逻辑、命令、渲染、持久化数据，以及该功能专用的 Forge 监听器。
 
-`runtime` 管理有独立生命周期，或由多个功能共用的实时数据和服务，包括客户端会话、游戏状态跟踪器、命令注册表、配置目录和 HUD 注册表。
+`runtime` 存放有独立生命周期或多个功能共享的实时状态与服务，例如客户端会话、游戏状态跟踪器、命令注册表、配置目录和 HUD 注册表。
 
-`shared` 提供线程、监听器、渲染和文件写入所需的小型辅助接口和工具。实时游戏状态由 runtime 和功能组件管理。
+`shared` 提供线程、监听器、渲染和文件写入等通用辅助接口与工具类，不保存实时游戏状态。
 
-`platform` 适配外部框架、客户端扩展和原生服务，负责注册、协议细节和兼容处理。适配器按目标系统分包，通过功能、runtime 或 shared 定义的接口转发外部请求，也可以实现 `ClientLifecycle`，管理自己的订阅和注册。
+`platform` 负责对接外部框架、客户端扩展和原生 API，处理注册、协议细节和兼容钩子，并通过 `feature`、`runtime` 或 `shared` 定义的接口把外部调用转交给对应模块。适配器按所对接的外部系统分包。
 
-功能负责定义命令和操作。`runtime.command` 负责命令路由、帮助、补全和可用性。`platform.forge` 负责向 Forge 注册命令。
+命令由各功能自己定义和实现，`runtime.command` 负责路由、帮助信息、补全和可用性判断，`platform.forge` 负责向 Forge 注册。
 
-`feature.webui` 管理本地 HTTP 服务器，将配置界面连接到配置和功能 API。`web-ui` 存放浏览器页面。
+`feature.webui` 管理本地 HTTP 服务器，负责把浏览器里的配置界面（`web-ui`）与配置及功能 API 连接起来。
 
 ## 依赖
 
-`Pit12` 依赖 Bootstrap，并读取 `shared.build.BuildConfig` 中的编译期构建常量。Bootstrap 可以依赖 `platform`、`runtime`、`feature` 和 `shared`，直接向组件传入所需依赖。
+`Pit12` 只依赖 `bootstrap` 和 `shared.build.BuildConfig` 中的编译期常量。`bootstrap` 可以依赖 `platform`、`runtime`、`feature` 和 `shared`，并直接把依赖传给需要的组件。
 
-`runtime` 和 `shared` 可供功能使用。功能之间通过对方公开的 `api` 包交互。`runtime` 可以依赖 `shared`。`shared` 独立于项目的其他层。
+`feature` 可以依赖 `runtime` 和 `shared`。不同功能之间交互时，只能通过对方公开的 `api` 包访问。`runtime` 只依赖 `shared`，而 `shared` 不依赖项目中的任何其他层。
 
-`platform` 可以依赖 `runtime`、`feature` 和 `shared`。功能、runtime 和 shared 通过各自的接口使用平台服务并绑定钩子，与 platform 类解耦。原生 API 和可选框架类型的使用集中在平台适配器中。命令 runtime 代码与 Forge 解耦。
+`platform` 可以依赖 `runtime`、`feature` 和 `shared`，但反过来这些层不依赖 `platform` 的类，而是通过自己定义的接口接收平台服务或绑定钩子。原生 API 和可选的外部框架类型都留在 `platform` 内部，`runtime.command` 也不依赖 Forge。
 
-项目层的直接子包构成模块，模块依赖应保持无环。功能专用的 Mixin 归属对应功能，通过公开 API 访问其他功能。
+各层下的直接子包各自构成模块，模块之间不能出现循环依赖。所有 Mixin 都放在 `platform.mixin` 下，其中功能专用的 Mixin 放在 `platform.mixin.feature.<feature>`，同样遵守功能边界约束。
 
 ## 状态和资源
 
-`ClientSession` 管理连接和世界的身份标识。跟踪器管理与这些标识相关的状态。断开连接时结束会话，更换世界时结束旧世界的状态。模组在这两种情况下都继续运行。
+每份可变状态都有唯一的所有者，每个组件各自负责清理自己创建的工作线程、订阅和渲染资源。
 
-Minecraft 管理当前的 Tab 条目、已加载实体、记分板和物品栏状态。runtime 跟踪器管理额外记录的数据，以及多个功能共享的派生数据。每份可变数据都有一个所有者，显示快照提供这些数据的视图。
-
-组件负责自己创建的资源，例如工作线程、订阅和渲染资源。临时操作管理自己的进度、取消和恢复。功能分别记录启动状态和启用标志。
-
-各功能定义自己的设置。`ConfigCatalog` 管理已注册的实时配置，配置方案功能管理配置快照及其存储。其他保存数据由使用它的功能管理。断开连接后仍会保留用户数据。
+各功能自行定义配置项。`ConfigCatalog` 保存已注册的实时配置，配置方案（`profile`）功能负责配置快照及其磁盘存储，其余需要持久化的数据由对应的功能自己管理。
 
 ## 架构检查
 
-[ArchitectureTest](../../src/test/java/pit12/architecture/ArchitectureTest.java) 检查包的归属、依赖方向、模块循环依赖、生命周期归属和 Mixin 注册。
+[ArchitectureTest](../../src/test/java/pit12/architecture/ArchitectureTest.java) 负责检查包边界、依赖方向、模块循环依赖、生命周期归属和 Mixin 注册；[BootstrapLayoutTest](../../src/test/java/pit12/architecture/BootstrapLayoutTest.java) 负责检查 `ClientBootstrap` 中的分组注释和组件注册顺序。

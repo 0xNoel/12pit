@@ -2,68 +2,54 @@
 
 ## Setup
 
-The [README requirements](../README.md#requirements) list the required JDK and Node.js versions.
+Install the JDK and Node.js versions mentioned in [Requirements](../README.md#requirements).
 
 ## Run the development client
 
-On Windows, run:
+On Windows:
 
 ```powershell
 .\gradlew.bat runClient
 ```
 
-On Linux/macOS, run:
+On Linux or macOS:
 
 ```sh
 ./gradlew runClient
 ```
 
-The development game directory is `run/`. Check `run/logs/latest.log` for client errors and the configuration interface address.
+The development client launches in `run/`. See `run/logs/latest.log` for any errors in the client and the local URL of the configuration interface.
 
-[DevAuth](https://github.com/DJtheRedstoner/DevAuth) is included in the development environment. To test with an authenticated account, enable the `devauth.enabled` JVM property and follow the [DevAuth configuration guide](https://github.com/DJtheRedstoner/DevAuth#configuration).
+[DevAuth](https://github.com/DJtheRedstoner/DevAuth) is shipped in the development environment. For testing with a logged-in Minecraft account, set the `devauth.enabled` JVM property and configure it as explained in the [DevAuth documentation](https://github.com/DJtheRedstoner/DevAuth#configuration).
 
 ## Develop the configuration interface
 
-Start the game, then press Right Shift (the default key) to open the HUD editor. Clear the HUD selection by clicking empty space, then press the key again to open the configuration interface. If the browser stays closed, open the URL from the log.
+After launching the game, press the default key bind (Right Shift) to open the HUD editor. With no HUD element selected (click empty space to clear the selection), press the same key again to open the configuration interface in your browser window. If your browser didn't launch automatically, copy the URL from `run/logs/latest.log`.
 
-The server listens at `http://127.0.0.1:60916/` by default. If that port is in use, it picks another available port. Check the log for the current address.
+By default, the local server is listening to `http://127.0.0.1:60916/`, or a random port if `60916` is already occupied.
 
-To see frontend changes as you work, start Vite in a separate terminal:
+For developing the frontend part with the live reload, you need to launch Vite in a different terminal:
 
 ```powershell
 npm ci --prefix web-ui
 npm run dev --prefix web-ui
 ```
 
-Open the URL printed by Vite. The `/api` proxy forwards requests to port `60916` by default. If the game uses another port, set the proxy's `target` before starting Vite.
+Open the URL printed by Vite. By default, the `/api` proxy will forward requests to port `60916`. In case the game uses another port, set the `WEB_UI_TARGET` variable before starting Vite:
 
 ```powershell
 $env:WEB_UI_TARGET = 'http://127.0.0.1:<game-port>'
 npm run dev --prefix web-ui
 ```
 
-Replace `<game-port>` with the port from the log. Rebuild and restart the mod to update the bundled page.
+After you are done, rebuild and relaunch the game to refresh the bundled page.
 
 ## Run checks
 
-On Windows, run the following commands from the repository root. On Linux or macOS, use `./gradlew` instead of `./gradlew.bat`.
+Run the tests and formatting checks in the repository root (using `./gradlew` on Linux and macOS):
 
 ```powershell
 .\gradlew.bat check
-.\gradlew.bat assemble
+npm ci --prefix web-ui
 npm run format:check --prefix web-ui
 ```
-
-`check` runs the Java tests, including `ArchitectureTest`. `assemble` builds the configuration interface and creates the jar file in `build/libs/`.
-
-Install dependencies with `npm ci --prefix web-ui` before running the npm check.
-
-## Troubleshooting
-
-If Gradle sync fails or reports a toolchain error, check that Gradle uses JDK 21 and can find or download the Java 8 toolchain.
-
-If the Vite page opens but requests fail, check that the game is running and `WEB_UI_TARGET` matches its current address. If the configuration interface fails to open, look for "Configuration interface is unavailable" in the game log.
-
-Saved data is in the `12pit/` folder inside the Minecraft game directory. Profiles are in `12pit/config/`, relations in `12pit/relations.json`, and swap bindings in `12pit/swap-bindings.json`.
-
-Back up these files before editing them to diagnose a load error.
