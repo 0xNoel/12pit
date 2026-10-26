@@ -50,7 +50,11 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
             return lunar;
         }
         if (mixinClassName.startsWith("pit12.platform.mixin.feature.fontcachefix.")) {
-            return Launch.classLoader
+            if (lunar) {
+                return !mixinClassName.endsWith(".FontRendererHookMixin") && Launch.classLoader
+                        .getResource("optifine/OptiFineClassTransformer.class") != null;
+            }
+            return !mixinClassName.endsWith(".LunarFontRendererMixin") && Launch.classLoader
                     .getResource("club/sk1er/patcher/hooks/FontRendererHook.class") != null;
         }
         // Forge detects OptiFine after Mixin preparation.

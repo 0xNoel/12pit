@@ -30,6 +30,7 @@
     "feature.denick.MinecraftMixin",
     "feature.denick.GuiPlayerTabOverlayMixin",
     "feature.fontcachefix.FontRendererHookMixin",
+    "feature.fontcachefix.LunarFontRendererMixin",
     "feature.fontcachefix.MinecraftMixin",
     "feature.gamma.EntityRendererMixin",
     "feature.nametag.RendererLivingEntityAccessor",
