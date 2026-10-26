@@ -18,6 +18,8 @@
  */
 package pit12.feature.playerlist;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -36,6 +38,7 @@ import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.config.Setting;
+import pit12.runtime.hud.HudBounds;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.languages.Languages;
@@ -62,7 +65,8 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
     private final PlayerNameCache playerNames;
     private final DenickNames denickNames;
     private final PlayerListBuilder builder;
-    private final PlayerListHud hud;
+    private final List<PlayerListHud> huds = new ArrayList<>();
+    private final List<PlayerListHud> activeHuds = new ArrayList<>();
     private final FontListener fontListener = new FontListener();
     private final Languages language;
     private final Runnable languageListener;
@@ -92,8 +96,15 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         this.hudRegistry = hudRegistry;
         builder = new PlayerListBuilder(minecraft, players, equipment, pitContext, config,
                 relations, playerNames, denickNames, nicks);
-        hud = new PlayerListHud(config, hudRenderer, language);
-        languageListener = hud::localize;
+        huds.add(new PlayerListHud(config, hudRenderer, language, null));
+        for (PlayerListGroup group : PlayerListGroup.values()) {
+            huds.add(new PlayerListHud(config, hudRenderer, language, group));
+        }
+        languageListener = () -> {
+            for (PlayerListHud hud : huds) {
+                hud.localize();
+            }
+        };
     }
 
     @Override
@@ -104,7 +115,7 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         started = true;
         MinecraftForge.EVENT_BUS.register(fontListener);
         language.addListener(languageListener);
-        hudRegistry.register(hud);
+        updateHudLayout();
         configs.addListener(this);
         if (config.enabled()) {
             activate();
@@ -121,8 +132,23 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         configs.removeListener(this);
         language.removeListener(languageListener);
         deactivate();
-        hudRegistry.unregister(hud);
-        hud.close();
+        for (PlayerListHud hud : huds) {
+            hudRegistry.unregister(hud);
+            hud.close();
+        }
+        activeHuds.clear();
+    }
+
+    private void updateHudLayout() {
+        activeHuds.clear();
+        for (PlayerListHud hud : huds) {
+            if (hud.active()) {
+                hudRegistry.register(hud);
+                activeHuds.add(hud);
+            } else {
+                hudRegistry.unregister(hud);
+            }
+        }
     }
 
     private void activate() {
@@ -155,8 +181,10 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         equipment.removeListener(this);
         snapshot = PlayerListSnapshot.empty();
         builder.clear();
-        hud.snapshot(snapshot);
-        hud.close();
+        for (PlayerListHud hud : huds) {
+            hud.snapshot(snapshot);
+            hud.close();
+        }
         ticksSinceUpdate = UPDATE_INTERVAL_TICKS;
         snapshotDirty = true;
         realNamesHeld = false;
@@ -204,12 +232,20 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
         }
         for (Setting<?> setting : config.settings()) {
             if (changes.affects("playerlist", setting.id())) {
-                hud.configurationChanged();
+                for (PlayerListHud hud : huds) {
+                    hud.configurationChanged();
+                }
                 break;
             }
         }
         if (changes.affects("playerlist", config.hud().translateText().id())) {
-            hud.localize();
+            languageListener.run();
+        }
+        for (PlayerListGroup group : PlayerListGroup.values()) {
+            if (changes.affects("playerlist", "player_list." + group.id() + ".independent")) {
+                updateHudLayout();
+                break;
+            }
         }
         if (changes.affects("playerlist", "enabled")) {
             if (config.enabled() && !active) {
@@ -268,7 +304,9 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             boolean rebuildText = snapshotDirty;
             snapshotDirty = false;
             snapshot = builder.build(realNamesHeld, rebuildText);
-            hud.snapshot(snapshot);
+            for (PlayerListHud hud : huds) {
+                hud.snapshot(snapshot);
+            }
         }
     }
 
@@ -279,17 +317,22 @@ public final class PlayerListFeature implements ClientLifecycle, PlayerEquipment
             return;
         }
         ScaledResolution resolution = event.resolution;
-        hudRenderer.render(
-                hud, HudRenderer.layout(hud, resolution.getScaledWidth(),
-                        resolution.getScaledHeight(), resolution.getScaleFactor(), false),
-                event.partialTicks, false);
+        for (PlayerListHud hud : activeHuds) {
+            HudBounds bounds = HudRenderer.layout(hud, resolution.getScaledWidth(),
+                    resolution.getScaledHeight(), resolution.getScaleFactor(), false);
+            if (hud.width() > 0) {
+                hudRenderer.render(hud, bounds, event.partialTicks, false);
+            }
+        }
     }
 
     // Forge needs this listener class to be public.
     public final class FontListener {
         @SubscribeEvent
         public void onTextureStitch(TextureStitchEvent.Post event) {
-            hud.configurationChanged();
+            for (PlayerListHud hud : huds) {
+                hud.configurationChanged();
+            }
         }
     }
 }
