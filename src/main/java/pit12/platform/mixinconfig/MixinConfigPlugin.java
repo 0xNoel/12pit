@@ -49,6 +49,10 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
                 .equals("pit12.platform.mixin.feature.nametag.LunarEntityLivingBaseMixin")) {
             return lunar;
         }
+        if (mixinClassName.startsWith("pit12.platform.mixin.feature.fontcachefix.")) {
+            return Launch.classLoader
+                    .getResource("club/sk1er/patcher/hooks/FontRendererHook.class") != null;
+        }
         // Forge detects OptiFine after Mixin preparation.
         return !mixinClassName.startsWith("pit12.platform.mixin.feature.resourceleakfix.")
                 || Launch.classLoader
