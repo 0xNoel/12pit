@@ -18,26 +18,40 @@
  */
 package pit12.platform.mixin.patcher;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.client.gui.FontRenderer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Pseudo
 @Mixin(targets = "club.sk1er.patcher.hooks.FontRendererHook", remap = false)
 public abstract class FontRendererHookMixin {
+    // PolyPatcher shares both caches across font renderers and font modes.
+    @Unique
+    private static final AtomicInteger pit12$nextFontId = new AtomicInteger();
+    @Unique
+    private final String pit12$cachePrefix = pit12$nextFontId.getAndIncrement() + ":";
     @Shadow
     @Final
     private FontRenderer fontRenderer;
 
-    // PolyPatcher's display-list key omits the font mode.
     @ModifyArg(method = "renderStringAtPos", at = @At(value = "INVOKE",
             target = "Lclub/sk1er/patcher/util/enhancement/hash/StringHash;<init>(Ljava/lang/String;FFFFZ)V"),
             index = 0, remap = false, require = 1)
     private String pit12$fontCacheKey(String text) {
-        return (fontRenderer.getUnicodeFlag() ? "\u0001" : "\u0000") + text;
+        return pit12$cachePrefix + (fontRenderer.getUnicodeFlag() ? "\u0001" : "\u0000") + text;
+    }
+
+    // The width calculator captures the original text separately from the cache key.
+    @ModifyArg(method = "getStringWidth", at = @At(value = "INVOKE",
+            target = "Ljava/util/Map;computeIfAbsent(Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;"),
+            index = 0, remap = false, require = 1)
+    private Object pit12$widthCacheKey(Object text) {
+        return pit12$fontCacheKey((String) text);
     }
 }
