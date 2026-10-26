@@ -28,8 +28,7 @@ public final class AutoQuickMathConfig extends FeatureConfig {
     private final DoubleSetting delay;
 
     public AutoQuickMathConfig() {
-        super("auto_quick_math", source("Auto Quick Math"),
-                new ConfigCategory("misc", source("Misc")),
+        super("auto_quick_math", source("Auto Quick Math"), ConfigCategory.MISC,
                 source("Solves QUICK MATHS! questions and sends the answer with /ac."), true,
                 false);
         delay = doubleSliderSetting("delay", source("Answer delay"),

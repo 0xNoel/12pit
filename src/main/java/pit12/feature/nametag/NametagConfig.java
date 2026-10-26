@@ -43,7 +43,7 @@ public final class NametagConfig extends FeatureConfig {
     private final IntegerSetting upwardOffset;
 
     public NametagConfig() {
-        super("nametag", source("Nametag"), new ConfigCategory("render", source("Render")),
+        super("nametag", source("Nametag"), ConfigCategory.RENDER,
                 source("Adds real names, Pit enchantments, and timers to player nametags."));
         subsubcategory("names", "Denick");
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),

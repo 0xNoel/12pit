@@ -18,15 +18,22 @@
  */
 package pit12.runtime.config;
 
+import static pit12.runtime.languages.Languages.source;
+
 import pit12.runtime.languages.Languages;
 
-public final class ConfigCategory {
+public enum ConfigCategory {
+    COMBAT("combat", source("Combat")),
+    RENDER("render", source("Render")),
+    MISC("misc", source("Misc")),
+    PATCH("patch", source("Patch"));
+
     private final String id;
     private final String originalDisplayName;
     private String displayName;
 
-    public ConfigCategory(String id, String displayName) {
-        this.id = ConfigNames.requireStableId(id, "category id");
+    ConfigCategory(String id, String displayName) {
+        this.id = id;
         originalDisplayName = displayName;
         this.displayName = displayName;
     }

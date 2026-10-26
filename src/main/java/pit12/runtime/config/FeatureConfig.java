@@ -240,9 +240,6 @@ public abstract class FeatureConfig {
     void localize(Languages language) {
         displayName = language.translate(originalDisplayName);
         description = language.translate(originalDescription);
-        if (category != null) {
-            category.localize(language);
-        }
         for (Setting<?> setting : settings) {
             setting.localize(language);
         }

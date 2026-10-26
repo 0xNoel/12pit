@@ -51,9 +51,8 @@ public final class TelebowConfig extends FeatureConfig {
     public final IntegerSetting fadeTime;
 
     public TelebowConfig() {
-        super("telebow", source("Telebow Prediction"),
-                new ConfigCategory("render", source("Render")),
-                source("Shows Telebow trails, predicted landing points, and shooter names through blocks."));
+        super("telebow", source("Telebow Prediction"), ConfigCategory.RENDER, source(
+                "Shows Telebow trails, predicted landing points, and shooter names through blocks."));
         subcategory("shooters", source("Shooters"));
         own = booleanSetting("own", source("Own"), source("Shows your Telebow trails."), true);
         friends = booleanSetting("friends", source("Friends"),
