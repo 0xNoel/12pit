@@ -126,7 +126,6 @@ import pit12.runtime.player.TabPresenceTracker;
 import pit12.runtime.scoreboard.SidebarCache;
 import pit12.runtime.session.ClientSession;
 import pit12.runtime.session.ClientSessionBinding;
-import pit12.runtime.usage.DailyUsageReporter;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.MinecraftActions;
 import pit12.shared.lifecycle.ClientLifecycle;
@@ -178,7 +177,6 @@ public final class ClientBootstrap {
         components.add(nicks);
         SidebarCache sidebar = new SidebarCache(minecraft, session);
         components.add(sidebar);
-        components.add(new DailyUsageReporter(client, pitContext));
         HudRegistry hudRegistry = new HudRegistry(client);
         Supplier<TextureState> textureStates =
                 LunarSupport.isLoaded() ? LunarTextureState::new : OpenGlTextureState::new;
