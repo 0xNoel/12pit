@@ -28,7 +28,7 @@ public final class GammaConfig extends FeatureConfig {
     private final IntegerSetting gamma;
 
     public GammaConfig() {
-        super("gamma", source("Gamma"), new ConfigCategory("render", source("Render")),
+        super("gamma", source("Gamma"), ConfigCategory.RENDER,
                 source("Changes world brightness using a gamma value."));
         gamma = integerSliderSetting("gamma", source("Gamma value"),
                 source("Sets the gamma value used for world lighting."), 100, 0, 100, 1);

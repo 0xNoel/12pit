@@ -39,7 +39,7 @@ public final class PlayerEspConfig extends FeatureConfig {
     private final IntegerSetting fadeFarDistance;
 
     public PlayerEspConfig() {
-        super("playeresp", source("Player ESP"), new ConfigCategory("render", source("Render")),
+        super("playeresp", source("Player ESP"), ConfigCategory.RENDER,
                 source("Shows colored boxes around loaded players through blocks."), true, false);
         subsubcategory("friends", source("Friends"));
         showFriend = booleanSetting("show_friend", source("Show friends"), source("Marks friends."),

@@ -41,8 +41,7 @@ public final class ContractRerollConfig extends FeatureConfig {
     final ChoiceSetting apples;
 
     public ContractRerollConfig() {
-        super("contractreroll", source("Contract reroll"),
-                new ConfigCategory("misc", source("Misc")),
+        super("contractreroll", source("Contract reroll"), ConfigCategory.MISC,
                 source("Rerolls contracts until a task matches an enabled filter."), false);
         key = keybindSetting("key", source("Contract reroll key"),
                 source("Starts contract rerolling. Press again to stop."), Keyboard.KEY_NONE);

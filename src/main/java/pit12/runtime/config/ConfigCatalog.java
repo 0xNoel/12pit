@@ -70,6 +70,9 @@ public final class ConfigCatalog {
 
     public void localize(Languages language) {
         client.check();
+        for (ConfigCategory category : ConfigCategory.values()) {
+            category.localize(language);
+        }
         for (FeatureConfig feature : features) {
             feature.localize(language);
         }

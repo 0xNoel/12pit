@@ -25,8 +25,7 @@ import pit12.runtime.config.FeatureConfig;
 
 public final class ScoreboardFixConfig extends FeatureConfig {
     public ScoreboardFixConfig() {
-        super("scoreboardfix", source("Scoreboard Fix"),
-                new ConfigCategory("patch", source("Patch")),
+        super("scoreboardfix", source("Scoreboard Fix"), ConfigCategory.PATCH,
                 source("Skips removal of missing scoreboard teams and objectives."));
     }
 }

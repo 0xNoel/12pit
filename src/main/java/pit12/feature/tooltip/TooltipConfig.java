@@ -31,8 +31,7 @@ public final class TooltipConfig extends FeatureConfig {
     private final IntegerSetting upwardOffset;
 
     public TooltipConfig() {
-        super("tooltip", source("Held Item Tooltip"),
-                new ConfigCategory("render", source("Render")),
+        super("tooltip", source("Held Item Tooltip"), ConfigCategory.RENDER,
                 source("Changes the text and position of the held item tooltip."));
         showEnchantments = booleanSetting("show_enchantments",
                 source("Show enchantments instead of item name"),

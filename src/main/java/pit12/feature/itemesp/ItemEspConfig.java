@@ -32,7 +32,7 @@ public final class ItemEspConfig extends FeatureConfig {
     private final ColorSetting goldColor;
 
     public ItemEspConfig() {
-        super("itemesp", source("Item ESP"), new ConfigCategory("render", source("Render")),
+        super("itemesp", source("Item ESP"), ConfigCategory.RENDER,
                 source("Shows dropped name tags and gold ingots through blocks."), true, false);
         subsubcategory("raffle_tickets", source("Raffle tickets"));
         showRaffle = booleanSetting("show_raffle", source("Show raffle tickets"),

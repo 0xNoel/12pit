@@ -38,7 +38,7 @@ public final class SmartBlockConfig extends FeatureConfig {
     final BooleanSetting lockSlot;
 
     public SmartBlockConfig() {
-        super("smart_block", source("Smart Block"), new ConfigCategory("combat", source("Combat")),
+        super("smart_block", source("Smart Block"), ConfigCategory.COMBAT,
                 source("Selects a Bullet Time or Bruiser sword from the hotbar while blocking."),
                 true, false);
         subsubcategory("enchantments", source("Enchantments"));
