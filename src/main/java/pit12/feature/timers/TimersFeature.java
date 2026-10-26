@@ -47,6 +47,7 @@ import pit12.runtime.arrow.ArrowTracker;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
+import pit12.runtime.config.Setting;
 import pit12.runtime.hud.HudBounds;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
@@ -67,7 +68,8 @@ public final class TimersFeature
     private final HudRegistry hudRegistry;
     private final TelebowCooldowns telebow;
     private final HudRenderer renderer = new HudRenderer();
-    private final TimersHud hud;
+    private final TimersHud[] huds = new TimersHud[TimerType.values().length + 1];
+    private final List<TimersHud> activeHuds = new ArrayList<>();
     private final PinTracker pin;
     private final VenomTracker venom;
     private final JumpBoostTracker jumpBoost;
@@ -99,7 +101,10 @@ public final class TimersFeature
         this.playerNames = playerNames;
         this.hudRegistry = hudRegistry;
         this.telebow = telebow;
-        hud = new TimersHud(minecraft, config, renderer);
+        huds[0] = new TimersHud(minecraft, config, renderer, null);
+        for (TimerType type : TimerType.values()) {
+            huds[type.ordinal() + 1] = new TimersHud(minecraft, config, renderer, type);
+        }
         pin = new PinTracker(config, arrows, this::onPin, () -> {
             pinTimers.clear();
             nextRefresh = 0;
@@ -125,7 +130,7 @@ public final class TimersFeature
         if (started)
             return;
         started = true;
-        hudRegistry.register(hud);
+        updateHudLayout();
         configs.addListener(this);
         updateActivation();
     }
@@ -136,7 +141,34 @@ public final class TimersFeature
         started = false;
         configs.removeListener(this);
         updateActivation();
-        hudRegistry.unregister(hud);
+        for (TimersHud hud : huds) {
+            hudRegistry.unregister(hud);
+        }
+        activeHuds.clear();
+    }
+
+    private void updateHudLayout() {
+        activeHuds.clear();
+        for (TimersHud hud : huds) {
+            if (hud.active()) {
+                hudRegistry.register(hud);
+                activeHuds.add(hud);
+            } else {
+                hudRegistry.unregister(hud);
+            }
+        }
+        updateHudRows();
+    }
+
+    private void updateHudRows() {
+        for (TimersHud hud : huds) {
+            hud.rows.clear();
+            hud.invalidate();
+        }
+        for (TimersHud.Row row : rows) {
+            huds[config.hudGroups.get(row.type).independent() ? row.type.ordinal() + 1 : 0].rows
+                    .add(row);
+        }
     }
 
     private void updateActivation() {
@@ -184,7 +216,7 @@ public final class TimersFeature
             rows.clear();
             pendingRows.clear();
             countdownTexts.clear();
-            hud.rows(rows);
+            updateHudRows();
         }
     }
 
@@ -227,7 +259,24 @@ public final class TimersFeature
 
     @Override
     public void onConfigChanged(ConfigChangeSet changes) {
-        if (!started || !(changes.affects("debufftimers", "enabled")
+        if (!started) {
+            return;
+        }
+        for (Setting<?> setting : config.settings()) {
+            if (changes.affects("debufftimers", setting.id())) {
+                for (TimersHud hud : huds) {
+                    hud.invalidate();
+                }
+                break;
+            }
+        }
+        for (TimerType type : TimerType.values()) {
+            if (changes.affects("debufftimers", "debuff_timers." + type.id + ".independent")) {
+                updateHudLayout();
+                break;
+            }
+        }
+        if (!(changes.affects("debufftimers", "enabled")
                 || changes.affects("debufftimers", "pin_enabled")
                 || changes.affects("debufftimers", "own")
                 || changes.affects("debufftimers", "friends")
@@ -265,7 +314,6 @@ public final class TimersFeature
         venomTimers.values().removeIf(
                 timer -> timer.venomSelf ? !config.venomSelf.get() : !config.venomTargets.get());
         nextRefresh = 0;
-        hud.invalidate();
     }
 
     private boolean accepts(EntityPlayer player, TimerType type) {
@@ -373,7 +421,7 @@ public final class TimersFeature
         if (jumpBoostActive)
             jumpBoost.tick();
         if (pinTimers.isEmpty() && venomTimers.isEmpty() && jumpBoostTimers.isEmpty()
-                && telebowCooldowns.isEmpty() && hud.empty())
+                && telebowCooldowns.isEmpty() && rows.isEmpty())
             return;
         long now = System.nanoTime();
         if (now < nextRefresh)
@@ -392,7 +440,7 @@ public final class TimersFeature
             rows = pendingRows;
             pendingRows = previous;
         }
-        hud.rows(rows);
+        updateHudRows();
     }
 
     private boolean appendRows(Map<UUID, Timer> timers, TimerType type, long now) {
@@ -435,15 +483,20 @@ public final class TimersFeature
 
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
-        if (event.type != RenderGameOverlayEvent.ElementType.ALL || hud.empty()
+        if (event.type != RenderGameOverlayEvent.ElementType.ALL || rows.isEmpty()
                 || hudRegistry.editing() || minecraft.theWorld == null
                 || minecraft.gameSettings.hideGUI)
             return;
         ScaledResolution resolution = event.resolution;
-        HudBounds bounds = HudRenderer.layout(hud, resolution.getScaledWidth(),
-                resolution.getScaledHeight(), resolution.getScaleFactor(), false);
-        hud.visibleHeight = (resolution.getScaledHeight() - bounds.y) / bounds.scale;
-        renderer.render(hud, bounds, event.partialTicks, false);
+        for (TimersHud hud : activeHuds) {
+            if (hud.rows.isEmpty()) {
+                continue;
+            }
+            HudBounds bounds = HudRenderer.layout(hud, resolution.getScaledWidth(),
+                    resolution.getScaledHeight(), resolution.getScaleFactor(), false);
+            hud.visibleHeight = (resolution.getScaledHeight() - bounds.y) / bounds.scale;
+            renderer.render(hud, bounds, event.partialTicks, false);
+        }
     }
 
     private static final class Timer {

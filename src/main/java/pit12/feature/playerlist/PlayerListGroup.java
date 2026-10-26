@@ -21,17 +21,23 @@ package pit12.feature.playerlist;
 import static pit12.runtime.languages.Languages.source;
 
 public enum PlayerListGroup {
-    FRIEND(source("§a§lFriend")),
-    ENEMY(source("§c§lEnemy")),
-    NICK("§e§lNICK"),
-    REGULARITY("§4§lREG"),
-    DARK("§d§lDARK"),
-    BOUNTY_HUNTER("§6§lBounty Hunter");
+    FRIEND("friend", source("§a§lFriend")),
+    ENEMY("enemy", source("§c§lEnemy")),
+    NICK("nick", "§e§lNICK"),
+    REGULARITY("regularity", "§4§lREG"),
+    DARK("dark", "§d§lDARK"),
+    BOUNTY_HUNTER("bounty_hunter", "§6§lBounty Hunter");
 
+    private final String id;
     private final String displayName;
 
-    PlayerListGroup(String displayName) {
+    PlayerListGroup(String id, String displayName) {
+        this.id = id;
         this.displayName = displayName;
+    }
+
+    public String id() {
+        return id;
     }
 
     public String displayName() {

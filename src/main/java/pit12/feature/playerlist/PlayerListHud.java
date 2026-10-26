@@ -32,8 +32,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import pit12.runtime.config.HudConfig;
+import pit12.runtime.config.HudGroupConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
 import pit12.runtime.item.PitEnchantment;
@@ -56,6 +58,10 @@ final class PlayerListHud implements HudElement {
             new ResourceLocation(BuildConfig.MOD_ID, "textures/gui/playerlist/arrow.png");
     private final PlayerListConfig config;
     private final HudConfig hudConfig;
+    // A null group uses the combined layout.
+    private final PlayerListGroup group;
+    private final PlayerListGroup[] groups;
+    private final String id;
     private final Minecraft minecraft;
     private final HudRenderer renderer;
     private final Languages language;
@@ -87,9 +93,13 @@ final class PlayerListHud implements HudElement {
     private boolean languageDirty = true;
     private boolean unicodeFont;
 
-    PlayerListHud(PlayerListConfig config, HudRenderer renderer, Languages language) {
+    PlayerListHud(PlayerListConfig config, HudRenderer renderer, Languages language,
+            PlayerListGroup group) {
         this.config = config;
-        hudConfig = config.hud();
+        this.group = group;
+        groups = group == null ? PlayerListGroup.values() : new PlayerListGroup[] {group};
+        id = group == null ? "player-list" : "player-list." + group.id();
+        hudConfig = group == null ? config.hud() : config.hudGroups.get(group).hud();
         minecraft = Minecraft.getMinecraft();
         this.renderer = renderer;
         this.language = language;
@@ -116,14 +126,33 @@ final class PlayerListHud implements HudElement {
         pixelScale = Float.NaN;
     }
 
+    boolean active() {
+        if (group != null) {
+            return config.hudGroups.get(group).independent();
+        }
+        for (HudGroupConfig layout : config.hudGroups.values()) {
+            if (!layout.independent()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean includes(PlayerListGroup group) {
+        return this.group == null ? !config.hudGroups.get(group).independent()
+                : this.group == group;
+    }
+
     @Override
     public String id() {
-        return "player-list";
+        return id;
     }
 
     @Override
     public String displayName() {
-        return config.displayName();
+        return group == null ? config.displayName()
+                : config.displayName() + ": " + EnumChatFormatting.getTextWithoutFormattingCodes(
+                        language.translate(group.displayName(), hudConfig.translateText().get()));
     }
 
     @Override
@@ -156,7 +185,7 @@ final class PlayerListHud implements HudElement {
         resize(pixelScale);
         if (languageDirty) {
             boolean translate = hudConfig.translateText().get();
-            for (PlayerListGroup group : PlayerListGroup.values()) {
+            for (PlayerListGroup group : groups) {
                 groupNames[group.ordinal()] = group == PlayerListGroup.FRIEND
                         || group == PlayerListGroup.ENEMY || group == PlayerListGroup.NICK
                                 ? language.translate(group.displayName(), translate)
@@ -185,11 +214,15 @@ final class PlayerListHud implements HudElement {
 
     @Override
     public void render(float partialTicks, boolean editing) {
+        renderer.resize(pixelScale);
         PlayerListSnapshot content = editing ? sample : snapshot;
         prepareRenderDirection(partialTicks);
         int y = EDGE_PADDING;
         boolean hasGroup = false;
-        for (PlayerListGroup group : PlayerListGroup.values()) {
+        for (PlayerListGroup group : groups) {
+            if (!includes(group)) {
+                continue;
+            }
             List<PlayerListEntry> entries = content.entries(group);
             if (entries.isEmpty()) {
                 continue;
@@ -329,6 +362,9 @@ final class PlayerListHud implements HudElement {
         }
         for (Map.Entry<PlayerListGroup, List<PlayerListEntry>> group : content.entries()
                 .entrySet()) {
+            if (!includes(group.getKey())) {
+                continue;
+            }
             List<PlayerListEntry> entries = group.getValue();
             int[] textWidths = showDistance ? distanceTextWidths.get(group.getKey()) : null;
             if (showDistance && (textWidths == null || textWidths.length != entries.size())) {
@@ -357,8 +393,8 @@ final class PlayerListHud implements HudElement {
             }
         }
         if (config.showGroupName()) {
-            for (PlayerListGroup group : PlayerListGroup.values()) {
-                if (!content.entries(group).isEmpty()) {
+            for (PlayerListGroup group : groups) {
+                if (includes(group) && !content.entries(group).isEmpty()) {
                     nameWidth = Math.max(nameWidth,
                             FontWidths.measure(font, groupNames[group.ordinal()]));
                 }
@@ -381,7 +417,10 @@ final class PlayerListHud implements HudElement {
         width += EDGE_PADDING;
         height = EDGE_PADDING;
         boolean hasGroup = false;
-        for (PlayerListGroup group : PlayerListGroup.values()) {
+        for (PlayerListGroup group : groups) {
+            if (!includes(group)) {
+                continue;
+            }
             List<PlayerListEntry> entries = content.entries(group);
             if (!entries.isEmpty()) {
                 if (hasGroup) {
@@ -394,7 +433,8 @@ final class PlayerListHud implements HudElement {
                 hasGroup = true;
             }
         }
-        height = Math.max(lineHeight, height);
+        width = hasGroup ? width : 0;
+        height = hasGroup ? Math.max(lineHeight, height) : 0;
     }
 
     private static int distanceColor(float distance) {
@@ -440,11 +480,11 @@ final class PlayerListHud implements HudElement {
                 Collections.singletonList(new PlayerListEntry(null, 0, darkName,
                         sampleEnchantments(new PitEnchantment[] {PitEnchantment.Somber}, 1), null,
                         0.0F, 0.0F, false, false, true)));
-        if (config.showGroup(PlayerListGroup.NICK)) {
-            groups.put(PlayerListGroup.NICK,
-                    Collections.singletonList(new PlayerListEntry(null, 0, firstName,
-                            groups.get(PlayerListGroup.REGULARITY).get(0).leggingsText(), null,
-                            45.0F, -135.0F, true, true, false)));
+        for (PlayerListGroup group : PlayerListGroup.values()) {
+            if (!groups.containsKey(group)) {
+                groups.put(group,
+                        Collections.singletonList(groups.get(PlayerListGroup.REGULARITY).get(0)));
+            }
         }
         return PlayerListSnapshot.create(groups);
     }

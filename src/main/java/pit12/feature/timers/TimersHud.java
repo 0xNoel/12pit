@@ -18,12 +18,15 @@
  */
 package pit12.feature.timers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.EnumChatFormatting;
 import pit12.runtime.config.HudConfig;
+import pit12.runtime.config.HudGroupConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
 import pit12.shared.rendering.FontWidths;
@@ -32,7 +35,11 @@ final class TimersHud implements HudElement {
     private final Minecraft minecraft;
     private final TimersConfig config;
     private final HudRenderer renderer;
-    private List<Row> rows = Collections.emptyList();
+    private final HudConfig hudConfig;
+    // A null type uses the combined layout.
+    private final TimerType type;
+    private final String id;
+    final List<Row> rows = new ArrayList<>();
     private List<Row> content = Collections.emptyList();
     private float pixelScale = Float.NaN;
     private boolean dirty = true;
@@ -45,33 +52,41 @@ final class TimersHud implements HudElement {
     private final int[] titleWidths = new int[TimerType.values().length];
     float visibleHeight = Float.POSITIVE_INFINITY;
 
-    TimersHud(Minecraft minecraft, TimersConfig config, HudRenderer renderer) {
+    TimersHud(Minecraft minecraft, TimersConfig config, HudRenderer renderer, TimerType type) {
         this.minecraft = minecraft;
         this.config = config;
         this.renderer = renderer;
-    }
-
-    void rows(List<Row> rows) {
-        this.rows = rows;
-        dirty = true;
+        this.type = type;
+        id = type == null ? "debuff-timers" : "debuff-timers." + type.id;
+        hudConfig = type == null ? config.hud : config.hudGroups.get(type).hud();
     }
 
     void invalidate() {
         dirty = true;
     }
 
-    boolean empty() {
-        return rows.isEmpty();
+    boolean active() {
+        if (type != null) {
+            return config.hudGroups.get(type).independent();
+        }
+        for (HudGroupConfig layout : config.hudGroups.values()) {
+            if (!layout.independent()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public String id() {
-        return "debuff-timers";
+        return id;
     }
 
     @Override
     public String displayName() {
-        return config.displayName();
+        return type == null ? config.displayName()
+                : config.displayName() + ": "
+                        + EnumChatFormatting.getTextWithoutFormattingCodes(type.title);
     }
 
     @Override
@@ -81,7 +96,7 @@ final class TimersHud implements HudElement {
 
     @Override
     public HudConfig config() {
-        return config.hud;
+        return hudConfig;
     }
 
     @Override
@@ -108,10 +123,12 @@ final class TimersHud implements HudElement {
         if (editing) {
             String name = minecraft.thePlayer == null ? "You"
                     : minecraft.thePlayer.getDisplayName().getFormattedText();
-            content = Arrays.asList(new Row(TimerType.PIN, Group.OWN, name, 10_000_000_000L),
-                    new Row(TimerType.VENOM, Group.OWN, name, 24_000_000_000L),
-                    new Row(TimerType.JUMP_BOOST, Group.OWN, name, 30_000_000_000L),
-                    new Row(TimerType.TELEBOW, Group.OWN, name, 20_000_000_000L));
+            content = new ArrayList<>();
+            for (TimerType next : TimerType.values()) {
+                if (type == null ? !config.hudGroups.get(next).independent() : type == next) {
+                    content.add(new Row(next, Group.OWN, name, 10_000_000_000L));
+                }
+            }
         } else {
             content = rows;
         }
@@ -167,30 +184,36 @@ final class TimersHud implements HudElement {
 
     @Override
     public void render(float partialTicks, boolean editing) {
+        renderer.resize(pixelScale);
         int y = 4;
         TimerType previousType = null;
         for (Row row : content) {
             if (!editing && y >= visibleHeight + lineHeight)
                 break;
             if (previousType != row.type && config.showGroupNames.get()) {
-                renderer.text(row.type.title, 4, y, 0xFFFFFFFF, config.hud);
+                renderer.text(row.type.title, 4, y, 0xFFFFFFFF, hudConfig);
                 y += lineHeight;
             }
             previousType = row.type;
-            renderer.text(row.name, 4, y, 0xFFFFFFFF, config.hud);
+            renderer.text(row.name, 4, y, 0xFFFFFFFF, hudConfig);
             renderer.text(row.time, width - 4 - row.timeWidth, y, row.group.color(config),
-                    config.hud);
+                    hudConfig);
             y += lineHeight;
         }
     }
 
     enum TimerType {
-        PIN("§e§lPin"), VENOM("§d§lVenom"), JUMP_BOOST("§a§lJump Boost"), TELEBOW("§b§lTelebow");
+        PIN("pin", "§e§lPin"),
+        VENOM("venom", "§d§lVenom"),
+        JUMP_BOOST("jump_boost", "§a§lJump Boost"),
+        TELEBOW("telebow", "§b§lTelebow");
 
+        final String id;
         final String title;
         final String color;
 
-        TimerType(String title) {
+        TimerType(String id, String title) {
+            this.id = id;
             this.title = title;
             color = title.substring(0, 2);
         }

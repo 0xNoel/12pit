@@ -173,18 +173,7 @@ public abstract class FeatureConfig {
         ChoiceSetting font = new ChoiceSetting(prefix + "font", source("Font"),
                 source("Font used for HUD text."), 1, new ChoiceSetting.Choice(0, "ASCII"),
                 new ChoiceSetting.Choice(1, "Unicode"));
-        ChoiceSetting anchor = new ChoiceSetting(prefix + "anchor", source("Anchor"),
-                source("Auto selects the HUD anchor when you move the HUD."), HudConfig.AUTO_ANCHOR,
-                new ChoiceSetting.Choice(HudConfig.AUTO_ANCHOR, source("Auto")),
-                new ChoiceSetting.Choice(0, source("Top left")),
-                new ChoiceSetting.Choice(1, source("Top center")),
-                new ChoiceSetting.Choice(2, source("Top right")),
-                new ChoiceSetting.Choice(3, source("Center left")),
-                new ChoiceSetting.Choice(4, source("Center")),
-                new ChoiceSetting.Choice(5, source("Center right")),
-                new ChoiceSetting.Choice(6, source("Bottom left")),
-                new ChoiceSetting.Choice(7, source("Bottom center")),
-                new ChoiceSetting.Choice(8, source("Bottom right")));
+        ChoiceSetting anchor = hudAnchor(prefix);
         IntegerSetting autoAnchor = new IntegerSetting(prefix + "auto_anchor", source("Anchor"),
                 source("Stores the anchor chosen by Auto."), defaultAnchor.id(), 0, 8);
         IntegerSetting offsetX = new IntegerSetting(prefix + "offset_x",
@@ -215,6 +204,49 @@ public abstract class FeatureConfig {
         register(scale, null);
         return new HudConfig(textShadow, translateText, font, anchor, autoAnchor, offsetX, offsetY,
                 scale);
+    }
+
+    protected final HudGroupConfig hudGroupConfig(String hudId, String groupId, String displayName,
+            HudConfig parent, int verticalOffset) {
+        String prefix = hudId + "." + groupId + ".";
+        BooleanSetting independent = new BooleanSetting(prefix + "independent", displayName,
+                source("Lets you move and resize this group separately in the HUD editor."), false);
+        register(independent, ConfigOption.Kind.BOOLEAN);
+        options.get(options.size() - 1).group(new ConfigGroup(hudId + ".hud", "HUD"),
+                new ConfigGroup(hudId + ".independent_layout", source("Independent layout")));
+        HudPlacement placement = parent.defaultPlacement();
+        ChoiceSetting anchor = hudAnchor(prefix);
+        IntegerSetting autoAnchor =
+                new IntegerSetting(prefix + "auto_anchor", "", "", placement.anchor().id(), 0, 8);
+        IntegerSetting offsetX =
+                new IntegerSetting(prefix + "offset_x", "", "", placement.offsetX(), -32768, 32767);
+        IntegerSetting offsetY = new IntegerSetting(prefix + "offset_y", "", "",
+                placement.offsetY() + verticalOffset, -32768, 32767);
+        IntegerSetting scale = new IntegerSetting(prefix + "scale", "", "",
+                parent.scale().defaultValue(), 25, 300);
+        register(anchor, null);
+        register(autoAnchor, null);
+        register(offsetX, null);
+        register(offsetY, null);
+        register(scale, null);
+        return new HudGroupConfig(independent,
+                new HudConfig(parent.textShadow(), parent.translateText(), parent.font(), anchor,
+                        autoAnchor, offsetX, offsetY, scale));
+    }
+
+    private ChoiceSetting hudAnchor(String prefix) {
+        return new ChoiceSetting(prefix + "anchor", source("Anchor"),
+                source("Auto selects the HUD anchor when you move the HUD."), HudConfig.AUTO_ANCHOR,
+                new ChoiceSetting.Choice(HudConfig.AUTO_ANCHOR, source("Auto")),
+                new ChoiceSetting.Choice(0, source("Top left")),
+                new ChoiceSetting.Choice(1, source("Top center")),
+                new ChoiceSetting.Choice(2, source("Top right")),
+                new ChoiceSetting.Choice(3, source("Center left")),
+                new ChoiceSetting.Choice(4, source("Center")),
+                new ChoiceSetting.Choice(5, source("Center right")),
+                new ChoiceSetting.Choice(6, source("Bottom left")),
+                new ChoiceSetting.Choice(7, source("Bottom center")),
+                new ChoiceSetting.Choice(8, source("Bottom right")));
     }
 
     void completeHudGroups() {
