@@ -135,6 +135,8 @@ final class TimersHud implements HudElement {
                 row.nameWidth = -1;
                 row.timeWidth = -1;
             }
+            if (previousType != null && previousType != row.type)
+                lines++;
             if (previousType != row.type && config.showGroupNames.get()) {
                 lines++;
                 int index = row.type.ordinal();
@@ -170,6 +172,8 @@ final class TimersHud implements HudElement {
         int y = 4;
         TimerType previousType = null;
         for (Row row : content) {
+            if (previousType != null && previousType != row.type)
+                y += lineHeight;
             if (!editing && y >= visibleHeight + lineHeight)
                 break;
             if (previousType != row.type && config.showGroupNames.get()) {
