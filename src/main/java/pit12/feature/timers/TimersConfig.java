@@ -22,7 +22,6 @@ import static pit12.runtime.languages.Languages.source;
 
 import java.util.EnumMap;
 import java.util.Map;
-import net.minecraft.util.EnumChatFormatting;
 import pit12.feature.timers.TimersHud.TimerType;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ColorSetting;
@@ -33,6 +32,7 @@ import pit12.runtime.config.HudAnchor;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.config.HudGroupConfig;
 import pit12.runtime.config.IntegerSetting;
+import pit12.shared.text.TextCodes;
 
 public final class TimersConfig extends FeatureConfig {
     final Map<TimerType, HudGroupConfig> hudGroups = new EnumMap<>(TimerType.class);
@@ -78,10 +78,8 @@ public final class TimersConfig extends FeatureConfig {
         hud = hudConfig("debuff_timers", HudAnchor.TOP_RIGHT, 6, 6, true, HudGroup.SUBCATEGORY,
                 "HUD");
         for (TimerType type : TimerType.values()) {
-            hudGroups.put(type,
-                    hudGroupConfig("debuff_timers", type.id,
-                            EnumChatFormatting.getTextWithoutFormattingCodes(type.title), hud,
-                            type.ordinal() * 40));
+            hudGroups.put(type, hudGroupConfig("debuff_timers", type.id,
+                    TextCodes.strip(type.title), hud, type.ordinal() * 40));
         }
         subcategory("display", source("Display"));
         showGroupNames = booleanSetting("show_group_names", source("Show group names"),

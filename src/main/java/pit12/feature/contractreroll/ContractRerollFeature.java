@@ -32,7 +32,6 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -59,6 +58,7 @@ import pit12.shared.input.Keybind;
 import pit12.shared.input.MinecraftActions;
 import pit12.shared.lifecycle.ClientLifecycle;
 import pit12.shared.rendering.FontWidths;
+import pit12.shared.text.TextCodes;
 
 public final class ContractRerollFeature
         implements ClientLifecycle, InputHandler, SidebarListener, ConfigChangeListener {
@@ -250,8 +250,7 @@ public final class ContractRerollFeature
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
         if (state == State.LANGUAGE_REPLY && event.type != 2
-                && EnumChatFormatting
-                        .getTextWithoutFormattingCodes(event.message.getUnformattedText()).trim()
+                && TextCodes.strip(event.message.getUnformattedText()).trim()
                         .equals("Selected language: English")) {
             refreshContract();
             enter(State.CONTRACT, Minecraft.getSystemTime());
@@ -331,8 +330,7 @@ public final class ContractRerollFeature
             return false;
         IInventory inventory =
                 ((ContainerChest) ((GuiChest) screen).inventorySlots).getLowerChestInventory();
-        String title = EnumChatFormatting
-                .getTextWithoutFormattingCodes(inventory.getDisplayName().getUnformattedText());
+        String title = TextCodes.strip(inventory.getDisplayName().getUnformattedText());
         if (state == State.PURCHASE && inventory.getSizeInventory() == State.CHOICES.slots
                 && State.CHOICES.title.equals(title))
             enter(State.CHOICES, Minecraft.getSystemTime());
@@ -393,9 +391,8 @@ public final class ContractRerollFeature
             return;
         String[] tooltips = new String[CHOICE_SLOTS.length];
         for (int index = 0; index < tooltips.length; index++) {
-            tooltips[index] = EnumChatFormatting
-                    .getTextWithoutFormattingCodes(
-                            String.join(" ", pendingStacks[index].getTooltip(player, false)))
+            tooltips[index] = TextCodes
+                    .strip(String.join(" ", pendingStacks[index].getTooltip(player, false)))
                     .replaceAll("\\s+", " ");
         }
         for (int index = 0; index < tooltips.length; index++) {

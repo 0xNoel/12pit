@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import pit12.feature.fontcachefix.FontCacheFixBinding;
 
+@SuppressWarnings("target")
 @Mixin(FontRenderer.class)
 public abstract class LunarFontRendererMixin {
     @Shadow

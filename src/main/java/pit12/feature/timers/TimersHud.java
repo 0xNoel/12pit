@@ -24,12 +24,12 @@ import java.util.Collections;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.EnumChatFormatting;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.config.HudGroupConfig;
 import pit12.runtime.hud.HudElement;
 import pit12.runtime.hud.HudRenderer;
 import pit12.shared.rendering.FontWidths;
+import pit12.shared.text.TextCodes;
 
 final class TimersHud implements HudElement {
     private final Minecraft minecraft;
@@ -85,8 +85,7 @@ final class TimersHud implements HudElement {
     @Override
     public String displayName() {
         return type == null ? config.displayName()
-                : config.displayName() + ": "
-                        + EnumChatFormatting.getTextWithoutFormattingCodes(type.title);
+                : config.displayName() + ": " + TextCodes.strip(type.title);
     }
 
     @Override

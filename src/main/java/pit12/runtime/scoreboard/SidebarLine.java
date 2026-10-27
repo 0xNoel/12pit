@@ -19,7 +19,7 @@
 package pit12.runtime.scoreboard;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.EnumChatFormatting;
+import pit12.shared.text.TextCodes;
 
 public final class SidebarLine {
     private final String entry;
@@ -49,7 +49,7 @@ public final class SidebarLine {
     /** Call on the client thread. This line keeps the first result. */
     public String formattedText(FontRenderer font) {
         if (formattedText == null) {
-            String plain = EnumChatFormatting.getTextWithoutFormattingCodes(text);
+            String plain = TextCodes.strip(text);
             StringBuilder result = new StringBuilder(plain.length());
             for (int index = 0; index < plain.length(); index++) {
                 char character = plain.charAt(index);

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.logging.Logger;
-import net.minecraft.util.EnumChatFormatting;
+import pit12.shared.text.TextCodes;
 
 final class DenickQuery {
     private static final Logger LOGGER = Logger.getLogger(DenickQuery.class.getName());
@@ -42,7 +42,7 @@ final class DenickQuery {
             try {
                 Map<String, String> owners = api.owners(item.query, cancelled);
                 owners.values().removeIf(displayName -> {
-                    String plain = EnumChatFormatting.getTextWithoutFormattingCodes(displayName);
+                    String plain = TextCodes.strip(displayName);
                     return !plain.contains("[MVP++]") && !plain.contains("[YOUTUBE]");
                 });
                 if (owners.size() != 1) {
