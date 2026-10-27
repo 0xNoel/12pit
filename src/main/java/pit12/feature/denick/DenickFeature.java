@@ -351,12 +351,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
         PlayerEquipmentSnapshot snapshot = equipment.loadedEquipment(playerId);
         if (snapshot != null) {
             for (int slot = 0; slot < 5; slot++) {
-                int mask = slot == 0 ? PlayerEquipmentCache.HELD_ITEM
-                        : slot == 1 ? PlayerEquipmentCache.BOOTS
-                                : slot == 2 ? PlayerEquipmentCache.LEGGINGS
-                                        : slot == 3 ? PlayerEquipmentCache.CHESTPLATE
-                                                : PlayerEquipmentCache.HELMET;
-                if ((changedSlots & mask) != 0) {
+                if ((changedSlots & PlayerEquipmentCache.slotsFor(slot)) != 0) {
                     enqueue(target.search, snapshot.copyEquipment(slot));
                 }
             }

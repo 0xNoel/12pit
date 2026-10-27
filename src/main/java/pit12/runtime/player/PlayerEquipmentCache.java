@@ -38,6 +38,23 @@ public final class PlayerEquipmentCache {
     private final Map<UUID, PlayerEquipmentSnapshot> entries = new LinkedHashMap<>();
     private final Map<UUID, Integer> dirty = new LinkedHashMap<>();
 
+    public static int slotsFor(int equipmentSlot) {
+        switch (equipmentSlot) {
+            case 0:
+                return HELD_ITEM;
+            case 1:
+                return BOOTS;
+            case 2:
+                return LEGGINGS;
+            case 3:
+                return CHESTPLATE;
+            case 4:
+                return HELMET;
+            default:
+                return 0;
+        }
+    }
+
     public void markDirty(UUID playerId, int slots) {
         dirty.merge(playerId, slots, (existing, added) -> existing | added);
     }
@@ -58,9 +75,7 @@ public final class PlayerEquipmentCache {
         int knownSlots = previous == null ? 0 : previous.knownSlots();
         ItemStack[] equipment = previous == null ? new ItemStack[5] : previous.equipmentForUpdate();
         for (int slot = 0; slot < equipment.length; slot++) {
-            int mask = slot == 0 ? HELD_ITEM
-                    : slot == 1 ? BOOTS : slot == 2 ? LEGGINGS : slot == 3 ? CHESTPLATE : HELMET;
-            if ((slots & mask) != 0) {
+            if ((slots & slotsFor(slot)) != 0) {
                 ItemStack stack =
                         slot == 0 ? player.getHeldItem() : player.getCurrentArmor(slot - 1);
                 equipment[slot] = stack == null ? null : stack.copy();

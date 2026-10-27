@@ -124,12 +124,7 @@ final class ProfileController {
         }
         normalizeOrders();
         if (activeReplaced) {
-            applyingProfile = true;
-            try {
-                catalog.apply(profilesById.get(activeProfileId).config());
-            } finally {
-                applyingProfile = false;
-            }
+            applyConfig(profilesById.get(activeProfileId).config());
             markStateChanged();
         }
         publish();
@@ -201,17 +196,20 @@ final class ProfileController {
             }
         }
         normalizeOrders();
-        ProfileRecord active = profilesById.get(activeProfileId);
-        applyingProfile = true;
-        try {
-            catalog.apply(active.config());
-        } finally {
-            applyingProfile = false;
-        }
+        applyConfig(profilesById.get(activeProfileId).config());
         loadState = loaded.storageAvailable() && problems.isEmpty() ? LoadState.READY
                 : LoadState.DEGRADED;
         publish();
         persistence.changed();
+    }
+
+    private void applyConfig(ConfigSnapshot config) {
+        applyingProfile = true;
+        try {
+            catalog.apply(config);
+        } finally {
+            applyingProfile = false;
+        }
     }
 
     void onConfigChanged(ConfigChangeSet ignoredChanges) {
@@ -240,12 +238,7 @@ final class ProfileController {
         ProfileRecord previous = profilesById.get(activeProfileId);
         previous.config(catalog.snapshot());
         markChanged(previous);
-        applyingProfile = true;
-        try {
-            catalog.apply(target.config());
-        } finally {
-            applyingProfile = false;
-        }
+        applyConfig(target.config());
         activeProfileId = target.id();
         markStateChanged();
         publish();
@@ -259,12 +252,7 @@ final class ProfileController {
             return ready;
         }
         ConfigSnapshot defaults = catalog.defaults();
-        applyingProfile = true;
-        try {
-            catalog.apply(defaults);
-        } finally {
-            applyingProfile = false;
-        }
+        applyConfig(defaults);
         ProfileRecord active = profilesById.get(activeProfileId);
         active.resetConfig(defaults);
         markChanged(active);
@@ -359,12 +347,7 @@ final class ProfileController {
         profiles.add(0, created);
         profilesById.put(created.id(), created);
         normalizeOrders();
-        applyingProfile = true;
-        try {
-            catalog.apply(config);
-        } finally {
-            applyingProfile = false;
-        }
+        applyConfig(config);
         activeProfileId = created.id();
         markStateChanged();
         publish();

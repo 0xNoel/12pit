@@ -40,6 +40,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import pit12.runtime.session.ClientSession;
+import pit12.shared.entity.PlayerPositions;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class ArrowTracker implements ClientLifecycle, ArrowPacketObserver, ArrowObserver {
@@ -288,11 +289,8 @@ public final class ArrowTracker implements ClientLifecycle, ArrowPacketObserver,
         if (!(entity instanceof EntityPlayer))
             return;
         EntityPlayer player = (EntityPlayer) entity;
-        // Remote players interpolate toward serverPos, so compare server coordinates.
-        double dx = x - (player == minecraft.thePlayer ? player.posX : player.serverPosX / 32.0);
-        double dy = y - (player == minecraft.thePlayer ? player.posY : player.serverPosY / 32.0);
-        double dz = z - (player == minecraft.thePlayer ? player.posZ : player.serverPosZ / 32.0);
-        double distanceSquared = dx * dx + dy * dy + dz * dz;
+        double distanceSquared =
+                PlayerPositions.serverDistanceSquared(player, minecraft.thePlayer, x, y, z);
         for (ArrowListener listener : listeners) {
             listener.onShooterTeleport(player, distanceSquared);
         }
