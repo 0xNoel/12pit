@@ -59,10 +59,12 @@ public final class PlayerEspConfig extends FeatureConfig {
         subsubcategory("distance_fade", source("Distance fade"));
         distanceFade = booleanSetting("distance_fade", source("Fade nearby players"),
                 source("Makes boxes fade out as players get closer."), true);
-        fadeNearDistance = integerSliderSetting("fade_near_distance", source("Hidden distance"),
-                source("Hides boxes at or below the smaller distance."), 5, 0, 20, 1);
-        fadeFarDistance = integerSliderSetting("fade_far_distance", source("Full color distance"),
-                source("Uses full color at or above the larger distance."), 10, 0, 20, 1);
+        fadeNearDistance =
+                integerSliderSetting("fade_near_distance", source("Hidden distance (blocks)"),
+                        source("Hides boxes at or below the smaller distance."), 5, 0, 20, 1);
+        fadeFarDistance =
+                integerSliderSetting("fade_far_distance", source("Full color distance (blocks)"),
+                        source("Uses full color at or above the larger distance."), 10, 0, 20, 1);
     }
 
     public boolean hasTargets() {

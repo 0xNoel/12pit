@@ -207,9 +207,6 @@ function selectSubcategory(id: string) {
         </li>
       </ol>
     </div>
-    <p v-if="showDetails" class="feature-description">
-      <FormattedText :text="current.description" />
-    </p>
     <div
       v-if="subcategories.length"
       class="category-buttons"

@@ -25,7 +25,7 @@ import pit12.runtime.config.FeatureConfig;
 
 public final class ResourceLeakFixConfig extends FeatureConfig {
     public ResourceLeakFixConfig() {
-        super("resourceleakfix", source("Resource Leak Fix"), ConfigCategory.PATCH,
+        super("resourceleakfix", source("Resource leak fix"), ConfigCategory.PATCH,
                 source("Closes unused texture metadata streams during OptiFine texture loading."));
     }
 }

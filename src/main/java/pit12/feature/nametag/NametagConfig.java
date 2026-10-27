@@ -71,9 +71,8 @@ public final class NametagConfig extends FeatureConfig {
                 source("Shows Telebow cooldowns after player names while Timers is enabled."),
                 true);
         subsubcategory("display", source("Display"));
-        upwardOffset = integerSliderSetting("upward_offset", source("Upward offset"),
-                source("Moves enchantments above the nametag, in hundredths of a block."), 36, 20,
-                40, 1);
+        upwardOffset = integerSliderSetting("upward_offset", source("Upward offset (1/100 block)"),
+                source("Moves enchantments above the nametag."), 36, 20, 40, 1);
     }
 
     public boolean nickMarker() {

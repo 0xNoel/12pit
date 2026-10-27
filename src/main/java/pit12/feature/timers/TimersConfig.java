@@ -151,10 +151,10 @@ public final class TimersConfig extends FeatureConfig {
                 source("Reset on low jump"),
                 source("Removes the Jump Boost timer when an unobstructed jump rises less than 3.9 blocks."),
                 true);
-        jumpBoostGrace = integerSliderSetting("jump_boost_grace_ms",
-                source("Prediction margin (ms)"),
-                source("Starts checking new jumps this many milliseconds after the Jump Boost timer starts."),
-                250, 0, 1000, 25);
+        jumpBoostGrace =
+                integerSliderSetting("jump_boost_grace_ms", source("Prediction margin (ms)"),
+                        source("Time after the Jump Boost timer starts before checking new jumps."),
+                        250, 0, 1000, 25);
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
         telebowEnabled = booleanSetting("telebow_enabled", source("Enabled"),

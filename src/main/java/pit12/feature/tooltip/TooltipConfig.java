@@ -31,15 +31,15 @@ public final class TooltipConfig extends FeatureConfig {
     private final IntegerSetting upwardOffset;
 
     public TooltipConfig() {
-        super("tooltip", source("Held Item Tooltip"), ConfigCategory.RENDER,
+        super("tooltip", source("Held item tooltip"), ConfigCategory.RENDER,
                 source("Changes the text and position of the held item tooltip."));
         showEnchantments = booleanSetting("show_enchantments",
                 source("Show enchantments instead of item name"),
                 source("Shows Pit enchantments in place of the held item name."), true);
         showGem = booleanSetting("show_gem", source("Show gem"),
                 source("Shows a green diamond on gemmed items."), true);
-        upwardOffset = integerSliderSetting("upward_offset", source("Move tooltip upward"),
-                source("Moves the held item tooltip upward by this many pixels."), 0, 0, 30, 1);
+        upwardOffset = integerSliderSetting("upward_offset", source("Upward offset (pixels)"),
+                source("Moves the held item tooltip upward."), 0, 0, 30, 1);
     }
 
     public boolean showEnchantments() {
