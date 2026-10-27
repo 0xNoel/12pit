@@ -32,7 +32,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import pit12.runtime.config.HudConfig;
 import pit12.runtime.config.HudGroupConfig;
@@ -44,6 +43,7 @@ import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
 import pit12.shared.build.BuildConfig;
 import pit12.shared.rendering.FontWidths;
+import pit12.shared.text.TextCodes;
 
 final class PlayerListHud implements HudElement {
     private static final int GAP = 15;
@@ -150,7 +150,7 @@ final class PlayerListHud implements HudElement {
     @Override
     public String displayName() {
         return group == null ? config.displayName()
-                : config.displayName() + ": " + EnumChatFormatting.getTextWithoutFormattingCodes(
+                : config.displayName() + ": " + TextCodes.strip(
                         language.translate(group.displayName(), hudConfig.translateText().get()));
     }
 

@@ -22,7 +22,6 @@ import static pit12.runtime.languages.Languages.source;
 
 import java.util.EnumMap;
 import java.util.Map;
-import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.input.Keyboard;
 import pit12.runtime.config.BooleanSetting;
 import pit12.runtime.config.ChoiceSetting;
@@ -33,6 +32,7 @@ import pit12.runtime.config.HudConfig;
 import pit12.runtime.config.HudGroupConfig;
 import pit12.runtime.config.KeybindSetting;
 import pit12.runtime.item.PitEnchantmentFormat;
+import pit12.shared.text.TextCodes;
 
 public final class PlayerListConfig extends FeatureConfig {
     final Map<PlayerListGroup, HudGroupConfig> hudGroups = new EnumMap<>(PlayerListGroup.class);
@@ -62,10 +62,8 @@ public final class PlayerListConfig extends FeatureConfig {
         subcategory("display", source("Display"));
         hud = hudConfig("player_list", HudAnchor.TOP_LEFT, 6, 6, true);
         for (PlayerListGroup group : PlayerListGroup.values()) {
-            hudGroups.put(group,
-                    hudGroupConfig("player_list", group.id(),
-                            EnumChatFormatting.getTextWithoutFormattingCodes(group.displayName()),
-                            hud, group.ordinal() * 40));
+            hudGroups.put(group, hudGroupConfig("player_list", group.id(),
+                    TextCodes.strip(group.displayName()), hud, group.ordinal() * 40));
         }
         subsubcategory("enchantments", source("Enchantments"));
         enchantmentFormat = choiceSetting("enchantment_format", source("Enchantment format"),

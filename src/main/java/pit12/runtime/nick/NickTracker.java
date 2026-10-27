@@ -26,13 +26,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
-import net.minecraft.util.EnumChatFormatting;
 import pit12.runtime.player.PlayerNameCache;
 import pit12.runtime.player.TabPresence;
 import pit12.runtime.player.TabPresenceListener;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
+import pit12.shared.text.TextCodes;
 
 /** Use this API on the client thread. */
 public final class NickTracker implements ClientLifecycle, TabPresenceListener {
@@ -126,7 +126,7 @@ public final class NickTracker implements ClientLifecycle, TabPresenceListener {
     }
 
     private boolean isNpc(String display) {
-        String plain = EnumChatFormatting.getTextWithoutFormattingCodes(display).trim();
+        String plain = TextCodes.strip(display).trim();
         return plain.contains("[NPC]") || NPC_TAB_NAME.matcher(display).lookingAt();
     }
 }

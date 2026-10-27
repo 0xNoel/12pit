@@ -28,7 +28,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,6 +42,7 @@ import pit12.runtime.session.ClientSession;
 import pit12.shared.chat.ChatFeedback;
 import pit12.shared.chat.ChatFeedback.Tone;
 import pit12.shared.lifecycle.ClientLifecycle;
+import pit12.shared.text.TextCodes;
 
 public final class BanAlertFeature implements ClientLifecycle, TabPresenceListener {
     private static final String BAN_MESSAGE_PREFIX = "A player has been removed from your game";
@@ -153,8 +153,8 @@ public final class BanAlertFeature implements ClientLifecycle, TabPresenceListen
             return;
         }
         String message = event.message.getUnformattedText();
-        if (!message.contains(BAN_MESSAGE_PREFIX) || !EnumChatFormatting
-                .getTextWithoutFormattingCodes(message).startsWith(BAN_MESSAGE_PREFIX)) {
+        if (!message.contains(BAN_MESSAGE_PREFIX)
+                || !TextCodes.strip(message).startsWith(BAN_MESSAGE_PREFIX)) {
             return;
         }
         session.refresh();
