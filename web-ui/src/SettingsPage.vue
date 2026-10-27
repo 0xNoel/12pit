@@ -31,7 +31,6 @@ const props = defineProps<{
   profilesLoading: boolean
   busy: boolean
   pending: boolean
-  showDetails: boolean
   capturing: { featureId: string; settingId: string } | null
 }>()
 const emit = defineEmits<{
@@ -109,7 +108,6 @@ function languageOpened() {
         :system-locale="systemLocale"
         :requested-language="requestedLanguage"
         :busy="busy || pending"
-        :show-details="showDetails"
         @open="languageOpened"
         @change="changeSetting(option.id, $event)"
       />
@@ -121,7 +119,6 @@ function languageOpened() {
           capturing?.settingId === option.id
         "
         :busy="pending"
-        :show-details="showDetails"
         @change="changeSetting(option.id, $event)"
         @capture="emit('capture', settings.id, option.id)"
         @cancel="emit('cancel')"

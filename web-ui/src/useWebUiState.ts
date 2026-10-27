@@ -116,12 +116,6 @@ export function useWebUiState() {
     () =>
       settingsOptions.value?.find((option) => option.id === 'gui_color')!.value,
   )
-  const showDetails = computed(() =>
-    Boolean(
-      settingsOptions.value?.find((option) => option.id === 'show_details')!
-        .value,
-    ),
-  )
   const featuresById = new Map<string, Feature>()
   const optionsById = new Map<string, Option>()
   const confirmedSettings = new Map<string, SettingValue>()
@@ -510,7 +504,6 @@ export function useWebUiState() {
     pending,
     busy,
     features,
-    showDetails,
     favorites,
     toggleFavorite,
     setting,

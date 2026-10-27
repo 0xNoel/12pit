@@ -26,7 +26,6 @@ defineProps<{
   sections: Feature['sections']
   capturing: { featureId: string; settingId: string } | null
   busy: boolean
-  showDetails: boolean
 }>()
 const emit = defineEmits<{
   change: [settingId: string, value: boolean | number | string]
@@ -49,7 +48,6 @@ const emit = defineEmits<{
         capturing?.featureId === featureId && capturing?.settingId === option.id
       "
       :busy="busy"
-      :show-details="showDetails"
       @change="emit('change', option.id, $event)"
       @capture="emit('capture', option.id)"
       @cancel="emit('cancel')"

@@ -39,7 +39,6 @@ const {
   pending,
   busy,
   features,
-  showDetails,
   favorites,
   toggleFavorite,
   setting,
@@ -286,7 +285,6 @@ function closeTransfer() {
             :selected-id="selectedId"
             :capturing="capturing"
             :busy="pending"
-            :show-details="showDetails"
             @open="openFeature"
             @back="selectPage('features')"
             @favorite="toggleFavorite"
@@ -309,7 +307,6 @@ function closeTransfer() {
             :profiles-loading="state.profiles.loadState === 'LOADING'"
             :busy="busy"
             :pending="pending || !state.webui.ready"
-            :show-details="showDetails"
             :capturing="capturing"
             @reset="resetProfile"
             @transfer="openTransfer"

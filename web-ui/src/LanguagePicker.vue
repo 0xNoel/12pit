@@ -29,7 +29,6 @@ const props = defineProps<{
   systemLocale: string
   requestedLanguage: number | null
   busy: boolean
-  showDetails: boolean
 }>()
 const emit = defineEmits<{
   change: [value: number]
@@ -94,7 +93,7 @@ watch(
   <div class="row list-row">
     <div>
       <strong><FormattedText :text="option.name" /></strong>
-      <p v-if="showDetails && option.description">
+      <p v-if="option.description">
         <FormattedText :text="option.description" />
       </p>
     </div>

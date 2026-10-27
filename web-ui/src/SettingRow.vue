@@ -30,7 +30,6 @@ const props = defineProps<{
   option: Option
   capturing: boolean
   busy: boolean
-  showDetails: boolean
 }>()
 const emit = defineEmits<{
   change: [value: boolean | number | string]
@@ -144,7 +143,7 @@ function keyLabel(value: string): string {
   <div class="row list-row">
     <div>
       <strong><FormattedText :text="option.name" /></strong>
-      <p v-if="showDetails && option.description">
+      <p v-if="option.description">
         <FormattedText :text="option.description" />
       </p>
     </div>
