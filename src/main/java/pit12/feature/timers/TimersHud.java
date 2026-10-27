@@ -121,12 +121,10 @@ final class TimersHud implements HudElement {
         metricsDirty |= unicode != nextUnicode;
         unicode = nextUnicode;
         if (editing) {
-            String name = minecraft.thePlayer == null ? "You"
-                    : minecraft.thePlayer.getDisplayName().getFormattedText();
             content = new ArrayList<>();
             for (TimerType next : TimerType.values()) {
                 if (type == null ? !config.hudGroups.get(next).independent() : type == next) {
-                    content.add(new Row(next, Group.OWN, name, 10_000_000_000L));
+                    content.add(sampleRow(next));
                 }
             }
         } else {
@@ -203,6 +201,21 @@ final class TimersHud implements HudElement {
             renderer.text(row.time, width - 4 - row.timeWidth, y, row.group.color(config),
                     hudConfig);
             y += lineHeight;
+        }
+    }
+
+    private static Row sampleRow(TimerType type) {
+        switch (type) {
+            case PIN:
+                return new Row(type, Group.OWN, "§5[§b§l120§5] §7PlayerOne", 3_500_000_000L);
+            case VENOM:
+                return new Row(type, Group.FRIEND, "§e[§f§l117§e] §aPlayerThree", 6_000_000_000L);
+            case JUMP_BOOST:
+                return new Row(type, Group.ENEMY, "§c[§d§l109§c] §7PlayerFour", 8_000_000_000L);
+            case TELEBOW:
+                return new Row(type, Group.OTHER, "§6[§f§l112§6] §bPlayerSeven", 15_000_000_000L);
+            default:
+                throw new AssertionError(type);
         }
     }
 

@@ -44,7 +44,6 @@ import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
 import pit12.shared.build.BuildConfig;
 import pit12.shared.rendering.FontWidths;
-import pit12.shared.text.PlayerNameFormatter;
 
 final class PlayerListHud implements HudElement {
     private static final int GAP = 15;
@@ -455,37 +454,50 @@ final class PlayerListHud implements HudElement {
     }
 
     private PlayerListSnapshot sampleSnapshot() {
-        String firstName = "§5[§f§l113§5] §6PlayerOne §e✫ §6300g";
-        String secondName = "§f[§e54§f] §aPlayerTwo §c♨";
-        String darkName = "§9[§320§9] §aPlayerThree §b400g";
-        if (config.shortPlayerNames()) {
-            firstName = PlayerNameFormatter.shorten(firstName);
-            secondName = PlayerNameFormatter.shorten(secondName);
-            darkName = PlayerNameFormatter.shorten(darkName);
-        }
-        firstName += " §e§lN";
+        String regularOne = "§5[§b§l120§5] §7PlayerOne";
+        String regularTwo = "§d[§f§l113§d] §7PlayerTwo";
+        String friend = "§e[§f§l117§e] §aPlayerThree";
+        String enemy = "§c[§d§l109§c] §7PlayerFour";
+        String nick = config.nickMarker() ? "§f[§5§l98§f] §bPlayerFive §e§lN"
+                : "§f[§5§l98§f] §bPlayerFive";
+        String dark = "§4[§d§l104§4] §7PlayerSix";
+        String bountyHunter = "§6[§f§l112§6] §bPlayerSeven";
         Map<PlayerListGroup, List<PlayerListEntry>> groups = new EnumMap<>(PlayerListGroup.class);
         groups.put(PlayerListGroup.REGULARITY,
                 Arrays.asList(
-                        new PlayerListEntry(null, 0, firstName,
+                        new PlayerListEntry(null, 0, regularOne,
                                 sampleEnchantments(new PitEnchantment[] {PitEnchantment.Regularity,
                                         PitEnchantment.Gotta_go_fast}, 3, 3),
                                 null, 45.0F, -135.0F, true, true, false),
-                        new PlayerListEntry(null, 0, secondName,
+                        new PlayerListEntry(null, 0, regularTwo,
                                 sampleEnchantments(new PitEnchantment[] {PitEnchantment.Regularity,
                                         PitEnchantment.Gotta_go_fast, PitEnchantment.Solitude}, 3,
                                         3, 2),
                                 null, 0.0F, 0.0F, false, false, true)));
+        groups.put(PlayerListGroup.FRIEND,
+                Collections.singletonList(new PlayerListEntry(null, 0, friend,
+                        sampleEnchantments(
+                                new PitEnchantment[] {PitEnchantment.Sweaty, PitEnchantment.Mirror},
+                                3, 1),
+                        null, 12.0F, 20.0F, true, true, false)));
+        groups.put(PlayerListGroup.ENEMY,
+                Collections.singletonList(new PlayerListEntry(null, 0, enemy,
+                        sampleEnchantments(new PitEnchantment[] {PitEnchantment.Regularity,
+                                PitEnchantment.Peroxide}, 3, 3),
+                        null, 28.0F, -60.0F, true, true, false)));
+        groups.put(PlayerListGroup.NICK,
+                Collections.singletonList(new PlayerListEntry(null, 0, nick,
+                        sampleEnchantments(new PitEnchantment[] {PitEnchantment.Somber,
+                                PitEnchantment.Combo_Venom}, 1, 1),
+                        null, 0.0F, 0.0F, false, false, true)));
         groups.put(PlayerListGroup.DARK,
-                Collections.singletonList(new PlayerListEntry(null, 0, darkName,
-                        sampleEnchantments(new PitEnchantment[] {PitEnchantment.Somber}, 1), null,
-                        0.0F, 0.0F, false, false, true)));
-        for (PlayerListGroup group : PlayerListGroup.values()) {
-            if (!groups.containsKey(group)) {
-                groups.put(group,
-                        Collections.singletonList(groups.get(PlayerListGroup.REGULARITY).get(0)));
-            }
-        }
+                Collections.singletonList(new PlayerListEntry(null, 0, dark,
+                        sampleEnchantments(new PitEnchantment[] {PitEnchantment.Somber,
+                                PitEnchantment.Mind_Assault}, 1, 1),
+                        null, 18.0F, 90.0F, true, true, false)));
+        groups.put(PlayerListGroup.BOUNTY_HUNTER,
+                Collections.singletonList(new PlayerListEntry(null, 0, bountyHunter, null, null,
+                        0.0F, 0.0F, false, false, false)));
         return PlayerListSnapshot.create(groups);
     }
 
