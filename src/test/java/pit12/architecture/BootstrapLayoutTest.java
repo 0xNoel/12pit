@@ -93,9 +93,8 @@ public final class BootstrapLayoutTest {
                     category = new WebUiConfig(new Languages(ClientThread.current())).category();
                     assertNull("Global settings have no feature category", category);
                 } else {
-                    category = FeatureConfig.class
-                            .cast(Class.forName(type).getDeclaredConstructor().newInstance())
-                            .category();
+                    category = ((FeatureConfig) Class.forName(type).getDeclaredConstructor()
+                            .newInstance()).category();
                     assertNotNull("Missing config category in " + name, category);
                     assertTrue("Unknown config category in " + name,
                             categories.contains(category.id()));

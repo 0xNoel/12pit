@@ -18,6 +18,8 @@
  */
 package pit12.feature.webui;
 
+import static pit12.runtime.languages.Languages.source;
+
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
@@ -33,6 +35,8 @@ import pit12.feature.hudeditor.api.HudEditor;
 import pit12.feature.profile.api.Profiles;
 import pit12.feature.relation.api.Relations;
 import pit12.feature.swap.api.SwapBindings;
+import pit12.runtime.command.CommandNode;
+import pit12.runtime.command.CommandRegistry;
 import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
@@ -55,7 +59,7 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
 
     public WebUiFeature(ConfigCatalog catalog, ConfigCatalog settings, Profiles profiles,
             Relations relations, HudEditor hudEditor, SwapBindings swapBindings, WebUiConfig config,
-            Languages language, Path path) {
+            CommandRegistry commands, Languages language, Path path) {
         this.settings = settings;
         this.language = language;
         this.config = config;
@@ -67,6 +71,10 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
         WebUiRoutes routes = new WebUiRoutes();
         api.register(routes);
         server = new WebUiServer(minecraft, routes, events);
+        commands.register(
+                CommandNode.command("settings", source("Open the configuration interface"))
+                        .aliases("config", "clickgui").executes((sender, args) -> open()).build(),
+                true);
     }
 
     @Override
