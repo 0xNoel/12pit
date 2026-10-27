@@ -49,6 +49,9 @@ import pit12.feature.denick.api.DenickNames;
 import pit12.feature.discordrpc.DiscordRpcFeature;
 import pit12.feature.eventlist.EventListConfig;
 import pit12.feature.eventlist.EventListFeature;
+import pit12.feature.fontcachefix.FontCacheFixBinding;
+import pit12.feature.fontcachefix.FontCacheFixConfig;
+import pit12.feature.fontcachefix.FontCacheFixFeature;
 import pit12.feature.gamma.GammaBinding;
 import pit12.feature.gamma.GammaConfig;
 import pit12.feature.gamma.GammaFeature;
@@ -234,6 +237,9 @@ public final class ClientBootstrap {
                 (MinecraftActions) minecraft);
         // Category: Patch
         registerCommandFix(configs, (CommandFixBinding) ClientCommandHandler.instance);
+        if (minecraft instanceof FontCacheFixBinding) {
+            registerFontCacheFix(configs, (FontCacheFixBinding) minecraft);
+        }
         if (FMLClientHandler.instance().hasOptifine()) {
             registerResourceLeakFix(configs,
                     (ResourceLeakFixBinding) minecraft.getTextureMapBlocks());
@@ -475,6 +481,12 @@ public final class ClientBootstrap {
         CommandFixConfig config = new CommandFixConfig();
         configs.register(config);
         components.add(new CommandFixFeature(config, binding));
+    }
+
+    private void registerFontCacheFix(ConfigCatalog configs, FontCacheFixBinding binding) {
+        FontCacheFixConfig config = new FontCacheFixConfig();
+        configs.register(config);
+        components.add(new FontCacheFixFeature(config, binding));
     }
 
     private void registerResourceLeakFix(ConfigCatalog configs, ResourceLeakFixBinding binding) {
