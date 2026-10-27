@@ -36,12 +36,15 @@ final class WebUiRoutes {
         final String[] segments;
         final int bodyLimit;
         final Function<Request, Object> handler;
+        final Function<Request, Object> lookup;
 
-        Route(String method, String path, int bodyLimit, Function<Request, Object> handler) {
+        Route(String method, String path, int bodyLimit, Function<Request, Object> handler,
+                Function<Request, Object> lookup) {
             this.method = method;
             segments = path.split("/", -1);
             this.bodyLimit = bodyLimit;
             this.handler = handler;
+            this.lookup = lookup;
         }
 
         Map<String, String> match(String[] path) {
@@ -86,8 +89,19 @@ final class WebUiRoutes {
     private final List<Route> templates = new ArrayList<>();
 
     void register(String method, String path, int bodyLimit, Function<Request, Object> handler) {
+        add(method, path, bodyLimit, handler, null);
+    }
+
+    /** The lookup runs on the HTTP thread; a miss runs the handler on the client thread. */
+    void registerCached(String method, String path, Function<Request, Object> lookup,
+            Function<Request, Object> handler) {
+        add(method, path, 0, handler, lookup);
+    }
+
+    private void add(String method, String path, int bodyLimit, Function<Request, Object> handler,
+            Function<Request, Object> lookup) {
         String key = method + " " + path;
-        Route route = new Route(method, path, bodyLimit, handler);
+        Route route = new Route(method, path, bodyLimit, handler, lookup);
         if (routes.putIfAbsent(key, route) != null)
             throw new IllegalStateException("Duplicate interface route: " + key);
         if (path.contains("{"))

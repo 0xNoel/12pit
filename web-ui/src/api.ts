@@ -92,6 +92,12 @@ export interface WebUiPreferences {
   problem: SourceText | null
 }
 
+export interface WebUiLink {
+  id: string
+  name: string
+  url: string
+}
+
 export interface ProfilesState {
   loadState: 'LOADING' | 'READY' | 'DEGRADED'
   activeId: string | null
@@ -149,6 +155,7 @@ async function request<T>(
 }
 
 export const loadCatalog = () => request<ConfigurationCatalog>('/api/settings')
+export const loadLinks = () => request<WebUiLink[]>('/api/links')
 export const loadSettingValues = (featureId?: string) =>
   request<SettingValue[]>(
     `/api/settings/${encodeURIComponent(featureId ?? 'values')}`,

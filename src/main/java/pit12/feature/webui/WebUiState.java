@@ -128,6 +128,15 @@ final class WebUiState {
         return object("swapBindings", object("problem", swapBindings.readinessProblem()));
     }
 
+    List<Object> links() {
+        List<Object> links = new ArrayList<>();
+        links.add(
+                object("id", "discord", "name", "Discord", "url", "https://discord.gg/e9PRKMUenc"));
+        links.add(
+                object("id", "github", "name", "GitHub", "url", "https://github.com/12src/12pit"));
+        return links;
+    }
+
     private Map<String, Object> featureState(FeatureConfig feature) {
         List<Object> sections = new ArrayList<>();
         Map<String, Map<String, Object>> byId = new LinkedHashMap<>();

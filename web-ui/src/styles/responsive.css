@@ -56,10 +56,6 @@
   .brand-name {
     font-size: 23px;
   }
-  .brand-version {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
   .community-links {
     position: absolute;
     top: 9px;
@@ -86,6 +82,24 @@
     min-height: 34px;
     padding: 0 11px;
     font-size: 12px;
+  }
+  .nav-skeleton-item {
+    flex: none;
+    width: auto;
+    min-height: 34px;
+    padding: 0 11px;
+  }
+  .nav-skeleton-item:nth-child(1) .skeleton {
+    width: 49px;
+  }
+  .nav-skeleton-item:nth-child(2) .skeleton {
+    width: 43px;
+  }
+  .nav-skeleton-item:nth-child(3) .skeleton {
+    width: 52px;
+  }
+  .nav-skeleton-item:nth-child(4) .skeleton {
+    width: 48px;
   }
   nav button.active {
     background: var(--wash);

@@ -163,6 +163,13 @@ final class WebUiServer {
             }
             return;
         }
+        if (request.route.lookup != null) {
+            Object cached = request.route.lookup.apply(request);
+            if (cached != null) {
+                sendJson(exchange, 200, cached);
+                return;
+            }
+        }
         if (request.route.bodyLimit == 0) {
             sendJson(exchange, 200, onClient(() -> request.route.handler.apply(request)));
             return;
@@ -242,7 +249,12 @@ final class WebUiServer {
                             : path.endsWith(".css") ? "text/css; charset=utf-8"
                                     : path.endsWith(".png") ? "image/png"
                                             : "application/octet-stream";
-            sendBytes(exchange, 200, type, readLimited(resource, 4 * 1024 * 1024));
+            byte[] bytes = readLimited(resource, 4 * 1024 * 1024);
+            // Vite includes a content hash in asset filenames.
+            exchange.getResponseHeaders().set("Cache-Control",
+                    path.startsWith("/assets/") ? "public, max-age=31536000, immutable"
+                            : "no-cache");
+            sendBytes(exchange, 200, type, bytes);
         }
     }
 
