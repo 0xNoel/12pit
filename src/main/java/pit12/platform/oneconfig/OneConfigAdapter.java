@@ -52,18 +52,21 @@ import pit12.runtime.config.IntegerSetting;
 import pit12.runtime.config.KeybindSetting;
 import pit12.runtime.config.NumberSetting;
 import pit12.runtime.config.Setting;
+import pit12.runtime.hud.HudRegistry;
 import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeListener {
     private static final Logger LOGGER = Logger.getLogger(OneConfigAdapter.class.getName());
     private final ConfigCatalog catalog;
+    private final OneConfigHudAdapter hudAdapter;
     private final List<Mod> featureMods = new ArrayList<>();
     private final List<ConfigKeyBind> keybindControls = new ArrayList<>();
     private RootView view;
 
-    OneConfigAdapter(ConfigCatalog catalog) {
+    OneConfigAdapter(ConfigCatalog catalog, HudRegistry hudRegistry) {
         this.catalog = catalog;
+        hudAdapter = new OneConfigHudAdapter(hudRegistry);
     }
 
     @Override
@@ -82,11 +85,13 @@ public final class OneConfigAdapter implements ClientLifecycle, ConfigChangeList
         ConfigCore.mods.addAll(featureMods);
         Config.register(view.mod);
         catalog.addListener(this);
+        hudAdapter.start();
     }
 
     @Override
     public void stop() {
         catalog.clientThread().check();
+        hudAdapter.stop();
         catalog.removeListener(this);
         for (ConfigKeyBind control : keybindControls) {
             EventManager.INSTANCE.unregister(control);
