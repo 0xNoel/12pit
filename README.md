@@ -4,7 +4,7 @@
 
 English | [简体中文](docs/zh-CN/README.md)
 
-12pit is a lightweight and open-source Forge mod for The Pit on Minecraft 1.8.9. It features a configuration interface and supports [OneConfig](https://github.com/Polyfrost/OneConfig).
+12pit is a free and open-source for The Pit. It has its own configuration interface and also supports [OneConfig](https://github.com/Polyfrost/OneConfig). It is also compatible with Lunar Client.
 
 12pit is recommended to be run with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home).
 
