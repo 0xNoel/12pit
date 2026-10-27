@@ -23,13 +23,16 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import pit12.shared.concurrent.ClientThread;
 
 public final class HudRegistry {
     private final List<HudElement> elements = new ArrayList<>();
     private final List<HudElement> elementsView = Collections.unmodifiableList(elements);
     private final Map<String, HudElement> elementsById = new LinkedHashMap<>();
+    private final List<Listener> listeners = new ArrayList<>();
     private boolean editing;
+    private BooleanSupplier externalEditor = () -> false;
     private final ClientThread client;
 
     public HudRegistry(ClientThread client) {
@@ -53,6 +56,9 @@ public final class HudRegistry {
         }
         elements.add(element);
         elementsById.put(id, element);
+        for (Listener listener : listeners) {
+            listener.onRegistered(element);
+        }
     }
 
     public void unregister(HudElement element) {
@@ -62,6 +68,19 @@ public final class HudRegistry {
         }
         elementsById.remove(element.id());
         elements.remove(element);
+        for (Listener listener : listeners) {
+            listener.onUnregistered(element);
+        }
+    }
+
+    public void addListener(Listener listener) {
+        client.check();
+        listeners.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        client.check();
+        listeners.remove(listener);
     }
 
     public List<HudElement> elements() {
@@ -76,11 +95,22 @@ public final class HudRegistry {
 
     public boolean editing() {
         client.check();
-        return editing;
+        return editing || externalEditor.getAsBoolean();
     }
 
     public void setEditing(boolean editing) {
         client.check();
         this.editing = editing;
+    }
+
+    public void setExternalEditor(BooleanSupplier externalEditor) {
+        client.check();
+        this.externalEditor = externalEditor;
+    }
+
+    public interface Listener {
+        void onRegistered(HudElement element);
+
+        void onUnregistered(HudElement element);
     }
 }

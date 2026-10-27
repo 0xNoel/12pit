@@ -246,7 +246,7 @@ public final class ClientBootstrap {
         }
         registerScoreboardFix(configs, (ScoreboardFixBinding) minecraft);
         // Platform integrations
-        OneConfigSupport oneConfig = new OneConfigSupport(configs);
+        OneConfigSupport oneConfig = new OneConfigSupport(configs, hudRegistry);
         components.add(oneConfig);
         language.addListener(() -> configs.localize(language));
         language.addListener(() -> webUiConfigs.localize(language));
