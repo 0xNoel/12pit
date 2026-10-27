@@ -38,7 +38,7 @@ public abstract class ClientCommandHandlerMixin implements CommandFixBinding {
         pit12$commandFixConfig = config;
     }
 
-    @Inject(method = "executeCommand", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "executeCommand", at = @At("HEAD"), cancellable = true, remap = true)
     private void pit12$requireSlash(ICommandSender sender, String message,
             CallbackInfoReturnable<Integer> cir) {
         if (pit12$commandFixConfig != null && pit12$commandFixConfig.enabled()
