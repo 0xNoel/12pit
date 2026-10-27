@@ -39,7 +39,6 @@ public final class NametagConfig extends FeatureConfig {
     private final BooleanSetting showGem;
     private final BooleanSetting showHeldItem;
     private final BooleanSetting showLeggings;
-    private final IntegerSetting displayDistance;
     private final IntegerSetting upwardOffset;
 
     public NametagConfig() {
@@ -72,8 +71,6 @@ public final class NametagConfig extends FeatureConfig {
                 source("Shows Telebow cooldowns after player names while Timers is enabled."),
                 true);
         subsubcategory("display", source("Display"));
-        displayDistance = integerSliderSetting("display_distance", source("Display distance"),
-                source("Shows enchantments within this distance, in blocks."), 32, 1, 64, 1);
         upwardOffset = integerSliderSetting("upward_offset", source("Upward offset"),
                 source("Moves enchantments above the nametag, in hundredths of a block."), 36, 20,
                 40, 1);
@@ -107,10 +104,6 @@ public final class NametagConfig extends FeatureConfig {
 
     public boolean showLeggings() {
         return showLeggings.get();
-    }
-
-    public int displayDistance() {
-        return displayDistance.get();
     }
 
     public int upwardOffset() {

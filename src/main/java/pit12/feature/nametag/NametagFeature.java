@@ -260,10 +260,9 @@ public final class NametagFeature
         }
         EntityPlayer player = (EntityPlayer) event.entity;
         double distanceSquared = player.getDistanceSqToEntity(camera);
-        int distance = config.displayDistance();
         float nameRange = player.isSneaking() ? RendererLivingEntity.NAME_TAG_RANGE_SNEAK
                 : RendererLivingEntity.NAME_TAG_RANGE;
-        if (distanceSquared > distance * distance || distanceSquared >= nameRange * nameRange
+        if (distanceSquared >= nameRange * nameRange
                 || player.isInvisibleToPlayer(minecraft.thePlayer)) {
             return;
         }
