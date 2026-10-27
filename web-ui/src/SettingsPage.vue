@@ -26,7 +26,6 @@ import SettingRow from './SettingRow.vue'
 
 const props = defineProps<{
   settings: Feature
-  systemLocale: string
   requestedLanguage: number | null
   profilesLoading: boolean
   busy: boolean
@@ -105,7 +104,6 @@ function languageOpened() {
       <LanguagePicker
         v-if="option.id === 'language'"
         :option="option"
-        :system-locale="systemLocale"
         :requested-language="requestedLanguage"
         :busy="busy || pending"
         @open="languageOpened"

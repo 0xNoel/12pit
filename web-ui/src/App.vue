@@ -302,7 +302,6 @@ function closeTransfer() {
           <SettingsPage
             v-else-if="page === 'settings'"
             :settings="state.webui.settings"
-            :system-locale="state.webui.systemLanguage"
             :requested-language="requestedLanguage"
             :profiles-loading="state.profiles.loadState === 'LOADING'"
             :busy="busy"

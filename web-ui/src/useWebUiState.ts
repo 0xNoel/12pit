@@ -64,7 +64,6 @@ export interface WebUiState {
 export type ProfileAction = 'create' | 'rename' | 'delete' | 'switch' | 'reset'
 
 const emptyPreferences: WebUiPreferences = {
-  systemLanguage: '',
   languageHint: false,
   favorites: [],
   ready: false,

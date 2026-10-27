@@ -26,7 +26,6 @@ import SearchField from './SearchField.vue'
 
 const props = defineProps<{
   option: Option
-  systemLocale: string
   requestedLanguage: number | null
   busy: boolean
 }>()
@@ -56,9 +55,7 @@ const choices = computed(() => {
         choice.locale!.includes(query),
     )
 })
-const detected = computed(() =>
-  systemLanguage(props.option, props.systemLocale),
-)
+const detected = computed(() => systemLanguage(props.option))
 
 function open(value = Number(props.option.value)) {
   emit('open')

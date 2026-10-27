@@ -85,11 +85,17 @@ export interface ConfigurationCatalog {
 }
 
 export interface WebUiPreferences {
-  systemLanguage: string
   languageHint: boolean
   favorites: string[]
   ready: boolean
   problem: SourceText | null
+}
+
+export interface LanguageHint {
+  message: string
+  gotIt: string
+  hide: string
+  switch: string
 }
 
 export interface WebUiLink {
@@ -156,6 +162,8 @@ async function request<T>(
 
 export const loadCatalog = () => request<ConfigurationCatalog>('/api/settings')
 export const loadLinks = () => request<WebUiLink[]>('/api/links')
+export const loadLanguageHint = (locale: string) =>
+  request<LanguageHint>(`/api/languages/${encodeURIComponent(locale)}/hint`)
 export const loadSettingValues = (featureId?: string) =>
   request<SettingValue[]>(
     `/api/settings/${encodeURIComponent(featureId ?? 'values')}`,

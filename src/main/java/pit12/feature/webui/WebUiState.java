@@ -23,7 +23,6 @@ import static pit12.feature.webui.WebUiJson.object;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import pit12.feature.profile.api.ProfileSummary;
 import pit12.feature.profile.api.Profiles;
@@ -96,9 +95,8 @@ final class WebUiState {
     }
 
     Map<String, Object> preferences() {
-        return object("favorites", preferences.favorites(), "systemLanguage",
-                Locale.getDefault().toLanguageTag(), "languageHint", config.languageHint().get(),
-                "ready", preferences.ready(), "problem",
+        return object("favorites", preferences.favorites(), "languageHint",
+                config.languageHint().get(), "ready", preferences.ready(), "problem",
                 Languages.sourceText(preferences.problem()));
     }
 
@@ -194,9 +192,10 @@ final class WebUiState {
         if (setting instanceof ChoiceSetting) {
             List<Object> choices = new ArrayList<>();
             for (ChoiceSetting.Choice choice : ((ChoiceSetting) setting).choices()) {
-                Map<String, Object> entry =
-                        object("value", choice.value(), "name", choice.displayName());
-                if (setting == config.language()) {
+                boolean isLanguage = setting == config.language();
+                Map<String, Object> entry = object("value", choice.value(), "name",
+                        isLanguage ? language.name(choice.value()) : choice.displayName());
+                if (isLanguage) {
                     entry.put("locale", language.locale(choice.value()));
                     entry.put("displayName", language.displayNameSource(choice.value()));
                 }
