@@ -44,7 +44,7 @@ public abstract class GuiIngameForgeMixin extends GuiIngame implements HeldItemT
     }
 
     @ModifyVariable(method = "renderToolHightlight", remap = false,
-            at = @At(value = "STORE", ordinal = 0), require = 0)
+            at = @At(value = "STORE", ordinal = 0))
     private String pit12$replaceHeldItemName(String originalName) {
         TooltipConfig config = pit12$tooltipConfig;
         if (config == null || !config.enabled() || !config.showEnchantments()) {
@@ -56,8 +56,7 @@ public abstract class GuiIngameForgeMixin extends GuiIngame implements HeldItemT
     }
 
     // Slot 4 holds the tooltip Y coordinate before either font renderer is chosen.
-    @ModifyVariable(method = "renderToolHightlight", remap = false, at = @At("STORE"), index = 4,
-            require = 0)
+    @ModifyVariable(method = "renderToolHightlight", remap = false, at = @At("STORE"), index = 4)
     private int pit12$moveHeldItemTooltipUp(int originalY) {
         TooltipConfig config = pit12$tooltipConfig;
         return config == null || !config.enabled() ? originalY : originalY - config.upwardOffset();

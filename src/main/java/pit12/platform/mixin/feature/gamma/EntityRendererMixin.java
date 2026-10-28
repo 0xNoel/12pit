@@ -42,10 +42,8 @@ public abstract class EntityRendererMixin implements GammaBinding {
     }
 
     // Leave the saved brightness alone. We only need a different value while rendering.
-    @Redirect(method = "updateLightmap",
-            at = @At(value = "FIELD",
-                    target = "Lnet/minecraft/client/settings/GameSettings;gammaSetting:F"),
-            require = 0)
+    @Redirect(method = "updateLightmap", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/client/settings/GameSettings;gammaSetting:F"))
     private float pit12$useConfiguredGamma(GameSettings settings) {
         GammaConfig config = pit12$gammaConfig;
         return config != null && config.enabled() ? config.gamma() : settings.gammaSetting;

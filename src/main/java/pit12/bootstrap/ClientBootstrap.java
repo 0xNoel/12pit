@@ -108,6 +108,7 @@ import pit12.platform.forge.ForgeCommandAdapter;
 import pit12.platform.lunar.LunarSupport;
 import pit12.platform.lunar.LunarTextureState;
 import pit12.platform.lwjgl.LwjglInputDevice;
+import pit12.platform.mixinconfig.MixinFailureWarning;
 import pit12.platform.oneconfig.OneConfigSupport;
 import pit12.runtime.arrow.ArrowTracker;
 import pit12.runtime.command.CommandRegistry;
@@ -250,6 +251,7 @@ public final class ClientBootstrap {
         }
         registerScoreboardFix(configs, (ScoreboardFixBinding) minecraft);
         // Platform integrations
+        components.add(new MixinFailureWarning(minecraft, session, language));
         OneConfigSupport oneConfig = new OneConfigSupport(configs, hudRegistry);
         components.add(oneConfig);
         language.addListener(() -> configs.localize(language));
