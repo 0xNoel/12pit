@@ -98,7 +98,7 @@ public final class NickTracker implements ClientLifecycle, TabPresenceListener {
                 || !checked.add(playerId)) {
             return;
         }
-        String display = names.displayName(playerId);
+        String display = names.shortName(playerId);
         if (display == null || isNpc(display)) {
             return;
         }

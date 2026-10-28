@@ -462,7 +462,7 @@ public final class TimersFeature
                     group = relation == Relation.FRIEND ? Group.FRIEND
                             : relation == Relation.ENEMY ? Group.ENEMY : Group.OTHER;
                 }
-                String name = playerNames.displayName(playerId);
+                String name = playerNames.shortName(playerId);
                 if (name == null)
                     name = timer.player.getDisplayName().getFormattedText();
                 if (timer.row == null) {

@@ -607,7 +607,7 @@ public final class DenickFeature implements ClientLifecycle, DenickNames, TabPre
 
     private String displayName(Target target) {
         // Refreshing the name can remove an NPC target before a query reply.
-        String displayName = names.displayName(target.id);
+        String displayName = names.shortName(target.id);
         return displayName == null ? target.name : displayName;
     }
 
