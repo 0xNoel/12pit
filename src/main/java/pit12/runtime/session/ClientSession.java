@@ -26,18 +26,22 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import pit12.shared.concurrent.ClientThread;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-/** Both connection and world are updated before listeners run. */
+/** Session changes are published after one quiet client tick. */
 public final class ClientSession implements ClientLifecycle {
     private final Minecraft minecraft;
     private final ClientThread client;
     private final ClientSessionBinding binding;
     private final SessionState<NetHandlerPlayClient, WorldClient> state = new SessionState<>();
     private final List<Runnable> listeners = new ArrayList<>();
+    private long lastTickRevision;
+    private long notifiedRevision;
     private boolean started;
     private volatile long generation;
 
@@ -85,6 +89,8 @@ public final class ClientSession implements ClientLifecycle {
         started = true;
         // noinspection NonAtomicOperationOnVolatileField
         generation++;
+        lastTickRevision = state.revision();
+        notifiedRevision = lastTickRevision;
         binding.bindWorldChangeListener(this::refresh);
         MinecraftForge.EVENT_BUS.register(this);
         refresh();
@@ -100,14 +106,34 @@ public final class ClientSession implements ClientLifecycle {
         generation++;
         binding.bindWorldChangeListener(null);
         MinecraftForge.EVENT_BUS.unregister(this);
-        if (state.clear())
+        state.clear();
+        if (notifiedRevision != state.revision()) {
+            notifiedRevision = state.revision();
             Listeners.notify(listeners, Runnable::run);
+        }
         listeners.clear();
     }
 
     public void refresh() {
         client.check();
-        if (started && state.update(minecraft.getNetHandler(), minecraft.theWorld)) {
+        if (started) {
+            state.update(minecraft.getNetHandler(), minecraft.theWorld);
+        }
+    }
+
+    @SubscribeEvent
+    public void onClientTick(ClientTickEvent event) {
+        client.check();
+        if (!started || event.phase != Phase.END) {
+            return;
+        }
+        long revision = state.revision();
+        if (lastTickRevision != revision) {
+            lastTickRevision = revision;
+            return;
+        }
+        if (notifiedRevision != revision) {
+            notifiedRevision = revision;
             Listeners.notify(listeners, Runnable::run);
         }
     }
@@ -120,9 +146,8 @@ public final class ClientSession implements ClientLifecycle {
                 return;
             refresh();
             NetHandlerPlayClient current = state.connection();
-            if (current != null && current.getNetworkManager() == event.manager
-                    && state.disconnect(current)) {
-                Listeners.notify(listeners, Runnable::run);
+            if (current != null && current.getNetworkManager() == event.manager) {
+                state.disconnect(current);
             }
         });
     }
@@ -133,9 +158,8 @@ public final class ClientSession implements ClientLifecycle {
             return;
         long eventGeneration = generation;
         client.execute(() -> {
-            if (started && generation == eventGeneration
-                    && state.unload((WorldClient) event.world)) {
-                Listeners.notify(listeners, Runnable::run);
+            if (started && generation == eventGeneration) {
+                state.unload((WorldClient) event.world);
             }
         });
     }
