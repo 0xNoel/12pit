@@ -38,6 +38,7 @@ import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerEquipmentCache;
 import pit12.runtime.player.PlayerEquipmentListener;
 import pit12.runtime.session.ClientSession;
+import pit12.shared.entity.PlayerPositions;
 
 public final class JumpBoostTracker implements PlayerEquipmentListener {
     private static final long DURATION_NANOS = 30_000_000_000L;
@@ -259,14 +260,8 @@ public final class JumpBoostTracker implements PlayerEquipmentListener {
             EntityPlayer player = potion.player;
             if (!player.isEntityAlive())
                 continue;
-            // Match server positions before client movement interpolation.
-            double dx =
-                    x - (player == minecraft.thePlayer ? player.posX : player.serverPosX / 32.0);
-            double dy =
-                    y - (player == minecraft.thePlayer ? player.posY : player.serverPosY / 32.0);
-            double dz =
-                    z - (player == minecraft.thePlayer ? player.posZ : player.serverPosZ / 32.0);
-            double distance = dx * dx + dy * dy + dz * dz;
+            double distance =
+                    PlayerPositions.serverDistanceSquared(player, minecraft.thePlayer, x, y, z);
             if (distance < closestDistance) {
                 closest = potion;
                 closestDistance = distance;

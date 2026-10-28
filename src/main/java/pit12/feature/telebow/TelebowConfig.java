@@ -51,7 +51,7 @@ public final class TelebowConfig extends FeatureConfig {
     public final IntegerSetting fadeTime;
 
     public TelebowConfig() {
-        super("telebow", source("Telebow Prediction"), ConfigCategory.RENDER, source(
+        super("telebow", source("Telebow prediction"), ConfigCategory.RENDER, source(
                 "Shows Telebow trails, predicted landing points, and shooter names through blocks."));
         subcategory("shooters", source("Shooters"));
         own = booleanSetting("own", source("Own"), source("Shows your Telebow trails."), true);
@@ -69,7 +69,7 @@ public final class TelebowConfig extends FeatureConfig {
                 source("Updates the cooldown estimate when arrow removal matches a shooter position update of at least 4 blocks."),
                 true);
         sneakWindow = integerSliderSetting("sneak_window_ms", source("Prediction margin (ms)"),
-                source("Predicts arrows fired within this many milliseconds after sneaking ends. Also sets the arrow hit matching window."),
+                source("Time after sneaking ends when arrows can still be predicted. Also sets the arrow hit matching window."),
                 250, 0, 1000, 25);
         subcategory("aim", source("Aim points"));
         aimPoints = booleanSetting("aim_points", source("Show aim points"), source(
@@ -87,7 +87,7 @@ public final class TelebowConfig extends FeatureConfig {
         aimNames = booleanSetting("aim_names", source("Show names"),
                 source("Shows player names next to aim points."), true);
         aimTolerance = doubleSliderSetting("aim_tolerance_blocks", source("Tolerance (blocks)"),
-                source("Maximum distance between the predicted impact and the marked landing point, in blocks."),
+                source("Maximum distance between the predicted impact and the marked landing point."),
                 2, 0.25, 8, 0.25);
         subcategory("appearance", source("Appearance"));
         ownColor = colorPickerSetting("own_color", source("Own color"),

@@ -34,7 +34,6 @@ const props = defineProps<{
   selectedId: string | null
   capturing: { featureId: string; settingId: string } | null
   busy: boolean
-  showDetails: boolean
 }>()
 const emit = defineEmits<{
   open: [id: string]
@@ -159,9 +158,7 @@ function selectSubcategory(id: string) {
           >
             <span>
               <strong><FormattedText :text="feature.name" /></strong>
-              <small v-if="showDetails"
-                ><FormattedText :text="feature.description"
-              /></small>
+              <small><FormattedText :text="feature.description" /></small>
             </span>
             <ChevronRight v-if="hasDetails" :size="16" />
           </component>
@@ -207,9 +204,6 @@ function selectSubcategory(id: string) {
         </li>
       </ol>
     </div>
-    <p v-if="showDetails" class="feature-description">
-      <FormattedText :text="current.description" />
-    </p>
     <div
       v-if="subcategories.length"
       class="category-buttons"
@@ -233,7 +227,6 @@ function selectSubcategory(id: string) {
           :sections="currentSections"
           :capturing="capturing"
           :busy="busy"
-          :show-details="showDetails"
           @change="(id, value) => emit('change', current!.id, id, value)"
           @capture="emit('capture', current!.id, $event)"
           @cancel="emit('cancel')"

@@ -38,7 +38,7 @@ public final class SmartBlockConfig extends FeatureConfig {
     final BooleanSetting lockSlot;
 
     public SmartBlockConfig() {
-        super("smart_block", source("Smart Block"), ConfigCategory.COMBAT,
+        super("smart_block", source("Smart block"), ConfigCategory.COMBAT,
                 source("Selects a Bullet Time or Bruiser sword from the hotbar while blocking."),
                 true, false);
         subsubcategory("enchantments", source("Enchantments"));
@@ -54,19 +54,18 @@ public final class SmartBlockConfig extends FeatureConfig {
                 source("Prefer Bullet Time near arrows"),
                 source("Switches to a Bullet Time sword when a flying arrow is within the detection range."),
                 false);
-        arrowRange = integerSliderSetting("arrow_range", source("Arrow detection range"),
-                source("Detects flying arrows within this distance, in blocks."), 12, 1, 32, 1);
+        arrowRange = integerSliderSetting("arrow_range", source("Arrow detection range (blocks)"),
+                source("Detects flying arrows within this distance."), 12, 1, 32, 1);
         subsubcategory("switching", source("Switching"));
         emptyHand = booleanSetting("empty_hand", source("Trigger with fist"), source(
-                "Also starts Smart Block when the right-click key is held with an empty hand."),
+                "Also starts Smart block when the right-click key is held with an empty hand."),
                 false);
-        lockSlot = booleanSetting("lock_slot", source("Prevent manual slot changes"), source(
-                "Blocks hotbar keys, scrolling, and pick block during Smart Block. Manual slot changes otherwise end the switch."),
-                true);
-        switchDelay = integerSliderSetting("switch_delay", source("Switch delay"),
-                source("Waits this many ticks before selecting the blocking sword."), 1, 0, 20, 1);
-        restoreDelay = integerSliderSetting("restore_delay", source("Restore delay"), source(
-                "Waits this many ticks after releasing the right-click key before restoring the original slot."),
+        lockSlot = booleanSetting("lock_slot", source("Prevent manual slot changes"),
+                source("Locks hotbar during Smart Block."), true);
+        switchDelay = integerSliderSetting("switch_delay", source("Switch delay (ticks)"),
+                source("Wait before selecting the blocking sword."), 1, 0, 20, 1);
+        restoreDelay = integerSliderSetting("restore_delay", source("Restore delay (ticks)"),
+                source("Wait after releasing the right-click key before restoring the original slot."),
                 0, 0, 20, 1);
     }
 }

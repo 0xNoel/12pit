@@ -18,6 +18,7 @@
  */
 package pit12.feature.relation.api;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public final class RelationEntry {
@@ -37,6 +38,10 @@ public final class RelationEntry {
     /** Null until Tab or a Mojang lookup confirms the player's identity. */
     public UUID playerId() {
         return playerId;
+    }
+
+    public Object identityKey() {
+        return playerId == null ? name.toLowerCase(Locale.ROOT) : playerId;
     }
 
     public String name() {

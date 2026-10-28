@@ -19,8 +19,9 @@ along with 12pit. If not, see <https://www.gnu.org/licenses/>.
 <script setup lang="ts">
 import { TriangleAlert } from '@lucide/vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
+import { loadLanguageHint } from './api'
+import { systemLanguage } from './languages'
 import type { WebUiState } from './useWebUiState'
-import { loadLanguage, systemLanguage, translate } from './languages'
 import UiNotice from './UiNotice.vue'
 
 const props = defineProps<{
@@ -100,30 +101,20 @@ watch(
     if (!props.state.webui.ready || checked) return
     checked = true
     if (!props.state.webui.languageHint) return
-    const available = systemLanguage(
-      option.value,
-      props.state.webui.systemLanguage,
-    )
+    const available = systemLanguage(option.value)
     if (!available || available.value === option.value.value) return
     try {
-      const catalog = await loadLanguage(available.locale!)
+      const hint = await loadLanguageHint(available.locale!)
       if (
         stopped ||
         !props.state.webui.languageHint ||
         option.value.value === available.value
       )
         return
-      const t = translate.bind(null, catalog)
       notice.value = {
-        locale: props.state.webui.systemLanguage,
+        locale: available.locale!,
         value: available.value,
-        message: t(
-          '{0} is available. Open Settings to change your language.',
-          available.name,
-        ),
-        gotIt: t('Got it'),
-        hide: t("Don't show again"),
-        switch: t('Switch language'),
+        ...hint,
       }
       resume()
     } catch (cause) {

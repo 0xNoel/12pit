@@ -49,8 +49,6 @@ public final class WebUiConfig extends FeatureConfig {
                 source("Sets the language for the interface, commands, and HUD."), 0, choices);
         colorSetting("gui_color", source("Accent color"),
                 source("Sets the interface accent color."), 0x7BADE2);
-        booleanSetting("show_details", source("Show details"),
-                source("Shows descriptions below features and settings."), false);
         discordRpc = booleanSetting("discord_rpc", "Discord RPC",
                 source("Shows 12pit activity and elapsed time on your Discord profile."), true);
         keybind = keybindSetting("keybind", source("Interface key"),

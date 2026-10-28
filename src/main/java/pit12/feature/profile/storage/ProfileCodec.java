@@ -62,7 +62,7 @@ public final class ProfileCodec {
         this.schema = schema;
     }
 
-    public DecodeResult decode(UUID expectedId, Reader reader) {
+    public DecodeResult decode(Reader reader) {
         JsonElement parsed = new JsonParser().parse(reader);
         if (!parsed.isJsonObject()) {
             throw new IllegalArgumentException("root must be a JSON object");
@@ -77,9 +77,6 @@ public final class ProfileCodec {
             throw new IllegalArgumentException("unsupported schemaVersion " + schemaVersion);
         }
         UUID id = UUID.fromString(requiredString(root, "id"));
-        if (!expectedId.equals(id)) {
-            throw new IllegalArgumentException("id does not match filename UUID");
-        }
         String name = requiredString(root, "name").trim();
         if (name.isEmpty() || name.length() > 48) {
             throw new IllegalArgumentException("name must contain 1 to 48 characters");

@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -339,11 +338,9 @@ public final class RelationFeature implements ClientLifecycle, Relations, TabPre
         String problem = readinessProblem();
         if (problem != null)
             return OperationResult.failure(Status.UNAVAILABLE, problem);
-        Set<UUID> ids = new HashSet<>();
-        Set<String> pending = new HashSet<>();
+        Set<Object> identities = new HashSet<>();
         for (RelationEntry entry : entries) {
-            if (entry.playerId() == null ? !pending.add(entry.name().toLowerCase(Locale.ROOT))
-                    : !ids.add(entry.playerId())) {
+            if (!identities.add(entry.identityKey())) {
                 return OperationResult.failure(Status.INVALID_VALUE,
                         language.translate("Duplicate relation identity"));
             }

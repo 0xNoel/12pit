@@ -76,17 +76,29 @@ export function translate(
     : translated
 }
 
-export function systemLanguage(option: Option, locale: string) {
-  const exact = option.choices!.find(
-    (choice) => choice.locale === locale.toLowerCase(),
-  )
-  if (exact) return exact
-  const requested = new Intl.Locale(locale).maximize()
-  return option.choices!.find((choice) => {
-    const available = new Intl.Locale(choice.locale!).maximize()
-    return (
-      available.language === requested.language &&
-      available.script === requested.script
+export function systemLanguage(option: Option) {
+  const locales = navigator.languages.length
+    ? navigator.languages
+    : [navigator.language]
+  for (const locale of locales) {
+    const exact = option.choices!.find(
+      (choice) => choice.locale === locale.toLowerCase(),
     )
-  })
+    if (exact) return exact
+    let requested: Intl.Locale
+    try {
+      requested = new Intl.Locale(locale).maximize()
+    } catch {
+      continue
+    }
+    // The registry uses Crowdin region tags, so maximize() fills in the script.
+    const match = option.choices!.find((choice) => {
+      const available = new Intl.Locale(choice.locale!).maximize()
+      return (
+        available.language === requested.language &&
+        available.script === requested.script
+      )
+    })
+    if (match) return match
+  }
 }

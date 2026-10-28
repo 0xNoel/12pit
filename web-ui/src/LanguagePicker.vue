@@ -26,10 +26,8 @@ import SearchField from './SearchField.vue'
 
 const props = defineProps<{
   option: Option
-  systemLocale: string
   requestedLanguage: number | null
   busy: boolean
-  showDetails: boolean
 }>()
 const emit = defineEmits<{
   change: [value: number]
@@ -57,9 +55,7 @@ const choices = computed(() => {
         choice.locale!.includes(query),
     )
 })
-const detected = computed(() =>
-  systemLanguage(props.option, props.systemLocale),
-)
+const detected = computed(() => systemLanguage(props.option))
 
 function open(value = Number(props.option.value)) {
   emit('open')
@@ -94,7 +90,7 @@ watch(
   <div class="row list-row">
     <div>
       <strong><FormattedText :text="option.name" /></strong>
-      <p v-if="showDetails && option.description">
+      <p v-if="option.description">
         <FormattedText :text="option.description" />
       </p>
     </div>

@@ -35,7 +35,6 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -220,12 +219,10 @@ final class SettingsTransfer {
             }
             groups.put(type, entries);
         }
-        Set<UUID> ids = new HashSet<>();
-        Set<String> pending = new HashSet<>();
+        Set<Object> identities = new HashSet<>();
         for (List<RelationEntry> group : groups.values()) {
             for (RelationEntry entry : group) {
-                if (entry.playerId() == null ? !pending.add(entry.name().toLowerCase(Locale.ROOT))
-                        : !ids.add(entry.playerId())) {
+                if (!identities.add(entry.identityKey())) {
                     throw new IllegalArgumentException("Duplicate relation in file");
                 }
             }
@@ -316,11 +313,9 @@ final class SettingsTransfer {
     }
 
     private static void validateResolved(List<RelationEntry> result) {
-        Set<UUID> ids = new HashSet<>();
-        Set<String> pending = new HashSet<>();
+        Set<Object> identities = new HashSet<>();
         for (RelationEntry entry : result) {
-            if (entry.playerId() == null ? !pending.add(entry.name().toLowerCase(Locale.ROOT))
-                    : !ids.add(entry.playerId())) {
+            if (!identities.add(entry.identityKey())) {
                 throw new IllegalArgumentException(
                         "Selected relation groups contain duplicate player identities");
             }

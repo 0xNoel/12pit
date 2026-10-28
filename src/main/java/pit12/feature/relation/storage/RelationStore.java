@@ -32,7 +32,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import pit12.feature.relation.api.Relation;
@@ -69,8 +68,7 @@ public final class RelationStore implements RelationStorage {
                 throw new IllegalArgumentException("Relation entries must be an array");
             }
             List<RelationEntry> loaded = new ArrayList<>();
-            Set<UUID> ids = new HashSet<>();
-            Set<String> pendingNames = new HashSet<>();
+            Set<Object> identities = new HashSet<>();
             for (JsonElement element : entries.getAsJsonArray()) {
                 if (!element.isJsonObject()) {
                     throw new IllegalArgumentException("Relation entry must be an object");
@@ -81,10 +79,11 @@ public final class RelationStore implements RelationStorage {
                         : UUID.fromString(string(entry, "uuid"));
                 Relation relation = Relation.valueOf(string(entry, "relation"));
                 String name = string(entry, "name");
-                if (id == null ? !pendingNames.add(name.toLowerCase(Locale.ROOT)) : !ids.add(id)) {
+                RelationEntry relationEntry = new RelationEntry(id, name, relation);
+                if (!identities.add(relationEntry.identityKey())) {
                     throw new IllegalArgumentException("Duplicate relation identity: " + name);
                 }
-                loaded.add(new RelationEntry(id, name, relation));
+                loaded.add(relationEntry);
             }
             return loaded;
         }

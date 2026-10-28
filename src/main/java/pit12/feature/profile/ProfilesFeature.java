@@ -18,9 +18,7 @@
  */
 package pit12.feature.profile;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
@@ -256,16 +254,7 @@ public final class ProfilesFeature
     private List<StoredProfile> decodeProfiles(List<String> profiles) {
         ArrayList<StoredProfile> decoded = new ArrayList<>();
         for (String text : profiles) {
-            JsonElement parsed = new JsonParser().parse(text);
-            if (!parsed.isJsonObject()) {
-                throw new IllegalArgumentException("Profile must be an object");
-            }
-            JsonElement id = parsed.getAsJsonObject().get("id");
-            if (id == null || !id.isJsonPrimitive() || !id.getAsJsonPrimitive().isString()) {
-                throw new IllegalArgumentException("Profile ID is missing");
-            }
-            ProfileCodec.DecodeResult result =
-                    codec.decode(UUID.fromString(id.getAsString()), new StringReader(text));
+            ProfileCodec.DecodeResult result = codec.decode(new StringReader(text));
             if (!result.warnings().isEmpty()) {
                 throw new IllegalArgumentException("Invalid profile: " + result.warnings().get(0));
             }

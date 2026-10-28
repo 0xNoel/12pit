@@ -83,7 +83,10 @@ public final class JsonProfileStore implements ProfileStore {
             String idText = filename.substring(0, filename.length() - ".json".length());
             UUID expectedId = UUID.fromString(idText);
             try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-                ProfileCodec.DecodeResult result = codec.decode(expectedId, reader);
+                ProfileCodec.DecodeResult result = codec.decode(reader);
+                if (!expectedId.equals(result.profile().id())) {
+                    throw new IllegalArgumentException("id does not match filename UUID");
+                }
                 profiles.add(result.profile());
                 for (String warning : result.warnings()) {
                     LOGGER.warning("Profile load warning for " + file + ": " + warning);

@@ -1,0 +1,213 @@
+/*
+ * This file is part of 12pit.
+ *
+ * Copyright (C) 2026 The 12pit Authors and contributors <https://github.com/12src/12pit>
+ *
+ * 12pit is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * 12pit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
+ */
+.skeleton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--hover);
+}
+
+.skeleton,
+.startup-page {
+  animation: skeleton-fade-in 150ms ease 200ms both;
+}
+
+.skeleton::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, #ffffff1f, transparent);
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.4s linear infinite;
+  content: '';
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes skeleton-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+main[aria-busy='true'] {
+  padding-bottom: 0;
+}
+
+.startup-title {
+  width: 150px;
+  height: 30px;
+}
+
+.startup-search {
+  width: min(340px, 40%);
+  height: 36px;
+}
+
+.startup-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.startup-chips .skeleton {
+  width: 48px;
+  height: 32px;
+}
+
+.startup-chips .skeleton:nth-child(2) {
+  width: 72px;
+}
+
+.startup-chips .skeleton:nth-child(3) {
+  width: 70px;
+}
+
+.startup-chips .skeleton:nth-child(4) {
+  width: 50px;
+}
+
+.startup-chips .skeleton:nth-child(5) {
+  width: 56px;
+}
+
+.startup-list {
+  padding-top: 16px;
+}
+
+.startup-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-height: 74px;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.startup-row-text {
+  display: grid;
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+}
+
+.startup-row-text .skeleton {
+  height: 13px;
+}
+
+.startup-row-text .skeleton:first-child {
+  width: min(220px, 45%);
+}
+
+.startup-row-text .skeleton:last-child {
+  width: min(420px, 72%);
+  height: 12px;
+}
+
+.startup-row:nth-child(2n) .startup-row-text .skeleton:first-child {
+  width: min(280px, 60%);
+}
+
+.startup-chevron,
+.startup-star {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.startup-favorite,
+.startup-toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  height: 36px;
+}
+
+.startup-favorite {
+  width: 34px;
+}
+
+.startup-toggle {
+  width: 44px;
+}
+
+.startup-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 12px;
+}
+
+.brand-version-skeleton {
+  position: absolute;
+  bottom: 5px;
+  width: 28px;
+  height: 8px;
+}
+
+.nav-skeleton-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.nav-skeleton-item .skeleton {
+  height: 11px;
+}
+
+.nav-skeleton-item:nth-child(1) .skeleton {
+  width: 56px;
+}
+
+.nav-skeleton-item:nth-child(2) .skeleton {
+  width: 50px;
+}
+
+.nav-skeleton-item:nth-child(3) .skeleton {
+  width: 62px;
+}
+
+.nav-skeleton-item:nth-child(4) .skeleton {
+  width: 56px;
+}
+
+.community-skeleton {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+}
+
+.community-skeleton .skeleton {
+  width: 24px;
+  height: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}

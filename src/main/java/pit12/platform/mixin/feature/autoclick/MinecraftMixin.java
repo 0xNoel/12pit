@@ -29,7 +29,7 @@ import pit12.feature.autoclick.AutoClickBinding;
 import pit12.feature.autoclick.AutoClickFeature;
 import pit12.shared.input.MinecraftActions;
 
-// Run after Smart Block.
+// Run after Smart block.
 @Mixin(value = Minecraft.class, priority = 900)
 public abstract class MinecraftMixin implements AutoClickBinding {
     @Unique

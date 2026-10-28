@@ -161,14 +161,35 @@ public final class Languages {
     }
 
     public String translate(String source) {
-        if (translations == null) {
+        return translate(translations, source);
+    }
+
+    public String translate(String source, boolean enabled) {
+        return enabled ? translate(source) : source;
+    }
+
+    public String name(int value) {
+        return entries.get(value).name;
+    }
+
+    public String name(String locale) {
+        return entry(locale).name;
+    }
+
+    /** A text translated into the given language. */
+    public String text(String locale, String source) {
+        return translate(load(entry(locale)), source);
+    }
+
+    private String translate(Catalog catalog, String source) {
+        if (catalog == null) {
             return source;
         }
-        String translated = translations.shared.get(source);
+        String translated = catalog.shared.get(source);
         if (translated != null) {
             return translated;
         }
-        Map<String, String> variants = translations.contextual.get(source);
+        Map<String, String> variants = catalog.contextual.get(source);
         if (variants == null) {
             return source;
         }
@@ -178,10 +199,6 @@ public final class Languages {
         }
         translated = variants.get(location == null ? location() : location);
         return translated == null ? source : translated;
-    }
-
-    public String translate(String source, boolean enabled) {
-        return enabled ? translate(source) : source;
     }
 
     public String format(String source, Object... parameters) {
@@ -198,17 +215,12 @@ public final class Languages {
     }
 
     public Map<String, Object> texts(String requested) {
-        for (Entry entry : entries.values()) {
-            if (entry.locale.equals(requested)) {
-                Catalog catalog = load(entry);
-                Map<String, Object> texts = new HashMap<>(catalog.shared);
-                for (Map.Entry<String, Map<String, String>> text : catalog.contextual.entrySet()) {
-                    texts.put(text.getKey(), new HashMap<>(text.getValue()));
-                }
-                return texts;
-            }
+        Catalog catalog = load(entry(requested));
+        Map<String, Object> texts = new HashMap<>(catalog.shared);
+        for (Map.Entry<String, Map<String, String>> text : catalog.contextual.entrySet()) {
+            texts.put(text.getKey(), new HashMap<>(text.getValue()));
         }
-        throw new IllegalArgumentException("Unknown language: " + requested);
+        return texts;
     }
 
     /** Runs the listener immediately and after each language change. */
@@ -221,6 +233,15 @@ public final class Languages {
     public void removeListener(Runnable listener) {
         client.check();
         listeners.remove(listener);
+    }
+
+    private Entry entry(String locale) {
+        for (Entry entry : entries.values()) {
+            if (entry.locale.equals(locale)) {
+                return entry;
+            }
+        }
+        throw new IllegalArgumentException("Unknown language: " + locale);
     }
 
     private Catalog load(Entry entry) {

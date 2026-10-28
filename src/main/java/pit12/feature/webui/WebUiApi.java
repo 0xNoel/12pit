@@ -20,6 +20,7 @@ package pit12.feature.webui;
 
 import static pit12.feature.webui.WebUiJson.object;
 import static pit12.feature.webui.WebUiJson.requiredString;
+import static pit12.runtime.languages.Languages.source;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -51,6 +52,11 @@ import pit12.shared.input.Keybind;
 import pit12.shared.result.OperationResult;
 
 final class WebUiApi {
+    private static final String HINT_MESSAGE =
+            source("{0} is available. Open Settings to change your language.");
+    private static final String HINT_GOT_IT = source("Got it");
+    private static final String HINT_HIDE = source("Don't show again");
+    private static final String HINT_SWITCH = source("Switch language");
     private final ConfigCatalog catalog;
     private final ConfigCatalog settings;
     private final WebUiConfig config;
@@ -67,6 +73,7 @@ final class WebUiApi {
     private final Runnable profilesListener;
     private final Runnable relationsListener;
     private final Runnable swapBindingsListener;
+    private volatile Map<String, Object> catalogCache;
 
     WebUiApi(ConfigCatalog catalog, ConfigCatalog settings, WebUiConfig config, Profiles profiles,
             Relations relations, SwapBindings swapBindings, Languages language,
@@ -79,14 +86,20 @@ final class WebUiApi {
         this.swapBindings = swapBindings;
         this.language = language;
         this.preferences = preferences;
-        configListener = changes -> changes
-                .forEach((featureId, settingId) -> events.changed("/api/settings/" + featureId));
+        configListener = changes -> {
+            catalogCache = null;
+            changes.forEach((featureId, settingId) -> events.changed("/api/settings/" + featureId));
+        };
         settingsListener = changes -> {
+            catalogCache = null;
             changes.forEach((featureId, settingId) -> events.changed("/api/settings/" + featureId));
             if (changes.affects(config.id(), config.languageHint().id()))
                 events.changed("/api/preferences");
         };
-        languageListener = () -> events.changed("/api/settings");
+        languageListener = () -> {
+            catalogCache = null;
+            events.changed("/api/settings");
+        };
         profilesListener = () -> events.changed("/api/profiles");
         relationsListener = () -> events.changed("/api/relations");
         swapBindingsListener = () -> events.changed("/api/transfer");
@@ -111,10 +124,12 @@ final class WebUiApi {
         profiles.removeListener(profilesListener);
         relations.removeChangeListener(relationsListener);
         swapBindings.removeChangeListener(swapBindingsListener);
+        catalogCache = null;
     }
 
     void register(WebUiRoutes routes) {
-        routes.register("GET", "/api/settings", 0, request -> state.catalog());
+        routes.registerCached("GET", "/api/settings", request -> catalogCache,
+                request -> catalogState());
         routes.register("GET", "/api/settings/values", 0, request -> state.values());
         routes.register("GET", "/api/settings/{featureId}", 0,
                 request -> state.values(feature(request.parameters.get("featureId"))));
@@ -132,6 +147,7 @@ final class WebUiApi {
             changePreferences(request.body);
             return state.preferences();
         });
+        routes.register("GET", "/api/links", 0, request -> state.links());
         routes.register("GET", "/api/profiles", 0, request -> state.profiles());
         routes.register("POST", "/api/profiles", 8192, request -> {
             createProfile(request.body);
@@ -162,6 +178,8 @@ final class WebUiApi {
         });
         routes.register("GET", "/api/languages/{locale}", 0,
                 request -> language.texts(request.parameters.get("locale")));
+        routes.register("GET", "/api/languages/{locale}/hint", 0,
+                request -> languageHint(request.parameters.get("locale")));
         routes.register("GET", "/api/transfer", 0, request -> {
             if (request.query.isEmpty())
                 return state.transfer();
@@ -187,6 +205,22 @@ final class WebUiApi {
             transfer.apply(request.body);
             return null;
         });
+    }
+
+    private Map<String, Object> languageHint(String locale) {
+        String name = language.name(locale);
+        return object("message", language.text(locale, HINT_MESSAGE).replace("{0}", name), "gotIt",
+                language.text(locale, HINT_GOT_IT), "hide", language.text(locale, HINT_HIDE),
+                "switch", language.text(locale, HINT_SWITCH));
+    }
+
+    private Map<String, Object> catalogState() {
+        Map<String, Object> cached = catalogCache;
+        if (cached == null) {
+            cached = state.catalog();
+            catalogCache = cached;
+        }
+        return cached;
     }
 
     private FeatureConfig feature(String id) {

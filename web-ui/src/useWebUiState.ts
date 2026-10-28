@@ -26,6 +26,7 @@ import {
   deleteProfile,
   dismissLanguageHint,
   loadCatalog,
+  loadLinks,
   loadPreferences,
   loadProfiles,
   loadRelations,
@@ -45,6 +46,7 @@ import {
   type RelationType,
   type SettingValue,
   type TransferState,
+  type WebUiLink,
   type WebUiPreferences,
 } from './api'
 import { applyLanguage, loadLanguage, t, type Catalog } from './languages'
@@ -61,29 +63,43 @@ export interface WebUiState {
 
 export type ProfileAction = 'create' | 'rename' | 'delete' | 'switch' | 'reset'
 
+const emptyPreferences: WebUiPreferences = {
+  languageHint: false,
+  favorites: [],
+  ready: false,
+  problem: null,
+}
+const emptyProfiles: ProfilesState = {
+  loadState: 'LOADING',
+  activeId: null,
+  entries: [],
+  problems: [],
+  unpersisted: false,
+}
+const emptyRelations: RelationsState = { problem: null, entries: [] }
+const emptyTransfer: TransferState = { swapBindings: { problem: null } }
+
 export function useWebUiState() {
   const catalog = ref<ConfigurationCatalog | null>(null)
+  const links = ref<WebUiLink[] | null>(null)
   const preferences = ref<WebUiPreferences | null>(null)
   const profiles = ref<ProfilesState | null>(null)
   const relations = ref<RelationsState | null>(null)
   const transfer = ref<TransferState | null>(null)
   const state = computed<WebUiState | null>(() => {
-    if (
-      !catalog.value ||
-      !preferences.value ||
-      !profiles.value ||
-      !relations.value ||
-      !transfer.value
-    )
-      return null
+    const loaded = catalog.value
+    if (!loaded) return null
     return {
-      language: catalog.value.language,
-      version: catalog.value.version,
-      features: catalog.value.features,
-      webui: { ...preferences.value, settings: catalog.value.settings },
-      profiles: profiles.value,
-      relations: relations.value,
-      transfer: transfer.value,
+      language: loaded.language,
+      version: loaded.version,
+      features: loaded.features,
+      webui: {
+        ...(preferences.value ?? emptyPreferences),
+        settings: loaded.settings,
+      },
+      profiles: profiles.value ?? emptyProfiles,
+      relations: relations.value ?? emptyRelations,
+      transfer: transfer.value ?? emptyTransfer,
     }
   })
   const error = ref('')
@@ -99,12 +115,6 @@ export function useWebUiState() {
     () =>
       settingsOptions.value?.find((option) => option.id === 'gui_color')!.value,
   )
-  const showDetails = computed(() =>
-    Boolean(
-      settingsOptions.value?.find((option) => option.id === 'show_details')!
-        .value,
-    ),
-  )
   const featuresById = new Map<string, Feature>()
   const optionsById = new Map<string, Option>()
   const confirmedSettings = new Map<string, SettingValue>()
@@ -113,6 +123,7 @@ export function useWebUiState() {
   const refreshQueue = new Set<string>()
   const resources = [
     '/api/settings',
+    '/api/links',
     '/api/preferences',
     '/api/profiles',
     '/api/relations',
@@ -223,6 +234,11 @@ export function useWebUiState() {
           languageProblem = error.value
         }
         displayCatalog(next)
+      }
+    } else if (path === '/api/links') {
+      const next = await loadLinks()
+      apply = () => {
+        links.value = next
       }
     } else if (path.startsWith('/api/settings/')) {
       if (!catalog.value) {
@@ -482,11 +498,11 @@ export function useWebUiState() {
   })
   return {
     state,
+    links,
     error,
     pending,
     busy,
     features,
-    showDetails,
     favorites,
     toggleFavorite,
     setting,

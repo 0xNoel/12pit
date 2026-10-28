@@ -72,8 +72,8 @@ public final class SwapConfig extends FeatureConfig {
     final ChoiceSetting darkPriority;
 
     public SwapConfig() {
-        super("swap", source("Swap"), ConfigCategory.COMBAT, source(
-                "Swaps armor and hotbar items manually or automatically when you are poisoned or a player has low health."));
+        super("swap", source("Swap"), ConfigCategory.COMBAT,
+                source("Swaps armor and hotbar items manually or automatically."));
         subcategory("general", source("General"));
         rightClick = booleanSetting("right_click", source("Right click swap"),
                 source("Right-click held armor to replace the armor in its slot."), true);
@@ -85,12 +85,12 @@ public final class SwapConfig extends FeatureConfig {
                 source("Shows or hides the inventory during swaps."), 0,
                 new ChoiceSetting.Choice(0, source("Hidden")),
                 new ChoiceSetting.Choice(1, source("Visible")));
-        openDelay = integerSliderSetting("open_delay", source("Open delay"),
-                source("Ticks between opening the inventory and the first click."), 2, 0, 10, 1);
-        swapDelay = integerSliderSetting("swap_delay", source("Swap delay"),
-                source("Ticks between clicks for right click and automatic swaps."), 1, 0, 10, 1);
-        closeDelay = integerSliderSetting("close_delay", source("Close delay"),
-                source("Ticks between completing the last swap request and closing the inventory."),
+        openDelay = integerSliderSetting("open_delay", source("Open delay (ticks)"),
+                source("Wait between opening the inventory and the first click."), 2, 0, 10, 1);
+        swapDelay = integerSliderSetting("swap_delay", source("Swap delay (ticks)"),
+                source("Wait between clicks for right click and automatic swaps."), 1, 0, 10, 1);
+        closeDelay = integerSliderSetting("close_delay", source("Close delay (ticks)"),
+                source("Wait between completing the last swap request and closing the inventory."),
                 2, 0, 10, 1);
         resumeInputNextTick = booleanSetting("resume_input_next_tick",
                 source("Resume input next tick"),
@@ -111,8 +111,8 @@ public final class SwapConfig extends FeatureConfig {
         subcategory("bindings", source("Bindings"));
         unequipKey = keybindSetting("unequip_all_key", source("Unequip all"),
                 source("Moves worn armor into free inventory slots."), 0);
-        bindingDelay = integerSliderSetting("binding_delay", source("Binding delay"),
-                source("Ticks between clicks for bindings and unequipping."), 1, 0, 10, 1);
+        bindingDelay = integerSliderSetting("binding_delay", source("Binding delay (ticks)"),
+                source("Wait between clicks for bindings and unequipping."), 1, 0, 10, 1);
         bindingMessages = booleanSetting("binding_messages", source("Binding messages"),
                 source("Shows messages when bindings are added, removed or cleared."), true);
         highlight = booleanSetting("highlight_bindings", source("Show binding keys"),
@@ -170,7 +170,7 @@ public final class SwapConfig extends FeatureConfig {
         darkThreshold = integerSliderSetting("dark_threshold", source("Target health threshold"),
                 source("Equips Somber leggings when a target's health is at or below this value. Uses health without absorption."),
                 10, 0, 20, 1);
-        darkRange = integerSliderSetting("dark_range", source("Target range"),
+        darkRange = integerSliderSetting("dark_range", source("Target range (blocks)"),
                 source("Maximum straight-line distance to targets in both trigger modes."), 6, 1,
                 32, 1);
         restoreDark = booleanSetting("restore_dark", source("Restore leggings"), source(

@@ -26,12 +26,10 @@ import SettingRow from './SettingRow.vue'
 
 const props = defineProps<{
   settings: Feature
-  systemLocale: string
   requestedLanguage: number | null
   profilesLoading: boolean
   busy: boolean
   pending: boolean
-  showDetails: boolean
   capturing: { featureId: string; settingId: string } | null
 }>()
 const emit = defineEmits<{
@@ -106,10 +104,8 @@ function languageOpened() {
       <LanguagePicker
         v-if="option.id === 'language'"
         :option="option"
-        :system-locale="systemLocale"
         :requested-language="requestedLanguage"
         :busy="busy || pending"
-        :show-details="showDetails"
         @open="languageOpened"
         @change="changeSetting(option.id, $event)"
       />
@@ -121,7 +117,6 @@ function languageOpened() {
           capturing?.settingId === option.id
         "
         :busy="pending"
-        :show-details="showDetails"
         @change="changeSetting(option.id, $event)"
         @capture="emit('capture', settings.id, option.id)"
         @cancel="emit('cancel')"

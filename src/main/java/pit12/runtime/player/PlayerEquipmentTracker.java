@@ -103,7 +103,7 @@ public final class PlayerEquipmentTracker implements ClientLifecycle, PlayerEqui
     @Override
     public void onEquipmentPacket(int entityId, int equipmentSlot) {
         session.checkThread();
-        int slots = slotsFor(equipmentSlot);
+        int slots = PlayerEquipmentCache.slotsFor(equipmentSlot);
         if (slots == 0) {
             return;
         }
@@ -218,23 +218,5 @@ public final class PlayerEquipmentTracker implements ClientLifecycle, PlayerEqui
 
     private void notifyRemoved(UUID playerId) {
         Listeners.notify(listeners, listener -> listener.onPlayerEquipmentRemoved(playerId));
-    }
-
-    private static int slotsFor(int equipmentSlot) {
-        if (equipmentSlot == 0) {
-            return PlayerEquipmentCache.HELD_ITEM;
-        }
-        switch (equipmentSlot) {
-            case 1:
-                return PlayerEquipmentCache.BOOTS;
-            case 2:
-                return PlayerEquipmentCache.LEGGINGS;
-            case 3:
-                return PlayerEquipmentCache.CHESTPLATE;
-            case 4:
-                return PlayerEquipmentCache.HELMET;
-            default:
-                return 0;
-        }
     }
 }
