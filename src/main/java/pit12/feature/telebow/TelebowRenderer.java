@@ -18,6 +18,7 @@
  */
 package pit12.feature.telebow;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IdentityHashMap;
@@ -34,14 +35,13 @@ import net.minecraft.client.renderer.culling.ClippingHelperImpl;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import pit12.shared.rendering.FontWidths;
 import pit12.shared.rendering.TextureState;
 
 final class TelebowRenderer {
-    private static final ResourceLocation BEAM_TEXTURE =
-            new ResourceLocation("pit12", "textures/telebow/beam.png");
     private static final double[] CIRCLE = new double[48];
     static {
         for (int index = 0; index < CIRCLE.length; index += 2) {
@@ -58,6 +58,7 @@ final class TelebowRenderer {
     private final List<TelebowAim.Target> visibleAims = new ArrayList<>();
     private ClippingHelper clipping;
     private Frustum frustum;
+    private int fadeTexture;
 
     TelebowRenderer(Minecraft minecraft, TelebowConfig config, TextureState textures) {
         this.minecraft = minecraft;
@@ -182,21 +183,14 @@ final class TelebowRenderer {
                     GL11.GL_ZERO);
             GL11.glLineWidth(2F);
             GlStateManager.translate(-camera.viewerPosX, -camera.viewerPosY, -camera.viewerPosZ);
-            double angle = Math.toRadians(camera.playerViewY);
-            double beamX = Math.cos(angle) * 0.22;
-            double beamZ = Math.sin(angle) * 0.22;
             if (drawBeams) {
                 textures.setEnabled(true);
-                minecraft.getTextureManager().bindTexture(BEAM_TEXTURE);
+                bindFadeTexture();
                 GL11.glBegin(GL11.GL_QUADS);
                 try {
                     for (Mesh mesh : visible) {
-                        if (!mesh.geometryVisible || !mesh.path.trajectory.hasImpact)
-                            continue;
-                        int color = mesh.path.color;
-                        GL11.glColor4f((color >>> 16 & 255) / 255F, (color >>> 8 & 255) / 255F,
-                                (color & 255) / 255F, mesh.alpha * 0.75F);
-                        drawBeam(mesh.path, beamX, beamZ);
+                        if (mesh.geometryVisible && mesh.path.trajectory.hasImpact)
+                            drawBeam(mesh.path, mesh.alpha);
                     }
                 } finally {
                     GL11.glEnd();
@@ -301,18 +295,15 @@ final class TelebowRenderer {
             maxZ = Math.max(maxZ, trajectory.points[offset + 2]);
         }
         if (trajectory.hasImpact)
-            maxY = Math.max(maxY, beamTop(path));
+            maxY = Math.max(maxY, trajectory.points[(trajectory.count - 1) * 3 + 1] + 32);
         mesh.bounds = new AxisAlignedBB(minX - 0.25, minY, minZ - 0.25, maxX + 0.25, maxY + 0.02,
                 maxZ + 0.25);
     }
 
     private static void compile(Mesh mesh, TelebowPath path) {
-        TelebowTrajectory trajectory = path.trajectory;
         GL11.glNewList(mesh.lines, GL11.GL_COMPILE);
         try {
             drawLines(path);
-            if (trajectory.hasImpact)
-                drawLanding(trajectory);
         } finally {
             GL11.glEndList();
         }
@@ -334,51 +325,59 @@ final class TelebowRenderer {
         }
     }
 
-    private static void drawLanding(TelebowTrajectory trajectory) {
-        int offset = (trajectory.count - 1) * 3;
-        double x = trajectory.points[offset];
-        double y = trajectory.points[offset + 1] + 0.02;
-        double z = trajectory.points[offset + 2];
-        GL11.glBegin(GL11.GL_LINE_LOOP);
-        try {
-            for (int index = 0; index < CIRCLE.length; index += 2) {
-                GL11.glVertex3d(x + CIRCLE[index] * 0.25, y, z + CIRCLE[index + 1] * 0.25);
-            }
-        } finally {
-            GL11.glEnd();
-        }
-        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-        try {
-            GL11.glVertex3d(x, y, z);
-            for (int index = 0; index <= CIRCLE.length; index += 2) {
-                int point = index % CIRCLE.length;
-                GL11.glVertex3d(x + CIRCLE[point] * 0.035, y, z + CIRCLE[point + 1] * 0.035);
-            }
-        } finally {
-            GL11.glEnd();
-        }
-    }
-
-    private static void drawBeam(TelebowPath path, double rightX, double rightZ) {
+    private static void drawBeam(TelebowPath path, float alpha) {
         TelebowTrajectory trajectory = path.trajectory;
         int offset = (trajectory.count - 1) * 3;
         double x = trajectory.points[offset];
         double y = trajectory.points[offset + 1];
         double z = trajectory.points[offset + 2];
-        double top = beamTop(path);
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex3d(x - rightX, y, z - rightZ);
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex3d(x - rightX, top, z - rightZ);
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex3d(x + rightX, top, z + rightZ);
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex3d(x + rightX, y, z + rightZ);
+        int color = path.color;
+        float red = (color >>> 16 & 255) / 255F;
+        float green = (color >>> 8 & 255) / 255F;
+        float blue = (color & 255) / 255F;
+        double top = y + 32;
+        GL11.glColor4f(red, green, blue, alpha * 0.18F);
+        drawBeamLayer(x, y, z, top, 0.24);
+        GL11.glColor4f(red, green, blue, alpha * 0.45F);
+        drawBeamLayer(x, y, z, top, 0.12);
     }
 
-    private static double beamTop(TelebowPath path) {
-        return Math.max(path.trajectory.points[(path.trajectory.count - 1) * 3 + 1] + 64,
-                path.arrow.worldObj.getActualHeight());
+    private static void drawBeamLayer(double x, double y, double z, double top, double radius) {
+        for (int index = 0; index < CIRCLE.length; index += 2) {
+            int next = (index + 2) % CIRCLE.length;
+            GL11.glTexCoord2f(0.5F, 0);
+            GL11.glVertex3d(x + CIRCLE[index] * radius, y, z + CIRCLE[index + 1] * radius);
+            GL11.glTexCoord2f(0.5F, 1);
+            GL11.glVertex3d(x + CIRCLE[index] * radius, top, z + CIRCLE[index + 1] * radius);
+            GL11.glTexCoord2f(0.5F, 1);
+            GL11.glVertex3d(x + CIRCLE[next] * radius, top, z + CIRCLE[next + 1] * radius);
+            GL11.glTexCoord2f(0.5F, 0);
+            GL11.glVertex3d(x + CIRCLE[next] * radius, y, z + CIRCLE[next + 1] * radius);
+        }
+    }
+
+    private void bindFadeTexture() {
+        if (fadeTexture == 0) {
+            int height = 256;
+            ByteBuffer pixels = BufferUtils.createByteBuffer(height * 4);
+            for (int index = 0; index < height; index++) {
+                double t = index / (double) (height - 1);
+                double fade = 1 - t * t * (3 - 2 * t);
+                pixels.put((byte) 255).put((byte) 255).put((byte) 255)
+                        .put((byte) Math.round(fade * 255));
+            }
+            pixels.flip();
+            fadeTexture = GL11.glGenTextures();
+            GlStateManager.bindTexture(fadeTexture);
+            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 1, height, 0, GL11.GL_RGBA,
+                    GL11.GL_UNSIGNED_BYTE, pixels);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+        } else {
+            GlStateManager.bindTexture(fadeTexture);
+        }
     }
 
     private void drawName(TelebowPath path, int width, float scale, FontRenderer font,
