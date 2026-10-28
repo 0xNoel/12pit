@@ -25,6 +25,7 @@
     "input.MinecraftMixin",
     "input.EntityRendererMixin",
     "input.PlayerControllerMPMixin",
+    "rendering.OptiFineFontRendererMixin",
     "feature.autoclick.MinecraftMixin",
     "feature.commandfix.ClientCommandHandlerMixin",
     "feature.denick.MinecraftMixin",

@@ -57,10 +57,14 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
             return !mixinClassName.endsWith(".LunarFontRendererMixin") && Launch.classLoader
                     .getResource("club/sk1er/patcher/hooks/FontRendererHook.class") != null;
         }
-        // Forge detects OptiFine after Mixin preparation.
-        return !mixinClassName.startsWith("pit12.platform.mixin.feature.resourceleakfix.")
-                || Launch.classLoader
-                        .getResource("optifine/OptiFineClassTransformer.class") != null;
+        if (mixinClassName.startsWith("pit12.platform.mixin.feature.resourceleakfix.")
+                || mixinClassName
+                        .equals("pit12.platform.mixin.rendering.OptiFineFontRendererMixin")) {
+            // Forge detects OptiFine after Mixin preparation.
+            return Launch.classLoader
+                    .getResource("optifine/OptiFineClassTransformer.class") != null;
+        }
+        return true;
     }
 
     @Override
