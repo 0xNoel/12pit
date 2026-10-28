@@ -38,7 +38,7 @@ public final class SmartBlockConfig extends FeatureConfig {
     final BooleanSetting lockSlot;
 
     public SmartBlockConfig() {
-        super("smart_block", source("Smart block"), ConfigCategory.COMBAT,
+        super("smart_block", source("Smart Block"), ConfigCategory.COMBAT,
                 source("Selects a Bullet Time or Bruiser sword from the hotbar while blocking."),
                 true, false);
         subsubcategory("enchantments", source("Enchantments"));
@@ -57,15 +57,14 @@ public final class SmartBlockConfig extends FeatureConfig {
         arrowRange = integerSliderSetting("arrow_range", source("Arrow detection range (blocks)"),
                 source("Detects flying arrows within this distance."), 12, 1, 32, 1);
         subsubcategory("switching", source("Switching"));
-        emptyHand = booleanSetting("empty_hand", source("Trigger with fist"), source(
-                "Also starts Smart block when the right-click key is held with an empty hand."),
-                false);
+        emptyHand = booleanSetting("empty_hand", source("Trigger with fist"),
+                source("Also starts when the right-click key is held with an empty hand."), false);
         lockSlot = booleanSetting("lock_slot", source("Prevent manual slot changes"),
-                source("Locks hotbar during Smart Block."), true);
+                source("Locks the hotbar slot until the original slot is restored."), true);
         switchDelay = integerSliderSetting("switch_delay", source("Switch delay (ticks)"),
-                source("Wait before selecting the blocking sword."), 1, 0, 20, 1);
+                source("Time before selecting the blocking sword."), 1, 0, 20, 1);
         restoreDelay = integerSliderSetting("restore_delay", source("Restore delay (ticks)"),
-                source("Wait after releasing the right-click key before restoring the original slot."),
+                source("Time after releasing the right-click key before restoring the original slot."),
                 0, 0, 20, 1);
     }
 }

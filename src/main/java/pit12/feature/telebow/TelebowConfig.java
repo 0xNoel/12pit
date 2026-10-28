@@ -51,29 +51,29 @@ public final class TelebowConfig extends FeatureConfig {
     public final IntegerSetting fadeTime;
 
     public TelebowConfig() {
-        super("telebow", source("Telebow prediction"), ConfigCategory.RENDER, source(
+        super("telebow", source("Telebow Prediction"), ConfigCategory.RENDER, source(
                 "Shows Telebow trails, predicted landing points, and shooter names through blocks."));
         subcategory("shooters", source("Shooters"));
-        own = booleanSetting("own", source("Own"), source("Shows your Telebow trails."), true);
+        own = booleanSetting("own", source("Own"), source("Shows your trails and landing points."),
+                true);
         friends = booleanSetting("friends", source("Friends"),
-                source("Shows friends' Telebow trails."), true);
+                source("Shows friends' trails and landing points."), true);
         enemies = booleanSetting("enemies", source("Enemies"),
-                source("Shows enemies' Telebow trails."), true);
+                source("Shows enemies' trails and landing points."), true);
         others = booleanSetting("others", source("Others"),
-                source("Shows other players' Telebow trails."), true);
+                source("Shows other players' trails and landing points."), true);
         subcategory("prediction", source("Prediction"));
         ignoreCooldown = booleanSetting("ignore_cooldown", source("Ignore arrows during cooldown"),
                 source("Skips predictions for arrows fired during a tracked Telebow cooldown."),
                 true);
         correctCooldown = booleanSetting("correct_cooldown", source("Correct cooldown estimates"),
-                source("Updates the cooldown estimate when arrow removal matches a shooter position update of at least 4 blocks."),
-                true);
+                source("Updates cooldown estimates after successful Telebow teleports."), true);
         sneakWindow = integerSliderSetting("sneak_window_ms", source("Prediction margin (ms)"),
-                source("Time after sneaking ends when arrows can still be predicted. Also sets the arrow hit matching window."),
+                source("Time allowed after sneaking ends for shot prediction. Also sets the delay allowed when detecting hits that reduce cooldowns."),
                 250, 0, 1000, 25);
         subcategory("aim", source("Aim points"));
         aimPoints = booleanSetting("aim_points", source("Show aim points"), source(
-                "Shows predicted aim points for fully drawn Telebow shots fired while sneaking."),
+                "Shows where to aim to land near another player's predicted Telebow landing point. Use a fully drawn shot while sneaking."),
                 false);
         aimHoldingOnly = booleanSetting("aim_holding_only", source("Only while holding Telebow"),
                 source("Shows aim points only while holding a Telebow."), true);
@@ -87,7 +87,7 @@ public final class TelebowConfig extends FeatureConfig {
         aimNames = booleanSetting("aim_names", source("Show names"),
                 source("Shows player names next to aim points."), true);
         aimTolerance = doubleSliderSetting("aim_tolerance_blocks", source("Tolerance (blocks)"),
-                source("Maximum distance between the predicted impact and the marked landing point."),
+                source("Maximum distance between your predicted landing point and the other player's landing point."),
                 2, 0.25, 8, 0.25);
         subcategory("appearance", source("Appearance"));
         ownColor = colorPickerSetting("own_color", source("Own color"),
@@ -98,12 +98,11 @@ public final class TelebowConfig extends FeatureConfig {
                 source("Color and opacity of enemies' Telebow predictions."), 0xFFFF5555);
         otherColor = colorPickerSetting("other_color", source("Other player color"),
                 source("Color and opacity of other players' Telebow predictions."), 0xFFFFFFFF);
-        holdTime = integerSliderSetting("hold_time_ms", source("Hold time (ms)"), source(
-                "Time to keep the trail and landing point after the arrow lands or disappears."),
+        holdTime = integerSliderSetting("hold_time_ms", source("Hold time (ms)"),
+                source("Time to keep predictions visible after the arrow lands or disappears."),
                 2000, 0, 5000, 100);
-        fadeTime = integerSliderSetting("fade_time_ms", source("Fade time (ms)"), source(
-                "Time for the trail, landing point, name, and aim point to fade after the hold time."),
-                1000, 100, 3000, 100);
+        fadeTime = integerSliderSetting("fade_time_ms", source("Fade time (ms)"),
+                source("Time for predictions to fade after the hold time."), 1000, 100, 3000, 100);
         showNames = booleanSetting("show_names", source("Show names"),
                 source("Shows the shooter's display name at the predicted landing point."), true);
     }

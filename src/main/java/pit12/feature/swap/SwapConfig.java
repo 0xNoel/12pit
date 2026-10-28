@@ -72,8 +72,8 @@ public final class SwapConfig extends FeatureConfig {
     final ChoiceSetting darkPriority;
 
     public SwapConfig() {
-        super("swap", source("Swap"), ConfigCategory.COMBAT,
-                source("Swaps armor and hotbar items manually or automatically."));
+        super("swap", source("Swap"), ConfigCategory.COMBAT, source(
+                "Swaps armor and hotbar items manually or automatically. Blocks input during swaps."));
         subcategory("general", source("General"));
         rightClick = booleanSetting("right_click", source("Right click swap"),
                 source("Right-click held armor to replace the armor in its slot."), true);
@@ -86,12 +86,12 @@ public final class SwapConfig extends FeatureConfig {
                 new ChoiceSetting.Choice(0, source("Hidden")),
                 new ChoiceSetting.Choice(1, source("Visible")));
         openDelay = integerSliderSetting("open_delay", source("Open delay (ticks)"),
-                source("Wait between opening the inventory and the first click."), 2, 0, 10, 1);
+                source("Time between opening the inventory and the first click."), 2, 0, 10, 1);
         swapDelay = integerSliderSetting("swap_delay", source("Swap delay (ticks)"),
-                source("Wait between clicks for right click and automatic swaps."), 1, 0, 10, 1);
+                source("Time between clicks for right click and automatic swaps."), 1, 0, 10, 1);
         closeDelay = integerSliderSetting("close_delay", source("Close delay (ticks)"),
-                source("Wait between completing the last swap request and closing the inventory."),
-                2, 0, 10, 1);
+                source("Time between completing the last swap and closing the inventory."), 2, 0,
+                10, 1);
         resumeInputNextTick = booleanSetting("resume_input_next_tick",
                 source("Resume input next tick"),
                 source("Keeps all input locked until the next tick after closing the inventory."),
@@ -112,7 +112,7 @@ public final class SwapConfig extends FeatureConfig {
         unequipKey = keybindSetting("unequip_all_key", source("Unequip all"),
                 source("Moves worn armor into free inventory slots."), 0);
         bindingDelay = integerSliderSetting("binding_delay", source("Binding delay (ticks)"),
-                source("Wait between clicks for bindings and unequipping."), 1, 0, 10, 1);
+                source("Time between clicks for bindings and unequipping."), 1, 0, 10, 1);
         bindingMessages = booleanSetting("binding_messages", source("Binding messages"),
                 source("Shows messages when bindings are added, removed or cleared."), true);
         highlight = booleanSetting("highlight_bindings", source("Show binding keys"),

@@ -35,19 +35,19 @@ public final class AutoFishConfig extends FeatureConfig {
     final IntegerSetting missHookChance;
 
     public AutoFishConfig() {
-        super("autofish", source("Auto fish"), ConfigCategory.MISC,
+        super("autofish", source("Auto Fish"), ConfigCategory.MISC,
                 source("Reels in when the bobber dips and can cast again."));
         subsubcategory("general", source("General"));
         autoRecast = booleanSetting("auto_recast", source("Auto recast"),
-                source("Casts once after Auto fish reels in."), true);
+                source("Casts again after reeling in."), true);
         reelDelayMin = integerSliderSetting("reel_delay_min", source("Reel delay min (ticks)"),
-                source("Shortest wait before reeling in."), 2, 0, 20, 1);
+                source("Minimum time before reeling in."), 2, 0, 20, 1);
         reelDelayMax = integerSliderSetting("reel_delay_max", source("Reel delay max (ticks)"),
-                source("Longest wait before reeling in."), 4, 0, 20, 1);
+                source("Maximum time before reeling in."), 4, 0, 20, 1);
         castDelayMin = integerSliderSetting("cast_delay_min", source("Recast delay min (ticks)"),
-                source("Shortest wait before casting again."), 15, 0, 20, 1);
+                source("Minimum time before casting again."), 15, 0, 20, 1);
         castDelayMax = integerSliderSetting("cast_delay_max", source("Recast delay max (ticks)"),
-                source("Longest wait before casting again."), 20, 0, 20, 1);
+                source("Maximum time before casting again."), 20, 0, 20, 1);
         subsubcategory("hook_chances", source("Hook chances"));
         emptyHookChance = integerSliderSetting("empty_hook_chance", source("Empty hook chance (%)"),
                 source("Chance of waiting for the bobber to rise and settle before reeling in."), 0,

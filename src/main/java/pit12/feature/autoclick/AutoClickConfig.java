@@ -40,8 +40,9 @@ public final class AutoClickConfig extends FeatureConfig {
     final BooleanSetting rightAllowDragonEgg;
 
     public AutoClickConfig() {
-        super("auto_click", source("Auto click"), ConfigCategory.COMBAT,
-                source("Repeats left and right clicks while their keys are held."), true, false);
+        super("auto_click", source("Auto Click"), ConfigCategory.COMBAT, source(
+                "Repeats left and right clicks while their keys are held. Turning off all filters for a click type removes its item restrictions."),
+                true, false);
         subcategory("left", source("Left click"));
         leftEnabled = booleanSetting("left_enabled", source("Left click enabled"),
                 source("Repeats left clicks while the left-click key is held."), true);

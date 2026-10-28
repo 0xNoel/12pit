@@ -30,7 +30,7 @@ public final class RingHelperConfig extends FeatureConfig {
     private final ColorSetting color;
 
     public RingHelperConfig() {
-        super("ringhelper", source("Ring helper"), ConfigCategory.RENDER, source(
+        super("ringhelper", source("Ring Helper"), ConfigCategory.RENDER, source(
                 "Outlines two blocks above the middle ring where the upper block is empty."));
         holdingBlocksOnly =
                 booleanSetting("holding_blocks_only", source("Only while holding blocks"),

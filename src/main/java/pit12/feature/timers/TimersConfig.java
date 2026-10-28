@@ -85,17 +85,17 @@ public final class TimersConfig extends FeatureConfig {
         showGroupNames = booleanSetting("show_group_names", source("Show group names"),
                 source("Shows the name above each timer group."), true);
         ownColor = colorPickerSetting("own_color", source("Own color"),
-                source("Sets the color of your countdowns."), 0xFF55FFFF);
+                source("Color and opacity of your countdowns."), 0xFF55FFFF);
         friendColor = colorPickerSetting("friend_color", source("Friend color"),
-                source("Sets the color of friends' countdowns."), 0xFF55FF55);
+                source("Color and opacity of friends' countdowns."), 0xFF55FF55);
         enemyColor = colorPickerSetting("enemy_color", source("Enemy color"),
-                source("Sets the color of enemies' countdowns."), 0xFFFF5555);
+                source("Color and opacity of enemies' countdowns."), 0xFFFF5555);
         otherColor = colorPickerSetting("other_color", source("Other player color"),
-                source("Sets the color of other players' countdowns."), 0xFFFFFFFF);
+                source("Color and opacity of other players' countdowns."), 0xFFFFFFFF);
         subcategory("debuffs", source("Debuffs"));
         subsubcategory("pin", "Pin");
         pinEnabled = booleanSetting("pin_enabled", source("Enabled"),
-                source("Estimates Pin duration from matched arrow hits."), true);
+                source("Shows estimated Pin durations."), true);
         pinOwn = booleanSetting("own", source("Own"), source("Shows your Pin timer."), true);
         pinFriends = booleanSetting("friends", source("Friends"),
                 source("Shows friends' Pin timers."), true);
@@ -104,17 +104,15 @@ public final class TimersConfig extends FeatureConfig {
         pinOthers = booleanSetting("others", source("Others"),
                 source("Shows other players' Pin timers."), true);
         pinHitWindow = integerSliderSetting("pin_hit_window_ms", source("Prediction margin (ms)"),
-                source("Time allowed to match an arrow collision, player damage, and arrow removal."),
-                250, 50, 1000, 25);
+                source("Time allowed for delayed damage to count as a Pin hit."), 250, 50, 1000,
+                25);
         subsubcategory("venom", "Venom");
         venomEnabled = booleanSetting("venom_enabled", source("Enabled"),
-                source("Estimates Venom duration from matched hits."), true);
-        venomSelf = booleanSetting("venom_self", source("Track wearers"), source(
-                "Starts a 24-second timer for the wearer after three matched hits on the same player."),
-                true);
-        venomTargets = booleanSetting("venom_targets", source("Track targets"), source(
-                "Starts a 12-second timer for the target after three matched hits from the same wearer."),
-                true);
+                source("Shows estimated Venom durations."), true);
+        venomSelf = booleanSetting("venom_self", source("Track wearers"),
+                source("Shows the wearer's estimated Venom duration."), true);
+        venomTargets = booleanSetting("venom_targets", source("Track targets"),
+                source("Shows the target's estimated Venom duration."), true);
         venomOwn =
                 booleanSetting("venom_own", source("Own"), source("Shows your Venom timer."), true);
         venomFriends = booleanSetting("venom_friends", source("Friends"),
@@ -125,16 +123,19 @@ public final class TimersConfig extends FeatureConfig {
                 source("Shows other players' Venom timers."), true);
         venomHitWindow =
                 integerSliderSetting("venom_hit_window_ms", source("Prediction margin (ms)"),
-                        source("Time window used to match Venom hits."), 250, 50, 1500, 25);
+                        source("Time allowed for delayed damage to count as a Venom hit."), 250, 50,
+                        1500, 25);
         venomReach = doubleSliderSetting("venom_reach_blocks", source("Maximum reach (blocks)"),
-                source("Maximum distance used to match Venom hits."), 4.5, 2, 6, 0.1);
-        venomHitboxMargin = doubleSliderSetting("venom_hitbox_margin_blocks",
-                source("Hitbox margin (blocks)"),
-                source("Expands player hitboxes when matching Venom hits."), 0.4, 0, 1, 0.05);
+                source("Maximum distance at which hits count toward Venom estimates."), 4.5, 2, 6,
+                0.1);
+        venomHitboxMargin =
+                doubleSliderSetting("venom_hitbox_margin_blocks", source("Hitbox margin (blocks)"),
+                        source("Extra space around players used to recognize Venom hits."), 0.4, 0,
+                        1, 0.05);
         subcategory("buffs", source("Buffs"));
         subsubcategory("jump_boost", "Jump Boost");
         jumpBoostEnabled = booleanSetting("jump_boost_enabled", source("Enabled"),
-                source("Estimates Jump Boost IV duration from potion and bottle changes."), true);
+                source("Shows estimated Jump Boost IV durations."), true);
         jumpBoostOwn = booleanSetting("jump_boost_own", source("Own"),
                 source("Shows your Jump Boost timer."), true);
         jumpBoostFriends = booleanSetting("jump_boost_friends", source("Friends"),
@@ -143,22 +144,22 @@ public final class TimersConfig extends FeatureConfig {
                 source("Shows enemies' Jump Boost timers."), true);
         jumpBoostOthers = booleanSetting("jump_boost_others", source("Others"),
                 source("Shows other players' Jump Boost timers."), true);
-        jumpBoostSoundRequired = booleanSetting("jump_boost_sound_required",
-                source("Sound required"),
-                source("Requires a drinking sound within 500 ms before a Jump Boost IV potion changes to a glass bottle."),
-                false);
+        jumpBoostSoundRequired =
+                booleanSetting("jump_boost_sound_required", source("Sound required"),
+                        source("Requires a drinking sound to start a Jump Boost timer."), false);
         jumpBoostResetOnLowJump = booleanSetting("jump_boost_reset_on_low_jump",
                 source("Reset on low jump"),
-                source("Removes the Jump Boost timer when an unobstructed jump rises less than 3.9 blocks."),
+                source("Clears the timer when an unobstructed jump is too low for Jump Boost IV."),
                 true);
-        jumpBoostGrace =
-                integerSliderSetting("jump_boost_grace_ms", source("Prediction margin (ms)"),
-                        source("Time after the Jump Boost timer starts before checking new jumps."),
-                        250, 0, 1000, 25);
+        jumpBoostGrace = integerSliderSetting("jump_boost_grace_ms",
+                source("Prediction margin (ms)"),
+                source("Time after a Jump Boost timer starts before low jumps can clear it."), 250,
+                0, 1000, 25);
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
-        telebowEnabled = booleanSetting("telebow_enabled", source("Enabled"),
-                source("Shows estimated Telebow cooldowns."), true);
+        telebowEnabled = booleanSetting("telebow_enabled", source("Enabled"), source(
+                "Shows estimated Telebow cooldowns. Requires telebow prediction to be enabled."),
+                true);
         telebowOwn = booleanSetting("telebow_own", source("Own"),
                 source("Shows your Telebow cooldown."), true);
         telebowFriends = booleanSetting("telebow_friends", source("Friends"),

@@ -28,10 +28,10 @@ public final class AutoQuickMathConfig extends FeatureConfig {
     private final DoubleSetting delay;
 
     public AutoQuickMathConfig() {
-        super("auto_quick_math", source("Auto quick math"), ConfigCategory.MISC,
-                source("Automatically send the Quick Math answer."), true, false);
+        super("auto_quick_math", source("Auto Quick Math"), ConfigCategory.MISC,
+                source("Automatically sends Quick Math answers in public chat."), true, false);
         delay = doubleSliderSetting("delay", source("Answer delay (seconds)"),
-                source("Delay before sending the answer."), 1.0, 0.0, 5.0, 0.1);
+                source("Time before sending the answer."), 1.0, 0.0, 5.0, 0.1);
     }
 
     public double delay() {
