@@ -1,4 +1,4 @@
-<!-- Source: README.md; Based on: b89c7e1ea68fd0183c6877fdbe32f36b5d89cb2b -->
+<!-- Source: README.md; Based on: 0454cf3738ee1313340b0ec009705dbe8c845c41 -->
 
 # 12pit
 
@@ -6,7 +6,7 @@
 
 [English](../../README.md) | 简体中文
 
-12pit 是适用于 Minecraft 1.8.9 The Pit 的轻量级开源 Forge 模组，自带网页配置界面，同时支持 [OneConfig](https://github.com/Polyfrost/OneConfig)。
+12pit 是适用于 The Pit 的免费开源模组，自带配置界面，同时支持 [OneConfig](https://github.com/Polyfrost/OneConfig)，也兼容 Lunar Client。
 
 建议配合 [PolyPatcher](https://modrinth.com/mod/patcher) 和 [OptiFine](https://optifine.net/home) 一起使用，以获得更好的性能。
 
