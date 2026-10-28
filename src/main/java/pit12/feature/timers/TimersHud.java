@@ -271,12 +271,17 @@ final class TimersHud implements HudElement {
                 this.name = name;
                 nameWidth = -1;
             }
+            updateTime(remainingNanos);
+        }
+
+        boolean updateTime(long remainingNanos) {
             long next = (remainingNanos + 99_999_999L) / 100_000_000L;
-            if (tenths != next) {
-                tenths = next;
-                time = tenths / 10 + "." + tenths % 10 + "s";
-                timeWidth = -1;
-            }
+            if (tenths == next)
+                return false;
+            tenths = next;
+            time = tenths / 10 + "." + tenths % 10 + "s";
+            timeWidth = -1;
+            return true;
         }
     }
 }

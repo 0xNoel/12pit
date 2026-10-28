@@ -18,11 +18,14 @@
  */
 package pit12.feature.telebow.api;
 
+import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface TelebowCooldownListener {
     /** until uses System.nanoTime(). */
     void onTelebowCooldown(EntityPlayer player, long until);
+
+    void onTelebowCooldownRemoved(UUID playerId);
 
     void onTelebowCooldownsReset();
 }

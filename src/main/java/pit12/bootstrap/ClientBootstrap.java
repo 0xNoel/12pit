@@ -206,9 +206,9 @@ public final class ClientBootstrap {
                         commands, new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
         // Category: Render
         TelebowCooldowns telebowCooldowns = registerTelebow(minecraft, configs, session, arrows,
-                relations, textureStates.get());
+                relations, textureStates.get(), players, pitContext);
         PlayerTimers timers = registerTimers(minecraft, configs, session, arrows, relations,
-                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
+                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment, pitContext);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
@@ -313,11 +313,11 @@ public final class ClientBootstrap {
     // Category: Render
     private TelebowCooldowns registerTelebow(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
-            TextureState textures) {
+            TextureState textures, PlayerEntityTracker players, PitContext pit) {
         TelebowConfig config = new TelebowConfig();
         configs.register(config);
         TelebowFeature feature = new TelebowFeature(minecraft, configs, config, session, arrows,
-                relations, textures);
+                relations, textures, players, pit);
         components.add(feature);
         return feature.cooldowns();
     }
@@ -325,11 +325,12 @@ public final class ClientBootstrap {
     private PlayerTimers registerTimers(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
             PlayerNameCache playerNames, HudRegistry hudRegistry, TelebowCooldowns telebowCooldowns,
-            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment) {
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment, PitContext pit) {
         TimersConfig config = new TimersConfig();
         configs.register(config);
-        TimersFeature feature = new TimersFeature(minecraft, configs, config, session, arrows,
-                relations, playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
+        TimersFeature feature =
+                new TimersFeature(minecraft, configs, config, session, arrows, relations,
+                        playerNames, hudRegistry, telebowCooldowns, players, playerEquipment, pit);
         components.add(feature);
         return feature;
     }
