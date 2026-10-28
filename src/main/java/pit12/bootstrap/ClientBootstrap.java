@@ -198,7 +198,7 @@ public final class ClientBootstrap {
         // Category: No config
         BooleanSetting discordRpc =
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
-                        new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
+                        commands, new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
         // Category: Render
         TelebowCooldowns telebowCooldowns = registerTelebow(minecraft, configs, session, arrows,
                 relations, textureStates.get());
@@ -293,12 +293,12 @@ public final class ClientBootstrap {
     // Category: No config
     private BooleanSetting registerWebUi(ConfigCatalog configs, ConfigCatalog featureConfigs,
             Profiles profiles, Relations relations, HudEditorFeature hudEditor,
-            SwapBindings swapBindings, Path path) {
+            SwapBindings swapBindings, CommandRegistry commands, Path path) {
         WebUiConfig config = new WebUiConfig(language);
         configs.register(config);
         WebUiFeature webUi = new WebUiFeature(featureConfigs, configs, profiles, relations,
-                hudEditor, swapBindings, config, language, path);
-        hudEditor.setWebUiOpener(config.keybind()::get, webUi::open, config.hudEditorHint());
+                hudEditor, swapBindings, config, commands, language, path);
+        hudEditor.setWebUiOpener(config.keybind()::get, webUi::open);
         components.add(webUi);
         return config.discordRpc();
     }
