@@ -39,6 +39,8 @@ import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.input.InputBlocker;
 import pit12.runtime.input.InputHandler;
+import pit12.runtime.input.InputTicks;
+import pit12.runtime.input.InputTicks.Phase;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
 import pit12.runtime.languages.Languages;
@@ -51,8 +53,8 @@ import pit12.shared.concurrent.ClientThread;
 import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-public final class SwapFeature
-        implements ClientLifecycle, ConfigChangeListener, SwapHooks, InputHandler {
+public final class SwapFeature implements ClientLifecycle, ConfigChangeListener, SwapHooks,
+        InputHandler, InputTicks.Listener {
     private final Minecraft minecraft;
     private final ConfigCatalog configs;
     private final SwapConfig config;
@@ -64,6 +66,7 @@ public final class SwapFeature
     private final SwapOverlay overlay;
     private final SwapHooksBinding hookBinding;
     private final InputBlocker input;
+    private final InputTicks inputTicks;
     private final Runnable sessionListener = this::worldChanged;
     private boolean started;
     private boolean listening;
@@ -73,7 +76,8 @@ public final class SwapFeature
     public SwapFeature(Minecraft minecraft, ClientThread client, ConfigCatalog configs,
             SwapConfig config, ClientSession session, PitContext pit,
             PlayerEquipmentAccess equipment, RelationLookup relations, CommandRegistry commands,
-            Path path, SwapHooksBinding hookBinding, InputBlocker input, Languages language) {
+            Path path, SwapHooksBinding hookBinding, InputBlocker input, InputTicks inputTicks,
+            Languages language) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
@@ -81,6 +85,7 @@ public final class SwapFeature
         this.session = session;
         this.hookBinding = hookBinding;
         this.input = input;
+        this.inputTicks = inputTicks;
         bindings = new BindingBook(client, path,
                 message -> report(Tone.ERROR, language.translate(message)));
         controller = new SwapController(minecraft, session, config, bindings, this::report, input,
@@ -148,9 +153,11 @@ public final class SwapFeature
             MinecraftForge.EVENT_BUS.register(this);
             hookBinding.pit12$bindSwapHooks(this);
             input.addHandler(this);
+            inputTicks.addListener(this);
         } else {
             session.removeListener(sessionListener);
             input.removeHandler(this);
+            inputTicks.removeListener(this);
             hookBinding.pit12$bindSwapHooks(null);
             MinecraftForge.EVENT_BUS.unregister(this);
             automatic.reset();
@@ -227,8 +234,8 @@ public final class SwapFeature
     }
 
     @Override
-    public void inventoryTick(int phase) {
-        if (controller.tick(phase)) {
+    public void onInputTick(Phase phase) {
+        if (listening && controller.tick(phase)) {
             updateMouseGrab();
             updateListening();
         }

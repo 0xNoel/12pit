@@ -25,14 +25,21 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
+import pit12.runtime.input.InputTickBinding;
+import pit12.runtime.input.InputTicks;
+import pit12.runtime.input.InputTicks.Phase;
 
-@Mixin(Minecraft.class)
-public abstract class MinecraftMixin implements InputBlockBinding {
+// Run the input phases after Smart block.
+@Mixin(value = Minecraft.class, priority = 900)
+public abstract class MinecraftMixin implements InputBlockBinding, InputTickBinding {
     @Unique
     private InputBlocker pit12$inputBlocker;
+    @Unique
+    private InputTicks pit12$inputTicks;
 
     @Override
     public void pit12$bindInputBlocker(InputBlocker blocker) {
@@ -42,6 +49,52 @@ public abstract class MinecraftMixin implements InputBlockBinding {
     @Override
     public InputBlocker pit12$inputBlocker() {
         return pit12$inputBlocker;
+    }
+
+    @Override
+    public void pit12$bindInputTicks(InputTicks ticks) {
+        pit12$inputTicks = ticks;
+    }
+
+    @Inject(method = "runTick",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraftforge/fml/common/FMLCommonHandler;onPreClientTick()V",
+                    shift = At.Shift.AFTER, remap = false))
+    private void pit12$startInputTick(CallbackInfo callback) {
+        if (pit12$inputTicks != null)
+            pit12$inputTicks.tick(Phase.START);
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/GuiScreen;handleInput()V", shift = At.Shift.AFTER))
+    private void pit12$afterGuiInput(CallbackInfo callback) {
+        if (pit12$inputTicks != null)
+            pit12$inputTicks.tick(Phase.GUI_INPUT);
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/GuiScreen;updateScreen()V", shift = At.Shift.AFTER))
+    private void pit12$afterGuiUpdate(CallbackInfo callback) {
+        if (pit12$inputTicks != null)
+            pit12$inputTicks.tick(Phase.GUI_UPDATE);
+    }
+
+    @Inject(method = "runTick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/entity/EntityPlayerSP;isUsingItem()Z", ordinal = 0))
+    private void pit12$beforeActions(CallbackInfo callback) {
+        if (pit12$inputTicks != null)
+            pit12$inputTicks.tick(Phase.BEFORE_ACTIONS);
+    }
+
+    @Inject(method = "runTick",
+            slice = @Slice(from = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;sendClickBlockToController(Z)V")),
+            at = @At(value = "FIELD",
+                    target = "Lnet/minecraft/client/Minecraft;theWorld:Lnet/minecraft/client/multiplayer/WorldClient;",
+                    ordinal = 0))
+    private void pit12$afterInput(CallbackInfo callback) {
+        if (pit12$inputTicks != null)
+            pit12$inputTicks.tick(Phase.AFTER_INPUT);
     }
 
     // Block interaction packets are sent before Forge's right-click-air event.

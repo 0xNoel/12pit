@@ -22,15 +22,12 @@ import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import pit12.feature.autoclick.AutoClickBinding;
 import pit12.feature.autoclick.AutoClickFeature;
 import pit12.shared.input.MinecraftActions;
 
-// Run after Smart block.
-@Mixin(value = Minecraft.class, priority = 900)
+@Mixin(Minecraft.class)
 public abstract class MinecraftMixin implements AutoClickBinding {
     @Unique
     private AutoClickFeature pit12$autoClick;
@@ -38,14 +35,6 @@ public abstract class MinecraftMixin implements AutoClickBinding {
     @Override
     public void pit12$bindAutoClick(AutoClickFeature feature) {
         pit12$autoClick = feature;
-    }
-
-    @Inject(method = "runTick", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/entity/EntityPlayerSP;isUsingItem()Z", ordinal = 0))
-    private void pit12$autoClickInput(CallbackInfo callback) {
-        if (pit12$autoClick != null) {
-            pit12$autoClick.inputTick();
-        }
     }
 
     @Redirect(method = "runTick",

@@ -116,6 +116,8 @@ import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
+import pit12.runtime.input.InputTickBinding;
+import pit12.runtime.input.InputTicks;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
@@ -163,6 +165,8 @@ public final class ClientBootstrap {
         InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
                 new LwjglInputDevice());
         components.add(input);
+        InputTicks inputTicks = new InputTicks(client, (InputTickBinding) minecraft);
+        components.add(inputTicks);
         CommandRegistry commands =
                 new CommandRegistry(client, configs, ForgeCommandAdapter::register, language);
         components.add(commands);
@@ -194,7 +198,7 @@ public final class ClientBootstrap {
         SwapBindings swapBindings = registerSwap(minecraft, client, configs, session, pitContext,
                 playerEquipment, relations, commands,
                 new File(minecraft.mcDataDir, "12pit/swap-bindings.json").toPath(),
-                (SwapHooksBinding) minecraft, input);
+                (SwapHooksBinding) minecraft, input, inputTicks);
         // Category: No config
         BooleanSetting discordRpc =
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
@@ -213,7 +217,7 @@ public final class ClientBootstrap {
         registerDiscordRpc(webUiConfigs, discordRpc);
         // Category: Combat
         registerAutoClick(minecraft, configs, session, (AutoClickBinding) minecraft,
-                (MinecraftActions) minecraft);
+                (MinecraftActions) minecraft, inputTicks);
         registerAutoSprint(configs, (AutoSprintBinding) minecraft);
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         registerSmartBlock(minecraft, configs, session, (SmartBlockBinding) minecraft);
@@ -281,11 +285,12 @@ public final class ClientBootstrap {
     private SwapBindings registerSwap(Minecraft minecraft, ClientThread client,
             ConfigCatalog configs, ClientSession session, PitContext pitContext,
             PlayerEquipmentAccess playerEquipment, RelationLookup relations,
-            CommandRegistry commands, Path path, SwapHooksBinding binding, InputBlocker input) {
+            CommandRegistry commands, Path path, SwapHooksBinding binding, InputBlocker input,
+            InputTicks inputTicks) {
         SwapConfig config = new SwapConfig();
         configs.register(config);
         SwapFeature swap = new SwapFeature(minecraft, client, configs, config, session, pitContext,
-                playerEquipment, relations, commands, path, binding, input, language);
+                playerEquipment, relations, commands, path, binding, input, inputTicks, language);
         components.add(swap);
         return swap.bindings();
     }
@@ -349,10 +354,12 @@ public final class ClientBootstrap {
 
     // Category: Combat
     private void registerAutoClick(Minecraft minecraft, ConfigCatalog configs,
-            ClientSession session, AutoClickBinding binding, MinecraftActions actions) {
+            ClientSession session, AutoClickBinding binding, MinecraftActions actions,
+            InputTicks inputTicks) {
         AutoClickConfig config = new AutoClickConfig();
         configs.register(config);
-        components.add(new AutoClickFeature(minecraft, configs, config, session, binding, actions));
+        components.add(new AutoClickFeature(minecraft, configs, config, session, binding, actions,
+                inputTicks));
     }
 
     private void registerAutoSprint(ConfigCatalog configs, AutoSprintBinding binding) {

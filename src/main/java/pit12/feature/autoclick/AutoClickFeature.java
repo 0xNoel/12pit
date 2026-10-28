@@ -35,33 +35,39 @@ import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.config.IntegerSetting;
 import pit12.runtime.config.Setting;
+import pit12.runtime.input.InputTicks;
+import pit12.runtime.input.InputTicks.Phase;
 import pit12.runtime.session.ClientSession;
 import pit12.shared.input.MinecraftActions;
 import pit12.shared.lifecycle.ClientLifecycle;
 
-public final class AutoClickFeature implements ClientLifecycle, ConfigChangeListener {
+public final class AutoClickFeature
+        implements ClientLifecycle, ConfigChangeListener, InputTicks.Listener {
     private final Minecraft minecraft;
     private final ConfigCatalog configs;
     private final AutoClickConfig config;
     private final ClientSession session;
     private final AutoClickBinding binding;
     private final MinecraftActions actions;
+    private final InputTicks inputTicks;
     private final Runnable sessionChanged = this::reset;
     private boolean started;
     private boolean active;
     private boolean leftClicking;
     private boolean rightClicking;
-    private double leftDelayTicks;
-    private double rightDelayTicks;
+    private int leftDelayPhases;
+    private int rightDelayPhases;
 
     public AutoClickFeature(Minecraft minecraft, ConfigCatalog configs, AutoClickConfig config,
-            ClientSession session, AutoClickBinding binding, MinecraftActions actions) {
+            ClientSession session, AutoClickBinding binding, MinecraftActions actions,
+            InputTicks inputTicks) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
         this.session = session;
         this.binding = binding;
         this.actions = actions;
+        this.inputTicks = inputTicks;
     }
 
     @Override
@@ -103,15 +109,20 @@ public final class AutoClickFeature implements ClientLifecycle, ConfigChangeList
         active = enabled;
         if (enabled) {
             session.addListener(sessionChanged);
+            inputTicks.addListener(this);
             binding.pit12$bindAutoClick(this);
         } else {
             binding.pit12$bindAutoClick(null);
+            inputTicks.removeListener(this);
             session.removeListener(sessionChanged);
         }
         reset();
     }
 
-    public void inputTick() {
+    @Override
+    public void onInputTick(Phase phase) {
+        if (!active || phase != Phase.BEFORE_ACTIONS && phase != Phase.AFTER_INPUT)
+            return;
         EntityPlayerSP player = minecraft.thePlayer;
         MovingObjectPosition target = minecraft.objectMouseOver;
         if (player == null || minecraft.theWorld == null || target == null
@@ -142,24 +153,22 @@ public final class AutoClickFeature implements ClientLifecycle, ConfigChangeList
                         || (config.allowCake.get() && targetBlock == Blocks.cake)
                         || (config.rightAllowDragonEgg.get() && targetBlock == Blocks.dragon_egg));
         if (leftClicking) {
-            if (leftDelayTicks <= 0.0) {
-                // Keep CPS after misses.
+            if (--leftDelayPhases <= 0) {
+                // Misses normally add a ten-tick cooldown.
                 actions.pit12$setLeftClickCounter(0);
                 actions.pit12$leftClick();
-                leftDelayTicks += delay(config.leftCpsMin, config.leftCpsMax);
+                leftDelayPhases = delay(config.leftIntervalMin, config.leftIntervalMax);
             }
-            leftDelayTicks--;
         } else {
-            leftDelayTicks = 0.0;
+            leftDelayPhases = 0;
         }
         if (rightClicking) {
-            if (rightDelayTicks <= 0.0) {
+            if (--rightDelayPhases <= 0) {
                 actions.pit12$rightClick();
-                rightDelayTicks += delay(config.rightCpsMin, config.rightCpsMax);
+                rightDelayPhases = delay(config.rightIntervalMin, config.rightIntervalMax);
             }
-            rightDelayTicks--;
         } else {
-            rightDelayTicks = 0.0;
+            rightDelayPhases = 0;
         }
     }
 
@@ -171,17 +180,17 @@ public final class AutoClickFeature implements ClientLifecycle, ConfigChangeList
         return rightClicking;
     }
 
-    private static double delay(IntegerSetting minimum, IntegerSetting maximum) {
+    private static int delay(IntegerSetting minimum, IntegerSetting maximum) {
         int first = minimum.get();
         int second = maximum.get();
-        return 20.0 / ThreadLocalRandom.current().nextInt(Math.min(first, second),
+        return ThreadLocalRandom.current().nextInt(Math.min(first, second),
                 Math.max(first, second) + 1);
     }
 
     private void reset() {
         leftClicking = false;
         rightClicking = false;
-        leftDelayTicks = 0.0;
-        rightDelayTicks = 0.0;
+        leftDelayPhases = 0;
+        rightDelayPhases = 0;
     }
 }
