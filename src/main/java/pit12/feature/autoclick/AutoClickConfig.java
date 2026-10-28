@@ -27,28 +27,33 @@ import pit12.runtime.config.IntegerSetting;
 
 public final class AutoClickConfig extends FeatureConfig {
     final BooleanSetting leftEnabled;
-    final IntegerSetting leftCpsMin;
-    final IntegerSetting leftCpsMax;
+    final IntegerSetting leftIntervalMin;
+    final IntegerSetting leftIntervalMax;
     final BooleanSetting allowWeapons;
     final BooleanSetting allowFist;
     final BooleanSetting leftAllowDragonEgg;
     final BooleanSetting rightEnabled;
-    final IntegerSetting rightCpsMin;
-    final IntegerSetting rightCpsMax;
+    final IntegerSetting rightIntervalMin;
+    final IntegerSetting rightIntervalMax;
     final BooleanSetting allowBlocks;
     final BooleanSetting allowCake;
     final BooleanSetting rightAllowDragonEgg;
 
     public AutoClickConfig() {
-        super("auto_click", source("Auto click"), ConfigCategory.COMBAT,
-                source("Repeats left and right clicks while their keys are held."), true, false);
+        super("auto_click", source("Auto Click"), ConfigCategory.COMBAT, source(
+                "Repeats left and right clicks while their keys are held. Turning off all filters for a click type removes its item restrictions."),
+                true, false);
         subcategory("left", source("Left click"));
         leftEnabled = booleanSetting("left_enabled", source("Left click enabled"),
                 source("Repeats left clicks while the left-click key is held."), true);
-        leftCpsMin = integerSliderSetting("left_cps_min", source("Minimum CPS"),
-                source("Minimum left click rate."), 8, 1, 20, 1);
-        leftCpsMax = integerSliderSetting("left_cps_max", source("Maximum CPS"),
-                source("Maximum left click rate."), 12, 1, 20, 1);
+        leftIntervalMin = integerSliderSetting("left_interval_min_phases",
+                source("Minimum interval (phases)"),
+                source("Minimum time between left clicks. CPS is about 40 divided by phases."), 3,
+                1, 20, 1);
+        leftIntervalMax = integerSliderSetting("left_interval_max_phases",
+                source("Maximum interval (phases)"),
+                source("Maximum time between left clicks. CPS is about 40 divided by phases."), 7,
+                1, 20, 1);
         allowWeapons = booleanSetting("weapon_only", source("Allow weapons"),
                 source("Allows left clicks with swords and tools."), true);
         allowFist = booleanSetting("only_fist", source("Allow fist"),
@@ -58,10 +63,14 @@ public final class AutoClickConfig extends FeatureConfig {
         subcategory("right", source("Right click"));
         rightEnabled = booleanSetting("right_enabled", source("Right click enabled"),
                 source("Repeats right clicks while the right-click key is held."), true);
-        rightCpsMin = integerSliderSetting("right_cps_min", source("Minimum CPS"),
-                source("Minimum right click rate."), 8, 1, 20, 1);
-        rightCpsMax = integerSliderSetting("right_cps_max", source("Maximum CPS"),
-                source("Maximum right click rate."), 12, 1, 20, 1);
+        rightIntervalMin = integerSliderSetting("right_interval_min_phases",
+                source("Minimum interval (phases)"),
+                source("Minimum time between right clicks. CPS is about 40 divided by phases."), 3,
+                1, 20, 1);
+        rightIntervalMax = integerSliderSetting("right_interval_max_phases",
+                source("Maximum interval (phases)"),
+                source("Maximum time between right clicks. CPS is about 40 divided by phases."), 7,
+                1, 20, 1);
         allowBlocks = booleanSetting("only_blocks", source("Allow blocks"),
                 source("Allows right clicks while holding a block."), true);
         allowCake = booleanSetting("only_cake", source("Allow cake"),

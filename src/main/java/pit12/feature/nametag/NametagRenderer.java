@@ -73,10 +73,10 @@ final class NametagRenderer {
             WorldRenderer vertices = tessellator.getWorldRenderer();
             vertices.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
             if (text.leggings != null) {
-                background(vertices, text.leggingsWidth, 0, font.FONT_HEIGHT);
+                background(vertices, text.leggingsWidth, 0);
             }
             if (text.heldItem != null) {
-                background(vertices, text.heldItemWidth, heldItemY, font.FONT_HEIGHT);
+                background(vertices, text.heldItemWidth, heldItemY);
             }
             tessellator.draw();
             GlStateManager.enableTexture2D();
@@ -114,12 +114,12 @@ final class NametagRenderer {
         }
     }
 
-    private static void background(WorldRenderer vertices, int width, int y, int height) {
+    private static void background(WorldRenderer vertices, int width, int y) {
         int left = -width / 2 - 1;
-        int right = left + width + 2;
+        int right = width / 2 + 1;
         vertices.pos(left, y - 1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        vertices.pos(left, y + height, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        vertices.pos(right, y + height, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        vertices.pos(left, y + 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        vertices.pos(right, y + 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
         vertices.pos(right, y - 1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
     }
 }

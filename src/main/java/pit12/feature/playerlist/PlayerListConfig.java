@@ -57,7 +57,7 @@ public final class PlayerListConfig extends FeatureConfig {
     private final HudConfig hud;
 
     public PlayerListConfig() {
-        super("playerlist", source("Player list HUD"), ConfigCategory.RENDER,
+        super("playerlist", source("Player List HUD"), ConfigCategory.RENDER,
                 source("Shows player names, equipment, distance, and direction in a HUD."));
         subcategory("display", source("Display"));
         hud = hudConfig("player_list", HudAnchor.TOP_LEFT, 6, 6, true);
@@ -79,7 +79,7 @@ public final class PlayerListConfig extends FeatureConfig {
         shortPlayerNames = booleanSetting("short_player_names", source("Remove bounty suffix"),
                 source("Removes bounty suffixes from player names."), false);
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
-                source("Adds N to nicked players' names in Player List."), true);
+                source("Adds N to nicked players' names."), true);
         showDistance = booleanSetting("show_distance", source("Show player distance"),
                 source("Shows the distance to each loaded player."), true);
         showDirection = booleanSetting("show_direction", source("Show player direction"),
@@ -90,17 +90,16 @@ public final class PlayerListConfig extends FeatureConfig {
         hideSpawn = booleanSetting("hide_spawn", source("Hide players in spawn"),
                 source("Hides players in spawn from all groups."), false);
         realNamesKey = keybindSetting("real_names_key", source("Real names key"),
-                source("Hold to show nicked players' real names in Player List."),
-                Keyboard.KEY_TAB);
+                source("Hold to show nicked players' real names."), Keyboard.KEY_TAB);
         subcategory("groups", source("Groups"));
         showGroupName = booleanSetting("show_group_name", source("Show group names"),
                 source("Shows the name above each group."), true);
         showFriend = booleanSetting("show_friend", source("Show Friend group"),
-                source("Shows friends in the player list."), true);
+                source("Shows friends."), true);
         showEnemy = booleanSetting("show_enemy", source("Show Enemy group"),
-                source("Shows enemies in the player list."), true);
+                source("Shows enemies."), true);
         showNick = booleanSetting("show_nick", source("Show Nick group"),
-                source("Shows nicked players in the player list."), true);
+                source("Shows nicked players."), true);
         showRegularity = booleanSetting("show_regularity", source("Show Regularity group"),
                 source("Shows players wearing Regularity leggings."), true);
         showDark = booleanSetting("show_dark", source("Show Dark group"),

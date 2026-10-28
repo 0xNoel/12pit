@@ -23,9 +23,9 @@ import net.minecraft.client.gui.FontRenderer;
 public final class FontWidths {
     private FontWidths() {}
 
-    /** Uses the font's current Unicode mode and glyph metrics. */
     public static int measure(FontRenderer font, String text) {
-        int width = 0;
+        Metrics metrics = font instanceof Metrics ? (Metrics) font : null;
+        float width = 0.0F;
         boolean bold = false;
         for (int index = 0; index < text.length(); index++) {
             char character = text.charAt(index);
@@ -39,12 +39,20 @@ public final class FontWidths {
                 }
                 continue;
             }
-            int characterWidth = font.getCharWidth(character);
-            width += characterWidth;
-            if (bold && characterWidth > 0) {
-                width++;
+            if (metrics != null) {
+                width += metrics.pit12$charAdvance(character, bold);
+            } else {
+                int characterWidth = font.getCharWidth(character);
+                width += characterWidth;
+                if (bold && characterWidth > 0) {
+                    width++;
+                }
             }
         }
-        return width;
+        return Math.round(width);
+    }
+
+    public interface Metrics {
+        float pit12$charAdvance(char character, boolean bold);
     }
 }

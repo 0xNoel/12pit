@@ -108,6 +108,7 @@ import pit12.platform.forge.ForgeCommandAdapter;
 import pit12.platform.lunar.LunarSupport;
 import pit12.platform.lunar.LunarTextureState;
 import pit12.platform.lwjgl.LwjglInputDevice;
+import pit12.platform.mixinconfig.MixinFailureWarning;
 import pit12.platform.oneconfig.OneConfigSupport;
 import pit12.runtime.arrow.ArrowTracker;
 import pit12.runtime.command.CommandRegistry;
@@ -116,6 +117,8 @@ import pit12.runtime.config.ConfigCatalog;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.input.InputBlockBinding;
 import pit12.runtime.input.InputBlocker;
+import pit12.runtime.input.InputTickBinding;
+import pit12.runtime.input.InputTicks;
 import pit12.runtime.languages.Languages;
 import pit12.runtime.nick.NickTracker;
 import pit12.runtime.pit.PitContext;
@@ -163,6 +166,8 @@ public final class ClientBootstrap {
         InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
                 new LwjglInputDevice());
         components.add(input);
+        InputTicks inputTicks = new InputTicks(client, (InputTickBinding) minecraft);
+        components.add(inputTicks);
         CommandRegistry commands =
                 new CommandRegistry(client, configs, ForgeCommandAdapter::register, language);
         components.add(commands);
@@ -194,16 +199,16 @@ public final class ClientBootstrap {
         SwapBindings swapBindings = registerSwap(minecraft, client, configs, session, pitContext,
                 playerEquipment, relations, commands,
                 new File(minecraft.mcDataDir, "12pit/swap-bindings.json").toPath(),
-                (SwapHooksBinding) minecraft, input);
+                (SwapHooksBinding) minecraft, input, inputTicks);
         // Category: No config
         BooleanSetting discordRpc =
                 registerWebUi(webUiConfigs, configs, profiles, relations, hudEditor, swapBindings,
                         commands, new File(minecraft.mcDataDir, "12pit/webui.json").toPath());
         // Category: Render
         TelebowCooldowns telebowCooldowns = registerTelebow(minecraft, configs, session, arrows,
-                relations, textureStates.get());
+                relations, textureStates.get(), players, pitContext);
         PlayerTimers timers = registerTimers(minecraft, configs, session, arrows, relations,
-                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
+                playerNames, hudRegistry, telebowCooldowns, players, playerEquipment, pitContext);
         // Category: Misc
         DenickNames denickNames = registerDenick(minecraft, configs, session, pitContext, presence,
                 playerNames, nicks, players, playerEquipment, commands,
@@ -213,7 +218,7 @@ public final class ClientBootstrap {
         registerDiscordRpc(webUiConfigs, discordRpc);
         // Category: Combat
         registerAutoClick(minecraft, configs, session, (AutoClickBinding) minecraft,
-                (MinecraftActions) minecraft);
+                (MinecraftActions) minecraft, inputTicks);
         registerAutoSprint(configs, (AutoSprintBinding) minecraft);
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         registerSmartBlock(minecraft, configs, session, (SmartBlockBinding) minecraft);
@@ -246,6 +251,7 @@ public final class ClientBootstrap {
         }
         registerScoreboardFix(configs, (ScoreboardFixBinding) minecraft);
         // Platform integrations
+        components.add(new MixinFailureWarning(minecraft, session, language));
         OneConfigSupport oneConfig = new OneConfigSupport(configs, hudRegistry);
         components.add(oneConfig);
         language.addListener(() -> configs.localize(language));
@@ -281,11 +287,12 @@ public final class ClientBootstrap {
     private SwapBindings registerSwap(Minecraft minecraft, ClientThread client,
             ConfigCatalog configs, ClientSession session, PitContext pitContext,
             PlayerEquipmentAccess playerEquipment, RelationLookup relations,
-            CommandRegistry commands, Path path, SwapHooksBinding binding, InputBlocker input) {
+            CommandRegistry commands, Path path, SwapHooksBinding binding, InputBlocker input,
+            InputTicks inputTicks) {
         SwapConfig config = new SwapConfig();
         configs.register(config);
         SwapFeature swap = new SwapFeature(minecraft, client, configs, config, session, pitContext,
-                playerEquipment, relations, commands, path, binding, input, language);
+                playerEquipment, relations, commands, path, binding, input, inputTicks, language);
         components.add(swap);
         return swap.bindings();
     }
@@ -306,11 +313,11 @@ public final class ClientBootstrap {
     // Category: Render
     private TelebowCooldowns registerTelebow(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
-            TextureState textures) {
+            TextureState textures, PlayerEntityTracker players, PitContext pit) {
         TelebowConfig config = new TelebowConfig();
         configs.register(config);
         TelebowFeature feature = new TelebowFeature(minecraft, configs, config, session, arrows,
-                relations, textures);
+                relations, textures, players, pit);
         components.add(feature);
         return feature.cooldowns();
     }
@@ -318,11 +325,12 @@ public final class ClientBootstrap {
     private PlayerTimers registerTimers(Minecraft minecraft, ConfigCatalog configs,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
             PlayerNameCache playerNames, HudRegistry hudRegistry, TelebowCooldowns telebowCooldowns,
-            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment) {
+            PlayerEntityTracker players, PlayerEquipmentAccess playerEquipment, PitContext pit) {
         TimersConfig config = new TimersConfig();
         configs.register(config);
-        TimersFeature feature = new TimersFeature(minecraft, configs, config, session, arrows,
-                relations, playerNames, hudRegistry, telebowCooldowns, players, playerEquipment);
+        TimersFeature feature =
+                new TimersFeature(minecraft, configs, config, session, arrows, relations,
+                        playerNames, hudRegistry, telebowCooldowns, players, playerEquipment, pit);
         components.add(feature);
         return feature;
     }
@@ -349,10 +357,12 @@ public final class ClientBootstrap {
 
     // Category: Combat
     private void registerAutoClick(Minecraft minecraft, ConfigCatalog configs,
-            ClientSession session, AutoClickBinding binding, MinecraftActions actions) {
+            ClientSession session, AutoClickBinding binding, MinecraftActions actions,
+            InputTicks inputTicks) {
         AutoClickConfig config = new AutoClickConfig();
         configs.register(config);
-        components.add(new AutoClickFeature(minecraft, configs, config, session, binding, actions));
+        components.add(new AutoClickFeature(minecraft, configs, config, session, binding, actions,
+                inputTicks));
     }
 
     private void registerAutoSprint(ConfigCatalog configs, AutoSprintBinding binding) {

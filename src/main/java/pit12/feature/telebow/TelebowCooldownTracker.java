@@ -42,6 +42,10 @@ import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
+import pit12.runtime.pit.PitContext;
+import pit12.runtime.pit.PitSnapshot;
+import pit12.runtime.pit.SpawnState;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.session.ClientSession;
 import pit12.shared.event.Listeners;
 import pit12.shared.lifecycle.ClientLifecycle;
@@ -53,6 +57,8 @@ public final class TelebowCooldownTracker
     private final TelebowConfig config;
     private final ClientSession session;
     private final ArrowTracker arrows;
+    private final PlayerEntityTracker players;
+    private final PitContext pit;
     private final List<TelebowCooldownListener> listeners = new ArrayList<>();
     private final Map<UUID, Cooldown> cooldowns = new HashMap<>();
     private final Map<Integer, Shot> shots = new HashMap<>();
@@ -61,11 +67,13 @@ public final class TelebowCooldownTracker
     private boolean active;
 
     TelebowCooldownTracker(ConfigCatalog configs, TelebowConfig config, ClientSession session,
-            ArrowTracker arrows) {
+            ArrowTracker arrows, PlayerEntityTracker players, PitContext pit) {
         this.configs = configs;
         this.config = config;
         this.session = session;
         this.arrows = arrows;
+        this.players = players;
+        this.pit = pit;
     }
 
     @Override
@@ -115,8 +123,9 @@ public final class TelebowCooldownTracker
             return;
         listeners.add(listener);
         long now = System.nanoTime();
+        PitSnapshot snapshot = pit.current();
         for (Cooldown cooldown : cooldowns.values()) {
-            if (now < cooldown.until)
+            if (now < cooldown.until && refreshCooldown(cooldown, snapshot))
                 listener.onTelebowCooldown(cooldown.player, cooldown.until);
         }
     }
@@ -129,8 +138,8 @@ public final class TelebowCooldownTracker
 
     boolean blocksArrow(UUID shooterId, int arrowId) {
         Cooldown cooldown = cooldowns.get(shooterId);
-        return cooldown != null && cooldown.arrowId != arrowId
-                && System.nanoTime() < cooldown.until;
+        return cooldown != null && cooldown.arrowId != arrowId && System.nanoTime() < cooldown.until
+                && refreshCooldown(cooldown, pit.current());
     }
 
     @Override
@@ -139,8 +148,10 @@ public final class TelebowCooldownTracker
         long now = System.nanoTime();
         UUID shooterId = shooter.getUniqueID();
         Cooldown cooldown = cooldowns.get(shooterId);
-        if (cooldown != null && now >= cooldown.until) {
+        PitSnapshot snapshot = pit.current();
+        if (cooldown != null && (now >= cooldown.until || !refreshCooldown(cooldown, snapshot))) {
             cooldowns.remove(shooterId);
+            Listeners.notify(listeners, listener -> listener.onTelebowCooldownRemoved(shooterId));
             cooldown = null;
         }
         boolean attempt = sneaking || lastSneakingNanos != 0
@@ -153,12 +164,13 @@ public final class TelebowCooldownTracker
             return false;
         Cooldown retry = null;
         if (cooldown == null) {
-            cooldown =
-                    new Cooldown(shooter, arrow.getEntityId(), now, now + seconds * 1_000_000_000L);
+            cooldown = new Cooldown(shooter, arrow.getEntityId(), now,
+                    now + seconds * 1_000_000_000L, snapshot);
             cooldowns.put(shooterId, cooldown);
             publish(cooldown);
         } else if (attempt && config.correctCooldown.get()) {
-            retry = new Cooldown(shooter, arrow.getEntityId(), now, now + seconds * 1_000_000_000L);
+            retry = new Cooldown(shooter, arrow.getEntityId(), now, now + seconds * 1_000_000_000L,
+                    snapshot);
         }
         Shot shot = new Shot(shooter, now, retry);
         shots.put(arrow.getEntityId(), shot);
@@ -208,12 +220,13 @@ public final class TelebowCooldownTracker
         // noinspection DataFlowIssue
         Cooldown cooldown = cooldowns.get(shooter.getUniqueID());
         if (cooldown != null && System.nanoTime() < cooldown.until
-                && firstShot >= cooldown.startedAt) {
+                && firstShot >= cooldown.startedAt && refreshCooldown(cooldown, pit.current())) {
             cooldown.until -= 3_000_000_000L;
             publish(cooldown);
         }
         for (Shot pending : attempts) {
-            if (pending.shooter == shooter && firstShot >= pending.firedAt)
+            if (pending.shooter.getUniqueID().equals(shooter.getUniqueID())
+                    && firstShot >= pending.firedAt)
                 pending.retry.until -= 3_000_000_000L;
         }
     }
@@ -233,7 +246,7 @@ public final class TelebowCooldownTracker
         Iterator<Shot> iterator = attempts.iterator();
         while (iterator.hasNext()) {
             Shot shot = iterator.next();
-            if (shot.shooter != shooter)
+            if (!shot.shooter.getUniqueID().equals(shooter.getUniqueID()))
                 continue;
             // Teleport and arrow removal packets may arrive in either order.
             shot.teleportedAt = now;
@@ -247,6 +260,8 @@ public final class TelebowCooldownTracker
     }
 
     private void confirm(Shot shot) {
+        if (!refreshCooldown(shot.retry, pit.current()))
+            return;
         UUID playerId = shot.shooter.getUniqueID();
         Cooldown current = cooldowns.get(playerId);
         if (current != null && current.startedAt > shot.firedAt)
@@ -261,14 +276,42 @@ public final class TelebowCooldownTracker
                 listener -> listener.onTelebowCooldown(cooldown.player, cooldown.until));
     }
 
+    private boolean refreshCooldown(Cooldown cooldown, PitSnapshot pit) {
+        // A live replacement can hide the old entity's death.
+        if (cooldown.player.getHealth() <= 0)
+            return false;
+        EntityPlayer player = players.loadedPlayer(cooldown.player.getUniqueID());
+        if (player == null)
+            player = cooldown.player;
+        if (!player.isEntityAlive())
+            return false;
+        boolean inSpawn =
+                pit.spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
+        if (inSpawn && !cooldown.inSpawn)
+            return false;
+        cooldown.player = player;
+        cooldown.inSpawn = inSpawn;
+        return true;
+    }
+
     @SubscribeEvent
     public void onTick(ClientTickEvent event) {
         if (event.phase != Phase.END || cooldowns.isEmpty() && attempts.isEmpty())
             return;
         long now = System.nanoTime();
-        cooldowns.values().removeIf(cooldown -> now >= cooldown.until);
-        attempts.removeIf(
-                shot -> shot.landedAt != 0 && now - shot.landedAt > TELEPORT_WINDOW_NANOS);
+        PitSnapshot snapshot = pit.current();
+        Iterator<Map.Entry<UUID, Cooldown>> iterator = cooldowns.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, Cooldown> entry = iterator.next();
+            Cooldown cooldown = entry.getValue();
+            if (now >= cooldown.until || !refreshCooldown(cooldown, snapshot)) {
+                iterator.remove();
+                Listeners.notify(listeners,
+                        listener -> listener.onTelebowCooldownRemoved(entry.getKey()));
+            }
+        }
+        attempts.removeIf(shot -> shot.landedAt != 0 && now - shot.landedAt > TELEPORT_WINDOW_NANOS
+                || !refreshCooldown(shot.retry, snapshot));
     }
 
     @Override
@@ -280,16 +323,19 @@ public final class TelebowCooldownTracker
     }
 
     private static final class Cooldown {
-        final EntityPlayer player;
+        EntityPlayer player;
         final int arrowId;
         final long startedAt;
         long until;
+        boolean inSpawn;
 
-        Cooldown(EntityPlayer player, int arrowId, long startedAt, long until) {
+        Cooldown(EntityPlayer player, int arrowId, long startedAt, long until, PitSnapshot pit) {
             this.player = player;
             this.arrowId = arrowId;
             this.startedAt = startedAt;
             this.until = until;
+            inSpawn =
+                    pit.spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
         }
     }
     private static final class Shot {

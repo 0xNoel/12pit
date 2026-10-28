@@ -23,9 +23,6 @@ import net.minecraft.item.ItemStack;
 public interface SwapHooks {
     boolean rightClick();
 
-    // 0 = tick start, 1-3 = input phases.
-    void inventoryTick(int phase);
-
     void drawBinding(ItemStack stack, int x, int y);
 
     void sound(String name, double x, double y, double z, float volume, float pitch);

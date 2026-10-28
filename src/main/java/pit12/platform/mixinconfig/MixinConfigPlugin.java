@@ -18,19 +18,31 @@
  */
 package pit12.platform.mixinconfig;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import net.minecraft.launchwrapper.Launch;
 import org.spongepowered.asm.lib.tree.ClassNode;
+import org.spongepowered.asm.mixin.Mixins;
+import org.spongepowered.asm.mixin.extensibility.IMixinConfig;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
+import org.spongepowered.asm.mixin.extensibility.IMixinErrorHandler;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import pit12.platform.lunar.LunarSupport;
 
-public final class MixinConfigPlugin implements IMixinConfigPlugin {
+public final class MixinConfigPlugin implements IMixinConfigPlugin, IMixinErrorHandler {
+    // Mixin creates a separate instance for error callbacks.
+    private static final Set<String> FAILED_MIXINS = new ConcurrentSkipListSet<>();
     private boolean lunar;
+
+    public static List<String> failedMixinNames() {
+        return new ArrayList<>(FAILED_MIXINS);
+    }
 
     @Override
     public void onLoad(String mixinPackage) {
+        Mixins.registerErrorHandlerClass(MixinConfigPlugin.class.getName());
         lunar = LunarSupport.isLoaded();
     }
 
@@ -57,10 +69,14 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
             return !mixinClassName.endsWith(".LunarFontRendererMixin") && Launch.classLoader
                     .getResource("club/sk1er/patcher/hooks/FontRendererHook.class") != null;
         }
-        // Forge detects OptiFine after Mixin preparation.
-        return !mixinClassName.startsWith("pit12.platform.mixin.feature.resourceleakfix.")
-                || Launch.classLoader
-                        .getResource("optifine/OptiFineClassTransformer.class") != null;
+        if (mixinClassName.startsWith("pit12.platform.mixin.feature.resourceleakfix.")
+                || mixinClassName
+                        .equals("pit12.platform.mixin.rendering.OptiFineFontRendererMixin")) {
+            // Forge detects OptiFine after Mixin preparation.
+            return Launch.classLoader
+                    .getResource("optifine/OptiFineClassTransformer.class") != null;
+        }
+        return true;
     }
 
     @Override
@@ -78,4 +94,22 @@ public final class MixinConfigPlugin implements IMixinConfigPlugin {
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName,
             IMixinInfo mixinInfo) {}
+
+    @Override
+    public ErrorAction onPrepareError(IMixinConfig config, Throwable failure, IMixinInfo mixin,
+            ErrorAction action) {
+        if (config.getPlugin() instanceof MixinConfigPlugin) {
+            FAILED_MIXINS.add(mixin.getName());
+        }
+        return action;
+    }
+
+    @Override
+    public ErrorAction onApplyError(String targetClassName, Throwable failure, IMixinInfo mixin,
+            ErrorAction action) {
+        if (mixin.getConfig().getPlugin() instanceof MixinConfigPlugin) {
+            FAILED_MIXINS.add(mixin.getName());
+        }
+        return action;
+    }
 }

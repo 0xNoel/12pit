@@ -46,7 +46,7 @@ public final class EventListConfig extends FeatureConfig {
     private final Map<EventType, BooleanSetting> shownEvents = new EnumMap<>(EventType.class);
 
     public EventListConfig() {
-        super("eventlist", source("Event list HUD"), ConfigCategory.RENDER,
+        super("eventlist", source("Event List HUD"), ConfigCategory.RENDER,
                 source("Shows upcoming and active Pit events."));
         subcategory("display", source("Display"));
         hud = hudConfig("event_list", HudAnchor.TOP_RIGHT, -6, 6, true);

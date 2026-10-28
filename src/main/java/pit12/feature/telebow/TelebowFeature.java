@@ -44,6 +44,8 @@ import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.item.PitEnchantment;
 import pit12.runtime.item.PitEnchantmentReader;
+import pit12.runtime.pit.PitContext;
+import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.session.ClientSession;
 import pit12.shared.lifecycle.ClientLifecycle;
 import pit12.shared.rendering.TextureState;
@@ -66,14 +68,14 @@ public final class TelebowFeature
 
     public TelebowFeature(Minecraft minecraft, ConfigCatalog configs, TelebowConfig config,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
-            TextureState textures) {
+            TextureState textures, PlayerEntityTracker players, PitContext pit) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
         this.session = session;
         this.arrows = arrows;
         this.relations = relations;
-        cooldowns = new TelebowCooldownTracker(configs, config, session, arrows);
+        cooldowns = new TelebowCooldownTracker(configs, config, session, arrows, players, pit);
         renderer = new TelebowRenderer(minecraft, config, textures);
         aim = new TelebowAim(minecraft, config, player -> colorOf(player, true));
     }

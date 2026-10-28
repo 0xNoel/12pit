@@ -43,7 +43,7 @@ public abstract class TextureMapMixin implements ResourceLeakFixBinding {
     @Dynamic("Added by OptiFine")
     @Redirect(method = "detectMinimumSpriteSize", remap = false, at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/resources/IResource;getInputStream()Ljava/io/InputStream;",
-            remap = true), require = 0)
+            remap = true))
     private InputStream pit12$closeUnusedMetadata(IResource resource) {
         // The first texture reload runs before the config is bound.
         if ((pit12$resourceLeakFixConfig == null || pit12$resourceLeakFixConfig.enabled())

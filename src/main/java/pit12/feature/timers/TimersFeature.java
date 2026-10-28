@@ -51,6 +51,9 @@ import pit12.runtime.config.Setting;
 import pit12.runtime.hud.HudBounds;
 import pit12.runtime.hud.HudRegistry;
 import pit12.runtime.hud.HudRenderer;
+import pit12.runtime.pit.PitContext;
+import pit12.runtime.pit.PitSnapshot;
+import pit12.runtime.pit.SpawnState;
 import pit12.runtime.player.PlayerEntityTracker;
 import pit12.runtime.player.PlayerEquipmentAccess;
 import pit12.runtime.player.PlayerNameCache;
@@ -63,6 +66,8 @@ public final class TimersFeature
     private final ConfigCatalog configs;
     private final TimersConfig config;
     private final ClientSession session;
+    private final PlayerEntityTracker players;
+    private final PitContext pit;
     private final RelationLookup relations;
     private final PlayerNameCache playerNames;
     private final HudRegistry hudRegistry;
@@ -92,11 +97,13 @@ public final class TimersFeature
     public TimersFeature(Minecraft minecraft, ConfigCatalog configs, TimersConfig config,
             ClientSession session, ArrowTracker arrows, RelationLookup relations,
             PlayerNameCache playerNames, HudRegistry hudRegistry, TelebowCooldowns telebow,
-            PlayerEntityTracker players, PlayerEquipmentAccess equipment) {
+            PlayerEntityTracker players, PlayerEquipmentAccess equipment, PitContext pit) {
         this.minecraft = minecraft;
         this.configs = configs;
         this.config = config;
         this.session = session;
+        this.players = players;
+        this.pit = pit;
         this.relations = relations;
         this.playerNames = playerNames;
         this.hudRegistry = hudRegistry;
@@ -250,8 +257,7 @@ public final class TimersFeature
     }
 
     private void appendCountdown(StringBuilder text, Timer timer, TimerType type, long now) {
-        if (timer != null && timer.row != null && now < timer.until
-                && (type == TimerType.TELEBOW || timer.player.isEntityAlive())
+        if (timer != null && timer.row != null && now < timer.until && timer.player.isEntityAlive()
                 && accepts(timer.player, type)) {
             text.append(' ').append(type.color).append(timer.row.time);
         }
@@ -354,7 +360,7 @@ public final class TimersFeature
         UUID playerId = player.getUniqueID();
         Timer previous = venomTimers.get(playerId);
         if (previous == null || previous.player != player || until > previous.until) {
-            Timer timer = new Timer(player, until);
+            Timer timer = new Timer(player, until, pit.current());
             timer.venomSelf = self;
             venomTimers.put(playerId, timer);
             nextRefresh = 0;
@@ -378,7 +384,7 @@ public final class TimersFeature
     private void onJumpBoost(EntityPlayer player, long until) {
         if (!accepts(player, TimerType.JUMP_BOOST))
             return;
-        jumpBoostTimers.put(player.getUniqueID(), new Timer(player, until));
+        jumpBoostTimers.put(player.getUniqueID(), new Timer(player, until, pit.current()));
         jumpBoost.trackJumps(player, until);
         nextRefresh = 0;
     }
@@ -388,10 +394,18 @@ public final class TimersFeature
         UUID playerId = player.getUniqueID();
         Timer timer = telebowCooldowns.get(playerId);
         if (timer == null || timer.player != player) {
-            telebowCooldowns.put(playerId, new Timer(player, until));
+            telebowCooldowns.put(playerId, new Timer(player, until, pit.current()));
         } else {
             timer.until = until;
+            timer.inSpawn = pit.current().spawnStateAt(player.posX, player.posY,
+                    player.posZ) == SpawnState.IN_SPAWN;
         }
+        nextRefresh = 0;
+    }
+
+    @Override
+    public void onTelebowCooldownRemoved(UUID playerId) {
+        telebowCooldowns.remove(playerId);
         nextRefresh = 0;
     }
 
@@ -407,7 +421,7 @@ public final class TimersFeature
         UUID playerId = player.getUniqueID();
         Timer previous = pinTimers.get(playerId);
         if (previous == null || until > previous.until) {
-            pinTimers.put(playerId, new Timer(player, until));
+            pinTimers.put(playerId, new Timer(player, until, pit.current()));
             nextRefresh = 0;
         }
     }
@@ -424,15 +438,39 @@ public final class TimersFeature
                 && telebowCooldowns.isEmpty() && rows.isEmpty())
             return;
         long now = System.nanoTime();
-        if (now < nextRefresh)
-            return;
+        if (now < nextRefresh) {
+            boolean expired = false;
+            boolean changed = false;
+            for (TimersHud hud : activeHuds) {
+                boolean hudChanged = false;
+                for (TimersHud.Row row : hud.rows) {
+                    if (now >= row.until) {
+                        expired = true;
+                    } else {
+                        hudChanged |= row.updateTime(row.until - now);
+                    }
+                }
+                if (hudChanged) {
+                    hud.invalidate();
+                    changed = true;
+                }
+            }
+            if (!expired) {
+                if (changed)
+                    countdownTexts.clear();
+                return;
+            }
+        }
         nextRefresh = now + 100_000_000L;
         countdownTexts.clear();
         pendingRows.clear();
-        boolean orderChanged = pinActive && appendRows(pinTimers, TimerType.PIN, now);
-        orderChanged |= venomActive && appendRows(venomTimers, TimerType.VENOM, now);
-        orderChanged |= jumpBoostActive && appendRows(jumpBoostTimers, TimerType.JUMP_BOOST, now);
-        orderChanged |= telebowActive && appendRows(telebowCooldowns, TimerType.TELEBOW, now);
+        PitSnapshot snapshot = pit.current();
+        boolean orderChanged = pinActive && appendRows(pinTimers, TimerType.PIN, now, snapshot);
+        orderChanged |= venomActive && appendRows(venomTimers, TimerType.VENOM, now, snapshot);
+        orderChanged |=
+                jumpBoostActive && appendRows(jumpBoostTimers, TimerType.JUMP_BOOST, now, snapshot);
+        orderChanged |=
+                telebowActive && appendRows(telebowCooldowns, TimerType.TELEBOW, now, snapshot);
         if (orderChanged || pendingRows.size() != rows.size()) {
             pendingRows.sort(Comparator.comparing((TimersHud.Row row) -> row.type)
                     .thenComparing(row -> row.group).thenComparingLong(row -> row.until));
@@ -443,17 +481,31 @@ public final class TimersFeature
         updateHudRows();
     }
 
-    private boolean appendRows(Map<UUID, Timer> timers, TimerType type, long now) {
+    private boolean appendRows(Map<UUID, Timer> timers, TimerType type, long now, PitSnapshot pit) {
         boolean orderChanged = false;
         Iterator<Timer> iterator = timers.values().iterator();
         while (iterator.hasNext()) {
             Timer timer = iterator.next();
-            if (now >= timer.until || type != TimerType.TELEBOW && !timer.player.isEntityAlive()) {
+            // A live replacement can hide the old entity's death.
+            if (now >= timer.until || timer.player.getHealth() <= 0) {
                 iterator.remove();
                 continue;
             }
+            UUID playerId = timer.player.getUniqueID();
+            EntityPlayer player = players.loadedPlayer(playerId);
+            if (player == null)
+                player = timer.player;
+            boolean inSpawn =
+                    pit.spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
+            if (!player.isEntityAlive() || inSpawn && !timer.inSpawn) {
+                iterator.remove();
+                continue;
+            }
+            if (player != timer.player && type == TimerType.JUMP_BOOST)
+                jumpBoost.trackJumps(player, timer.until);
+            timer.player = player;
+            timer.inSpawn = inSpawn;
             if (accepts(timer.player, type)) {
-                UUID playerId = timer.player.getUniqueID();
                 Group group;
                 if (playerId.equals(minecraft.thePlayer.getUniqueID())) {
                     group = Group.OWN;
@@ -462,7 +514,7 @@ public final class TimersFeature
                     group = relation == Relation.FRIEND ? Group.FRIEND
                             : relation == Relation.ENEMY ? Group.ENEMY : Group.OTHER;
                 }
-                String name = playerNames.displayName(playerId);
+                String name = playerNames.shortName(playerId);
                 if (name == null)
                     name = timer.player.getDisplayName().getFormattedText();
                 if (timer.row == null) {
@@ -500,14 +552,17 @@ public final class TimersFeature
     }
 
     private static final class Timer {
-        final EntityPlayer player;
+        EntityPlayer player;
         long until;
         TimersHud.Row row;
         boolean venomSelf;
+        boolean inSpawn;
 
-        Timer(EntityPlayer player, long until) {
+        Timer(EntityPlayer player, long until, PitSnapshot pit) {
             this.player = player;
             this.until = until;
+            inSpawn =
+                    pit.spawnStateAt(player.posX, player.posY, player.posZ) == SpawnState.IN_SPAWN;
         }
     }
 }
