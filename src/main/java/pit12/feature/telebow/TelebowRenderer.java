@@ -401,14 +401,23 @@ final class TelebowRenderer {
     }
 
     private void drawLabel(String name, int width, FontRenderer font, float alpha) {
+        // FontRenderer makes alpha values below four fully opaque.
+        int textAlpha = Math.round(alpha * 255);
+        if (textAlpha < 4)
+            return;
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
         textures.setEnabled(false);
-        GL11.glColor4f(0, 0, 0, alpha * 0.5F);
+        GL11.glColor4f(0, 0, 0, alpha * 0.25F);
+        int left = -width / 2 - 1;
+        int right = width / 2 + 1;
         GL11.glBegin(GL11.GL_QUADS);
         try {
-            GL11.glVertex3d(-width / 2.0 - 3, -2, 0);
-            GL11.glVertex3d(-width / 2.0 - 3, font.FONT_HEIGHT + 2, 0);
-            GL11.glVertex3d(width / 2.0 + 3, font.FONT_HEIGHT + 2, 0);
-            GL11.glVertex3d(width / 2.0 + 3, -2, 0);
+            GL11.glVertex3d(left, -1, 0);
+            GL11.glVertex3d(left, 8, 0);
+            GL11.glVertex3d(right, 8, 0);
+            GL11.glVertex3d(right, -1, 0);
         } finally {
             GL11.glEnd();
         }
@@ -419,7 +428,14 @@ final class TelebowRenderer {
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.001F);
         GlStateManager.enableAlpha();
         GlStateManager.resetColor();
-        font.drawString(name, -width / 2, 0, Math.round(alpha * 255) << 24 | 0xFFFFFF);
+        int faintAlpha = Math.round(alpha * 32);
+        if (faintAlpha >= 4)
+            font.drawString(name, -width / 2, 0, faintAlpha << 24 | 0xFFFFFF);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(true);
+        font.drawString(name, -width / 2, 0, textAlpha << 24 | 0xFFFFFF);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false);
     }
 
     void remove(TelebowPath path) {
