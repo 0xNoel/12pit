@@ -12,7 +12,7 @@ Each package in `feature` directory is responsible for one user facing capabilit
 
 `platform` wraps the third party frameworks, client extensions, native APIs. It deals with registration, protocol specifics and compatibility hooks, delegates calls from external systems to corresponding `feature`, `runtime` or `shared` interfaces. The adapters are organized by system they are integrating with.
 
-For commands, features declare their commands and actions, `runtime.command` does routing, help and tab completion for them and `platform.forge` registers the commands with Forge.
+Features define their commands and actions. `runtime.command` handles routing, help, tab completion, and availability checks. `platform.forge` registers the commands with Forge.
 
 `feature.webui` runs a local HTTP server that connects the configuration interface (`web-ui`) to config and feature APIs.
 
