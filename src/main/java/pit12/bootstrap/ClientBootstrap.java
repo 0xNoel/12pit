@@ -28,9 +28,6 @@ import java.util.logging.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import pit12.feature.autoclick.AutoClickBinding;
-import pit12.feature.autoclick.AutoClickConfig;
-import pit12.feature.autoclick.AutoClickFeature;
 import pit12.feature.autofish.AutoFishConfig;
 import pit12.feature.autofish.AutoFishFeature;
 import pit12.feature.banalert.BanAlertConfig;
@@ -217,8 +214,6 @@ public final class ClientBootstrap {
         // Category: No config
         registerDiscordRpc(webUiConfigs, discordRpc);
         // Category: Combat
-        registerAutoClick(minecraft, configs, session, (AutoClickBinding) minecraft,
-                (MinecraftActions) minecraft, inputTicks);
         registerAutoSprint(configs, (AutoSprintBinding) minecraft);
         registerNoJumpDelay(configs, (NoJumpDelayBinding) minecraft);
         registerSmartBlock(minecraft, configs, session, (SmartBlockBinding) minecraft);
@@ -356,15 +351,6 @@ public final class ClientBootstrap {
     }
 
     // Category: Combat
-    private void registerAutoClick(Minecraft minecraft, ConfigCatalog configs,
-            ClientSession session, AutoClickBinding binding, MinecraftActions actions,
-            InputTicks inputTicks) {
-        AutoClickConfig config = new AutoClickConfig();
-        configs.register(config);
-        components.add(new AutoClickFeature(minecraft, configs, config, session, binding, actions,
-                inputTicks));
-    }
-
     private void registerAutoSprint(ConfigCatalog configs, AutoSprintBinding binding) {
         AutoSprintConfig config = new AutoSprintConfig();
         configs.register(config);
