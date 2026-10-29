@@ -72,15 +72,15 @@ public final class SwapConfig extends FeatureConfig {
     final ChoiceSetting darkPriority;
 
     public SwapConfig() {
-        super("swap", source("Swap"), ConfigCategory.COMBAT, source(
-                "Swaps armor and hotbar items manually or automatically. Blocks input during swaps."));
+        super("swap", source("Swap"), ConfigCategory.COMBAT,
+                source("Swaps armor and hotbar items manually or automatically."));
         subcategory("general", source("General"));
         rightClick = booleanSetting("right_click", source("Right click swap"),
                 source("Right-click held armor to replace the armor in its slot."), true);
         randomClickTiming = booleanSetting("random_click_timing", source("Random click timing"),
-                source("Randomizes when inventory clicks are sent within each tick."), true);
+                source("Randomizes inventory click timing."), true);
         shiftClick = booleanSetting("shift_click", source("Shift click swap"),
-                source("Use shift clicks instead of number keys to swap armor."), false);
+                source("Swaps armor with shift clicks."), false);
         inventoryDisplay = choiceSetting("inventory_display", source("Inventory visibility"),
                 source("Shows or hides the inventory during swaps."), 0,
                 new ChoiceSetting.Choice(0, source("Hidden")),
@@ -94,7 +94,7 @@ public final class SwapConfig extends FeatureConfig {
                 10, 1);
         resumeInputNextTick = booleanSetting("resume_input_next_tick",
                 source("Resume input next tick"),
-                source("Keeps all input locked until the next tick after closing the inventory."),
+                source("Keeps movement, clicks, and key presses locked until the next tick after closing the inventory."),
                 true);
         swapMessages = booleanSetting("swap_messages", source("Swap messages"),
                 source("Shows a message after items are swapped or unequipped."), true);
@@ -119,7 +119,7 @@ public final class SwapConfig extends FeatureConfig {
                 source("Shows keys on bound items outside their target slots."), true);
         subcategory("automatic_swap", source("Automatic swap"));
         autoSwap = booleanSetting("auto_swap", source("Automatic swap"), source(
-                "Swaps items when you become poisoned, your health is low, or a dark target's health is low."),
+                "Swaps items when you become poisoned, your health is low, or a player wearing Escape Pod or Phoenix has low health."),
                 false);
         autoSwapMessages = booleanSetting("auto_swap_messages", source("Automatic swap messages"),
                 source("Shows why automatic swaps happened."), true);
@@ -127,12 +127,12 @@ public final class SwapConfig extends FeatureConfig {
         venomArmor = booleanSetting("venom_armor", source("Swap diamond armor"),
                 source("Equips diamond leggings and boots when you become poisoned."), true);
         venomSpade = booleanSetting("venom_spade", source("Swap Combat Spade"), source(
-                "Moves a diamond shovel to the selected hotbar slot when you become poisoned."),
+                "Moves a Combat Spade to the selected hotbar slot when you become poisoned."),
                 true);
         skipVenomPants = booleanSetting("skip_venom_pants", source("Skip while wearing Venom"),
                 source("Skips poison swaps while wearing Combo Venom leggings."), false);
         spadeSlot = integerSliderSetting("spade_slot", source("Combat Spade slot"),
-                source("Hotbar slot used for the diamond shovel during poison swaps."), 1, 1, 9, 1);
+                source("Hotbar slot used for the Combat Spade during poison swaps."), 1, 1, 9, 1);
         subsubcategory("health", "Pod & Phoenix");
         escapePod = booleanSetting("escape_pod", source("Use Escape Pod"),
                 source("Equips Escape Pod leggings at or below their health threshold."), true);
@@ -173,12 +173,11 @@ public final class SwapConfig extends FeatureConfig {
         darkRange = integerSliderSetting("dark_range", source("Target range (blocks)"),
                 source("Maximum straight-line distance to targets in both trigger modes."), 6, 1,
                 32, 1);
-        restoreDark = booleanSetting("restore_dark", source("Restore leggings"), source(
-                "Restores your previous leggings once the selected mode has no remaining dark targets."),
-                true);
+        restoreDark = booleanSetting("restore_dark", source("Restore leggings"),
+                source("Restores the leggings worn before an automatic Somber swap."), true);
         darkRestoreThreshold = integerSliderSetting("dark_restore_threshold",
                 source("Restore threshold"),
-                source("Stops tracking a target when its health reaches this value and exceeds the equip threshold."),
+                source("Health targets must recover to before your previous leggings can be restored. It must also exceed the equip threshold."),
                 10, 0, 20, 1);
         skipLowPod = booleanSetting("dark_skip_low_pod",
                 source("Skip Escape Pod players below 2 hearts"),

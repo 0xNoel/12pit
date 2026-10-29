@@ -159,13 +159,6 @@ main[aria-busy='true'] {
   border-radius: 12px;
 }
 
-.brand-version-skeleton {
-  position: absolute;
-  bottom: 5px;
-  width: 28px;
-  height: 8px;
-}
-
 .nav-skeleton-item {
   display: flex;
   align-items: center;

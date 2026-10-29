@@ -128,10 +128,10 @@ public final class TimersConfig extends FeatureConfig {
         venomReach = doubleSliderSetting("venom_reach_blocks", source("Maximum reach (blocks)"),
                 source("Maximum distance at which hits count toward Venom estimates."), 4.5, 2, 6,
                 0.1);
-        venomHitboxMargin =
-                doubleSliderSetting("venom_hitbox_margin_blocks", source("Hitbox margin (blocks)"),
-                        source("Extra space around players used to recognize Venom hits."), 0.4, 0,
-                        1, 0.05);
+        venomHitboxMargin = doubleSliderSetting("venom_hitbox_margin_blocks",
+                source("Hitbox margin (blocks)"),
+                source("Counts hits up to this far outside player hitboxes toward Venom timers."),
+                0.4, 0, 1, 0.05);
         subcategory("buffs", source("Buffs"));
         subsubcategory("jump_boost", "Jump Boost");
         jumpBoostEnabled = booleanSetting("jump_boost_enabled", source("Enabled"),
@@ -158,7 +158,7 @@ public final class TimersConfig extends FeatureConfig {
         subcategory("cooldowns", source("Cooldowns"));
         subsubcategory("telebow", "Telebow");
         telebowEnabled = booleanSetting("telebow_enabled", source("Enabled"), source(
-                "Shows estimated Telebow cooldowns. Requires telebow prediction to be enabled."),
+                "Shows estimated Telebow cooldowns. Requires Telebow Prediction to be enabled."),
                 true);
         telebowOwn = booleanSetting("telebow_own", source("Own"),
                 source("Shows your Telebow cooldown."), true);

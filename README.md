@@ -4,9 +4,9 @@
 
 English | [简体中文](docs/zh-CN/README.md)
 
-12pit is a free and open-source for The Pit. It has its own configuration interface and also supports [OneConfig](https://github.com/Polyfrost/OneConfig). It is also compatible with Lunar Client.
+12pit is a free and open-source mod for The Pit. It has its own configuration interface and also supports [OneConfig](https://github.com/Polyfrost/OneConfig). It is also compatible with Lunar Client.
 
-12pit is recommended to be run with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home).
+12pit is recommended to be run with [PolyPatcher](https://modrinth.com/mod/patcher) and [OptiFine](https://optifine.net/home) for better performance.
 
 For help and discussion regarding development, please join our [Discord](https://discord.gg/e9PRKMUenc) and visit `#developer`.
 
@@ -56,11 +56,12 @@ Install the recommended extensions when prompted. Press `Ctrl+Shift+B` (`Cmd+Shi
 
 12pit includes the following third-party components:
 
-- [SpongePowered Mixin](https://github.com/SpongePowered/Mixin), MIT. License text: [MIXIN-MIT.txt](src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt).
-- [ASM](https://asm.ow2.io/), bundled with Mixin, BSD 3-Clause. License text: [ASM-BSD-3-CLAUSE.txt](src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt).
-- [Vue](https://vuejs.org/), MIT. License text: [VUE-MIT.txt](src/main/resources/META-INF/third-party-notices/VUE-MIT.txt).
-- [Vite](https://vite.dev/), used for module preloading in the configuration interface, MIT. License text: [VITE-MIT.txt](src/main/resources/META-INF/third-party-notices/VITE-MIT.txt).
-- [Rolldown](https://rolldown.rs/), used for module preloading in the configuration interface, MIT. License text: [ROLLDOWN-MIT.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt).
-- [Lucide](https://lucide.dev/), ISC, with Feather icons under MIT. License text: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt).
+- [SpongePowered Mixin](https://github.com/SpongePowered/Mixin) is licensed under MIT. License text: [MIXIN-MIT.txt](src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt).
+- [ASM](https://asm.ow2.io/) is licensed under BSD 3-Clause. License text: [ASM-BSD-3-CLAUSE.txt](src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt). It is bundled with Mixin.
+- [Vue](https://vuejs.org/) is licensed under MIT. License text: [VUE-MIT.txt](src/main/resources/META-INF/third-party-notices/VUE-MIT.txt).
+- [Vite](https://vite.dev/) is licensed under MIT. License text: [VITE-MIT.txt](src/main/resources/META-INF/third-party-notices/VITE-MIT.txt). It provides module preload support for the configuration interface.
+- [Rolldown](https://rolldown.rs/) is licensed under MIT. License text: [ROLLDOWN-MIT.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt). Third-party notices: [ROLLDOWN-THIRD-PARTY-LICENSE.txt](src/main/resources/META-INF/third-party-notices/ROLLDOWN-THIRD-PARTY-LICENSE.txt). It provides module preload support for the configuration interface.
+- [Lucide](https://lucide.dev/) is licensed under ISC. License text: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt).
+- [Feather](https://github.com/feathericons/feather) is licensed under MIT. License text: [LUCIDE-ISC.txt](src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt). Its icons are included through Lucide.
 
 12pit is licensed under [GPL-3.0-or-later](LICENSE).

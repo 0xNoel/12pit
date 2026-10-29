@@ -18,6 +18,8 @@
  */
 package pit12.runtime.input;
 
-public interface MouseInputBinding {
-    void pit12$clearMouseInput();
+public interface SprintInputBinding {
+    boolean pit12$pauseDoubleTapSprint();
+
+    void pit12$resumeDoubleTapSprint();
 }

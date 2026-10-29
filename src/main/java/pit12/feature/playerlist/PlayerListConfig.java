@@ -90,7 +90,8 @@ public final class PlayerListConfig extends FeatureConfig {
         hideSpawn = booleanSetting("hide_spawn", source("Hide players in spawn"),
                 source("Hides players in spawn from all groups."), false);
         realNamesKey = keybindSetting("real_names_key", source("Real names key"),
-                source("Hold to show nicked players' real names."), Keyboard.KEY_TAB);
+                source("Hold to show nicked players' real names found by Denick."),
+                Keyboard.KEY_TAB);
         subcategory("groups", source("Groups"));
         showGroupName = booleanSetting("show_group_name", source("Show group names"),
                 source("Shows the name above each group."), true);

@@ -52,16 +52,16 @@ final class RelationCommand {
         String name = relation.name().toLowerCase(Locale.ROOT);
         return CommandNode
                 .command(name,
-                        relation == Relation.FRIEND ? source("Manage friend relations")
-                                : source("Manage enemy relations"))
+                        relation == Relation.FRIEND ? source("Manage your friend list")
+                                : source("Manage your enemy list"))
                 .aliases(relation == Relation.FRIEND ? "friends" : "enemies",
                         relation == Relation.FRIEND ? "f" : "e")
                 .arguments("<player>", 1, 1)
                 .executes((sender, args) -> change(sender, "toggle", args[0]))
                 .suggests((sender, args) -> playerNames(true))
                 .child(CommandNode.command("list",
-                        relation == Relation.FRIEND ? source("Show friend relations")
-                                : source("Show enemy relations"))
+                        relation == Relation.FRIEND ? source("Show your friend list")
+                                : source("Show your enemy list"))
                         .executes(this::list))
                 .child(CommandNode.command("add", source("Add a player"))
                         .arguments("<player>", 1, 1)

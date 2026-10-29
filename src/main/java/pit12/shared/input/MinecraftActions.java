@@ -19,9 +19,5 @@
 package pit12.shared.input;
 
 public interface MinecraftActions {
-    void pit12$leftClick();
-
     void pit12$rightClick();
-
-    void pit12$setLeftClickCounter(int ticks);
 }

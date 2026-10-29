@@ -1,4 +1,4 @@
-<!-- Source: docs/CONTRIBUTING.md; Based on: b89c7e1ea68fd0183c6877fdbe32f36b5d89cb2b -->
+<!-- Source: docs/CONTRIBUTING.md; Based on: fd3499ea65660abdafb7116049c5fd734e73efe8 -->
 
 # 参与贡献
 
@@ -10,7 +10,7 @@
 
 如果你想找点事做，可以看看带有 https://github.com/12src/12pit/labels/confirmed 和 https://github.com/12src/12pit/labels/help%20wanted 标签的未关闭议题；刚接触项目的话，可以从同时带有 https://github.com/12src/12pit/labels/confirmed 和 https://github.com/12src/12pit/labels/good%20first%20issue 标签的议题入手。动手前请先看一下负责人、评论和关联的拉取请求，确认还没有别人接手。
 
-如果打算开发较大的新功能，或者改动涉及设计取舍，请先提一个议题讨论，具体要求见[议题指南](ISSUES.md)。拿不准改动范围时，可以在议题里问，或者到 [Discord](https://discord.gg/e9PRKMUenc) 的 `#developer` 频道交流。
+如果改动需要设计新功能，或者会显著影响模组的其他部分，请先提一个议题讨论，具体要求见[议题指南](ISSUES.md)。拿不准改动范围时，可以在议题里问，或者到 [Discord](https://discord.gg/e9PRKMUenc) 的 `#developer` 频道交流。
 
 ## 认领议题
 
@@ -18,13 +18,13 @@
 
 ## 开发改动
 
-每次提交请专注于一件事，提交说明推荐使用[约定式提交](https://www.conventionalcommits.org/)格式，比如 `fix: correct profile loading` 或 `docs: clarify build steps`。一个拉取请求通常只解决一个目标，如果几处小改动紧密相关、方便一起审查，也可以合在同一个拉取请求里。
+每次提交请专注于一件事，提交说明请使用[约定式提交](https://www.conventionalcommits.org/)格式，比如 `fix: correct profile loading` 或 `docs: clarify build steps`。一个拉取请求通常只解决一个目标，如果几处小改动紧密相关、方便一起审查，也可以合在同一个拉取请求里。
 
 动工前建议先读一下[架构指南](ARCHITECTURE.md)了解包边界和依赖关系，再参考[调试指南](DEBUGGING.md)运行开发客户端和检查。
 
 改代码前先看看相关模块现有的实现，能复用现有工具的尽量复用。新增逻辑放在所属功能的包内，确实有多处复用需求时再提取到共享层，不要在拉取请求里顺手做无关的代码清理。
 
-[BootstrapLayoutTest](../../src/test/java/pit12/architecture/BootstrapLayoutTest.java) 会实例化各功能的配置类来检查分类和注册顺序。不需要注入依赖的配置类使用无参构造器；如果新增的配置类需要传入构造参数，记得同步更新该测试。
+[BootstrapLayoutTest](../../src/test/java/pit12/architecture/BootstrapLayoutTest.java) 会实例化各功能的配置类来检查分类和注册顺序。不需要注入依赖的配置类使用 `public` 无参构造器；如果新增的配置类需要传入构造参数，记得同步更新该测试。
 
 项目里的界面文案、日志和文档请保持自然、简练。
 

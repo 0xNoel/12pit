@@ -151,25 +151,21 @@ function closeTransfer() {
   <div class="app" :inert="transferMode !== null">
     <aside class="sidebar">
       <div class="brand">
-        <span class="brand-lockup"
-          ><span class="brand-name">12<span>pit</span></span
-          ><small v-if="state" class="brand-version" :title="state.version">{{
+        <span v-if="state" class="brand-lockup">
+          <span class="brand-name startup-fade">12<span>pit</span></span>
+          <small class="brand-version" :title="state.version">{{
             state.version
-          }}</small
-          ><span
-            v-else
-            class="skeleton brand-version-skeleton"
-            aria-hidden="true"
-          ></span
-        ></span>
+          }}</small>
+        </span>
       </div>
       <nav
         :aria-label="t('Pages')"
         :style="{ '--indicator-top': navIndicatorTop }"
       >
         <template v-if="state">
-          <span class="nav-indicator" aria-hidden="true" />
+          <span class="nav-indicator startup-fade" aria-hidden="true" />
           <button
+            class="startup-fade"
             :class="{ active: page === 'features' }"
             :aria-current="page === 'features' ? 'page' : undefined"
             @click="selectPage('features')"
@@ -177,6 +173,7 @@ function closeTransfer() {
             {{ t('Features') }}
           </button>
           <button
+            class="startup-fade"
             :class="{ active: page === 'profiles' }"
             :aria-current="page === 'profiles' ? 'page' : undefined"
             @click="selectPage('profiles')"
@@ -184,6 +181,7 @@ function closeTransfer() {
             {{ t('Profiles') }}
           </button>
           <button
+            class="startup-fade"
             :class="{ active: page === 'relations' }"
             :aria-current="page === 'relations' ? 'page' : undefined"
             @click="selectPage('relations')"
@@ -191,7 +189,7 @@ function closeTransfer() {
             {{ t('Relations') }}
           </button>
           <button
-            class="nav-settings"
+            class="nav-settings startup-fade"
             :class="{ active: page === 'settings' }"
             :aria-current="page === 'settings' ? 'page' : undefined"
             @click="selectPage('settings')"
@@ -216,6 +214,7 @@ function closeTransfer() {
           <a
             v-for="link in links"
             :key="link.id"
+            class="startup-fade"
             :href="link.url"
             target="_blank"
             rel="noopener noreferrer"
@@ -272,7 +271,11 @@ function closeTransfer() {
           </div>
         </div>
       </div>
-      <ResizeTransition v-else :name="pageTransition" class="page-stage">
+      <ResizeTransition
+        v-else
+        :name="pageTransition"
+        class="page-stage startup-fade"
+      >
         <div :key="pageKey" class="page-view">
           <FeaturesPage
             v-if="page === 'features'"

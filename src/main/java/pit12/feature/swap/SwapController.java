@@ -411,13 +411,14 @@ final class SwapController {
 
     private String swapMessage(int first, int second) {
         if (current.automaticReason != null) {
-            return options.automaticMessages
-                    ? language.format("Swapped {0} with {1} due to {2}", itemName(first),
-                            itemName(second), current.automaticReason)
+            return options.automaticMessages ? EnumChatFormatting.RESET.toString()
+                    + EnumChatFormatting.GREEN + language.format("Swapped {0} with {1} due to {2}",
+                            itemName(first), itemName(second), current.automaticReason)
                     : null;
         }
         return options.messages
-                ? language.format("Swapped {0} with {1}", itemName(first), itemName(second))
+                ? EnumChatFormatting.RESET.toString() + EnumChatFormatting.GREEN
+                        + language.format("Swapped {0} with {1}", itemName(first), itemName(second))
                 : null;
     }
 

@@ -1,4 +1,4 @@
-<!-- Source: README.md; Based on: 0454cf3738ee1313340b0ec009705dbe8c845c41 -->
+<!-- Source: README.md; Based on: fd3499ea65660abdafb7116049c5fd734e73efe8 -->
 
 # 12pit
 
@@ -36,7 +36,7 @@ Linux 或 macOS：
 
 ## 开发
 
-开发时建议同时安装 PolyPatcher 和 OptiFine，至少保证在两者的默认设置下兼容。
+测试改动时，请同时安装 PolyPatcher 和 OptiFine 并运行游戏，确认改动在两者的默认设置下正常工作。
 
 ### IntelliJ IDEA
 
@@ -58,11 +58,12 @@ Linux 或 macOS：
 
 12pit 包含以下第三方开源组件：
 
-- [SpongePowered Mixin](https://github.com/SpongePowered/Mixin)，MIT。许可证文本：[MIXIN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt)。
-- [ASM](https://asm.ow2.io/)，随 Mixin 打包，BSD 3-Clause。许可证文本：[ASM-BSD-3-CLAUSE.txt](../../src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt)。
-- [Vue](https://vuejs.org/)，MIT。许可证文本：[VUE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VUE-MIT.txt)。
-- [Vite](https://vite.dev/)，用于配置界面的模块预加载，MIT。许可证文本：[VITE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VITE-MIT.txt)。
-- [Rolldown](https://rolldown.rs/)，用于配置界面的模块预加载，MIT。许可证文本：[ROLLDOWN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt)。
-- [Lucide](https://lucide.dev/)，ISC，包含 MIT 协议的 Feather 图标。许可证文本：[LUCIDE-ISC.txt](../../src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt)。
+- [SpongePowered Mixin](https://github.com/SpongePowered/Mixin) 使用 MIT 许可证。许可证文本：[MIXIN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/MIXIN-MIT.txt)。
+- [ASM](https://asm.ow2.io/) 使用 BSD 3-Clause 许可证。许可证文本：[ASM-BSD-3-CLAUSE.txt](../../src/main/resources/META-INF/third-party-notices/ASM-BSD-3-CLAUSE.txt)。随 Mixin 打包。
+- [Vue](https://vuejs.org/) 使用 MIT 许可证。许可证文本：[VUE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VUE-MIT.txt)。
+- [Vite](https://vite.dev/) 使用 MIT 许可证。许可证文本：[VITE-MIT.txt](../../src/main/resources/META-INF/third-party-notices/VITE-MIT.txt)。用于配置界面的模块预加载。
+- [Rolldown](https://rolldown.rs/) 使用 MIT 许可证。许可证文本：[ROLLDOWN-MIT.txt](../../src/main/resources/META-INF/third-party-notices/ROLLDOWN-MIT.txt)。第三方声明：[ROLLDOWN-THIRD-PARTY-LICENSE.txt](../../src/main/resources/META-INF/third-party-notices/ROLLDOWN-THIRD-PARTY-LICENSE.txt)。用于配置界面的模块预加载。
+- [Lucide](https://lucide.dev/) 使用 ISC 许可证。许可证文本：[LUCIDE-ISC.txt](../../src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt)。
+- [Feather](https://github.com/feathericons/feather) 使用 MIT 许可证。许可证文本：[LUCIDE-ISC.txt](../../src/main/resources/META-INF/third-party-notices/LUCIDE-ISC.txt)。图标通过 Lucide 包含在模组中。
 
 12pit 基于 [GPL-3.0-or-later](../../LICENSE) 协议开源。

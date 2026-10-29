@@ -25,33 +25,31 @@ import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import pit12.shared.concurrent.ClientThread;
+import pit12.shared.input.Keybind;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class InputBlocker implements ClientLifecycle {
     private final Minecraft minecraft;
     private final ClientThread client;
     private final InputBlockBinding binding;
-    private final InputDevice device;
     private final Set<Object> owners = new HashSet<>();
     private final List<InputHandler> handlers = new ArrayList<>();
     private Object actionOwner;
+    private EntityPlayerSP sprintPlayer;
+    private int sprintForwardKey;
+    private int modifiers;
+    private volatile boolean locked;
     private boolean cursorReleased;
     private boolean started;
 
-    public InputBlocker(Minecraft minecraft, ClientThread client, InputBlockBinding binding,
-            InputDevice device) {
+    public InputBlocker(Minecraft minecraft, ClientThread client, InputBlockBinding binding) {
         this.minecraft = minecraft;
         this.client = client;
         this.binding = binding;
-        this.device = device;
     }
 
     @Override
@@ -68,6 +66,7 @@ public final class InputBlocker implements ClientLifecycle {
         client.check();
         if (locked()) {
             owners.clear();
+            locked = false;
             release(false);
         }
         handlers.clear();
@@ -90,41 +89,43 @@ public final class InputBlocker implements ClientLifecycle {
         client.check();
         boolean alreadyLocked = locked();
         owners.add(owner);
+        locked = true;
         if (alreadyLocked)
             return;
-        device.block(this::blockedKey, this::focusOnClick);
-        MinecraftForge.EVENT_BUS.register(this);
+        EntityPlayerSP player = minecraft.thePlayer;
+        sprintPlayer = player != null && ((SprintInputBinding) player).pit12$pauseDoubleTapSprint()
+                ? player
+                : null;
+        sprintForwardKey = minecraft.gameSettings.keyBindForward.getKeyCode();
+        if (!held(sprintForwardKey))
+            sprintPlayer = null;
+        modifiers = 0;
+        for (int key : new int[] {Keyboard.KEY_LSHIFT, Keyboard.KEY_RSHIFT, Keyboard.KEY_LCONTROL,
+                Keyboard.KEY_RCONTROL, Keyboard.KEY_LMENU, Keyboard.KEY_RMENU, Keyboard.KEY_LMETA,
+                Keyboard.KEY_RMETA}) {
+            if (held(key))
+                modifiers |= Keybind.modifierMask(key);
+        }
         KeyBinding.unPressAllKeys();
         if (minecraft.playerController != null) {
             minecraft.playerController.resetBlockRemoving();
             if (minecraft.thePlayer != null && minecraft.thePlayer.isUsingItem())
                 minecraft.playerController.onStoppedUsingItem(minecraft.thePlayer);
         }
-        EntityPlayerSP player = minecraft.thePlayer;
-        if (player != null) {
-            player.movementInput.moveForward = 0;
-            player.movementInput.moveStrafe = 0;
-            player.movementInput.jump = false;
-            player.movementInput.sneak = false;
-            player.moveForward = 0;
-            player.moveStrafing = 0;
-            player.setJumping(false);
-            player.setSprinting(false);
-        }
-        minecraft.mouseHelper.deltaX = 0;
-        minecraft.mouseHelper.deltaY = 0;
-        if (minecraft.entityRenderer != null)
-            ((MouseInputBinding) minecraft.entityRenderer).pit12$clearMouseInput();
+        if (player != null)
+            clearMovement(player);
     }
 
     public void unlock(Object owner, boolean resume) {
         client.check();
-        if (owners.remove(owner) && !locked())
+        if (owners.remove(owner) && owners.isEmpty()) {
+            locked = false;
             release(resume);
+        }
     }
 
     public boolean locked() {
-        return !owners.isEmpty();
+        return locked;
     }
 
     public boolean blockedFor(Object owner) {
@@ -132,7 +133,8 @@ public final class InputBlocker implements ClientLifecycle {
     }
 
     public boolean blocksActions() {
-        return locked() && (actionOwner == null || blockedFor(actionOwner));
+        return locked() && (!minecraft.isCallingFromMinecraftThread() || actionOwner == null
+                || blockedFor(actionOwner));
     }
 
     public void releaseCursor() {
@@ -156,7 +158,6 @@ public final class InputBlocker implements ClientLifecycle {
 
     public void runAction(Object owner, Runnable action) {
         client.check();
-        // Let the lock owner use vanilla interaction hooks without restoring physical input.
         Object previous = actionOwner;
         actionOwner = owner;
         try {
@@ -167,8 +168,10 @@ public final class InputBlocker implements ClientLifecycle {
     }
 
     public boolean key(int key, boolean pressed, boolean repeat) {
-        if (locked())
+        if (locked()) {
+            blockedKey(key, pressed, repeat);
             return true;
+        }
         for (InputHandler handler : handlers) {
             if (handler.key(key, pressed, repeat))
                 return true;
@@ -176,13 +179,47 @@ public final class InputBlocker implements ClientLifecycle {
         return false;
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.START)
-            device.dispatchEvents();
+    public void drainEvents() {
+        if (Keyboard.isCreated()) {
+            while (Keyboard.next())
+                blockedKey(Keyboard.getEventKey(), Keyboard.getEventKeyState(),
+                        Keyboard.isRepeatEvent());
+        }
+        if (Mouse.isCreated()) {
+            while (Mouse.next()) {
+                int button = Mouse.getEventButton();
+                boolean pressed = Mouse.getEventButtonState();
+                if (!pressed && sprintForwardKey == button - 100)
+                    sprintPlayer = null;
+                if (locked() && button >= 0 && pressed && !Mouse.isGrabbed()
+                        && Mouse.isInsideWindow())
+                    focusOnClick();
+            }
+        }
+        if (!Display.isActive() || !held(sprintForwardKey))
+            sprintPlayer = null;
     }
 
-    private void blockedKey(int key, int modifiers) {
+    public void clearMovement(EntityPlayerSP player) {
+        player.movementInput.moveForward = 0;
+        player.movementInput.moveStrafe = 0;
+        player.movementInput.jump = false;
+        player.movementInput.sneak = false;
+        player.moveForward = 0;
+        player.moveStrafing = 0;
+        player.setJumping(false);
+    }
+
+    private void blockedKey(int key, boolean pressed, boolean repeat) {
+        if (!pressed && key == sprintForwardKey)
+            sprintPlayer = null;
+        int modifier = Keybind.modifierMask(key);
+        if (pressed)
+            modifiers |= modifier;
+        else
+            modifiers &= ~modifier;
+        if (!pressed || repeat)
+            return;
         for (Object owner : owners) {
             if (owner instanceof InputHandler && ((InputHandler) owner).blockedKey(key, modifiers))
                 return;
@@ -190,11 +227,18 @@ public final class InputBlocker implements ClientLifecycle {
     }
 
     private void release(boolean resume) {
-        MinecraftForge.EVENT_BUS.unregister(this);
         cursorReleased = false;
-        device.unblock();
-        minecraft.mouseHelper.deltaX = 0;
-        minecraft.mouseHelper.deltaY = 0;
+        if (Keyboard.isCreated())
+            Keyboard.poll();
+        if (Mouse.isCreated())
+            Mouse.poll();
+        drainEvents();
+        EntityPlayerSP player = sprintPlayer;
+        sprintPlayer = null;
+        if (Mouse.isCreated())
+            Mouse.getDWheel();
+        // Lunar restores Toggle Sprint when the inventory closes.
+        boolean sprintPressed = minecraft.gameSettings.keyBindSprint.isKeyDown();
         KeyBinding.unPressAllKeys();
         if (!resume || !minecraft.inGameHasFocus || !Display.isActive())
             return;
@@ -209,8 +253,13 @@ public final class InputBlocker implements ClientLifecycle {
                 }
             }
             if (!consumed)
-                KeyBinding.setKeyBindState(key, held(key));
+                KeyBinding.setKeyBindState(key, held(key)
+                        || sprintPressed && keyBinding == minecraft.gameSettings.keyBindSprint);
         }
+        if (player != null && player == minecraft.thePlayer
+                && sprintForwardKey == minecraft.gameSettings.keyBindForward.getKeyCode()
+                && minecraft.gameSettings.keyBindForward.isKeyDown())
+            ((SprintInputBinding) player).pit12$resumeDoubleTapSprint();
     }
 
     public static boolean held(int key) {

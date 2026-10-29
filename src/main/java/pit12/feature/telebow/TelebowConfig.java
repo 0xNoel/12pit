@@ -69,7 +69,7 @@ public final class TelebowConfig extends FeatureConfig {
         correctCooldown = booleanSetting("correct_cooldown", source("Correct cooldown estimates"),
                 source("Updates cooldown estimates after successful Telebow teleports."), true);
         sneakWindow = integerSliderSetting("sneak_window_ms", source("Prediction margin (ms)"),
-                source("Time allowed after sneaking ends for shot prediction. Also sets the delay allowed when detecting hits that reduce cooldowns."),
+                source("Predicts shots fired within this time after sneaking ends. Also allows this much delay for arrow hits that shorten cooldowns."),
                 250, 0, 1000, 25);
         subcategory("aim", source("Aim points"));
         aimPoints = booleanSetting("aim_points", source("Show aim points"), source(

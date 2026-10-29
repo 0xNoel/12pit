@@ -37,7 +37,7 @@ import pit12.runtime.input.InputTicks.Phase;
 @Mixin(value = Minecraft.class, priority = 900)
 public abstract class MinecraftMixin implements InputBlockBinding, InputTickBinding {
     @Unique
-    private InputBlocker pit12$inputBlocker;
+    private volatile InputBlocker pit12$inputBlocker;
     @Unique
     private InputTicks pit12$inputTicks;
 
@@ -61,6 +61,8 @@ public abstract class MinecraftMixin implements InputBlockBinding, InputTickBind
                     target = "Lnet/minecraftforge/fml/common/FMLCommonHandler;onPreClientTick()V",
                     shift = At.Shift.AFTER, remap = false))
     private void pit12$startInputTick(CallbackInfo callback) {
+        if (pit12$inputBlocker != null && pit12$inputBlocker.locked())
+            pit12$inputBlocker.drainEvents();
         if (pit12$inputTicks != null)
             pit12$inputTicks.tick(Phase.START);
     }
@@ -97,9 +99,9 @@ public abstract class MinecraftMixin implements InputBlockBinding, InputTickBind
             pit12$inputTicks.tick(Phase.AFTER_INPUT);
     }
 
-    // Block interaction packets are sent before Forge's right-click-air event.
-    @Inject(method = "rightClickMouse", at = @At("HEAD"), cancellable = true)
-    private void pit12$blockRightClick(CallbackInfo callback) {
+    @Inject(method = {"clickMouse", "rightClickMouse", "middleClickMouse",
+            "sendClickBlockToController"}, at = @At("HEAD"), cancellable = true)
+    private void pit12$blockMouseActions(CallbackInfo callback) {
         if (pit12$inputBlocker != null && pit12$inputBlocker.blocksActions())
             callback.cancel();
     }
@@ -119,5 +121,13 @@ public abstract class MinecraftMixin implements InputBlockBinding, InputTickBind
                 return true;
         }
         return false;
+    }
+
+    // Lunar wraps this call too.
+    @Inject(method = "runTick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/gui/GuiScreen;handleInput()V"))
+    private void pit12$beforeGuiInput(CallbackInfo callback) {
+        if (pit12$inputBlocker != null && pit12$inputBlocker.locked())
+            pit12$inputBlocker.drainEvents();
     }
 }
