@@ -259,9 +259,10 @@ public final class SwapFeature implements ClientLifecycle, ConfigChangeListener,
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onAttack(AttackEntityEvent event) {
-        if (!config.enabled() || !config.autoSwap.get() || !config.dark.get()
-                || event.entityPlayer != minecraft.thePlayer
-                || !(event.target instanceof EntityPlayer))
+        // Config reads require the client thread, so filter integrated server events first.
+        if (event.entityPlayer != minecraft.thePlayer || !(event.target instanceof EntityPlayer))
+            return;
+        if (!config.enabled() || !config.autoSwap.get() || !config.dark.get())
             return;
         session.checkThread();
         automatic.attack((EntityPlayer) event.target);
