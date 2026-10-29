@@ -94,7 +94,7 @@ function resetNumber() {
   if (numericInput.value) numericInput.value.value = String(draft.value)
   numericInput.value?.blur()
 }
-function setChoice(value: number) {
+function setChoice(value: number | string) {
   emit('change', value)
   menu.value?.close()
   menu.value?.focusTrigger()

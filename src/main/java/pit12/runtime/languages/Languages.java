@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -49,7 +50,7 @@ public final class Languages {
     private static final Map<String, String> MARKED_TEXTS = new HashMap<>();
     private static final Map<String, String> SOURCE_LOCATIONS = new IdentityHashMap<>();
     private final ClientThread client;
-    private final Map<Integer, Entry> entries = new LinkedHashMap<>();
+    private final Map<String, Entry> entries = new LinkedHashMap<>();
     private final Map<String, Catalog> catalogs = new HashMap<>();
     private final List<Runnable> listeners = new ArrayList<>();
     private String locale = "en-us";
@@ -60,38 +61,38 @@ public final class Languages {
         try (BufferedReader reader = resource("languages.json")) {
             for (JsonElement value : new JsonParser().parse(reader).getAsJsonArray()) {
                 JsonObject object = value.getAsJsonObject();
-                JsonElement id = object.get("value");
-                int number = id.getAsInt();
                 String code = object.get("locale").getAsString();
                 String name = object.get("name").getAsString();
                 String displayName = object.get("displayName").getAsString();
-                if (!id.getAsJsonPrimitive().isNumber() || number < 0 || id.getAsDouble() != number
-                        || !code.matches("[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*")
-                        || name.trim().isEmpty() || displayName.trim().isEmpty()
-                        || (number == 0) != code.equalsIgnoreCase("en-us")) {
+                if (!code.matches("[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*") || name.trim().isEmpty()
+                        || displayName.trim().isEmpty()) {
                     throw new IllegalArgumentException("Invalid language entry");
                 }
                 String normalized = code.toLowerCase(Locale.ROOT);
-                for (Entry entry : entries.values()) {
-                    if (entry.locale.equals(normalized)) {
-                        throw new IllegalArgumentException("Duplicate language " + code);
-                    }
-                }
-                if (entries.put(number, new Entry(code, normalized, name, displayName)) != null) {
-                    throw new IllegalArgumentException("Duplicate language value " + number);
+                if (entries.put(normalized,
+                        new Entry(code, normalized, name, displayName)) != null) {
+                    throw new IllegalArgumentException("Duplicate language " + code);
                 }
             }
-            if (!entries.containsKey(0)) {
+            if (!entries.containsKey("en-us")) {
                 throw new IllegalArgumentException("English is missing");
+            }
+            List<Entry> sorted = new ArrayList<>(entries.values());
+            sorted.sort(Comparator.comparing((Entry entry) -> !entry.locale.equals("en-us"))
+                    .thenComparing(entry -> entry.displayName, String.CASE_INSENSITIVE_ORDER)
+                    .thenComparing(entry -> entry.locale));
+            entries.clear();
+            for (Entry entry : sorted) {
+                entries.put(entry.locale, entry);
             }
         } catch (IOException | RuntimeException failure) {
             throw new IllegalStateException("Could not read languages.json", failure);
         }
     }
 
-    public Map<Integer, String> names() {
-        Map<Integer, String> names = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Entry> entry : entries.entrySet()) {
+    public Map<String, String> names() {
+        Map<String, String> names = new LinkedHashMap<>();
+        for (Map.Entry<String, Entry> entry : entries.entrySet()) {
             names.put(entry.getKey(), entry.getValue().name);
         }
         return names;
@@ -101,12 +102,8 @@ public final class Languages {
         return locale;
     }
 
-    public String locale(int value) {
-        return entries.get(value).locale;
-    }
-
-    public Map<String, String> displayNameSource(int value) {
-        Entry entry = entries.get(value);
+    public Map<String, String> displayNameSource(String locale) {
+        Entry entry = entry(locale);
         Map<String, String> source = new HashMap<>();
         source.put("text", entry.displayName);
         source.put("location",
@@ -146,15 +143,15 @@ public final class Languages {
         return source;
     }
 
-    public void select(int value) {
+    public void select(String locale) {
         client.check();
-        Entry entry = entries.get(value);
-        if (locale.equals(entry.locale)) {
+        Entry entry = entry(locale);
+        if (this.locale.equals(entry.locale)) {
             return;
         }
         Catalog values = load(entry);
-        translations = value == 0 ? null : values;
-        locale = entry.locale;
+        translations = entry.locale.equals("en-us") ? null : values;
+        this.locale = entry.locale;
         for (Runnable listener : listeners.toArray(new Runnable[0])) {
             listener.run();
         }
@@ -166,10 +163,6 @@ public final class Languages {
 
     public String translate(String source, boolean enabled) {
         return enabled ? translate(source) : source;
-    }
-
-    public String name(int value) {
-        return entries.get(value).name;
     }
 
     public String name(String locale) {
@@ -236,12 +229,11 @@ public final class Languages {
     }
 
     private Entry entry(String locale) {
-        for (Entry entry : entries.values()) {
-            if (entry.locale.equals(locale)) {
-                return entry;
-            }
+        Entry entry = entries.get(locale.toLowerCase(Locale.ROOT));
+        if (entry == null) {
+            throw new IllegalArgumentException("Unknown language: " + locale);
         }
-        throw new IllegalArgumentException("Unknown language: " + locale);
+        return entry;
     }
 
     private Catalog load(Entry entry) {

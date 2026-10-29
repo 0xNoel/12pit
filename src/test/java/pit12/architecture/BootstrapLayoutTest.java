@@ -42,8 +42,6 @@ import org.junit.Test;
 import pit12.feature.webui.WebUiConfig;
 import pit12.runtime.config.ConfigCategory;
 import pit12.runtime.config.FeatureConfig;
-import pit12.runtime.languages.Languages;
-import pit12.shared.concurrent.ClientThread;
 import pit12.shared.lifecycle.ClientLifecycle;
 
 public final class BootstrapLayoutTest {
@@ -90,7 +88,7 @@ public final class BootstrapLayoutTest {
                 assertNotNull("Missing config import in " + name, type);
                 assertTrue("Config is constructed twice: " + type, configTypes.add(type));
                 if (WebUiConfig.class.getName().equals(type)) {
-                    category = new WebUiConfig(new Languages(ClientThread.current())).category();
+                    category = new WebUiConfig().category();
                     assertNull("Global settings have no feature category", category);
                 } else {
                     category = ((FeatureConfig) Class.forName(type).getDeclaredConstructor()

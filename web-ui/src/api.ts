@@ -36,7 +36,7 @@ export interface Option {
   step?: number
   keyName?: string
   choices?: {
-    value: number
+    value: number | string
     name: string
     locale?: string
     displayName?: SourceText

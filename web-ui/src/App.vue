@@ -83,7 +83,7 @@ const selectedSubcategoryId = ref<string | null>(null)
 const search = ref('')
 const category = ref('all')
 const transferMode = ref<'export' | 'import' | null>(null)
-const requestedLanguage = ref<number | null>(null)
+const requestedLanguage = ref<string | null>(null)
 const navOrder = { features: 0, profiles: 1, relations: 2, settings: 3 }
 const navIndex = computed(() => navOrder[page.value])
 const navIndicatorTop = computed(() =>
@@ -124,7 +124,7 @@ function resetProfile() {
   profileAction('reset')
 }
 
-function openLanguage(value: number) {
+function openLanguage(value: string) {
   selectPage('settings')
   requestedLanguage.value = value
 }

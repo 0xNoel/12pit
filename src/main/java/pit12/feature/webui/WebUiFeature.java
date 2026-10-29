@@ -64,7 +64,7 @@ public final class WebUiFeature implements ClientLifecycle, ConfigChangeListener
         this.language = language;
         this.config = config;
         this.hudEditor = hudEditor;
-        preferences = new WebUiPreferences(settings, config, path);
+        preferences = new WebUiPreferences(settings, config, language, path);
         events = new WebUiEvents();
         api = new WebUiApi(catalog, settings, config, profiles, relations, swapBindings, language,
                 preferences, events);

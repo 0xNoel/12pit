@@ -181,7 +181,8 @@ final class WebUiState {
     private Map<String, Object> optionState(ConfigOption<?> option) {
         Setting<?> setting = option.setting();
         Map<String, Object> value = object("id", setting.id(), "name", setting.displayName(),
-                "description", setting.description(), "kind", option.kind().name(), "value",
+                "description", setting.description(), "kind",
+                setting == config.language() ? "CHOICE" : option.kind().name(), "value",
                 setting.get());
         if (setting instanceof NumberSetting<?>) {
             NumberSetting<?> number = (NumberSetting<?>) setting;
@@ -189,17 +190,17 @@ final class WebUiState {
             value.put("max", number.maximumValue());
             value.put("step", number.stepValue());
         }
-        if (setting instanceof ChoiceSetting) {
+        if (setting == config.language()) {
+            List<Object> choices = new ArrayList<>();
+            for (Map.Entry<String, String> entry : language.names().entrySet()) {
+                choices.add(object("value", entry.getKey(), "name", entry.getValue(), "locale",
+                        entry.getKey(), "displayName", language.displayNameSource(entry.getKey())));
+            }
+            value.put("choices", choices);
+        } else if (setting instanceof ChoiceSetting) {
             List<Object> choices = new ArrayList<>();
             for (ChoiceSetting.Choice choice : ((ChoiceSetting) setting).choices()) {
-                boolean isLanguage = setting == config.language();
-                Map<String, Object> entry = object("value", choice.value(), "name",
-                        isLanguage ? language.name(choice.value()) : choice.displayName());
-                if (isLanguage) {
-                    entry.put("locale", language.locale(choice.value()));
-                    entry.put("displayName", language.displayNameSource(choice.value()));
-                }
-                choices.add(entry);
+                choices.add(object("value", choice.value(), "name", choice.displayName()));
             }
             value.put("choices", choices);
         }
