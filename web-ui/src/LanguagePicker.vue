@@ -26,16 +26,16 @@ import SearchField from './SearchField.vue'
 
 const props = defineProps<{
   option: Option
-  requestedLanguage: number | null
+  requestedLanguage: string | null
   busy: boolean
 }>()
 const emit = defineEmits<{
-  change: [value: number]
+  change: [value: string]
   open: []
 }>()
 const dialog = ref<HTMLDialogElement | null>(null)
 const search = ref('')
-const draft = ref(Number(props.option.value))
+const draft = ref(String(props.option.value))
 const selectedChoice = computed(
   () =>
     props.option.choices!.find((choice) => choice.value === props.option.value)!
@@ -57,7 +57,7 @@ const choices = computed(() => {
 })
 const detected = computed(() => systemLanguage(props.option))
 
-function open(value = Number(props.option.value)) {
+function open(value = String(props.option.value)) {
   emit('open')
   search.value = ''
   draft.value = value
@@ -67,7 +67,7 @@ function open(value = Number(props.option.value)) {
 
 function detectLanguage() {
   search.value = ''
-  draft.value = detected.value!.value
+  draft.value = String(detected.value!.value)
 }
 
 function apply() {
@@ -157,7 +157,7 @@ watch(
             class="language-choice"
             :disabled="busy"
             :aria-pressed="choice.value === draft"
-            @click="draft = choice.value"
+            @click="draft = String(choice.value)"
           >
             <span>
               <strong><FormattedText :text="choice.name" /></strong>

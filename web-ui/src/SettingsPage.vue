@@ -26,7 +26,7 @@ import SettingRow from './SettingRow.vue'
 
 const props = defineProps<{
   settings: Feature
-  requestedLanguage: number | null
+  requestedLanguage: string | null
   profilesLoading: boolean
   busy: boolean
   pending: boolean

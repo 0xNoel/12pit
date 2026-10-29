@@ -20,33 +20,24 @@ package pit12.feature.webui;
 
 import static pit12.runtime.languages.Languages.source;
 
-import java.util.Map;
 import org.lwjgl.input.Keyboard;
 import pit12.runtime.config.BooleanSetting;
-import pit12.runtime.config.ChoiceSetting;
-import pit12.runtime.config.ChoiceSetting.Choice;
 import pit12.runtime.config.FeatureConfig;
 import pit12.runtime.config.KeybindSetting;
-import pit12.runtime.languages.Languages;
+import pit12.runtime.config.StringSetting;
 
 public final class WebUiConfig extends FeatureConfig {
     private final KeybindSetting keybind;
     private final BooleanSetting languageHint;
-    private final ChoiceSetting language;
+    private final StringSetting language;
     private final BooleanSetting discordRpc;
 
-    public WebUiConfig(Languages languages) {
+    public WebUiConfig() {
         super("webui", source("Settings"), null,
                 source("Configures language, interface appearance, key bindings, and Discord RPC."),
                 false);
-        Map<Integer, String> names = languages.names();
-        Choice[] choices = new Choice[names.size()];
-        int index = 0;
-        for (Map.Entry<Integer, String> entry : names.entrySet()) {
-            choices[index++] = new Choice(entry.getKey(), entry.getValue());
-        }
-        language = choiceSetting("language", source("Language"),
-                source("Sets the language for the interface, commands, and HUD."), 0, choices);
+        language = stringSetting("language", source("Language"),
+                source("Sets the language for the interface, commands, and HUD."), "en-us");
         colorSetting("gui_color", source("Accent color"),
                 source("Sets the interface accent color."), 0x7BADE2);
         discordRpc = booleanSetting("discord_rpc", "Discord RPC",
@@ -65,7 +56,7 @@ public final class WebUiConfig extends FeatureConfig {
         return languageHint;
     }
 
-    public ChoiceSetting language() {
+    public StringSetting language() {
         return language;
     }
 

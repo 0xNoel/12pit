@@ -301,7 +301,7 @@ public final class ClientBootstrap {
     private BooleanSetting registerWebUi(ConfigCatalog configs, ConfigCatalog featureConfigs,
             Profiles profiles, Relations relations, HudEditorFeature hudEditor,
             SwapBindings swapBindings, CommandRegistry commands, Path path) {
-        WebUiConfig config = new WebUiConfig(language);
+        WebUiConfig config = new WebUiConfig();
         configs.register(config);
         WebUiFeature webUi = new WebUiFeature(featureConfigs, configs, profiles, relations,
                 hudEditor, swapBindings, config, commands, language, path);

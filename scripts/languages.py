@@ -106,23 +106,18 @@ def write_catalog(path, catalog):
 
 def read_languages():
     entries = json.loads((DIRECTORY / "languages.json").read_text(encoding="utf-8"))
-    values, locales = set(), set()
+    locales = set()
     for entry in entries:
-        value, locale, name = entry["value"], entry["locale"], entry["name"]
+        locale, name = entry["locale"], entry["name"]
         display_name = entry["displayName"]
-        if type(value) is not int or value < 0 or value in values:
-            raise ValueError("languages.json: language values must be unique nonnegative integers")
         if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", locale) or locale.lower() in locales:
             raise ValueError(f"languages.json: invalid or duplicate language tag: {locale}")
         if not isinstance(name, str) or not name.strip():
             raise ValueError(f"languages.json: missing language name: {locale}")
         if not isinstance(display_name, str) or not display_name.strip():
             raise ValueError(f"languages.json: missing English display name: {locale}")
-        if (value == 0) != (locale.lower() == "en-us"):
-            raise ValueError("languages.json: English must keep value 0")
-        values.add(value)
         locales.add(locale.lower())
-    if 0 not in values:
+    if "en-us" not in locales:
         raise ValueError("languages.json: English is missing")
     return entries
 
@@ -232,6 +227,13 @@ class Crowdin:
                                "skipUntranslatedFiles": False})
         with urlopen(result["url"], timeout=60) as response:
             text = response.read().decode("utf-8-sig").rstrip("\r\n") + "\n"
+        header = re.match(r'\Amsgid ""\r?\nmsgstr ""\r?\n((?:".*"\r?\n)*)(?:\r?\n)*', text)
+        if header:
+            metadata = "".join(ast.literal_eval(line) for line in header[1].splitlines())
+            lines = [json.dumps(line + "\n", ensure_ascii=False) for line in metadata.splitlines()
+                     if line.startswith(("MIME-Version:", "Content-Type:", "Content-Transfer-Encoding:",
+                                         "Language:", "Plural-Forms:"))]
+            text = 'msgid ""\nmsgstr ""\n' + "\n".join(lines) + "\n\n" + text[header.end():]
         path = DIRECTORY / (locale + ".po")
         catalog = read_catalog(text, path.name)
         if not catalog:
@@ -252,7 +254,7 @@ def status(entries):
     failed = False
     for entry in entries:
         locale, name = entry["locale"], entry["name"]
-        if entry["value"] == 0:
+        if locale.lower() == "en-us":
             rows.append((locale, "Source", "-", name))
             continue
         path = DIRECTORY / (locale + ".po")
@@ -305,9 +307,9 @@ def main():
             return status(select_languages(entries, args.language))
         if args.command == "sync":
             selected = select_languages(entries, args.language)
-            if args.language is not None and selected[0]["value"] == 0:
+            if args.language is not None and selected[0]["locale"].lower() == "en-us":
                 raise ValueError("Use extract to generate the English source POT")
-            selected = [entry for entry in selected if entry["value"] != 0]
+            selected = [entry for entry in selected if entry["locale"].lower() != "en-us"]
         else:
             if not re.fullmatch(r"[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{2,8})*", args.language):
                 raise ValueError(f"invalid language tag: {args.language}")
@@ -337,11 +339,14 @@ def main():
                 api.request(api.project, "PATCH", [{"op": "replace", "path": "/targetLanguageIds",
                                                     "value": targets + [language["id"]]}])
             count = api.download(file_id, language["id"], locale)
-            entry = {"value": max(entry["value"] for entry in entries) + 1,
-                     "locale": locale, "name": args.name.strip(),
+            entry = {"locale": locale, "name": args.name.strip(),
                      "displayName": args.display_name.strip() if args.display_name is not None else language["name"]}
             entries.append(entry)
-            write_changed(DIRECTORY / "languages.json", json.dumps(entries, ensure_ascii=False, indent=2) + "\n")
+            entries.sort(key=lambda item: (item["locale"].lower() != "en-us",
+                                           item["displayName"].lower(), item["locale"].lower()))
+            content = "[\n" + ",\n".join("  { " + json.dumps(entry, ensure_ascii=False)[1:-1] + " }"
+                                      for entry in entries) + "\n]\n"
+            write_changed(DIRECTORY / "languages.json", content)
             print(f"Added {locale} ({entry['name']}): {count} entries")
             return 0
         downloads = []

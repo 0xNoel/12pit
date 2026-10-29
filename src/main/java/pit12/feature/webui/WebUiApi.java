@@ -315,6 +315,13 @@ final class WebUiApi {
             } else {
                 candidate = primitive.getAsString();
             }
+            if (option.setting() == config.language()) {
+                if (!(candidate instanceof String)) {
+                    throw new IllegalArgumentException("Expected a language code");
+                }
+                language.name((String) candidate);
+                candidate = ((String) candidate).toLowerCase(Locale.ROOT);
+            }
             setValue(option.setting(), candidate);
             return;
         }

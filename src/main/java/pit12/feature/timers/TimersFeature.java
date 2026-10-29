@@ -376,8 +376,10 @@ public final class TimersFeature
 
     @SubscribeEvent
     public void onSound(PlaySoundAtEntityEvent event) {
-        if (jumpBoostActive && config.jumpBoostSoundRequired.get()
-                && event.entity == minecraft.thePlayer && "random.drink".equals(event.name))
+        // Config reads require the client thread, so filter integrated server events first.
+        if (!jumpBoostActive || event.entity != minecraft.thePlayer)
+            return;
+        if (config.jumpBoostSoundRequired.get() && "random.drink".equals(event.name))
             jumpBoost.drink(minecraft.thePlayer);
     }
 

@@ -30,7 +30,7 @@ const props = defineProps<{
   disable: () => Promise<boolean>
 }>()
 const emit = defineEmits<{
-  switch: [value: number]
+  switch: [value: string]
   error: [cause: unknown]
 }>()
 const option = computed(() =>
@@ -40,7 +40,7 @@ const option = computed(() =>
 )
 const notice = ref<{
   locale: string
-  value: number
+  value: string
   message: string
   gotIt: string
   hide: string
@@ -113,7 +113,7 @@ watch(
         return
       notice.value = {
         locale: available.locale!,
-        value: available.value,
+        value: String(available.value),
         ...hint,
       }
       resume()

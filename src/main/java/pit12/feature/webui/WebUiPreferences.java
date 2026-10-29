@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
@@ -51,12 +52,14 @@ import pit12.runtime.config.ConfigChangeListener;
 import pit12.runtime.config.ConfigChangeSet;
 import pit12.runtime.config.ConfigSnapshot;
 import pit12.runtime.config.Setting;
+import pit12.runtime.languages.Languages;
 import pit12.shared.storage.AtomicFile;
 
 final class WebUiPreferences implements ConfigChangeListener {
     private static final Logger LOGGER = Logger.getLogger(WebUiPreferences.class.getName());
     private final ConfigCatalog catalog;
     private final WebUiConfig config;
+    private final Languages language;
     private final Path path;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final Set<String> favorites = new LinkedHashSet<>();
@@ -69,9 +72,10 @@ final class WebUiPreferences implements ConfigChangeListener {
     private String problem;
     private long generation;
 
-    WebUiPreferences(ConfigCatalog catalog, WebUiConfig config, Path path) {
+    WebUiPreferences(ConfigCatalog catalog, WebUiConfig config, Languages language, Path path) {
         this.catalog = catalog;
         this.config = config;
+        this.language = language;
         this.path = path;
     }
 
@@ -216,11 +220,26 @@ final class WebUiPreferences implements ConfigChangeListener {
                     settings == null ? null : settings.getAsJsonObject().get(setting.id());
             if (value == null)
                 continue;
+            if (setting == config.language()) {
+                String locale = "en-us";
+                if (value.isJsonPrimitive() && value.getAsJsonPrimitive().isString()) {
+                    locale = value.getAsString().toLowerCase(Locale.ROOT);
+                    try {
+                        language.name(locale);
+                    } catch (IllegalArgumentException failure) {
+                        locale = "en-us";
+                    }
+                }
+                values.put(setting.id(), locale);
+                continue;
+            }
             if (!value.isJsonPrimitive())
                 throw new IllegalArgumentException(
                         "Invalid configuration interface setting: " + setting.id());
             JsonPrimitive primitive = value.getAsJsonPrimitive();
-            if (setting.storageType() == Setting.StorageType.BOOLEAN && primitive.isBoolean())
+            if (setting.storageType() == Setting.StorageType.STRING && primitive.isString())
+                values.put(setting.id(), primitive.getAsString());
+            else if (setting.storageType() == Setting.StorageType.BOOLEAN && primitive.isBoolean())
                 values.put(setting.id(), primitive.getAsBoolean());
             else if (setting.storageType() == Setting.StorageType.INTEGER && primitive.isNumber())
                 values.put(setting.id(), Integer.parseInt(primitive.getAsString()));
@@ -255,6 +274,8 @@ final class WebUiPreferences implements ConfigChangeListener {
             Object value = setting.get();
             if (value instanceof Boolean)
                 settings.addProperty(setting.id(), (Boolean) value);
+            else if (value instanceof String)
+                settings.addProperty(setting.id(), (String) value);
             else
                 settings.addProperty(setting.id(), (Number) value);
         }
