@@ -6,146 +6,6 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Language: ru_RU\n"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Auto Click"
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Repeats left and right clicks while their keys are held. Turning off all filters for a click type removes its item restrictions."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:46
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Left click"
-msgstr "Левый клик"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:47
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Left click enabled"
-msgstr "Щелчок левой кнопкой мыши включен"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:48
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Repeats left clicks while the left-click key is held."
-msgstr "Повторяет щелчок левой кнопкой мыши, пока удерживается клавиша щелчка левой кнопкой мыши."
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:50
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Minimum interval (phases)"
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:67
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
-msgid "Minimum interval (phases)"
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Minimum time between left clicks. CPS is about 40 divided by phases."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:54
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Maximum interval (phases)"
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:71
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
-msgid "Maximum interval (phases)"
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:55
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Maximum time between left clicks. CPS is about 40 divided by phases."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:57
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allow weapons"
-msgstr "Разрешить оружие"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:58
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows left clicks with swords and tools."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:59
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allow fist"
-msgstr "Разрешить пустую руку"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:60
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows left clicks with an empty hand."
-msgstr "Позволяет щелкать левой кнопкой мыши пустой рукой."
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:61
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allow dragon egg"
-msgstr "Разрешить драконье яйцо"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:78
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
-msgid "Allow dragon egg"
-msgstr "Разрешить драконье яйцо"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:62
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows left clicks while pointing at a dragon egg."
-msgstr "Позволяет щелкать левой кнопкой мыши, указывая на яйцо дракона."
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Right click"
-msgstr "Правый клик"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:64
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Right click enabled"
-msgstr "Щелчок правой кнопкой мыши включен"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:65
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Repeats right clicks while the right-click key is held."
-msgstr "Повторяет щелчки правой кнопкой мыши, пока удерживается клавиша щелчка правой кнопкой мыши."
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:68
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Minimum time between right clicks. CPS is about 40 divided by phases."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:72
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Maximum time between right clicks. CPS is about 40 divided by phases."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:74
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allow blocks"
-msgstr "Разрешить блоки"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:75
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows right clicks while holding a block."
-msgstr ""
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:76
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allow cake"
-msgstr "Разрешить торт"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:77
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows right clicks while pointing at cake."
-msgstr "Позволяет щелкать правой кнопкой мыши, указывая на торт."
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:79
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows right clicks while pointing at a dragon egg."
-msgstr "Позволяет щелкать правой кнопкой мыши, указывая на яйцо дракона."
-
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:38
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
 msgid "Auto Fish"
@@ -153,8 +13,8 @@ msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:39
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Reels in when the bobber dips and can cast again."
-msgstr "Подсекает, когда поплавок погружается, и может снова забросить удочку."
+msgid "Automatically reels in fish and can cast again."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:40
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
@@ -246,10 +106,10 @@ msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
 msgid "Ban Alerts"
 msgstr ""
 
-#: src/main/java/pit12/feature/banalert/BanAlertConfig.java:28
+#: src/main/java/pit12/feature/banalert/BanAlertConfig.java:29
 msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
-msgid "Shows who may have been banned based on ban messages and when players leave."
-msgstr "Показывает, кто мог быть забанен на основании сообщений о запрете и когда игроки ушли."
+msgid "Shows players who may have been banned."
+msgstr ""
 
 #: src/main/java/pit12/feature/banalert/BanAlertFeature.java:195
 msgctxt "src/main/java/pit12/feature/banalert/BanAlertFeature.java#1"
@@ -321,17 +181,17 @@ msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
 msgid "Block inputs"
 msgstr "Блокировать ввод"
 
-#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:37
+#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:36
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
-msgid "Blocks all input for one tick before sending a macro."
-msgstr "Блокирует весь ввод на один такт перед отправкой макроса."
+msgid "Blocks movement, clicks, and key presses for one tick before sending a macro."
+msgstr ""
 
-#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:38
+#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:39
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
 msgid "Spawn macro key"
 msgstr "Клавиша макроса возврата на спавн"
 
-#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:38
+#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:39
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
 msgid "Sends /spawn once you are out of combat. Press again to cancel while waiting."
 msgstr ""
@@ -368,8 +228,8 @@ msgstr ""
 
 #: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:45
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
-msgid "Rerolls contracts until a task matches an enabled filter."
-msgstr "Перебирает контракты, пока задание не совпадёт с включённым фильтром."
+msgid "Rerolls contracts until a task matches your filters."
+msgstr ""
 
 #: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:46
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
@@ -703,8 +563,8 @@ msgstr "Перебор контрактов остановлен: {0}"
 
 #: src/main/java/pit12/feature/denick/DenickConfig.java:35
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Looks up nicked players' real names using their equipment."
-msgstr "Ищет настоящие имена пользователей игроков с замаскированными никами по их снаряжению."
+msgid "Looks up nicked players' real names."
+msgstr ""
 
 #: src/main/java/pit12/feature/denick/DenickConfig.java:36
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
@@ -736,12 +596,12 @@ msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Keep monitoring"
 msgstr "Продолжайте следить"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:41
+#: src/main/java/pit12/feature/denick/DenickConfig.java:42
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Continues automatic lookups with new equipment until a real name is found."
-msgstr "Продолжает автоматический поиск по новому снаряжению, пока не найдёт настоящее имя пользователя."
+msgid "Continues automatic lookups until a real name is found."
+msgstr ""
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:44
+#: src/main/java/pit12/feature/denick/DenickConfig.java:43
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Display"
 msgstr "Отображение"
@@ -766,7 +626,7 @@ msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Display"
 msgstr "Отображение"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:45
+#: src/main/java/pit12/feature/denick/DenickConfig.java:44
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Show nick marker"
 msgstr "Показать маркер ника"
@@ -781,7 +641,7 @@ msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show nick marker"
 msgstr "Показать маркер ника"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:46
+#: src/main/java/pit12/feature/denick/DenickConfig.java:45
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Adds N to nicked players' names in Tab."
 msgstr "Добавляет N к именам игроков с замаскированными никами в списке Tab."
@@ -833,20 +693,20 @@ msgstr "Ожидание нового снаряжения"
 
 #: src/main/java/pit12/feature/eventlist/EventListCommand.java:47
 msgctxt "src/main/java/pit12/feature/eventlist/EventListCommand.java#1"
-msgid "Show stored events"
-msgstr "Показать сохраненные события"
+msgid "Show event times and countdowns"
+msgstr ""
 
-#: src/main/java/pit12/feature/eventlist/EventListCommand.java:63
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:64
 msgctxt "src/main/java/pit12/feature/eventlist/EventListCommand.java#1"
 msgid "Unknown event: {0}"
 msgstr "Неизвестное событие: {0}"
 
-#: src/main/java/pit12/feature/eventlist/EventListCommand.java:67
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:68
 msgctxt "src/main/java/pit12/feature/eventlist/EventListCommand.java#1"
 msgid "{0} events ({1}):"
 msgstr "{0} событий ({1}):"
 
-#: src/main/java/pit12/feature/eventlist/EventListCommand.java:77
+#: src/main/java/pit12/feature/eventlist/EventListCommand.java:78
 msgctxt "src/main/java/pit12/feature/eventlist/EventListCommand.java#1"
 msgid "  No stored events"
 msgstr "  Нет сохраненных событий"
@@ -1138,7 +998,7 @@ msgstr ""
 
 #: src/main/java/pit12/feature/fontcachefix/FontCacheFixConfig.java:29
 msgctxt "src/main/java/pit12/feature/fontcachefix/FontCacheFixConfig.java#1"
-msgid "Fixes cached text using the wrong font in Lunar and PolyPatcher."
+msgid "Fixes text appearing in the wrong font with Lunar or PolyPatcher."
 msgstr ""
 
 #: src/main/java/pit12/feature/gamma/GammaConfig.java:31
@@ -1146,20 +1006,20 @@ msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
 msgid "Gamma"
 msgstr "Гамма"
 
-#: src/main/java/pit12/feature/gamma/GammaConfig.java:32
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:31
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
-msgid "Changes world brightness using a gamma value."
-msgstr "Изменяет яркость мира с помощью значения гаммы."
+msgid "Adjusts world brightness."
+msgstr ""
 
-#: src/main/java/pit12/feature/gamma/GammaConfig.java:33
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:32
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
 msgid "Gamma value"
 msgstr "Значение гаммы"
 
-#: src/main/java/pit12/feature/gamma/GammaConfig.java:34
+#: src/main/java/pit12/feature/gamma/GammaConfig.java:33
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
-msgid "Sets the gamma value used for world lighting."
-msgstr "Устанавливает значение гаммы, используемое для освещения мира."
+msgid "Higher values make dark areas brighter."
+msgstr ""
 
 #: src/main/java/pit12/feature/hudeditor/HudEditorFeature.java:54
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorFeature.java#1"
@@ -1213,55 +1073,55 @@ msgstr "ESP предметов"
 
 #: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:36
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
-msgid "Shows dropped name tags and gold ingots through blocks."
-msgstr "Показывает выпавшие бирки и золотые слитки сквозь блоки."
+msgid "Shows dropped raffle tickets and gold ingots through blocks."
+msgstr ""
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:37
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:38
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Raffle tickets"
 msgstr "Лотерейные билеты"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:38
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:39
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Show raffle tickets"
 msgstr "Показать лотерейные билеты"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:39
-msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
-msgid "Marks dropped name tags."
-msgstr "Отмечает выпавшие бирки."
-
 #: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:40
+msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
+msgid "Marks dropped raffle tickets."
+msgstr ""
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:41
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Raffle ticket color"
 msgstr "Цвет лотерейного билета"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:41
-msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
-msgid "Color and opacity of dropped name tag boxes."
-msgstr "Цвет и непрозрачность рамок вокруг выпавших бирок."
-
 #: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:42
+msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
+msgid "Color and opacity of dropped raffle ticket boxes."
+msgstr ""
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:43
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Gold ingots"
 msgstr "Золотые слитки"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:43
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:44
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Show gold ingots"
 msgstr "Показать золотые слитки"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:44
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:45
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Marks dropped gold ingots."
 msgstr "Отмечает выпавшие золотые слитки."
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:45
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:46
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Gold ingot color"
 msgstr "Цвет золотого слитка"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:46
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:47
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Color and opacity of dropped gold ingot boxes."
 msgstr "Цвет и непрозрачность рамок вокруг выпавших золотых слитков."
@@ -1284,7 +1144,7 @@ msgstr "Добавляет N к именам игроков с замаскир�
 #: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:82
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Adds N to nicked players' names."
-msgstr ""
+msgstr "Добавляет N к именам игроков с замаскированными никами."
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:50
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
@@ -1293,8 +1153,8 @@ msgstr "Показывать настоящие имена над игрокам
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:51
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Adds the real name after the nicked name."
-msgstr "Добавляет настоящее имя после псевдонима."
+msgid "Adds the real name found by Denick after the nicked name."
+msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:52
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
@@ -1423,8 +1283,8 @@ msgstr "Показать таймер Pin"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:64
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Pin timers after player names while Timers is enabled."
-msgstr "Показывает таймеры Pin после имен игроков, когда таймеры включены."
+msgid "Shows Pin timers after player names when enabled in Timers HUD."
+msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:65
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
@@ -1433,8 +1293,8 @@ msgstr "Показать таймер Venom"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:66
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Venom timers after player names while Timers is enabled."
-msgstr "Показывает таймеры Venom после имен игроков, когда таймеры включены."
+msgid "Shows Venom timers after player names when enabled in Timers HUD."
+msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:67
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
@@ -1443,8 +1303,8 @@ msgstr "Показать таймер повышения прыжка"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:68
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Jump Boost timers after player names while Timers is enabled."
-msgstr "Показывает таймеры Jump Boost после имен игроков, когда таймеры включены."
+msgid "Shows Jump Boost timers after player names when enabled in Timers HUD."
+msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:70
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
@@ -1453,8 +1313,8 @@ msgstr "Показать время восстановления Telebow"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:71
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Telebow cooldowns after player names while Timers is enabled."
-msgstr "Показывает время восстановления Telebow после имен игроков, когда таймеры включены."
+msgid "Shows Telebow cooldowns after player names when enabled in Timers HUD."
+msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:74
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
@@ -1788,15 +1648,15 @@ msgstr "Клавиша настоящих имён"
 
 #: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:93
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Hold to show nicked players' real names."
+msgid "Hold to show nicked players' real names found by Denick."
 msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:94
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:95
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Groups"
 msgstr "Группы"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:95
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:96
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show group names"
 msgstr "Показать названия групп"
@@ -1806,67 +1666,67 @@ msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Show group names"
 msgstr "Показать названия групп"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:96
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:97
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows the name above each group."
 msgstr "Показывает имя над каждой группой."
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:97
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:98
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Friend group"
 msgstr "Показать группу друзей"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:98
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:99
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows friends."
 msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:99
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:100
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Enemy group"
 msgstr "Показать группу врагов"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:100
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:101
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows enemies."
 msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:101
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:102
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Nick group"
 msgstr "Показывать группу игроков с замаскированными никами"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:102
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:103
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows nicked players."
 msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:103
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:104
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Regularity group"
 msgstr "Показать группу Regularity"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:104
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:105
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows players wearing Regularity leggings."
 msgstr "Показывает игроков в леггинсах Regularity."
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:105
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:106
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Dark group"
 msgstr "Показать темную группу"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:106
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:107
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows players wearing Somber leggings."
 msgstr "Показывает игроков в леггинсах Somber."
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:107
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:108
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Bounty Hunter group"
 msgstr "Показать группу охотников за головами"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:108
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:109
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows players wearing golden leggings."
 msgstr "Показывает игроков в золотых леггинсах."
@@ -1983,23 +1843,23 @@ msgstr "враг"
 
 #: src/main/java/pit12/feature/relation/RelationCommand.java:55
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
-msgid "Manage friend relations"
-msgstr "Управляйте отношениями с друзьями"
+msgid "Manage your friend list"
+msgstr ""
 
 #: src/main/java/pit12/feature/relation/RelationCommand.java:56
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
-msgid "Manage enemy relations"
-msgstr "Управляйте отношениями с врагами"
+msgid "Manage your enemy list"
+msgstr ""
 
 #: src/main/java/pit12/feature/relation/RelationCommand.java:63
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
-msgid "Show friend relations"
-msgstr "Показать дружеские отношения"
+msgid "Show your friend list"
+msgstr ""
 
 #: src/main/java/pit12/feature/relation/RelationCommand.java:64
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
-msgid "Show enemy relations"
-msgstr "Показать отношения с врагами"
+msgid "Show your enemy list"
+msgstr ""
 
 #: src/main/java/pit12/feature/relation/RelationCommand.java:66
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
@@ -2096,10 +1956,10 @@ msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
 msgid "Ring Helper"
 msgstr ""
 
-#: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:33
+#: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:34
 msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
-msgid "Outlines two blocks above the middle ring where the upper block is empty."
-msgstr "Очерчивает два блока над средним кольцом, где верхний блок пуст."
+msgid "Highlights gaps above the middle ring."
+msgstr ""
 
 #: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:36
 msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
@@ -2128,7 +1988,7 @@ msgstr ""
 
 #: src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java:29
 msgctxt "src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java#1"
-msgid "Prevents crashes caused by removing missing scoreboard entries."
+msgid "Fixes crashes that can occur during scoreboard updates."
 msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:41
@@ -2313,8 +2173,8 @@ msgstr "Не удалось сохранить привязки обмена."
 
 #: src/main/java/pit12/feature/swap/SwapCommand.java:53
 msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
-msgid "Manage swap bindings"
-msgstr "Управление привязками смены снаряжения"
+msgid "Manage swaps and key bindings"
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapCommand.java:54
 msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
@@ -2343,13 +2203,13 @@ msgstr "Очищены привязки смены снаряжения"
 
 #: src/main/java/pit12/feature/swap/SwapCommand.java:63
 msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
-msgid "Show automatic swap state"
-msgstr "Показать состояние автоматической замены"
+msgid "Show automatic swap status"
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapCommand.java:64
 msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
-msgid "Reset automatic swap state"
-msgstr "Сбросить состояние автоматической замены"
+msgid "Reset automatic swaps"
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapCommand.java:67
 msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
@@ -2381,7 +2241,7 @@ msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
 msgid "Automatic swap: {0}"
 msgstr "Автоматическая замена: {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:460
+#: src/main/java/pit12/feature/swap/SwapController.java:461
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Automatic swap: {0}"
 msgstr "Автоматическая замена: {0}"
@@ -2446,9 +2306,9 @@ msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Swap"
 msgstr "Смена снаряжения"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:75
+#: src/main/java/pit12/feature/swap/SwapConfig.java:76
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Swaps armor and hotbar items manually or automatically. Blocks input during swaps."
+msgid "Swaps armor and hotbar items manually or automatically."
 msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:78
@@ -2468,8 +2328,8 @@ msgstr "Случайное время клика"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:81
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Randomizes when inventory clicks are sent within each tick."
-msgstr "Выполняется случайным образом, когда клики по инвентарю отправляются в течение каждого тика."
+msgid "Randomizes inventory click timing."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:82
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2478,8 +2338,8 @@ msgstr "Shift, клик, своп"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:83
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Use shift clicks instead of number keys to swap armor."
-msgstr "Используйте Shift+клик для смены брони вместо цифровых клавиш."
+msgid "Swaps armor with shift clicks."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:84
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2538,8 +2398,8 @@ msgstr "Возобновить ввод со следующего тика"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:97
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Keeps all input locked until the next tick after closing the inventory."
-msgstr "Сохраняет все вводимые данные заблокированными до следующего тика после закрытия инвентаря."
+msgid "Keeps movement, clicks, and key presses locked until the next tick after closing the inventory."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:99
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2638,8 +2498,8 @@ msgstr "Автоматический обмен"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:121
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Swaps items when you become poisoned, your health is low, or a dark target's health is low."
-msgstr "Меняет снаряжение при отравлении, низком собственном здоровье или низком здоровье цели для Dark."
+msgid "Swaps items when you become poisoned, your health is low, or a player wearing Escape Pod or Phoenix has low health."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:124
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2668,8 +2528,8 @@ msgstr "Переключаться на Combat Spade"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:129
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Moves a diamond shovel to the selected hotbar slot when you become poisoned."
-msgstr "Перемещает алмазную лопату в выбранный слот панели быстрого доступа, когда вы отравлены."
+msgid "Moves a Combat Spade to the selected hotbar slot when you become poisoned."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:132
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2688,8 +2548,8 @@ msgstr "Слот Combat Spade"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:135
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Hotbar slot used for the diamond shovel during poison swaps."
-msgstr "Слот панели быстрого доступа для алмазной лопаты при смене снаряжения из-за отравления."
+msgid "Hotbar slot used for the Combat Spade during poison swaps."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:137
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2791,7 +2651,7 @@ msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Restore threshold"
 msgstr "Порог возврата"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:180
+#: src/main/java/pit12/feature/swap/SwapConfig.java:179
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#2"
 msgid "Restore threshold"
 msgstr "Порог возврата"
@@ -2851,62 +2711,62 @@ msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Maximum straight-line distance to targets in both trigger modes."
 msgstr "Максимальное расстояние до цели по прямой в обоих режимах запуска."
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:176
+#: src/main/java/pit12/feature/swap/SwapConfig.java:177
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Restores your previous leggings once the selected mode has no remaining dark targets."
-msgstr "Снова надевает предыдущие поножи, когда в выбранном режиме больше нет целей для Dark."
+msgid "Restores the leggings worn before an automatic Somber swap."
+msgstr ""
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:181
+#: src/main/java/pit12/feature/swap/SwapConfig.java:180
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Stops tracking a target when its health reaches this value and exceeds the equip threshold."
-msgstr "Перестает отслеживать цель, когда ее здоровье достигает этого значения и превышает порог экипировки."
+msgid "Health targets must recover to before your previous leggings can be restored. It must also exceed the equip threshold."
+msgstr ""
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:184
+#: src/main/java/pit12/feature/swap/SwapConfig.java:183
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skip Escape Pod players below 2 hearts"
 msgstr "Пропускать игроков с Escape Pod, у которых меньше 2 сердец"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:185
+#: src/main/java/pit12/feature/swap/SwapConfig.java:184
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skips Escape Pod targets below 2 hearts in both trigger modes. Phoenix still qualifies."
 msgstr "Пропускает цели Escape Pod ниже 2 сердец в обоих режимах триггера. Phoenix по-прежнему соответствует требованиям."
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:187
+#: src/main/java/pit12/feature/swap/SwapConfig.java:186
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Enemies only"
 msgstr "Только враги"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:188
+#: src/main/java/pit12/feature/swap/SwapConfig.java:187
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Only checks players in your enemy list."
 msgstr "Проверяет только игроков из вашего списка врагов."
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:189
+#: src/main/java/pit12/feature/swap/SwapConfig.java:188
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Ignore friends"
 msgstr "Игнорировать друзей"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:189
+#: src/main/java/pit12/feature/swap/SwapConfig.java:188
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skips friends in both trigger modes. Attacking a friend keeps the previous target."
 msgstr "Пропускает друзей в обоих режимах триггера. Атака друга сохраняет предыдущую цель."
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:192
+#: src/main/java/pit12/feature/swap/SwapConfig.java:191
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Swap priority"
 msgstr "Приоритет замены"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:192
+#: src/main/java/pit12/feature/swap/SwapConfig.java:191
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Chooses between dark and your own Escape Pod or Phoenix when both are needed. Poison swaps take priority."
 msgstr "Выбирает между Dark и вашим Escape Pod или Phoenix, когда нужны оба. Смена снаряжения при отравлении имеет приоритет."
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:194
+#: src/main/java/pit12/feature/swap/SwapConfig.java:193
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Pod/Phoenix first"
 msgstr "Под/Phoenix первый"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:195
+#: src/main/java/pit12/feature/swap/SwapConfig.java:194
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Dark first"
 msgstr "Сначала Dark"
@@ -2921,7 +2781,7 @@ msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Missing item: {0}"
 msgstr "Предмет не найден: {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:660
+#: src/main/java/pit12/feature/swap/SwapController.java:661
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#2"
 msgid "Missing item: {0}"
 msgstr "Предмет не найден: {0}"
@@ -2931,67 +2791,67 @@ msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Swapped {0} with {1} due to {2}"
 msgstr "Заменил {0} на {1} из-за {2}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:420
+#: src/main/java/pit12/feature/swap/SwapController.java:421
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Swapped {0} with {1}"
 msgstr "Поменял местами {0} на {1}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:435
+#: src/main/java/pit12/feature/swap/SwapController.java:436
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Helmet slot"
 msgstr "Слот для шлема"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:438
+#: src/main/java/pit12/feature/swap/SwapController.java:439
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Chestplate slot"
 msgstr "Слот для нагрудника"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:441
+#: src/main/java/pit12/feature/swap/SwapController.java:442
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Leggings slot"
 msgstr "Слот для леггинсов"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:444
+#: src/main/java/pit12/feature/swap/SwapController.java:445
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Boots slot"
 msgstr "Слот для ботинок"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:448
+#: src/main/java/pit12/feature/swap/SwapController.java:449
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Hotbar slot {0}"
 msgstr "Слот панели быстрого доступа {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:449
+#: src/main/java/pit12/feature/swap/SwapController.java:450
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Inventory slot {0}"
 msgstr "Ячейка инвентаря {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:483
+#: src/main/java/pit12/feature/swap/SwapController.java:484
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Swap failed: {0}"
 msgstr "Замена не удалась: {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:539
+#: src/main/java/pit12/feature/swap/SwapController.java:540
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Inventory could not be closed"
 msgstr "Инвентарь не удалось закрыть"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:620
+#: src/main/java/pit12/feature/swap/SwapController.java:621
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Armor could not be moved to the inventory"
 msgstr "Броню нельзя было переместить в инвентарь."
 
-#: src/main/java/pit12/feature/swap/SwapController.java:622
+#: src/main/java/pit12/feature/swap/SwapController.java:623
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Not enough inventory space to unequip armor"
 msgstr "Недостаточно места в инвентаре, чтобы снять броню."
 
-#: src/main/java/pit12/feature/swap/SwapController.java:668
+#: src/main/java/pit12/feature/swap/SwapController.java:669
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Item does not fit: {0}"
 msgstr "Предмет не подходит: {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:710
+#: src/main/java/pit12/feature/swap/SwapController.java:711
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Not enough inventory space for {0}"
 msgstr "Недостаточно места в инвентаре для {0}"
@@ -3133,7 +2993,7 @@ msgstr "Запас прогноза (мс)"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:72
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Time allowed after sneaking ends for shot prediction. Also sets the delay allowed when detecting hits that reduce cooldowns."
+msgid "Predicts shots fired within this time after sneaking ends. Also allows this much delay for arrow hits that shorten cooldowns."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:74
@@ -3423,7 +3283,7 @@ msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:133
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Extra space around players used to recognize Venom hits."
+msgid "Counts hits up to this far outside player hitboxes toward Venom timers."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:135
@@ -3488,7 +3348,7 @@ msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:160
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows estimated Telebow cooldowns. Requires telebow prediction to be enabled."
+msgid "Shows estimated Telebow cooldowns. Requires Telebow Prediction to be enabled."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:164
@@ -3566,7 +3426,7 @@ msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Settings"
 msgstr "Настройки"
 
-#: web-ui/src/App.vue:199:16
+#: web-ui/src/App.vue:197:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Settings"
 msgstr "Настройки"
@@ -3721,117 +3581,117 @@ msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Anchor"
 msgstr "Якорь"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:238
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:239
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "Anchor"
 msgstr "Якорь"
 
 #: src/main/java/pit12/runtime/config/FeatureConfig.java:178
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Stores the anchor chosen by Auto."
-msgstr "Сохраняет якорь, выбранный Auto."
+msgid "Screen point the HUD stays relative to in Auto mode."
+msgstr ""
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:181
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Horizontal offset"
 msgstr "Горизонтальное смещение"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:181
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Offset from the anchor, in GUI pixels."
 msgstr "Смещение от привязки в пикселях графического интерфейса."
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:184
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "Offset from the anchor, in GUI pixels."
 msgstr "Смещение от привязки в пикселях графического интерфейса."
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:182
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Vertical offset"
 msgstr "Вертикальное смещение"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:184
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:185
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Scale"
 msgstr "Масштаб"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:185
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:186
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "HUD size, in percent."
 msgstr "Размер HUD, в процентах."
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:213
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:214
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Lets you move and resize this group separately in the HUD editor."
 msgstr ""
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:216
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:217
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Independent layout"
 msgstr ""
 
 #: src/main/java/pit12/runtime/config/FeatureConfig.java:239
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Auto selects the HUD anchor when you move the HUD."
-msgstr "Автоматически выбирает якорь HUD при перемещении HUD."
+msgid "Keeps the HUD positioned relative to this part of the screen. Auto selects it when you move the HUD."
+msgstr ""
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:240
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:242
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Auto"
 msgstr "Авто"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:241
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:243
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Top left"
 msgstr "Вверху слева"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:242
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:244
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Top center"
 msgstr "Верхний центр"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:243
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:245
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Top right"
 msgstr "Вверху справа"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:244
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:246
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Center left"
 msgstr "Центр слева"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:245
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:247
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Center"
 msgstr "Центр"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:246
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:248
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Center right"
 msgstr "Центр справа"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:247
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:249
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Bottom left"
 msgstr "Внизу слева"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:248
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:250
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Bottom center"
 msgstr "Нижний центр"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:249
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:251
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Bottom right"
 msgstr "Внизу справа"
 
-#: web-ui/src/App.vue:167:22
+#: web-ui/src/App.vue:162:22
 msgctxt "web-ui/src/App.vue#1"
 msgid "Pages"
 msgstr "Страницы"
 
-#: web-ui/src/App.vue:177:16
+#: web-ui/src/App.vue:173:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Features"
 msgstr "Функции"
@@ -3846,7 +3706,7 @@ msgctxt "web-ui/src/FeaturesPage.vue#2"
 msgid "Features"
 msgstr "Функции"
 
-#: web-ui/src/App.vue:184:16
+#: web-ui/src/App.vue:181:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Profiles"
 msgstr "Профили"
@@ -3861,7 +3721,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Profiles"
 msgstr "Профили"
 
-#: web-ui/src/App.vue:191:16
+#: web-ui/src/App.vue:189:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Relations"
 msgstr "Отношения"
@@ -3876,7 +3736,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Relations"
 msgstr "Отношения"
 
-#: web-ui/src/App.vue:332:25
+#: web-ui/src/App.vue:335:25
 msgctxt "web-ui/src/App.vue#1"
 msgid "Dismiss error"
 msgstr "Скрыть сообщение об ошибке"
@@ -4666,24 +4526,9 @@ msgctxt "src/main/resources/assets/pit12/languages/languages.json#de-DE"
 msgid "German"
 msgstr ""
 
-#: src/main/resources/assets/pit12/languages/languages.json:it-IT
-msgctxt "src/main/resources/assets/pit12/languages/languages.json#it-IT"
-msgid "Italian"
-msgstr ""
-
 #: src/main/resources/assets/pit12/languages/languages.json:ja-JP
 msgctxt "src/main/resources/assets/pit12/languages/languages.json#ja-JP"
 msgid "Japanese"
-msgstr ""
-
-#: src/main/resources/assets/pit12/languages/languages.json:ko-KR
-msgctxt "src/main/resources/assets/pit12/languages/languages.json#ko-KR"
-msgid "Korean"
-msgstr ""
-
-#: src/main/resources/assets/pit12/languages/languages.json:pl-PL
-msgctxt "src/main/resources/assets/pit12/languages/languages.json#pl-PL"
-msgid "Polish"
 msgstr ""
 
 #: src/main/resources/assets/pit12/languages/languages.json:pt-BR
@@ -4699,9 +4544,4 @@ msgstr ""
 #: src/main/resources/assets/pit12/languages/languages.json:es-ES
 msgctxt "src/main/resources/assets/pit12/languages/languages.json#es-ES"
 msgid "Spanish"
-msgstr ""
-
-#: src/main/resources/assets/pit12/languages/languages.json:tr-TR
-msgctxt "src/main/resources/assets/pit12/languages/languages.json#tr-TR"
-msgid "Turkish"
 msgstr ""
