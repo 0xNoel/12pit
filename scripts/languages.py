@@ -227,6 +227,13 @@ class Crowdin:
                                "skipUntranslatedFiles": False})
         with urlopen(result["url"], timeout=60) as response:
             text = response.read().decode("utf-8-sig").rstrip("\r\n") + "\n"
+        header = re.match(r'\Amsgid ""\r?\nmsgstr ""\r?\n((?:".*"\r?\n)*)(?:\r?\n)*', text)
+        if header:
+            metadata = "".join(ast.literal_eval(line) for line in header[1].splitlines())
+            lines = [json.dumps(line + "\n", ensure_ascii=False) for line in metadata.splitlines()
+                     if line.startswith(("MIME-Version:", "Content-Type:", "Content-Transfer-Encoding:",
+                                         "Language:", "Plural-Forms:"))]
+            text = 'msgid ""\nmsgstr ""\n' + "\n".join(lines) + "\n\n" + text[header.end():]
         path = DIRECTORY / (locale + ".po")
         catalog = read_catalog(text, path.name)
         if not catalog:
