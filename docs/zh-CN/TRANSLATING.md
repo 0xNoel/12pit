@@ -1,4 +1,4 @@
-<!-- Source: docs/TRANSLATING.md; Based on: b89c7e1ea68fd0183c6877fdbe32f36b5d89cb2b -->
+<!-- Source: docs/TRANSLATING.md; Based on: fd3499ea65660abdafb7116049c5fd734e73efe8 -->
 
 # 贡献翻译
 
@@ -22,7 +22,7 @@
 
 ## 贡献文档翻译
 
-拥有两字母 [ISO 639-1 代码](https://www.loc.gov/standards/iso639-2/php/code_list.php)的语言可以直接提交拉取请求；其他语言请先在议题或 [Discord](https://discord.gg/e9PRKMUenc) 上征得维护者同意。文档语言目录名需符合 [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html) 规范。
+拥有两字母 [ISO 639-1 代码](https://www.loc.gov/standards/iso639-2/php/code_list.php)的语言可以直接提交拉取请求；其他语言请先在议题或 [Discord](https://discord.gg/e9PRKMUenc) 上与维护者讨论。文档语言目录名需符合 [RFC 5646](https://www.rfc-editor.org/rfc/rfc5646.html) 规范。
 
 ### 路径与链接
 
