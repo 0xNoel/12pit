@@ -104,9 +104,9 @@ textarea:disabled {
 }
 
 .brand-lockup {
-  position: relative;
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
+  gap: 7px;
   max-width: 100%;
 }
 
@@ -122,12 +122,8 @@ textarea:disabled {
   color: var(--accent);
 }
 
-.brand-version,
-.brand-version-skeleton {
-  position: absolute;
-  bottom: 1px;
-  left: calc(100% + 7px);
-  width: 44px;
+.brand-version {
+  max-width: 44px;
   overflow: hidden;
   color: var(--faint);
   font-size: 10px;

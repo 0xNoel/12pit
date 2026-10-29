@@ -16,6 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with 12pit. If not, see <https://www.gnu.org/licenses/>.
  */
+@media (prefers-reduced-motion: no-preference) {
+  .startup-fade {
+    animation: startup-fade-in 0.2s ease-out backwards;
+  }
+
+  .brand-version {
+    animation: brand-version-reveal 0.2s ease-out 0.2s both;
+  }
+}
+
+@keyframes startup-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes brand-version-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-6px);
+  }
+  to {
+    clip-path: inset(0);
+    transform: translateX(0);
+  }
+}
+
 :is(.page-view, .tab-view, .relation-list):is(
   .slide-up-enter-active,
   .slide-down-enter-active,
