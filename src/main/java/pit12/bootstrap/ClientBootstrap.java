@@ -104,7 +104,6 @@ import pit12.platform.discord.DiscordIpcConnection;
 import pit12.platform.forge.ForgeCommandAdapter;
 import pit12.platform.lunar.LunarSupport;
 import pit12.platform.lunar.LunarTextureState;
-import pit12.platform.lwjgl.LwjglInputDevice;
 import pit12.platform.mixinconfig.MixinFailureWarning;
 import pit12.platform.oneconfig.OneConfigSupport;
 import pit12.runtime.arrow.ArrowTracker;
@@ -160,8 +159,7 @@ public final class ClientBootstrap {
         components.add(session);
         ArrowTracker arrows = new ArrowTracker(minecraft, session);
         components.add(arrows);
-        InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft,
-                new LwjglInputDevice());
+        InputBlocker input = new InputBlocker(minecraft, client, (InputBlockBinding) minecraft);
         components.add(input);
         InputTicks inputTicks = new InputTicks(client, (InputTickBinding) minecraft);
         components.add(inputTicks);

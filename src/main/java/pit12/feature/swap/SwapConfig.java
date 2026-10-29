@@ -94,7 +94,7 @@ public final class SwapConfig extends FeatureConfig {
                 10, 1);
         resumeInputNextTick = booleanSetting("resume_input_next_tick",
                 source("Resume input next tick"),
-                source("Keeps all input locked until the next tick after closing the inventory."),
+                source("Keeps movement, clicks, and key presses locked until the next tick after closing the inventory."),
                 true);
         swapMessages = booleanSetting("swap_messages", source("Swap messages"),
                 source("Shows a message after items are swapped or unequipped."), true);
