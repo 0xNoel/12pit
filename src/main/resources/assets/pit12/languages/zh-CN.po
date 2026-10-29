@@ -1,208 +1,160 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 12pit\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: 12pit\n"
-"X-Crowdin-Project-ID: 937057\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: 12pit.pot\n"
-"X-Crowdin-File-ID: 1\n"
-"Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2026-10-22 18:36\n"
 
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Auto Click"
-msgstr "连点器"
+msgstr ""
 
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:43
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Combat"
-msgstr "战斗"
+msgid "Repeats left and right clicks while their keys are held. Turning off all filters for a click type removes its item restrictions."
+msgstr ""
 
-#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:41
-msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Combat"
-msgstr "战斗"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:75
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Combat"
-msgstr "战斗"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:44
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Clicks repeatedly while holding a mouse button."
-msgstr "按住鼠标按键时连点。"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:45
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:46
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Left click"
 msgstr "左键"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:46
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:47
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Left click enabled"
 msgstr "启用左键连点"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:47
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Repeats left clicks while holding the attack button."
-msgstr "按住攻击键时连续左键点击。"
-
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:48
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Minimum CPS"
-msgstr "最低 CPS"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:62
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
-msgid "Minimum CPS"
-msgstr "最低 CPS"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:49
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Lowest left click rate, in clicks per second."
-msgstr "左键每秒点击次数的下限。"
+msgid "Repeats left clicks while the left-click key is held."
+msgstr "按住左键点击键时重复左键点击。"
 
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:50
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Maximum CPS"
-msgstr "最高 CPS"
+msgid "Minimum interval (phases)"
+msgstr ""
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:64
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:67
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
-msgid "Maximum CPS"
-msgstr "最高 CPS"
+msgid "Minimum interval (phases)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:51
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Highest left click rate, in clicks per second."
-msgstr "左键每秒点击次数的上限。"
+msgid "Minimum time between left clicks. CPS is about 40 divided by phases."
+msgstr ""
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:52
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:54
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Maximum interval (phases)"
+msgstr ""
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:71
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
+msgid "Maximum interval (phases)"
+msgstr ""
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:55
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Maximum time between left clicks. CPS is about 40 divided by phases."
+msgstr ""
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:57
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allow weapons"
 msgstr "允许武器"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:52
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:58
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows left clicks with swords and tools. Turn off all filters to allow any item."
-msgstr "手持剑或工具时允许左键连点。关闭所有筛选选项后，手持任何物品都可连点。"
+msgid "Allows left clicks with swords and tools."
+msgstr ""
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:55
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:59
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allow fist"
 msgstr "允许空手"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:56
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:60
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allows left clicks with an empty hand."
-msgstr "空手时允许左键连点。"
+msgstr "允许空手进行左键点击。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:57
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:61
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allow dragon egg"
 msgstr "允许龙蛋"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:71
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:78
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#2"
 msgid "Allow dragon egg"
 msgstr "允许龙蛋"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:58
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:62
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allows left clicks while pointing at a dragon egg."
-msgstr "指向龙蛋时允许左键连点。"
+msgstr "允许指向龙蛋时进行左键点击。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:59
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Right click"
 msgstr "右键"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:60
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:64
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Right click enabled"
 msgstr "启用右键连点"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:61
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Repeats right clicks while holding the use button."
-msgstr "按住使用键时连续右键点击。"
-
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:63
-msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Lowest right click rate, in clicks per second."
-msgstr "右键每秒点击次数的下限。"
-
 #: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:65
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Highest right click rate, in clicks per second."
-msgstr "右键每秒点击次数的上限。"
+msgid "Repeats right clicks while the right-click key is held."
+msgstr "按住右键点击键时重复右键点击。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:66
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:68
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Minimum time between right clicks. CPS is about 40 divided by phases."
+msgstr ""
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:72
+msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
+msgid "Maximum time between right clicks. CPS is about 40 divided by phases."
+msgstr ""
+
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:74
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allow blocks"
 msgstr "允许方块"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:66
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:75
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
-msgid "Allows right clicks while holding a block. Turn off all filters to allow any item."
-msgstr "手持方块时允许右键连点。关闭所有筛选选项后，手持任何物品都可连点。"
+msgid "Allows right clicks while holding a block."
+msgstr ""
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:69
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:76
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allow cake"
 msgstr "允许蛋糕"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:70
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:77
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allows right clicks while pointing at cake."
-msgstr "指向蛋糕时允许右键连点。"
+msgstr "允许指向蛋糕时进行右键点击。"
 
-#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:72
+#: src/main/java/pit12/feature/autoclick/AutoClickConfig.java:79
 msgctxt "src/main/java/pit12/feature/autoclick/AutoClickConfig.java#1"
 msgid "Allows right clicks while pointing at a dragon egg."
-msgstr "指向龙蛋时允许右键连点。"
+msgstr "允许指向龙蛋时进行右键点击。"
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:38
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
 msgid "Auto Fish"
-msgstr "自动钓鱼"
-
-#: src/main/java/pit12/feature/autofish/AutoFishConfig.java:38
-msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Player"
-msgstr "玩家"
-
-#: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:34
-msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
-msgid "Player"
-msgstr "玩家"
-
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:45
-msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
-msgid "Player"
-msgstr "玩家"
-
-#: src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java:29
-msgctxt "src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java#1"
-msgid "Player"
-msgstr "玩家"
-
-#: src/main/java/pit12/feature/sprint/AutoSprintConfig.java:28
-msgctxt "src/main/java/pit12/feature/sprint/AutoSprintConfig.java#1"
-msgid "Player"
-msgstr "玩家"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:39
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Reels in when a fish bites and can cast again."
-msgstr "鱼咬钩时自动收竿，也可再次抛竿。"
+msgid "Reels in when the bobber dips and can cast again."
+msgstr "浮漂下沉时收竿，并可再次抛竿。"
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:40
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
@@ -221,48 +173,48 @@ msgstr "自动抛竿"
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:42
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Casts once after Auto Fish reels in."
-msgstr "自动钓鱼收竿后，再抛竿一次。"
+msgid "Casts again after reeling in."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:43
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Reel delay min"
-msgstr "最短收竿延迟"
+msgid "Reel delay min (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:44
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Shortest wait before reeling in, in ticks."
-msgstr "收竿前的最短等待时间，单位为游戏刻。"
+msgid "Minimum time before reeling in."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:45
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Reel delay max"
-msgstr "最长收竿延迟"
+msgid "Reel delay max (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:46
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Longest wait before reeling in, in ticks."
-msgstr "收竿前的最长等待时间，单位为游戏刻。"
+msgid "Maximum time before reeling in."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:47
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Recast delay min"
-msgstr "最短抛竿延迟"
+msgid "Recast delay min (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:48
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Shortest wait before casting again, in ticks."
-msgstr "再次抛竿前的最短等待时间，单位为游戏刻。"
+msgid "Minimum time before casting again."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:49
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Recast delay max"
-msgstr "最长抛竿延迟"
+msgid "Recast delay max (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:50
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Longest wait before casting again, in ticks."
-msgstr "再次抛竿前的最长等待时间，单位为游戏刻。"
+msgid "Maximum time before casting again."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:51
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
@@ -271,50 +223,35 @@ msgstr "咬钩处理概率"
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:52
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Empty hook chance"
-msgstr "空钩概率"
+msgid "Empty hook chance (%)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:53
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Percent chance of waiting for the float to recover before reeling in."
-msgstr "等浮漂恢复后才收竿的概率，单位为百分比。"
+msgid "Chance of waiting for the bobber to rise and settle before reeling in."
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:55
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Miss hook chance"
-msgstr "错过咬钩概率"
+msgid "Miss hook chance (%)"
+msgstr ""
 
 #: src/main/java/pit12/feature/autofish/AutoFishConfig.java:56
 msgctxt "src/main/java/pit12/feature/autofish/AutoFishConfig.java#1"
-msgid "Percent chance of ignoring a bite and waiting for the next one."
-msgstr "忽略本次咬钩、等待下次咬钩的概率，单位为百分比。"
+msgid "Chance of ignoring a bobber dip and waiting for the next one."
+msgstr ""
 
 #: src/main/java/pit12/feature/banalert/BanAlertConfig.java:28
 msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
-msgid "Ban alerts"
-msgstr "封禁提示"
-
-#: src/main/java/pit12/feature/banalert/BanAlertConfig.java:28
-msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
-msgid "Misc"
-msgstr "杂项"
-
-#: src/main/java/pit12/feature/denick/DenickConfig.java:34
-msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Misc"
-msgstr "杂项"
-
-#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:32
-msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
-msgid "Misc"
-msgstr "杂项"
+msgid "Ban Alerts"
+msgstr ""
 
 #: src/main/java/pit12/feature/banalert/BanAlertConfig.java:28
 msgctxt "src/main/java/pit12/feature/banalert/BanAlertConfig.java#1"
 msgid "Shows who may have been banned based on ban messages and when players leave."
-msgstr "根据封禁消息和玩家离线时间，推测可能被封禁的人。"
+msgstr "根据封禁消息和玩家离开的时间，显示可能被封禁的玩家。"
 
-#: src/main/java/pit12/feature/banalert/BanAlertFeature.java:181
+#: src/main/java/pit12/feature/banalert/BanAlertFeature.java:195
 msgctxt "src/main/java/pit12/feature/banalert/BanAlertFeature.java#1"
 msgid "Possibly banned player: {0} §e({1}ms)"
 msgstr "可能被封禁的玩家：{0} §e（{1}ms）"
@@ -371,13 +308,13 @@ msgstr "没有匹配的聊天宏"
 
 #: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:34
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
-msgid "Chat macro"
-msgstr "聊天宏"
+msgid "Chat Macro"
+msgstr ""
 
 #: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:35
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
 msgid "Sends chat messages with key bindings."
-msgstr "通过按键发送聊天消息。"
+msgstr "通过按键绑定发送聊天消息。"
 
 #: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:36
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
@@ -387,7 +324,7 @@ msgstr "屏蔽输入"
 #: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:37
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
 msgid "Blocks all input for one tick before sending a macro."
-msgstr "在发送宏前屏蔽所有输入，持续一个游戏刻。"
+msgstr "发送宏之前屏蔽所有输入一个 tick。"
 
 #: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:38
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
@@ -396,8 +333,8 @@ msgstr "回出生点宏按键"
 
 #: src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java:38
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroConfig.java#1"
-msgid "Sends /spawn when you are not fighting. Press again to cancel while waiting."
-msgstr "未处于战斗中时发送 /spawn。等待期间再次按下可取消。"
+msgid "Sends /spawn once you are out of combat. Press again to cancel while waiting."
+msgstr ""
 
 #: src/main/java/pit12/feature/chatmacro/ChatMacroFeature.java:245
 msgctxt "src/main/java/pit12/feature/chatmacro/ChatMacroFeature.java#1"
@@ -414,87 +351,102 @@ msgctxt "src/main/java/pit12/feature/chatmacro/MacroBindings.java#1"
 msgid "Chat macros could not be saved"
 msgstr "无法保存聊天宏"
 
+#: src/main/java/pit12/feature/commandfix/CommandFixConfig.java:28
+msgctxt "src/main/java/pit12/feature/commandfix/CommandFixConfig.java#1"
+msgid "Command Fix"
+msgstr ""
+
+#: src/main/java/pit12/feature/commandfix/CommandFixConfig.java:29
+msgctxt "src/main/java/pit12/feature/commandfix/CommandFixConfig.java#1"
+msgid "Requires a leading slash for client commands."
+msgstr "要求客户端命令以斜杠开头。"
+
 #: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:44
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
-msgid "Contract reroll"
-msgstr "重抽契约"
+msgid "Contract Reroll"
+msgstr ""
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:45
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Rerolls contracts until a task matches an enabled filter."
+msgstr "重新抽取合约，直到任务符合某个已启用的筛选条件。"
 
 #: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:46
-msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
-msgid "Rerolls contracts until one matches your filters."
-msgstr "重抽契约，直到符合筛选条件。"
-
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:47
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Contract reroll key"
 msgstr "重抽契约按键"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:48
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:47
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
-msgid "Automatically rerolls contracts until one matches your filters."
-msgstr "自动重抽契约，直到符合筛选条件。"
+msgid "Starts contract rerolling. Press again to stop."
+msgstr "开始重新抽取合约。再次按下可停止。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:50
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:48
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Require bonus viles"
 msgstr "要求黑暗结晶奖励"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:51
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:49
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
-msgid "Only accepts matching contracts with a Chunk of Vile bonus."
-msgstr "只接受符合筛选条件且奖励包含黑暗结晶的契约。"
+msgid "Requires a Chunk of Vile bonus as well as a matching task."
+msgstr "要求任务符合条件且带有 Chunk of Vile 奖励。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:52
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:50
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Contract filters"
 msgstr "契约筛选"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:53
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:51
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Kills"
 msgstr "击杀数"
 
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:52
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of kills."
+msgstr "接受所需击杀数达到或低于选定数量的任务。"
+
 #: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:53
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:56
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:57
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#2"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:58
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:61
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#3"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:60
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:65
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#4"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:62
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:69
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#5"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:65
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:73
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#6"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:69
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:77
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#7"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:72
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:81
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#8"
 msgid "Off"
 msgstr "关闭"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:54
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:53
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 15"
 msgstr "最多 15"
@@ -504,7 +456,7 @@ msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 20"
 msgstr "最多 20"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:63
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:69
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#2"
 msgid "At most 20"
 msgstr "最多 20"
@@ -514,112 +466,147 @@ msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Kills without armor"
 msgstr "无护甲击杀数"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:56
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:55
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of kills without armor."
+msgstr "接受未穿护甲时所需击杀数达到或低于选定数量的任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:57
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 3"
 msgstr "最多 3"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:57
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:58
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 4"
 msgstr "最多 4"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:58
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:59
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Fist kills"
 msgstr "空手击杀数"
 
 #: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:59
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of fist kills in the small sea lantern circle."
+msgstr "接受在小海晶灯圈内所需空手击杀数达到或低于选定数量的任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:61
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 1"
 msgstr "最多 1"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:59
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:62
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 2"
 msgstr "最多 2"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:60
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:63
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Multikills"
 msgstr "多杀"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:61
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:64
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts Double, Triple, and Quadra kill tasks up to the selected limit."
+msgstr "接受达到或低于所选上限的双杀、三杀和四杀任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:65
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Up to Triple"
 msgstr "最多三杀"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:61
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:66
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Up to Quadra"
 msgstr "最多四杀"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:62
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:67
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Ingots"
 msgstr "金锭数"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:63
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:68
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of ingots."
+msgstr "接受所需金锭数达到或低于选定数量的任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:70
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 25"
 msgstr "最多 25"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:64
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:70
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 30"
 msgstr "最多 30"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:65
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:71
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Arrow hits"
 msgstr "箭矢命中次数"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:66
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:72
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of arrow hits."
+msgstr "接受所需箭命中数达到或低于选定数量的任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:73
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 100"
 msgstr "最多 100"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:66
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:74
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 125"
 msgstr "最多 125"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:67
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:74
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 150"
 msgstr "最多 150"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:68
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:75
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Kills without perks"
 msgstr "无天赋击杀数"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:69
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:75
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of kills without perks."
+msgstr "接受未使用天赋时所需击杀数达到或低于选定数量的任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:77
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 8"
 msgstr "最多 8"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:70
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:78
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 10"
 msgstr "最多 10"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:71
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:79
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "Golden apples"
 msgstr "金苹果数"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:72
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:79
+msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
+msgid "Accepts tasks requiring at most the selected number of golden apples eaten."
+msgstr "接受所需食用金苹果数达到或低于选定数量的任务。"
+
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:81
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 12"
 msgstr "最多 12"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:73
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:82
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 16"
 msgstr "最多 16"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:73
+#: src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java:82
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollConfig.java#1"
 msgid "At most 18"
 msgstr "最多 18"
@@ -644,12 +631,12 @@ msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1
 msgid "Move next to the Quest Master and aim at them before starting."
 msgstr "请先走到任务大师旁，将准星对准他后再开始。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:286
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:285
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#2"
 msgid "Move next to the Quest Master and aim at them before starting."
 msgstr "请先走到任务大师旁，将准星对准他后再开始。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:306
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:305
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#3"
 msgid "Move next to the Quest Master and aim at them before starting."
 msgstr "请先走到任务大师旁，将准星对准他后再开始。"
@@ -659,65 +646,65 @@ msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1
 msgid "Timed out waiting for the server."
 msgstr "等待服务器响应超时。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:266
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:265
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "A contract started unexpectedly."
 msgstr "意外开始了一个契约。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:290
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:289
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "The inventory changed."
 msgstr "物品栏发生变化。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:321
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:320
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#2"
 msgid "The inventory changed."
 msgstr "物品栏发生变化。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:442
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:440
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#3"
 msgid "The inventory changed."
 msgstr "物品栏发生变化。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:303
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:302
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "The menu closed unexpectedly."
 msgstr "菜单意外关闭。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:308
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:307
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "An unexpected menu opened."
 msgstr "意外打开了其他菜单。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:316
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:315
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "The menu changed unexpectedly."
 msgstr "菜单发生了意外变化。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:462
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:460
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "Waiting for the contract to end…"
 msgstr "正在等待契约结束…..."
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:463
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:461
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "Rerolling contracts…"
 msgstr "正在重抽契约……"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:474
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:472
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "An unexpected error occurred."
 msgstr "发生了意外错误。"
 
-#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:479
+#: src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java:477
 msgctxt "src/main/java/pit12/feature/contractreroll/ContractRerollFeature.java#1"
 msgid "Contract reroll stopped: {0}"
 msgstr "重抽契约已停止：{0}"
 
 #: src/main/java/pit12/feature/denick/DenickConfig.java:35
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Finds nicked players using their current equipment."
-msgstr "通过神秘附魔查询 nick 玩家的真实昵称。"
+msgid "Looks up nicked players' real names using their equipment."
+msgstr "利用使用昵称的玩家的装备查询其真实名称。"
 
 #: src/main/java/pit12/feature/denick/DenickConfig.java:36
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
@@ -731,8 +718,8 @@ msgstr "自动 Denick"
 
 #: src/main/java/pit12/feature/denick/DenickConfig.java:38
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Queries nicked players when you enter the Pit or they join."
-msgstr "自动查询 nick 玩家的真实昵称。"
+msgid "Looks up nicked players when you enter the Pit or they join."
+msgstr "你进入 Pit 或使用昵称的玩家加入时，查询这些玩家。"
 
 #: src/main/java/pit12/feature/denick/DenickConfig.java:39
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
@@ -749,12 +736,12 @@ msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Keep monitoring"
 msgstr "保持监测"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:42
+#: src/main/java/pit12/feature/denick/DenickConfig.java:41
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
-msgid "Queues equipment changes until a real name is found."
-msgstr "跟踪装备更改并查询直到找到真实昵称。"
+msgid "Continues automatic lookups with new equipment until a real name is found."
+msgstr "使用新装备继续自动查询，直到找到真实名称。"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:43
+#: src/main/java/pit12/feature/denick/DenickConfig.java:44
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Display"
 msgstr "显示"
@@ -769,77 +756,77 @@ msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Display"
 msgstr "显示"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:57
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:62
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Display"
 msgstr "显示"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:73
+#: src/main/java/pit12/feature/timers/TimersConfig.java:84
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Display"
-msgstr ""
+msgstr "显示"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:44
+#: src/main/java/pit12/feature/denick/DenickConfig.java:45
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Show nick marker"
 msgstr "显示 nick 标记"
 
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:49
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:48
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Show nick marker"
 msgstr "显示 nick 标记"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:72
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:81
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show nick marker"
 msgstr "显示 nick 标记"
 
-#: src/main/java/pit12/feature/denick/DenickConfig.java:45
+#: src/main/java/pit12/feature/denick/DenickConfig.java:46
 msgctxt "src/main/java/pit12/feature/denick/DenickConfig.java#1"
 msgid "Adds N to nicked players' names in Tab."
-msgstr "给 nick 玩家昵称后添加 N 后缀。"
+msgstr "在 Tab 中为使用昵称的玩家名称添加 N。"
 
 #: src/main/java/pit12/feature/denick/DenickFeature.java:128
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "Find a nicked player's name"
 msgstr "查找一个 nick 玩家的真实昵称"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:253
+#: src/main/java/pit12/feature/denick/DenickFeature.java:278
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "Querying {0}..."
 msgstr "正在查询 {0}..."
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:484
+#: src/main/java/pit12/feature/denick/DenickFeature.java:495
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "{0} §c-> {1} §c(cached)"
 msgstr "{0} §c-> {1}§c（缓存）"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:532
+#: src/main/java/pit12/feature/denick/DenickFeature.java:546
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "{0} §c-> {1} §c(updated)"
 msgstr "{0} §c-> {1}§c（已更新）"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:548
+#: src/main/java/pit12/feature/denick/DenickFeature.java:562
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "Cached identity for {0} is no longer confirmed"
 msgstr "{0} 的缓存身份已无法确认"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:562
+#: src/main/java/pit12/feature/denick/DenickFeature.java:576
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "No searchable equipment for {0}"
 msgstr "{0} 没有可用于查询的装备"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:563
+#: src/main/java/pit12/feature/denick/DenickFeature.java:577
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "Could not query {0}"
 msgstr "无法查询 {0}"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:564
+#: src/main/java/pit12/feature/denick/DenickFeature.java:578
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "No confirmed owner for {0}"
 msgstr "无法确认 {0} 的真实身份"
 
-#: src/main/java/pit12/feature/denick/DenickFeature.java:567
+#: src/main/java/pit12/feature/denick/DenickFeature.java:581
 msgctxt "src/main/java/pit12/feature/denick/DenickFeature.java#1"
 msgid "Waiting for new equipment"
 msgstr "等待新的装备"
@@ -866,63 +853,13 @@ msgstr "  暂无已保存的事件"
 
 #: src/main/java/pit12/feature/eventlist/EventListConfig.java:49
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Event List"
-msgstr "事件列表"
-
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:49
-msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/gamma/GammaConfig.java:31
-msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:35
-msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:46
-msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:42
-msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:55
-msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:33
-msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
-msgid "Render"
-msgstr "渲染"
-
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:55
-msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Render"
+msgid "Event List HUD"
 msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:69
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Render"
-msgstr ""
-
-#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:35
-msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Render"
-msgstr "渲染"
 
 #: src/main/java/pit12/feature/eventlist/EventListConfig.java:50
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Shows upcoming Pit events and their current stages."
-msgstr "显示即将到来的 Pit 事件及其当前阶段。"
+msgid "Shows upcoming and active Pit events."
+msgstr "显示即将到来和正在进行的 Pit 事件。"
 
 #: src/main/java/pit12/feature/eventlist/EventListConfig.java:53
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
@@ -931,145 +868,145 @@ msgstr "事件数量"
 
 #: src/main/java/pit12/feature/eventlist/EventListConfig.java:54
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Sets the number of event rows. The day and night row is separate."
-msgstr "设置事件行数，昼夜行不计入其中。"
+msgid "Number of event rows shown."
+msgstr "显示的事件行数。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:56
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:55
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Show day and night"
 msgstr "显示昼夜"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:57
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:56
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Shows the Pit day and night cycle above the events."
-msgstr "在事件列表上方显示 Pit 的昼夜周期。"
+msgid "Shows Day or Night and the time remaining above the events."
+msgstr "在事件上方显示白天或夜晚及其剩余时间。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:58
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:57
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Show status icons"
 msgstr "显示状态图标"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:59
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:58
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Marks upcoming major and minor events, preparation, and active events."
-msgstr "标记即将到来的大型与小型事件，以及准备中和进行中的事件。"
+msgid "Shows icons for upcoming, preparing, and active events."
+msgstr "为即将到来、准备中和进行中的事件显示图标。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:61
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:59
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Show event colors"
 msgstr "显示事件颜色"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:62
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:60
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Uses each event's color for its name."
-msgstr "用各事件的颜色显示其名称。"
+msgstr "使用各个事件的颜色显示其名称。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:63
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:61
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Pad time with zeros"
 msgstr "时间补零"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:64
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:62
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Shows two digits for each part of a countdown."
-msgstr "将倒计时中各部分不足两位的数字补零。"
+msgid "Pads each part of a countdown to at least two digits."
+msgstr "将倒计时的每个部分补零至至少两位数字。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:65
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:63
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Time format"
 msgstr "时间格式"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:66
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:64
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Sets how event times are shown."
-msgstr "设置事件时间的显示方式。"
+msgid "Displays countdowns, local times, or both."
+msgstr "显示倒计时、当地时间或两者。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:66
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:65
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Countdown"
 msgstr "倒计时"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:67
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:65
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Local time (24-hour)"
 msgstr "本地时间（24 小时制）"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:68
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:66
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Countdown and local time"
 msgstr "倒计时与本地时间"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:69
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:67
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Filter"
 msgstr "筛选"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:70
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:68
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Major events"
 msgstr "大型事件"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:71
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:69
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Show major events"
 msgstr "显示大型事件"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:72
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:70
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Shows major events in the list."
 msgstr "在列表中显示大型事件。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:76
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:74
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Shows this event in the list."
 msgstr "在列表中显示此事件。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:85
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:83
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#2"
 msgid "Shows this event in the list."
 msgstr "在列表中显示此事件。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:79
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:77
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Minor events"
 msgstr "小型事件"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:80
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:78
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Show minor events"
 msgstr "显示小型事件"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:81
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:79
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Shows minor events in the list."
 msgstr "在列表中显示小型事件。"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:88
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:86
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Source"
-msgstr ""
+msgstr "源"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:89
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:87
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
 msgid "Endpoint"
-msgstr ""
+msgstr "端点"
 
-#: src/main/java/pit12/feature/eventlist/EventListConfig.java:90
+#: src/main/java/pit12/feature/eventlist/EventListConfig.java:88
 msgctxt "src/main/java/pit12/feature/eventlist/EventListConfig.java#1"
-msgid "Leave blank to use the service hosted by 12pit."
-msgstr ""
+msgid "Event feed URL. Leave blank to use 12pit's service."
+msgstr "事件数据源的网址。留空以使用 12pit 的服务。"
 
-#: src/main/java/pit12/feature/eventlist/EventListFeature.java:242
+#: src/main/java/pit12/feature/eventlist/EventListFeature.java:246
 msgctxt "src/main/java/pit12/feature/eventlist/EventListFeature.java#1"
 msgid "Could not load events"
 msgstr "无法加载事件"
 
-#: src/main/java/pit12/feature/eventlist/EventListFeature.java:243
+#: src/main/java/pit12/feature/eventlist/EventListFeature.java:247
 msgctxt "src/main/java/pit12/feature/eventlist/EventListFeature.java#1"
 msgid "Event schedule has ended"
 msgstr "事件时间表已结束"
 
-#: src/main/java/pit12/feature/eventlist/EventListFeature.java:244
+#: src/main/java/pit12/feature/eventlist/EventListFeature.java:248
 msgctxt "src/main/java/pit12/feature/eventlist/EventListFeature.java#1"
 msgid "Loading events…"
 msgstr "正在加载事件…"
@@ -1099,7 +1036,7 @@ msgctxt "src/main/java/pit12/feature/eventlist/EventListSnapshot.java#1"
 msgid "Active"
 msgstr "进行中"
 
-#: web-ui/src/ProfilesPage.vue:290:21
+#: web-ui/src/ProfilesPage.vue:295:21
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Active"
 msgstr "当前使用"
@@ -1194,6 +1131,16 @@ msgctxt "src/main/java/pit12/feature/eventlist/EventType.java#1"
 msgid "Auction"
 msgstr "拍卖"
 
+#: src/main/java/pit12/feature/fontcachefix/FontCacheFixConfig.java:28
+msgctxt "src/main/java/pit12/feature/fontcachefix/FontCacheFixConfig.java#1"
+msgid "Font Cache Fix"
+msgstr ""
+
+#: src/main/java/pit12/feature/fontcachefix/FontCacheFixConfig.java:29
+msgctxt "src/main/java/pit12/feature/fontcachefix/FontCacheFixConfig.java#1"
+msgid "Fixes cached text using the wrong font in Lunar and PolyPatcher."
+msgstr ""
+
 #: src/main/java/pit12/feature/gamma/GammaConfig.java:31
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
 msgid "Gamma"
@@ -1201,8 +1148,8 @@ msgstr "伽马覆写"
 
 #: src/main/java/pit12/feature/gamma/GammaConfig.java:32
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
-msgid "Adjusts world brightness with a custom gamma value."
-msgstr "用自定义伽马值调整世界亮度。"
+msgid "Changes world brightness using a gamma value."
+msgstr "通过 gamma 值调整世界亮度。"
 
 #: src/main/java/pit12/feature/gamma/GammaConfig.java:33
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
@@ -1211,78 +1158,53 @@ msgstr "伽马值"
 
 #: src/main/java/pit12/feature/gamma/GammaConfig.java:34
 msgctxt "src/main/java/pit12/feature/gamma/GammaConfig.java#1"
-msgid "Controls brightness. Minecraft's normal range is 0 to 1."
-msgstr "控制亮度。Minecraft 的常规范围为 0 到 1。"
+msgid "Sets the gamma value used for world lighting."
+msgstr "设置世界光照使用的 gamma 值。"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorFeature.java:56
+#: src/main/java/pit12/feature/hudeditor/HudEditorFeature.java:54
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorFeature.java#1"
 msgid "Open the HUD editor"
 msgstr "打开 HUD 编辑器"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:80
-msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "Hold Alt to disable snapping."
-msgstr "按住 Alt 暂时关闭吸附。"
-
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:81
-msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "Drag to move. Drag empty space to select."
-msgstr "拖动 HUD 可移动，拖动空白区域可框选。"
-
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:82
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:73
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
 msgid "Ctrl+click to select multiple HUDs."
 msgstr "按住 Ctrl 点击可选择多个 HUD。"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:83
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:74
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "Scroll to resize. Hold Shift for smaller steps."
-msgstr "滚动鼠标滚轮可缩放，按住 Shift 可微调。"
+msgid "Hold Alt to disable snapping."
+msgstr "按住 Alt 暂时关闭吸附。"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:84
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:75
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
 msgid "Arrow keys move by 1 px. Shift moves by 10 px."
 msgstr "方向键每次移动 1 像素，按住 Shift 每次移动 10 像素。"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:85
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:76
+msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
+msgid "Scroll to resize. Hold Shift for smaller steps."
+msgstr "滚动鼠标滚轮可缩放，按住 Shift 可微调。"
+
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:77
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
 msgid "Ctrl+Z to undo. Ctrl+Y to redo."
 msgstr "Ctrl+Z 撤销，Ctrl+Y 重做。"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:86
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:78
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
 msgid "R to restore selection. Shift+R to restore all."
 msgstr "R 重置所选 HUD，Shift+R 重置全部 HUD。"
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:87
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:79
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "Hold Space to preview live HUDs."
-msgstr "按住空格键预览实时 HUD。"
+msgid "Hold Space to preview."
+msgstr ""
 
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:89
+#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:81
 msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "When no HUD is selected, press {0} again to open the configuration interface."
-msgstr "未选中 HUD 时，再按一次 {0} 可打开配置界面。"
-
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:100
-msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "Got it"
-msgstr "知道了"
-
-#: web-ui/src/LanguageNotice.vue:124:16
-msgctxt "web-ui/src/LanguageNotice.vue#1"
-msgid "Got it"
-msgstr "知道了"
-
-#: src/main/java/pit12/feature/hudeditor/HudEditorScreen.java:102
-msgctxt "src/main/java/pit12/feature/hudeditor/HudEditorScreen.java#1"
-msgid "Don't show again"
-msgstr "不再显示"
-
-#: web-ui/src/LanguageNotice.vue:125:15
-msgctxt "web-ui/src/LanguageNotice.vue#1"
-msgid "Don't show again"
-msgstr "不再显示"
+msgid "Press {0} to open the configuration interface (no HUD selected)."
+msgstr ""
 
 #: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:35
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
@@ -1291,80 +1213,95 @@ msgstr "物品透视"
 
 #: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:36
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
-msgid "Shows dropped raffle tickets and gold ingots through blocks."
-msgstr "隔着方块显示掉落的抽奖券和金锭。"
+msgid "Shows dropped name tags and gold ingots through blocks."
+msgstr "透过方块显示掉落的命名牌和金锭。"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:38
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:37
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Raffle tickets"
 msgstr "抽奖券"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:39
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:38
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Show raffle tickets"
 msgstr "显示抽奖券"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:40
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:39
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Marks dropped name tags."
 msgstr "标记掉落的命名牌。"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:42
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:40
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Raffle ticket color"
 msgstr "抽奖券颜色"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:43
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:41
+msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
+msgid "Color and opacity of dropped name tag boxes."
+msgstr "掉落命名牌方框的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:42
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Gold ingots"
 msgstr "金锭"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:44
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:43
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Show gold ingots"
 msgstr "显示金锭"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:45
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:44
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Marks dropped gold ingots."
 msgstr "标记掉落的金锭。"
 
-#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:46
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:45
 msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
 msgid "Gold ingot color"
 msgstr "金锭颜色"
 
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:46
+#: src/main/java/pit12/feature/itemesp/ItemEspConfig.java:46
+msgctxt "src/main/java/pit12/feature/itemesp/ItemEspConfig.java#1"
+msgid "Color and opacity of dropped gold ingot boxes."
+msgstr "掉落金锭方框的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:45
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Nametag"
 msgstr "名称标签"
 
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:47
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:46
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Adds real names, Pit enchantments, and timers to player nametags."
+msgstr "在玩家名牌中添加真实名称、Pit 附魔和计时器。"
+
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:49
+msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
+msgid "Adds N to nicked players' names."
+msgstr "在使用昵称的玩家名称中添加 N。"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:82
+msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
+msgid "Adds N to nicked players' names."
 msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:50
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Adds N to nicked players' names."
-msgstr "给 nick 玩家添加 N 后缀。"
-
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:51
-msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Show real names on nametags"
 msgstr "在名称标签中显示真实昵称"
 
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:52
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:51
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Adds the real name after the nicked name."
-msgstr "在 nick 玩家的昵称后显示真实昵称。"
+msgstr "在昵称后添加真实名称。"
 
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:53
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:52
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Enchantments"
 msgstr "附魔"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:59
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:68
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Enchantments"
 msgstr "附魔"
@@ -1374,185 +1311,170 @@ msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
 msgid "Enchantments"
 msgstr "附魔"
 
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:53
+msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
+msgid "Enchantment format"
+msgstr "附魔格式"
+
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:69
+msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
+msgid "Enchantment format"
+msgstr "附魔格式"
+
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:54
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Enchantment format"
-msgstr "附魔格式"
+msgid "Controls how enchantment names and levels are shown."
+msgstr "控制附魔名称和等级的显示方式。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:60
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:70
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Enchantment format"
-msgstr "附魔格式"
+msgid "Controls how enchantment names and levels are shown."
+msgstr "控制附魔名称和等级的显示方式。"
 
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:55
+#: src/main/java/pit12/feature/nametag/NametagConfig.java:56
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Controls how enchantment names and levels are shown."
-msgstr "设置附魔名称和等级的显示方式。"
+msgid "Show gem"
+msgstr "显示宝石标记"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:61
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:76
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Controls how enchantment names and levels are shown."
-msgstr "设置附魔名称和等级的显示方式。"
+msgid "Show gem"
+msgstr "显示宝石标记"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:101
+msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
+msgid "Show gem"
+msgstr "显示宝石标记"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:39
+msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
+msgid "Show gem"
+msgstr "显示宝石标记"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:57
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Show gem"
-msgstr "显示宝石标记"
+msgid "Shows a green diamond on gemmed items."
+msgstr "在镶嵌过宝石的物品上显示一个绿色菱形。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:67
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:77
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Show gem"
-msgstr "显示宝石标记"
+msgid "Shows a green diamond on gemmed items."
+msgstr "在镶嵌过宝石的物品上显示一个绿色菱形。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:103
+#: src/main/java/pit12/feature/swap/SwapConfig.java:102
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Show gem"
-msgstr "显示宝石标记"
+msgid "Shows a green diamond on gemmed items."
+msgstr "在镶嵌过宝石的物品上显示一个绿色菱形。"
 
 #: src/main/java/pit12/feature/tooltip/TooltipConfig.java:40
 msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Show gem"
-msgstr "显示宝石标记"
+msgid "Shows a green diamond on gemmed items."
+msgstr "在镶嵌过宝石的物品上显示一个绿色菱形。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:58
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows a green diamond on gemmed items."
-msgstr "在使用过宝石的物品上显示绿色菱形标记。"
+msgid "Show held item enchantments"
+msgstr "显示手持物品附魔"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:68
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:72
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows a green diamond on gemmed items."
-msgstr "在使用过宝石的物品上显示绿色菱形标记。"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:104
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Shows a green diamond on gemmed items."
-msgstr "在使用过宝石的物品上显示绿色菱形标记。"
-
-#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:41
-msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Shows a green diamond on gemmed items."
-msgstr "在使用过宝石的物品上显示绿色菱形标记。"
+msgid "Show held item enchantments"
+msgstr "显示手持物品附魔"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:59
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Show held item enchantments"
-msgstr "显示手持物品附魔"
+msgid "Shows the held item's Pit enchantments."
+msgstr "显示手持物品的 Pit 附魔。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:63
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:73
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Show held item enchantments"
-msgstr "显示手持物品附魔"
+msgid "Shows the held item's Pit enchantments."
+msgstr "显示手持物品的 Pit 附魔。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:60
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows the held item's Pit enchantments."
-msgstr "显示手持物品的 Pit 附魔。"
+msgid "Show leggings enchantments"
+msgstr "显示护腿附魔"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:64
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:74
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows the held item's Pit enchantments."
-msgstr "显示手持物品的 Pit 附魔。"
+msgid "Show leggings enchantments"
+msgstr "显示护腿附魔"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:61
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Show leggings enchantments"
-msgstr "显示护腿附魔"
+msgid "Shows the leggings' Pit enchantments."
+msgstr "显示护腿的 Pit 附魔。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:65
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:75
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Show leggings enchantments"
-msgstr "显示护腿附魔"
+msgid "Shows the leggings' Pit enchantments."
+msgstr "显示护腿的 Pit 附魔。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:62
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows the leggings' Pit enchantments."
-msgstr "显示护腿的 Pit 附魔。"
-
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:66
-msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows the leggings' Pit enchantments."
-msgstr "显示护腿的 Pit 附魔。"
+msgid "Timers"
+msgstr "计时"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:63
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Timers"
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:69
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Timers"
-msgstr ""
+msgid "Show Pin timer"
+msgstr "显示 Pin 计时"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:64
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Show Pin timer"
-msgstr ""
+msgid "Shows Pin timers after player names while Timers is enabled."
+msgstr "启用 Timers 时，在玩家名称后显示 Pin 计时器。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:65
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Pin after player names while Timers is enabled."
-msgstr ""
+msgid "Show Venom timer"
+msgstr "显示 Venom 计时"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:66
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Show Venom timer"
-msgstr ""
+msgid "Shows Venom timers after player names while Timers is enabled."
+msgstr "启用 Timers 时，在玩家名称后显示 Venom 计时器。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:67
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Venom after player names while Timers is enabled."
-msgstr ""
+msgid "Show Jump Boost timer"
+msgstr "显示 Jump Boost 计时"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:68
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Show Jump Boost timer"
-msgstr ""
-
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:69
-msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows Jump Boost after player names while Timers is enabled."
-msgstr ""
+msgid "Shows Jump Boost timers after player names while Timers is enabled."
+msgstr "启用 Timers 时，在玩家名称后显示 Jump Boost 计时器。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:70
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Show Telebow cooldown"
-msgstr ""
+msgstr "显示 Telebow 冷却"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:71
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
 msgid "Shows Telebow cooldowns after player names while Timers is enabled."
-msgstr ""
+msgstr "启用 Timers 时，在玩家名称后显示 Telebow 冷却时间。"
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:74
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Display distance"
-msgstr "显示距离"
+msgid "Upward offset (1/100 block)"
+msgstr ""
 
 #: src/main/java/pit12/feature/nametag/NametagConfig.java:75
 msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Shows enchantments within this distance, in blocks."
-msgstr "显示此距离内玩家的附魔，单位为方块。"
-
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:76
-msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Upward offset"
-msgstr "向上偏移"
-
-#: src/main/java/pit12/feature/nametag/NametagConfig.java:77
-msgctxt "src/main/java/pit12/feature/nametag/NametagConfig.java#1"
-msgid "Moves enchantments above the nametag, in hundredths of a block."
-msgstr "附魔在名称标签上方的偏移距离，单位为百分之一方块。"
+msgid "Moves enchantments above the nametag."
+msgstr ""
 
 #: src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java:28
 msgctxt "src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java#1"
 msgid "No Jump Delay"
-msgstr "无跳跃延迟"
+msgstr ""
 
-#: src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java:30
+#: src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java:29
 msgctxt "src/main/java/pit12/feature/nojumpdelay/NoJumpDelayConfig.java#1"
 msgid "Removes the delay between jumps while holding the jump key."
-msgstr "按住跳跃键时，移除连续跳跃的间隔。"
+msgstr "按住跳跃键时移除跳跃之间的延迟。"
 
 #: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:42
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
@@ -1562,14 +1484,14 @@ msgstr "玩家透视"
 #: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:43
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Shows colored boxes around loaded players through blocks."
-msgstr "在已加载的玩家周围显示彩色方框，方框可透过方块看到。"
+msgstr "透过方块显示已加载玩家周围的彩色方框。"
 
 #: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:44
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Friends"
 msgstr "好友"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:81
+#: src/main/java/pit12/feature/relation/RelationCommand.java:83
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Friends"
 msgstr "好友"
@@ -1577,32 +1499,32 @@ msgstr "好友"
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:59
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Friends"
-msgstr ""
+msgstr "好友"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:80
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#2"
 msgid "Friends"
-msgstr ""
+msgstr "好友"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:90
+#: src/main/java/pit12/feature/timers/TimersConfig.java:100
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Friends"
-msgstr ""
+msgstr "好友"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:106
+#: src/main/java/pit12/feature/timers/TimersConfig.java:118
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#2"
 msgid "Friends"
-msgstr ""
+msgstr "好友"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:127
+#: src/main/java/pit12/feature/timers/TimersConfig.java:141
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#3"
 msgid "Friends"
-msgstr ""
+msgstr "好友"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:146
+#: src/main/java/pit12/feature/timers/TimersConfig.java:165
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#4"
 msgid "Friends"
-msgstr ""
+msgstr "好友"
 
 #: web-ui/src/RelationsPage.vue:268:32
 msgctxt "web-ui/src/RelationsPage.vue#1"
@@ -1629,22 +1551,27 @@ msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Friend color"
 msgstr "好友颜色"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:93
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:95
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Friend color"
-msgstr ""
+msgstr "好友颜色"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:78
+#: src/main/java/pit12/feature/timers/TimersConfig.java:89
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Friend color"
-msgstr ""
+msgstr "好友颜色"
 
 #: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:48
+msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
+msgid "Color and opacity of boxes around friends."
+msgstr "好友周围方框的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:49
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Enemies"
 msgstr "敌人"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:82
+#: src/main/java/pit12/feature/relation/RelationCommand.java:84
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Enemies"
 msgstr "敌人"
@@ -1652,32 +1579,32 @@ msgstr "敌人"
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:61
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Enemies"
-msgstr ""
+msgstr "敌人"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:82
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#2"
 msgid "Enemies"
-msgstr ""
+msgstr "敌人"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:92
+#: src/main/java/pit12/feature/timers/TimersConfig.java:102
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Enemies"
-msgstr ""
+msgstr "敌人"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:108
+#: src/main/java/pit12/feature/timers/TimersConfig.java:120
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#2"
 msgid "Enemies"
-msgstr ""
+msgstr "敌人"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:129
+#: src/main/java/pit12/feature/timers/TimersConfig.java:143
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#3"
 msgid "Enemies"
-msgstr ""
+msgstr "敌人"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:148
+#: src/main/java/pit12/feature/timers/TimersConfig.java:167
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#4"
 msgid "Enemies"
-msgstr ""
+msgstr "敌人"
 
 #: web-ui/src/RelationsPage.vue:268:47
 msgctxt "web-ui/src/RelationsPage.vue#1"
@@ -1689,255 +1616,260 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Enemies"
 msgstr "敌人"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:49
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:50
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Show enemies"
 msgstr "显示敌人"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:49
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:50
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Marks enemies."
 msgstr "标记敌人。"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:51
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:52
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Enemy color"
 msgstr "敌人颜色"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:94
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:97
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Enemy color"
-msgstr ""
+msgstr "敌人颜色"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:80
+#: src/main/java/pit12/feature/timers/TimersConfig.java:91
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Enemy color"
-msgstr ""
+msgstr "敌人颜色"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:52
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:53
+msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
+msgid "Color and opacity of boxes around enemies."
+msgstr "敌人周围方框的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:54
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Other players"
 msgstr "其他玩家"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:53
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:55
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Show other players"
 msgstr "显示其他玩家"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:54
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:56
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Marks players outside the friend and enemy lists."
-msgstr "标记不在好友和敌人列表中的玩家。"
+msgstr "标记好友和敌人列表以外的玩家。"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:56
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:57
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Other player color"
 msgstr "其他玩家颜色"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:96
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:99
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Other player color"
-msgstr ""
+msgstr "其他玩家颜色"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:82
+#: src/main/java/pit12/feature/timers/TimersConfig.java:93
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Other player color"
-msgstr ""
+msgstr "其他玩家颜色"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:57
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:58
+msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
+msgid "Color and opacity of boxes around other players."
+msgstr "其他玩家周围方框的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:59
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Distance fade"
 msgstr "距离淡化"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:58
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:60
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Fade nearby players"
 msgstr "淡化附近玩家的方框"
 
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:59
-msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
-msgid "Makes boxes fade out as players get closer."
-msgstr "玩家越近，方框越透明。"
-
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:60
-msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
-msgid "Hidden distance"
-msgstr "隐藏距离"
-
 #: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:61
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
-msgid "Hides boxes at or below the smaller distance."
-msgstr "距离不超过两个距离设置中的较小值时，隐藏方框。"
-
-#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:62
-msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
-msgid "Full color distance"
-msgstr "完整显示距离"
+msgid "Makes boxes fade out as players get closer."
+msgstr "玩家靠近时使方框逐渐淡出。"
 
 #: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:63
 msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
+msgid "Hidden distance (blocks)"
+msgstr ""
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:64
+msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
+msgid "Hides boxes at or below the smaller distance."
+msgstr "距离达到或低于两个距离中的较小值时隐藏方框。"
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:66
+msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
+msgid "Full color distance (blocks)"
+msgstr ""
+
+#: src/main/java/pit12/feature/playeresp/PlayerEspConfig.java:67
+msgctxt "src/main/java/pit12/feature/playeresp/PlayerEspConfig.java#1"
 msgid "Uses full color at or above the larger distance."
-msgstr "距离不小于两个距离设置中的较大值时，完整显示方框。"
+msgstr "距离达到或高于两个距离中的较大值时使用完整颜色。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:55
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:60
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Player List"
-msgstr "玩家列表"
+msgid "Player List HUD"
+msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:56
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:61
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows loaded player equipment and direction in a compact HUD."
-msgstr "在紧凑的 HUD 中显示已加载玩家的装备和方向。"
+msgid "Shows player names, equipment, distance, and direction in a HUD."
+msgstr "在 HUD 中显示玩家名称、装备、距离和方向。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:69
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:78
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Player information"
 msgstr "玩家信息"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:70
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:79
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Remove bounty suffix"
 msgstr "去掉赏金后缀"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:71
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:80
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Removes bounty suffixes from player names."
-msgstr "去掉玩家名称中的赏金后缀。"
+msgstr "移除玩家名称中的赏金后缀。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:73
-msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Adds N to nicked players' names in Player List."
-msgstr "在 Tab 和玩家列表给 nick 玩家昵称后添加 N 后缀。"
-
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:74
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:83
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show player distance"
 msgstr "显示玩家距离"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:75
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:84
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows the distance to each loaded player."
-msgstr "显示与每个已加载玩家的距离。"
+msgstr "显示与每位已加载玩家的距离。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:76
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:85
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show player direction"
 msgstr "显示玩家方向"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:77
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:86
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows the continuous direction to each loaded player."
-msgstr "显示每个已加载玩家的方向，随方位连续变化。"
+msgid "Shows an arrow pointing toward each loaded player."
+msgstr "显示指向每位已加载玩家的箭头。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:78
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:87
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show spawn marker"
 msgstr "显示出生点标记"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:79
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:88
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows SPAWN instead of distance and direction for players in spawn."
-msgstr "对出生点内的玩家显示 SPAWN，替代距离和方向。"
+msgstr "对于出生点中的玩家，显示 SPAWN 以替代距离和方向。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:81
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:90
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Hide players in spawn"
 msgstr "隐藏在出生点的玩家"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:82
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:91
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Hides players in spawn from all groups."
-msgstr "隐藏所有组中处于出生点的玩家"
+msgstr "在所有分组中隐藏出生点内的玩家。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:83
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:92
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Real names key"
 msgstr "显示真名按键"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:84
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:93
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Hold to show nicked players' real names in Player List."
-msgstr "按住时，在玩家列表显示 nick 玩家的真实昵称。"
+msgid "Hold to show nicked players' real names."
+msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:86
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:94
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Groups"
 msgstr "分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:87
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:95
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show group names"
 msgstr "显示分组名称"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:74
+#: src/main/java/pit12/feature/timers/TimersConfig.java:85
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Show group names"
-msgstr ""
+msgstr "显示分组名称"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:88
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:96
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Shows the name above each group."
 msgstr "在每个分组上方显示名称。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:89
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:97
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Friend group"
 msgstr "显示好友分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:90
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:98
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows friends in the player list."
-msgstr "在玩家列表中显示好友。"
+msgid "Shows friends."
+msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:91
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:99
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Enemy group"
 msgstr "显示敌人分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:92
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:100
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows enemies in the player list."
-msgstr "在玩家列表中显示敌人。"
+msgid "Shows enemies."
+msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:93
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:101
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Nick group"
 msgstr "显示 Nick 分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:94
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:102
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows nicked players in the player list."
-msgstr "在玩家列表中显示 nick 玩家。"
+msgid "Shows nicked players."
+msgstr ""
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:95
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:103
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Regularity group"
 msgstr "显示 Regularity 分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:96
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:104
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows the Regularity equipment group."
-msgstr "显示 Regularity 装备分组。"
+msgid "Shows players wearing Regularity leggings."
+msgstr "显示穿着 Regularity 护腿的玩家。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:97
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:105
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Dark group"
 msgstr "显示暗黑分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:98
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:106
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows the Dark equipment group."
-msgstr "显示暗黑装备分组。"
+msgid "Shows players wearing Somber leggings."
+msgstr "显示穿着 Somber 护腿的玩家。"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:99
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:107
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
 msgid "Show Bounty Hunter group"
 msgstr "显示赏金猎人分组"
 
-#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:100
+#: src/main/java/pit12/feature/playerlist/PlayerListConfig.java:108
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListConfig.java#1"
-msgid "Shows the Bounty Hunter equipment group."
-msgstr "显示赏金猎人装备分组。"
+msgid "Shows players wearing golden leggings."
+msgstr "显示穿着金护腿的玩家。"
 
 #: src/main/java/pit12/feature/playerlist/PlayerListGroup.java:24
 msgctxt "src/main/java/pit12/feature/playerlist/PlayerListGroup.java#1"
@@ -1952,22 +1884,22 @@ msgstr "§c§l敌人"
 #: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:31
 msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
 msgid "Auto Quick Math"
-msgstr "自动速算"
+msgstr ""
+
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:32
+msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
+msgid "Automatically sends Quick Math answers in public chat."
+msgstr ""
 
 #: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:33
 msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
-msgid "Solves the QUICK MATHS! expression and answers in chat automatically."
-msgstr "自动计算 QUICK MATHS! 的算式，并在聊天中发送答案。"
+msgid "Answer delay (seconds)"
+msgstr ""
 
-#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:35
+#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:34
 msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
-msgid "Answer delay"
-msgstr "答题延迟"
-
-#: src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java:36
-msgctxt "src/main/java/pit12/feature/quickmath/AutoQuickMathConfig.java#1"
-msgid "Waits this many seconds before sending the answer."
-msgstr "发送答案前的等待时间，单位为秒。"
+msgid "Time before sending the answer."
+msgstr ""
 
 #: src/main/java/pit12/feature/relation/RelationBook.java:85
 msgctxt "src/main/java/pit12/feature/relation/RelationBook.java#1"
@@ -2059,37 +1991,37 @@ msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Manage enemy relations"
 msgstr "管理敌人列表"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:61
+#: src/main/java/pit12/feature/relation/RelationCommand.java:63
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Show friend relations"
 msgstr "查看好友列表"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:62
+#: src/main/java/pit12/feature/relation/RelationCommand.java:64
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Show enemy relations"
 msgstr "查看敌人列表"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:64
+#: src/main/java/pit12/feature/relation/RelationCommand.java:66
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Add a player"
 msgstr "添加玩家"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:68
+#: src/main/java/pit12/feature/relation/RelationCommand.java:70
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "Remove a player"
 msgstr "移除玩家"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:80
+#: src/main/java/pit12/feature/relation/RelationCommand.java:82
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "{0} ({1}):"
 msgstr "{0}（{1} 人）："
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:88
+#: src/main/java/pit12/feature/relation/RelationCommand.java:90
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid " (UUID {0})"
 msgstr " （UUID {0}）"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:112
+#: src/main/java/pit12/feature/relation/RelationCommand.java:114
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "waiting"
 msgstr "等待查询"
@@ -2099,52 +2031,52 @@ msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
 msgid "waiting"
 msgstr "等待查询"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:114
+#: src/main/java/pit12/feature/relation/RelationCommand.java:116
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "resolving"
 msgstr "查询中"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:116
+#: src/main/java/pit12/feature/relation/RelationCommand.java:118
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "retrying"
 msgstr "重试中"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:118
+#: src/main/java/pit12/feature/relation/RelationCommand.java:120
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "not_found"
 msgstr "未找到"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:120
+#: src/main/java/pit12/feature/relation/RelationCommand.java:122
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "failed"
 msgstr "查询失败"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:122
+#: src/main/java/pit12/feature/relation/RelationCommand.java:124
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "confirmed"
 msgstr "已确认"
 
-#: src/main/java/pit12/feature/relation/RelationCommand.java:124
+#: src/main/java/pit12/feature/relation/RelationCommand.java:126
 msgctxt "src/main/java/pit12/feature/relation/RelationCommand.java#1"
 msgid "unknown"
 msgstr "未知"
 
-#: src/main/java/pit12/feature/relation/RelationFeature.java:203
+#: src/main/java/pit12/feature/relation/RelationFeature.java:202
 msgctxt "src/main/java/pit12/feature/relation/RelationFeature.java#1"
 msgid "Relations are unavailable"
 msgstr "玩家关系不可用"
 
-#: src/main/java/pit12/feature/relation/RelationFeature.java:205
+#: src/main/java/pit12/feature/relation/RelationFeature.java:204
 msgctxt "src/main/java/pit12/feature/relation/RelationFeature.java#1"
 msgid "Relations could not be loaded: {0}"
 msgstr "无法加载玩家关系：{0}"
 
-#: src/main/java/pit12/feature/relation/RelationFeature.java:207
+#: src/main/java/pit12/feature/relation/RelationFeature.java:206
 msgctxt "src/main/java/pit12/feature/relation/RelationFeature.java#1"
 msgid "Relations are still loading"
 msgstr "玩家关系仍在加载中"
 
-#: src/main/java/pit12/feature/relation/RelationFeature.java:348
+#: src/main/java/pit12/feature/relation/RelationFeature.java:345
 msgctxt "src/main/java/pit12/feature/relation/RelationFeature.java#1"
 msgid "Duplicate relation identity"
 msgstr "玩家关系中存在重复身份"
@@ -2156,28 +2088,18 @@ msgstr ""
 
 #: src/main/java/pit12/feature/resourceleakfix/ResourceLeakFixConfig.java:29
 msgctxt "src/main/java/pit12/feature/resourceleakfix/ResourceLeakFixConfig.java#1"
-msgid "Patch"
-msgstr ""
-
-#: src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java:29
-msgctxt "src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java#1"
-msgid "Patch"
-msgstr ""
-
-#: src/main/java/pit12/feature/resourceleakfix/ResourceLeakFixConfig.java:29
-msgctxt "src/main/java/pit12/feature/resourceleakfix/ResourceLeakFixConfig.java#1"
-msgid "for Optifine"
+msgid "Fixes resource leaks during OptiFine texture loading."
 msgstr ""
 
 #: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:33
 msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
 msgid "Ring Helper"
-msgstr "围中辅助"
+msgstr ""
 
-#: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:34
+#: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:33
 msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
-msgid "Outlines two blocks above the middle ring until the upper block is filled."
-msgstr "在中场圆环上方标出两格高的轮廓，放好上层方块后隐藏对应轮廓。"
+msgid "Outlines two blocks above the middle ring where the upper block is empty."
+msgstr "上方方块为空的位置，显示中间圆环上方两个方块的轮廓。"
 
 #: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:36
 msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
@@ -2194,20 +2116,30 @@ msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
 msgid "Ring color"
 msgstr "圆环颜色"
 
+#: src/main/java/pit12/feature/ringhelper/RingHelperConfig.java:39
+msgctxt "src/main/java/pit12/feature/ringhelper/RingHelperConfig.java#1"
+msgid "Color and opacity of the ring outlines."
+msgstr "圆环轮廓的颜色和不透明度。"
+
 #: src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java:28
 msgctxt "src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java#1"
 msgid "Scoreboard Fix"
 msgstr ""
 
+#: src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java:29
+msgctxt "src/main/java/pit12/feature/scoreboardfix/ScoreboardFixConfig.java#1"
+msgid "Prevents crashes caused by removing missing scoreboard entries."
+msgstr ""
+
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:41
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
 msgid "Smart Block"
-msgstr "智能格挡"
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:42
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
 msgid "Selects a Bullet Time or Bruiser sword from the hotbar while blocking."
-msgstr "格挡时切换到快捷栏中的 Bullet Time 或 Bruiser 剑。"
+msgstr "格挡时从快捷栏选择一把带有 Bullet Time 或 Bruiser 的剑。"
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:45
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
@@ -2236,8 +2168,8 @@ msgstr "附魔优先级"
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:49
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Chooses the highest level of this enchantment. Ties use the other enabled enchantment's level."
-msgstr "优先选择此附魔等级最高的剑。等级相同时，再比较另一种已启用附魔的等级。"
+msgid "Prefers swords with the highest level of this enchantment. Ties use the other enabled enchantment's level."
+msgstr "优先选择此附魔等级最高的剑。等级相同时，使用另一个已启用附魔的等级。"
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:51
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
@@ -2257,17 +2189,17 @@ msgstr "附近有箭时优先 Bullet Time"
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:55
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
 msgid "Switches to a Bullet Time sword when a flying arrow is within the detection range."
-msgstr "检测范围内有飞行中的箭时，切换到 Bullet Time 剑。"
+msgstr "检测范围内有飞行中的箭时，切换到一把带有 Bullet Time 的剑。"
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:57
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Arrow detection range"
-msgstr "箭矢检测范围"
+msgid "Arrow detection range (blocks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:58
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Detects flying arrows within this distance, in blocks."
-msgstr "检测此距离内飞行中的箭，单位为方块。"
+msgid "Detects flying arrows within this distance."
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:59
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
@@ -2281,75 +2213,75 @@ msgstr "空手触发"
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:61
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Also starts Smart Block when holding use with an empty hand."
-msgstr "空手按住使用键时也可触发智能格挡。"
+msgid "Also starts when the right-click key is held with an empty hand."
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:62
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
 msgid "Prevent manual slot changes"
 msgstr "阻止手动切换槽位"
 
-#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:62
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:63
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Blocks hotbar keys, scrolling and pick block during Smart Block. Otherwise, changing slots ends the current switch."
-msgstr "智能格挡期间禁用快捷栏按键、滚轮和选取方块操作。关闭后，手动切换槽位会结束本次切换。"
+msgid "Locks the hotbar slot until the original slot is restored."
+msgstr ""
+
+#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:64
+msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
+msgid "Switch delay (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:65
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Switch delay"
-msgstr "切换延迟"
+msgid "Time before selecting the blocking sword."
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:66
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Waits this many ticks before selecting the blocking sword."
-msgstr "切换到格挡用剑前的等待时间，单位为游戏刻。"
+msgid "Restore delay (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:67
 msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Restore delay"
-msgstr "恢复延迟"
-
-#: src/main/java/pit12/feature/smartblock/SmartBlockConfig.java:67
-msgctxt "src/main/java/pit12/feature/smartblock/SmartBlockConfig.java#1"
-msgid "Waits this many ticks after releasing use before restoring the original slot."
-msgstr "松开使用键后到恢复原槽位的等待时间，单位为游戏刻。"
+msgid "Time after releasing the right-click key before restoring the original slot."
+msgstr ""
 
 #: src/main/java/pit12/feature/sprint/AutoSprintConfig.java:28
 msgctxt "src/main/java/pit12/feature/sprint/AutoSprintConfig.java#1"
 msgid "Auto Sprint"
-msgstr "自动疾跑"
+msgstr ""
 
 #: src/main/java/pit12/feature/sprint/AutoSprintConfig.java:29
 msgctxt "src/main/java/pit12/feature/sprint/AutoSprintConfig.java#1"
-msgid "Sprints automatically while moving forward, without holding the sprint key."
-msgstr "向前移动时自动疾跑，无需按住疾跑键。"
+msgid "Sprints automatically while moving forward."
+msgstr "向前移动时自动疾跑。"
 
-#: src/main/java/pit12/feature/swap/AutoSwapController.java:196
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:202
 msgctxt "src/main/java/pit12/feature/swap/AutoSwapController.java#1"
 msgid "venom"
 msgstr "中毒"
 
-#: src/main/java/pit12/feature/swap/AutoSwapController.java:265
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:271
 msgctxt "src/main/java/pit12/feature/swap/AutoSwapController.java#1"
 msgid "low target health"
 msgstr "目标血量低"
 
-#: src/main/java/pit12/feature/swap/AutoSwapController.java:266
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:272
 msgctxt "src/main/java/pit12/feature/swap/AutoSwapController.java#1"
 msgid "low health"
 msgstr "血量低"
 
-#: src/main/java/pit12/feature/swap/AutoSwapController.java:317
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:323
 msgctxt "src/main/java/pit12/feature/swap/AutoSwapController.java#1"
 msgid "no dark targets"
 msgstr "没有需要 Dark 的目标"
 
-#: src/main/java/pit12/feature/swap/AutoSwapController.java:319
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:325
 msgctxt "src/main/java/pit12/feature/swap/AutoSwapController.java#1"
 msgid "{0} activation"
 msgstr "{0} 触发"
 
-#: src/main/java/pit12/feature/swap/AutoSwapController.java:322
+#: src/main/java/pit12/feature/swap/AutoSwapController.java:328
 msgctxt "src/main/java/pit12/feature/swap/AutoSwapController.java#1"
 msgid "health recovery"
 msgstr "血量恢复"
@@ -2449,7 +2381,7 @@ msgctxt "src/main/java/pit12/feature/swap/SwapCommand.java#1"
 msgid "Automatic swap: {0}"
 msgstr "自动换装：{0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:459
+#: src/main/java/pit12/feature/swap/SwapController.java:460
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Automatic swap: {0}"
 msgstr "自动换装遇到问题：{0}"
@@ -2516,8 +2448,8 @@ msgstr "换装"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:75
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Swaps armor and hotbar items manually, when poisoned or when players have low health."
-msgstr "手动更换盔甲和快捷栏物品，或在中毒、玩家血量低时自动更换。"
+msgid "Swaps armor and hotbar items manually or automatically. Blocks input during swaps."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:78
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2527,7 +2459,7 @@ msgstr "右键换装"
 #: src/main/java/pit12/feature/swap/SwapConfig.java:79
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Right-click held armor to replace the armor in its slot."
-msgstr "右键点击手持盔甲，替换对应部位的盔甲。"
+msgstr "右键点击手持护甲，以替换其对应槽位中的护甲。"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:80
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
@@ -2536,530 +2468,530 @@ msgstr "随机点击时机"
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:81
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Uses a random input phase before player updates for all swaps and unequipping."
-msgstr "所有换装和卸甲操作都在玩家更新前的随机输入阶段执行。"
+msgid "Randomizes when inventory clicks are sent within each tick."
+msgstr "随机选择每个 tick 内发送物品栏点击的时机。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:83
+#: src/main/java/pit12/feature/swap/SwapConfig.java:82
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Shift click swap"
 msgstr "Shift 点击换装"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:84
+#: src/main/java/pit12/feature/swap/SwapConfig.java:83
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Use shift clicks instead of number keys to swap armor."
-msgstr "使用 Shift 点击代替数字键进行盔甲换装。"
+msgstr "使用 Shift 点击替代数字键来更换护甲。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:85
+#: src/main/java/pit12/feature/swap/SwapConfig.java:84
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Inventory visibility"
 msgstr "背包可见性"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:86
+#: src/main/java/pit12/feature/swap/SwapConfig.java:85
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Shows or hides the inventory during swaps."
-msgstr "换装时显示或隐藏背包界面。"
+msgstr "更换期间显示或隐藏物品栏。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:87
+#: src/main/java/pit12/feature/swap/SwapConfig.java:86
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Hidden"
 msgstr "隐藏"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:88
+#: src/main/java/pit12/feature/swap/SwapConfig.java:87
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Visible"
 msgstr "显示"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:89
+#: src/main/java/pit12/feature/swap/SwapConfig.java:88
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Open delay"
-msgstr "打开延迟"
+msgid "Open delay (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:89
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Ticks to wait after opening the inventory before the first click. Set to 0 for no wait."
-msgstr "打开背包后到首次点击的等待时间，单位为游戏刻。设为 0 则不等待。"
+msgid "Time between opening the inventory and the first click."
+msgstr ""
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:90
+msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
+msgid "Swap delay (ticks)"
+msgstr ""
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:91
+msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
+msgid "Time between clicks for right click and automatic swaps."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:92
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Swap delay"
-msgstr "换装延迟"
+msgid "Close delay (ticks)"
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:93
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Ticks between clicks for right click and automatic swaps."
-msgstr "右键换装和自动换装时的点击间隔，单位为游戏刻。"
+msgid "Time between completing the last swap and closing the inventory."
+msgstr ""
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:94
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Close delay"
-msgstr "关闭延迟"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:94
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Ticks to wait after the last request finishes before closing the inventory."
-msgstr "最后一次请求完成后到关闭背包的等待时间，单位为游戏刻。"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:98
+#: src/main/java/pit12/feature/swap/SwapConfig.java:96
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Resume input next tick"
 msgstr "下一游戏刻恢复输入"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:99
+#: src/main/java/pit12/feature/swap/SwapConfig.java:97
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Keeps all input locked until the next tick after closing the inventory."
-msgstr "关闭背包后，保持所有输入锁定，直到下一游戏刻。"
+msgstr "关闭物品栏后，持续锁定所有输入直到下一个 tick。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:101
+#: src/main/java/pit12/feature/swap/SwapConfig.java:99
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Swap messages"
 msgstr "换装消息"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:102
+#: src/main/java/pit12/feature/swap/SwapConfig.java:100
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Shows a message after items are swapped or unequipped."
-msgstr "更换或卸下物品后显示消息。"
+msgstr "更换或卸下物品后显示一条消息。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:105
+#: src/main/java/pit12/feature/swap/SwapConfig.java:103
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Transfer slot"
 msgstr "中转槽位"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:106
+#: src/main/java/pit12/feature/swap/SwapConfig.java:104
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Hotbar slot used to move armor from the inventory."
-msgstr "用于从背包移动盔甲的快捷栏槽位。"
+msgstr "用于从物品栏转移护甲的快捷栏槽位。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:107
+#: src/main/java/pit12/feature/swap/SwapConfig.java:105
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Restore transfer slot"
 msgstr "恢复中转槽位"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:108
+#: src/main/java/pit12/feature/swap/SwapConfig.java:106
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Restores the transfer slot's contents after moving armor. Slot bindings take priority."
-msgstr "移动盔甲后恢复中转槽位中的物品，槽位绑定优先。"
+msgid "Restores the transfer slot's previous item after moving armor. Slot bindings take priority."
+msgstr "转移护甲后恢复中转槽位原来的物品。槽位绑定优先。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:110
+#: src/main/java/pit12/feature/swap/SwapConfig.java:108
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Prefer empty hotbar slot"
 msgstr "优先使用空快捷栏槽位"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:111
+#: src/main/java/pit12/feature/swap/SwapConfig.java:109
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Uses the first empty hotbar slot as the transfer slot. Otherwise uses the selected transfer slot."
-msgstr "优先用快捷栏中第一个空槽位中转，否则使用指定的中转槽位。"
+msgid "Uses the first empty hotbar slot for transfers, or the selected transfer slot if the hotbar is full."
+msgstr "使用快捷栏中第一个空槽位进行中转，快捷栏已满时使用选定的中转槽位。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:113
+#: src/main/java/pit12/feature/swap/SwapConfig.java:111
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Bindings"
 msgstr "绑定"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:114
+#: src/main/java/pit12/feature/swap/SwapConfig.java:112
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Unequip all"
 msgstr "卸下全部盔甲"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:115
+#: src/main/java/pit12/feature/swap/SwapConfig.java:113
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Moves worn armor into free inventory slots."
-msgstr "将身上的盔甲移入背包空槽位。"
+msgstr "将身上的护甲移入物品栏的空槽位。"
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:114
+msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
+msgid "Binding delay (ticks)"
+msgstr ""
+
+#: src/main/java/pit12/feature/swap/SwapConfig.java:115
+msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
+msgid "Time between clicks for bindings and unequipping."
+msgstr ""
 
 #: src/main/java/pit12/feature/swap/SwapConfig.java:116
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Binding delay"
-msgstr "绑定换装延迟"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:117
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Ticks between clicks for bindings and unequipping."
-msgstr "通过绑定换装或卸下盔甲时的点击间隔，单位为游戏刻。"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:118
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Binding messages"
 msgstr "绑定消息"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:119
+#: src/main/java/pit12/feature/swap/SwapConfig.java:117
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Shows messages when bindings are added, removed or cleared."
 msgstr "添加、移除或清空绑定时显示消息。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:120
+#: src/main/java/pit12/feature/swap/SwapConfig.java:118
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Show binding keys"
 msgstr "显示绑定按键"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:121
+#: src/main/java/pit12/feature/swap/SwapConfig.java:119
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Shows keys on bound items outside their target slots."
-msgstr "在未处于目标槽位的绑定物品上显示按键。"
+msgstr "在处于目标槽位以外的已绑定物品上显示按键。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:122
+#: src/main/java/pit12/feature/swap/SwapConfig.java:120
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Automatic swap"
 msgstr "自动换装"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:123
+#: src/main/java/pit12/feature/swap/SwapConfig.java:121
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#2"
 msgid "Automatic swap"
 msgstr "自动换装"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:123
+#: src/main/java/pit12/feature/swap/SwapConfig.java:121
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Automatically swaps items when poisoned or when you or a dark target have low health."
-msgstr "中毒、自身血量低或 Dark 目标血量低时，自动更换物品。"
+msgid "Swaps items when you become poisoned, your health is low, or a dark target's health is low."
+msgstr "你中毒、你的生命值较低或暗裤目标生命值较低时更换物品。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:126
+#: src/main/java/pit12/feature/swap/SwapConfig.java:124
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Automatic swap messages"
 msgstr "自动换装消息"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:127
+#: src/main/java/pit12/feature/swap/SwapConfig.java:125
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Shows why automatic swaps happened."
-msgstr "显示自动换装的原因。"
+msgstr "显示自动更换发生的原因。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:129
+#: src/main/java/pit12/feature/swap/SwapConfig.java:127
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Swap diamond armor"
 msgstr "换上钻石盔甲"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:130
+#: src/main/java/pit12/feature/swap/SwapConfig.java:128
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Equips diamond leggings and boots when poisoned."
-msgstr "中毒时换上钻石护腿和靴子。"
+msgid "Equips diamond leggings and boots when you become poisoned."
+msgstr "你中毒时装备钻石护腿和靴子。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:131
+#: src/main/java/pit12/feature/swap/SwapConfig.java:129
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Swap Combat Spade"
 msgstr "换上 Combat Spade"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:132
+#: src/main/java/pit12/feature/swap/SwapConfig.java:129
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Moves a Combat Spade to the selected hotbar slot when poisoned."
-msgstr "中毒时将 Combat Spade 移至指定的快捷栏槽位。"
+msgid "Moves a diamond shovel to the selected hotbar slot when you become poisoned."
+msgstr "你中毒时将钻石锹移到选定的快捷栏槽位。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:133
+#: src/main/java/pit12/feature/swap/SwapConfig.java:132
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skip while wearing Venom"
 msgstr "穿着 Venom 护腿时跳过"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:134
+#: src/main/java/pit12/feature/swap/SwapConfig.java:133
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skips poison swaps while wearing Combo Venom leggings."
-msgstr "穿着 Combo Venom 护腿时，跳过中毒换装。"
+msgstr "穿着 Combo Venom 护腿时跳过中毒更换。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:135
+#: src/main/java/pit12/feature/swap/SwapConfig.java:134
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Combat Spade slot"
 msgstr "Combat Spade 槽位"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:136
+#: src/main/java/pit12/feature/swap/SwapConfig.java:135
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Hotbar slot for the Combat Spade."
-msgstr "Combat Spade 使用的快捷栏槽位。"
+msgid "Hotbar slot used for the diamond shovel during poison swaps."
+msgstr "中毒更换时钻石锹使用的快捷栏槽位。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:138
+#: src/main/java/pit12/feature/swap/SwapConfig.java:137
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Use Escape Pod"
 msgstr "使用 Escape Pod"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:139
+#: src/main/java/pit12/feature/swap/SwapConfig.java:138
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Equips Escape Pod leggings at or below their health threshold."
-msgstr "血量不高于设定阈值时，换上 Escape Pod 护腿。"
+msgstr "生命值达到或低于其阈值时装备 Escape Pod 护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:140
+#: src/main/java/pit12/feature/swap/SwapConfig.java:139
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Escape Pod threshold"
 msgstr "Escape Pod 血量阈值"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:141
+#: src/main/java/pit12/feature/swap/SwapConfig.java:140
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Health points for Escape Pod swaps. Two points equal one heart."
-msgstr "触发 Escape Pod 换装的生命值，2 点等于 1 颗心。"
+msgstr "触发 Escape Pod 更换的生命值点数。两点等于一颗心。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:143
+#: src/main/java/pit12/feature/swap/SwapConfig.java:142
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Use Phoenix"
 msgstr "使用 Phoenix"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:144
+#: src/main/java/pit12/feature/swap/SwapConfig.java:143
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Equips Phoenix leggings at or below their health threshold."
-msgstr "血量不高于设定阈值时，换上 Phoenix 护腿。"
+msgstr "生命值达到或低于其阈值时装备 Phoenix 护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:145
+#: src/main/java/pit12/feature/swap/SwapConfig.java:144
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Phoenix threshold"
 msgstr "Phoenix 血量阈值"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:146
+#: src/main/java/pit12/feature/swap/SwapConfig.java:145
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Health points for Phoenix swaps. Two points equal one heart."
-msgstr "触发 Phoenix 换装的生命值，2 点等于 1 颗心。"
+msgstr "触发 Phoenix 更换的生命值点数。两点等于一颗心。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:148
+#: src/main/java/pit12/feature/swap/SwapConfig.java:147
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Prefer first"
 msgstr "优先选择"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:148
+#: src/main/java/pit12/feature/swap/SwapConfig.java:147
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Chooses which unused enchantment to equip when both are available and eligible."
-msgstr "两种附魔均可用且满足条件时，选择优先装备哪种尚未触发的附魔。"
+msgid "Chooses between Escape Pod and Phoenix when both are available and eligible."
+msgstr "Escape Pod 和 Phoenix 都可用且符合条件时，在两者之间进行选择。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:152
+#: src/main/java/pit12/feature/swap/SwapConfig.java:150
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Prefer high Lives"
 msgstr "优先选择高寿命护腿"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:153
+#: src/main/java/pit12/feature/swap/SwapConfig.java:151
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Chooses Phoenix leggings with the most remaining Lives."
-msgstr "选择剩余寿命最多的 Phoenix 护腿。"
+msgstr "选择剩余 Lives 最多的 Phoenix 护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:154
+#: src/main/java/pit12/feature/swap/SwapConfig.java:152
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Restore leggings"
 msgstr "换回原护腿"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:178
+#: src/main/java/pit12/feature/swap/SwapConfig.java:176
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#2"
 msgid "Restore leggings"
 msgstr "换回原护腿"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:155
+#: src/main/java/pit12/feature/swap/SwapConfig.java:153
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Restores the leggings worn before an automatic health swap."
-msgstr "换回因低血量自动换装前穿着的护腿。"
+msgstr "恢复因生命值而自动更换前穿着的护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:156
+#: src/main/java/pit12/feature/swap/SwapConfig.java:154
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Restore mode"
 msgstr "换回模式"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:156
+#: src/main/java/pit12/feature/swap/SwapConfig.java:154
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Restores leggings after health recovers or the equipped enchantment triggers."
-msgstr "血量恢复或当前装备的附魔触发后，换回原护腿。"
+msgid "Chooses whether to restore leggings after health recovery or enchantment activation."
+msgstr "选择在生命值恢复后还是附魔触发后恢复护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:158
+#: src/main/java/pit12/feature/swap/SwapConfig.java:156
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Health"
 msgstr "血量恢复"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:159
+#: src/main/java/pit12/feature/swap/SwapConfig.java:157
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Used"
 msgstr "附魔触发"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:161
+#: src/main/java/pit12/feature/swap/SwapConfig.java:159
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Restore threshold"
 msgstr "换回血量阈值"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:182
+#: src/main/java/pit12/feature/swap/SwapConfig.java:180
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#2"
 msgid "Restore threshold"
 msgstr "换回血量阈值"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:162
+#: src/main/java/pit12/feature/swap/SwapConfig.java:160
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Health points needed to restore leggings in Health mode. Health must also exceed the trigger threshold."
-msgstr "血量恢复模式下换回原护腿所需的生命值。血量还须高于换装触发阈值。"
+msgid "Health needed to restore leggings in Health mode. It must also exceed the equip threshold."
+msgstr "Health 模式下恢复护腿所需的生命值。生命值还须超过装备阈值。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:165
+#: src/main/java/pit12/feature/swap/SwapConfig.java:163
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Use dark"
 msgstr "使用 Dark"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:165
+#: src/main/java/pit12/feature/swap/SwapConfig.java:163
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Equips Somber leggings against players with low health wearing Escape Pod or Phoenix."
-msgstr "面对穿着 Escape Pod 或 Phoenix 护腿的低血量玩家时，换上 Somber 护腿。"
+msgstr "面对生命值较低且穿着 Escape Pod 或 Phoenix 的玩家时装备 Somber 护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:168
+#: src/main/java/pit12/feature/swap/SwapConfig.java:166
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Trigger mode"
 msgstr "触发模式"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:168
+#: src/main/java/pit12/feature/swap/SwapConfig.java:166
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Checks the last player you attacked or all nearby players within range. Friend and enemy filters apply to both modes."
-msgstr "检查上次攻击的玩家，或范围内的所有玩家。两种模式都遵循好友和敌人的筛选设置。"
+msgstr "检查你最后攻击的玩家，或范围内所有附近的玩家。好友和敌人筛选条件适用于两种模式。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:170
+#: src/main/java/pit12/feature/swap/SwapConfig.java:168
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Last attacked target"
 msgstr "上次攻击的目标"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:171
+#: src/main/java/pit12/feature/swap/SwapConfig.java:169
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Nearby players"
 msgstr "附近玩家"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:172
+#: src/main/java/pit12/feature/swap/SwapConfig.java:170
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Target health threshold"
 msgstr "目标血量阈值"
 
+#: src/main/java/pit12/feature/swap/SwapConfig.java:171
+msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
+msgid "Equips Somber leggings when a target's health is at or below this value. Uses health without absorption."
+msgstr "目标生命值达到或低于此值时装备 Somber 护腿。使用生命值，排除伤害吸收值。"
+
 #: src/main/java/pit12/feature/swap/SwapConfig.java:173
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Equips dark when a target's health is at or below this value. Uses entity health without absorption."
-msgstr "目标血量不高于此值时，换上 Dark 护腿。血量不包含伤害吸收提供的额外生命值。"
+msgid "Target range (blocks)"
+msgstr ""
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:175
-msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Target range"
-msgstr "目标范围"
-
-#: src/main/java/pit12/feature/swap/SwapConfig.java:176
+#: src/main/java/pit12/feature/swap/SwapConfig.java:174
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Maximum straight-line distance to targets in both trigger modes."
 msgstr "两种触发模式下与目标的最大直线距离。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:178
+#: src/main/java/pit12/feature/swap/SwapConfig.java:176
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Restores the leggings worn before the automatic swap when no targets in the selected mode need dark."
-msgstr "当前模式下没有需要 Dark 的目标时，换回自动换装前穿着的护腿。"
+msgid "Restores your previous leggings once the selected mode has no remaining dark targets."
+msgstr "所选模式中已无暗裤目标时恢复你原来的护腿。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:183
+#: src/main/java/pit12/feature/swap/SwapConfig.java:181
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
-msgid "Stops tracking a recovered target at or above this value. Health must also exceed the equip threshold."
-msgstr "目标血量恢复到此值或更高时，停止跟踪。血量还须高于换装触发阈值。"
+msgid "Stops tracking a target when its health reaches this value and exceeds the equip threshold."
+msgstr "目标生命值达到此值且超过装备阈值时停止跟踪该目标。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:186
+#: src/main/java/pit12/feature/swap/SwapConfig.java:184
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skip Escape Pod players below 2 hearts"
 msgstr "跳过血量低于 2 颗心的 Escape Pod 玩家"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:187
+#: src/main/java/pit12/feature/swap/SwapConfig.java:185
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skips Escape Pod targets below 2 hearts in both trigger modes. Phoenix still qualifies."
-msgstr "两种触发模式都跳过血量低于 2 颗心的 Escape Pod 目标。Phoenix 目标仍可触发换装。"
+msgstr "两种触发模式下均跳过生命值低于 2 颗心的 Escape Pod 目标。Phoenix 仍符合条件。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:189
+#: src/main/java/pit12/feature/swap/SwapConfig.java:187
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Enemies only"
 msgstr "仅敌人"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:190
+#: src/main/java/pit12/feature/swap/SwapConfig.java:188
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Only checks players in your enemy list."
 msgstr "只检查敌人列表中的玩家。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:191
+#: src/main/java/pit12/feature/swap/SwapConfig.java:189
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Ignore friends"
 msgstr "忽略好友"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:191
+#: src/main/java/pit12/feature/swap/SwapConfig.java:189
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Skips friends in both trigger modes. Attacking a friend keeps the previous target."
-msgstr "两种触发模式都跳过好友。攻击好友时保留原目标。"
+msgstr "两种触发模式下均跳过好友。攻击好友会保留先前的目标。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:194
+#: src/main/java/pit12/feature/swap/SwapConfig.java:192
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Swap priority"
 msgstr "换装优先级"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:194
+#: src/main/java/pit12/feature/swap/SwapConfig.java:192
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Chooses between dark and your own Escape Pod or Phoenix when both are needed. Poison swaps take priority."
-msgstr "同时需要 Dark 和自身的 Escape Pod 或 Phoenix 时，选择优先换上哪种护腿。中毒换装优先。"
+msgstr "同时需要暗裤和你自己的 Escape Pod 或 Phoenix 时，在两者之间进行选择。中毒更换优先。"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:196
+#: src/main/java/pit12/feature/swap/SwapConfig.java:194
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Pod/Phoenix first"
 msgstr "优先 Pod/Phoenix"
 
-#: src/main/java/pit12/feature/swap/SwapConfig.java:197
+#: src/main/java/pit12/feature/swap/SwapConfig.java:195
 msgctxt "src/main/java/pit12/feature/swap/SwapConfig.java#1"
 msgid "Dark first"
 msgstr "优先 Dark"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:179
+#: src/main/java/pit12/feature/swap/SwapController.java:182
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Unexpected error"
 msgstr "意外错误"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:333
+#: src/main/java/pit12/feature/swap/SwapController.java:334
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Missing item: {0}"
 msgstr "找不到物品：{0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:659
+#: src/main/java/pit12/feature/swap/SwapController.java:660
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#2"
 msgid "Missing item: {0}"
 msgstr "找不到物品：{0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:414
+#: src/main/java/pit12/feature/swap/SwapController.java:415
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Swapped {0} with {1} due to {2}"
 msgstr "因{2}，已将 {0} 与 {1} 互换"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:419
+#: src/main/java/pit12/feature/swap/SwapController.java:420
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Swapped {0} with {1}"
 msgstr "已将 {0} 与 {1} 互换"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:434
+#: src/main/java/pit12/feature/swap/SwapController.java:435
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Helmet slot"
 msgstr "头盔槽位"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:437
+#: src/main/java/pit12/feature/swap/SwapController.java:438
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Chestplate slot"
 msgstr "胸甲槽位"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:440
+#: src/main/java/pit12/feature/swap/SwapController.java:441
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Leggings slot"
 msgstr "护腿槽位"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:443
+#: src/main/java/pit12/feature/swap/SwapController.java:444
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Boots slot"
 msgstr "靴子槽位"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:447
+#: src/main/java/pit12/feature/swap/SwapController.java:448
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Hotbar slot {0}"
 msgstr "快捷栏槽位 {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:448
+#: src/main/java/pit12/feature/swap/SwapController.java:449
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Inventory slot {0}"
 msgstr "背包槽位 {0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:482
+#: src/main/java/pit12/feature/swap/SwapController.java:483
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Swap failed: {0}"
 msgstr "换装失败：{0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:538
+#: src/main/java/pit12/feature/swap/SwapController.java:539
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Inventory could not be closed"
 msgstr "无法关闭背包"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:619
+#: src/main/java/pit12/feature/swap/SwapController.java:620
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Armor could not be moved to the inventory"
 msgstr "无法将盔甲移入背包"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:621
+#: src/main/java/pit12/feature/swap/SwapController.java:622
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Not enough inventory space to unequip armor"
 msgstr "背包空间不足，无法卸下盔甲"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:667
+#: src/main/java/pit12/feature/swap/SwapController.java:668
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Item does not fit: {0}"
 msgstr "物品无法放入目标槽位：{0}"
 
-#: src/main/java/pit12/feature/swap/SwapController.java:709
+#: src/main/java/pit12/feature/swap/SwapController.java:710
 msgctxt "src/main/java/pit12/feature/swap/SwapController.java#1"
 msgid "Not enough inventory space for {0}"
 msgstr "背包空间不足，无法放入 {0}"
@@ -3069,95 +3001,95 @@ msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Telebow Prediction"
 msgstr ""
 
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:54
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Shows Telebow trails, predicted landing points, and shooter names through blocks."
+msgstr "透过方块显示 Telebow 轨迹、预测落点和射手名称。"
+
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:56
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows Telebow trails, landing beams, and shooter names through blocks."
-msgstr ""
+msgid "Shooters"
+msgstr "射击者"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:57
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shooters"
-msgstr ""
-
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:58
-msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Own"
-msgstr ""
+msgstr "自己"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:88
+#: src/main/java/pit12/feature/timers/TimersConfig.java:99
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Own"
-msgstr ""
+msgstr "自己"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:105
+#: src/main/java/pit12/feature/timers/TimersConfig.java:117
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#2"
 msgid "Own"
-msgstr ""
+msgstr "自己"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:125
+#: src/main/java/pit12/feature/timers/TimersConfig.java:139
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#3"
 msgid "Own"
-msgstr ""
+msgstr "自己"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:144
+#: src/main/java/pit12/feature/timers/TimersConfig.java:163
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#4"
 msgid "Own"
+msgstr "自己"
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:57
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Shows your trails and landing points."
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:58
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:60
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows your arrows."
+msgid "Shows friends' trails and landing points."
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:59
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:62
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows friends' arrows."
-msgstr ""
-
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:61
-msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows enemies' arrows."
+msgid "Shows enemies' trails and landing points."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:63
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Others"
-msgstr ""
+msgstr "其他玩家"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:84
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#2"
 msgid "Others"
-msgstr ""
+msgstr "其他玩家"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:93
+#: src/main/java/pit12/feature/timers/TimersConfig.java:104
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Others"
-msgstr ""
+msgstr "其他玩家"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:110
+#: src/main/java/pit12/feature/timers/TimersConfig.java:122
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#2"
 msgid "Others"
-msgstr ""
+msgstr "其他玩家"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:131
+#: src/main/java/pit12/feature/timers/TimersConfig.java:145
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#3"
 msgid "Others"
-msgstr ""
+msgstr "其他玩家"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:150
+#: src/main/java/pit12/feature/timers/TimersConfig.java:169
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#4"
 msgid "Others"
-msgstr ""
+msgstr "其他玩家"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:63
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:64
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows other players' arrows."
+msgid "Shows other players' trails and landing points."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:65
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Prediction"
-msgstr ""
+msgstr "预测"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:66
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
@@ -3166,37 +3098,42 @@ msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:67
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Skips arrows blocked by a tracked cooldown."
-msgstr ""
+msgid "Skips predictions for arrows fired during a tracked Telebow cooldown."
+msgstr "跳过已跟踪的 Telebow 冷却期间射出的箭的预测。"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:68
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:69
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Correct cooldown estimates"
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:69
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:70
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Corrects the estimate when a shot during cooldown still teleports the shooter."
+msgid "Updates cooldown estimates after successful Telebow teleports."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:71
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Prediction margin (ms)"
-msgstr ""
+msgstr "预测容差（ms）"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:95
+#: src/main/java/pit12/feature/timers/TimersConfig.java:106
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Prediction margin (ms)"
-msgstr ""
+msgstr "预测容差（ms）"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:113
+#: src/main/java/pit12/feature/timers/TimersConfig.java:125
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#2"
 msgid "Prediction margin (ms)"
-msgstr ""
+msgstr "预测容差（ms）"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:155
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#3"
+msgid "Prediction margin (ms)"
+msgstr "预测容差（ms）"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:72
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Sets the time allowed for sneak changes and arrow hit confirmation."
+msgid "Time allowed after sneaking ends for shot prediction. Also sets the delay allowed when detecting hits that reduce cooldowns."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:74
@@ -3211,7 +3148,7 @@ msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:75
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows where to aim a fully drawn Telebow while sneaking to reach each marked landing point. Uses the trail's hold and fade times."
+msgid "Shows where to aim to land near another player's predicted Telebow landing point. Use a fully drawn shot while sneaking."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:78
@@ -3222,139 +3159,164 @@ msgstr ""
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:79
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Shows aim points only while holding a Telebow."
-msgstr ""
+msgstr "仅在手持 Telebow 时显示瞄准点。"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:81
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Finds shots near friends' Telebow landing points."
-msgstr ""
+msgid "Shows aim points for landing near friends' Telebow landing points."
+msgstr "显示用于落在好友 Telebow 落点附近的瞄准点。"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:83
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Finds shots near enemies' Telebow landing points."
-msgstr ""
+msgid "Shows aim points for landing near enemies' Telebow landing points."
+msgstr "显示用于落在敌人 Telebow 落点附近的瞄准点。"
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:85
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Finds shots near other players' Telebow landing points."
-msgstr ""
+msgid "Shows aim points for landing near other players' Telebow landing points."
+msgstr "显示用于落在其他玩家 Telebow 落点附近的瞄准点。"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:86
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:87
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Show names"
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:103
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:106
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#2"
 msgid "Show names"
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:87
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:88
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Shows player names next to aim points."
-msgstr ""
+msgstr "在瞄准点旁显示玩家名称。"
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:88
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:89
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Tolerance (blocks)"
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:89
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:90
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Accepts impacts within this radius of the marked landing point."
-msgstr ""
-
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:91
-msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Appearance"
+msgid "Maximum distance between your predicted landing point and the other player's landing point."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:92
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Appearance"
+msgstr ""
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:93
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Own color"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:76
+#: src/main/java/pit12/feature/timers/TimersConfig.java:87
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Own color"
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:97
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:94
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Color and opacity of your Telebow predictions."
+msgstr "你的 Telebow 预测的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:96
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Color and opacity of friends' Telebow predictions."
+msgstr "好友的 Telebow 预测的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:98
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Color and opacity of enemies' Telebow predictions."
+msgstr "敌人的 Telebow 预测的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:100
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Color and opacity of other players' Telebow predictions."
+msgstr "其他玩家的 Telebow 预测的颜色和不透明度。"
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:101
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
 msgid "Hold time (ms)"
 msgstr ""
 
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:98
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:102
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Keeps the trail and landing point after the arrow lands or disappears."
-msgstr ""
-
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:100
-msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Fade time (ms)"
-msgstr ""
-
-#: src/main/java/pit12/feature/telebow/TelebowConfig.java:101
-msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Fades the trail, beam, and name together after the hold time."
+msgid "Time to keep predictions visible after the arrow lands or disappears."
 msgstr ""
 
 #: src/main/java/pit12/feature/telebow/TelebowConfig.java:104
 msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
-msgid "Shows the shooter's display name at the landing point."
+msgid "Fade time (ms)"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:70
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:105
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Time for predictions to fade after the hold time."
+msgstr ""
+
+#: src/main/java/pit12/feature/telebow/TelebowConfig.java:107
+msgctxt "src/main/java/pit12/feature/telebow/TelebowConfig.java#1"
+msgid "Shows the shooter's display name at the predicted landing point."
+msgstr "在预测落点显示射手的显示名称。"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:76
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows estimated effect durations and cooldowns."
+msgid "Timers HUD"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:75
+#: src/main/java/pit12/feature/timers/TimersConfig.java:76
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows estimated Pin, Venom, and Jump Boost durations and Telebow cooldowns."
+msgstr "显示估算的 Pin、Venom、Jump Boost 持续时间和 Telebow 冷却时间。"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:86
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Shows the name above each timer group."
-msgstr ""
+msgstr "在每个计时器分组上方显示名称。"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:77
+#: src/main/java/pit12/feature/timers/TimersConfig.java:88
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the color of your countdowns."
+msgid "Color and opacity of your countdowns."
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:79
+#: src/main/java/pit12/feature/timers/TimersConfig.java:90
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the color of friends' countdowns."
+msgid "Color and opacity of friends' countdowns."
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:81
+#: src/main/java/pit12/feature/timers/TimersConfig.java:92
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the color of enemies' countdowns."
+msgid "Color and opacity of enemies' countdowns."
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:83
+#: src/main/java/pit12/feature/timers/TimersConfig.java:94
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the color of other players' countdowns."
+msgid "Color and opacity of other players' countdowns."
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:84
+#: src/main/java/pit12/feature/timers/TimersConfig.java:95
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Debuffs"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:86
+#: src/main/java/pit12/feature/timers/TimersConfig.java:97
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
 msgid "Enabled"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:99
+#: src/main/java/pit12/feature/timers/TimersConfig.java:110
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#2"
 msgid "Enabled"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:123
+#: src/main/java/pit12/feature/timers/TimersConfig.java:137
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#3"
 msgid "Enabled"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:142
+#: src/main/java/pit12/feature/timers/TimersConfig.java:160
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#4"
 msgid "Enabled"
 msgstr ""
@@ -3364,285 +3326,315 @@ msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Enabled"
 msgstr "启用"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:86
+#: src/main/java/pit12/feature/timers/TimersConfig.java:98
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Tracks Pin timers."
+msgid "Shows estimated Pin durations."
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:88
+#: src/main/java/pit12/feature/timers/TimersConfig.java:99
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Pin on you."
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:90
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Pin on friends."
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:92
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Pin on enemies."
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:94
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Pin on other players."
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:96
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the time allowed between arrow collision, player damage, and arrow removal."
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:100
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Tracks Venom timers."
-msgstr ""
+msgid "Shows your Pin timer."
+msgstr "显示你的 Pin 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:101
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Track wearers"
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:102
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Estimates the wearer's 24-second poison from observed hits."
-msgstr ""
+msgid "Shows friends' Pin timers."
+msgstr "显示好友的 Pin 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:103
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Track targets"
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:104
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Estimates the target's 12-second poison from observed hits."
-msgstr ""
+msgid "Shows enemies' Pin timers."
+msgstr "显示敌人的 Pin 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:105
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Venom on you."
-msgstr ""
+msgid "Shows other players' Pin timers."
+msgstr "显示其他玩家的 Pin 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:107
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Venom on friends."
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:109
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Venom on enemies."
+msgid "Time allowed for delayed damage to count as a Pin hit."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:111
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Venom on other players."
+msgid "Shows estimated Venom durations."
+msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:112
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Track wearers"
+msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:113
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows the wearer's estimated Venom duration."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:114
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the time allowed between an attack and player damage."
+msgid "Track targets"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:116
+#: src/main/java/pit12/feature/timers/TimersConfig.java:115
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Maximum reach (blocks)"
+msgid "Shows the target's estimated Venom duration."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:117
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sets the maximum distance used to match an attack."
-msgstr ""
+msgid "Shows your Venom timer."
+msgstr "显示你的 Venom 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:119
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Hitbox margin (blocks)"
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:120
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Expands the target's hitbox when matching an attack."
-msgstr ""
+msgid "Shows friends' Venom timers."
+msgstr "显示好友的 Venom 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:121
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Buffs"
-msgstr ""
+msgid "Shows enemies' Venom timers."
+msgstr "显示敌人的 Venom 计时器。"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:124
+#: src/main/java/pit12/feature/timers/TimersConfig.java:123
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Tracks Jump Boost timers."
-msgstr ""
+msgid "Shows other players' Venom timers."
+msgstr "显示其他玩家的 Venom 计时器。"
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:126
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Jump Boost on you."
+msgid "Time allowed for delayed damage to count as a Venom hit."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:128
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Jump Boost on friends."
+msgid "Maximum reach (blocks)"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:130
+#: src/main/java/pit12/feature/timers/TimersConfig.java:129
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Jump Boost on enemies."
+msgid "Maximum distance at which hits count toward Venom estimates."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:132
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Jump Boost on other players."
+msgid "Hitbox margin (blocks)"
 msgstr ""
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:134
+#: src/main/java/pit12/feature/timers/TimersConfig.java:133
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Sound required"
+msgid "Extra space around players used to recognize Venom hits."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:135
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Uses a drinking sound instead of the minimum hold time. Still requires a direct switch to a glass bottle."
+msgid "Buffs"
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:138
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Reset on low jump"
-msgstr ""
-
-#: src/main/java/pit12/feature/timers/TimersConfig.java:139
-msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Removes the timer when an unobstructed jump is too low."
+msgid "Shows estimated Jump Boost IV durations."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:140
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Cooldowns"
-msgstr ""
+msgid "Shows your Jump Boost timer."
+msgstr "显示你的 Jump Boost 计时器。"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:143
+#: src/main/java/pit12/feature/timers/TimersConfig.java:142
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows Telebow cooldowns."
-msgstr ""
+msgid "Shows friends' Jump Boost timers."
+msgstr "显示好友的 Jump Boost 计时器。"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:145
+#: src/main/java/pit12/feature/timers/TimersConfig.java:144
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows your Telebow cooldown."
-msgstr ""
+msgid "Shows enemies' Jump Boost timers."
+msgstr "显示敌人的 Jump Boost 计时器。"
 
-#: src/main/java/pit12/feature/timers/TimersConfig.java:147
+#: src/main/java/pit12/feature/timers/TimersConfig.java:146
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows friends' Telebow cooldowns."
+msgid "Shows other players' Jump Boost timers."
+msgstr "显示其他玩家的 Jump Boost 计时器。"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:148
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Sound required"
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:149
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows enemies' Telebow cooldowns."
+msgid "Requires a drinking sound to start a Jump Boost timer."
 msgstr ""
 
 #: src/main/java/pit12/feature/timers/TimersConfig.java:151
 msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
-msgid "Shows other players' Telebow cooldowns."
+msgid "Reset on low jump"
 msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:152
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Clears the timer when an unobstructed jump is too low for Jump Boost IV."
+msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:156
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Time after a Jump Boost timer starts before low jumps can clear it."
+msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:158
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Cooldowns"
+msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:160
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows estimated Telebow cooldowns. Requires telebow prediction to be enabled."
+msgstr ""
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:164
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows your Telebow cooldown."
+msgstr "显示你的 Telebow 冷却时间。"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:166
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows friends' Telebow cooldowns."
+msgstr "显示好友的 Telebow 冷却时间。"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:168
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows enemies' Telebow cooldowns."
+msgstr "显示敌人的 Telebow 冷却时间。"
+
+#: src/main/java/pit12/feature/timers/TimersConfig.java:170
+msgctxt "src/main/java/pit12/feature/timers/TimersConfig.java#1"
+msgid "Shows other players' Telebow cooldowns."
+msgstr "显示其他玩家的 Telebow 冷却时间。"
 
 #: src/main/java/pit12/feature/tooltip/TooltipConfig.java:34
 msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
 msgid "Held Item Tooltip"
-msgstr "手持物品提示"
+msgstr ""
 
-#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:36
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:35
 msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Customizes the held item tooltip above the hotbar."
-msgstr "自定义快捷栏上方的手持物品提示。"
+msgid "Changes the text and position of the held item tooltip."
+msgstr "更改手持物品提示的文字和位置。"
 
-#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:38
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:37
 msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
 msgid "Show enchantments instead of item name"
 msgstr "用附魔替代物品名称"
 
-#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:39
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:38
 msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Replaces the held item name with known Pit enchantments."
-msgstr "用已识别的 Pit 附魔替代手持物品名称。"
+msgid "Shows Pit enchantments in place of the held item name."
+msgstr "显示 Pit 附魔以替代手持物品名称。"
+
+#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:41
+msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
+msgid "Upward offset (pixels)"
+msgstr ""
 
 #: src/main/java/pit12/feature/tooltip/TooltipConfig.java:42
 msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Move tooltip upward"
-msgstr "提示上移"
+msgid "Moves the held item tooltip upward."
+msgstr ""
 
-#: src/main/java/pit12/feature/tooltip/TooltipConfig.java:43
-msgctxt "src/main/java/pit12/feature/tooltip/TooltipConfig.java#1"
-msgid "Moves the held item tooltip upward by this many pixels."
-msgstr "手持物品提示向上移动的像素数。"
+#: src/main/java/pit12/feature/webui/WebUiApi.java:56
+msgctxt "src/main/java/pit12/feature/webui/WebUiApi.java#1"
+msgid "{0} is available. Open Settings to change your language."
+msgstr ""
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:40
+#: src/main/java/pit12/feature/webui/WebUiApi.java:57
+msgctxt "src/main/java/pit12/feature/webui/WebUiApi.java#1"
+msgid "Got it"
+msgstr ""
+
+#: src/main/java/pit12/feature/webui/WebUiApi.java:58
+msgctxt "src/main/java/pit12/feature/webui/WebUiApi.java#1"
+msgid "Don't show again"
+msgstr ""
+
+#: src/main/java/pit12/feature/webui/WebUiApi.java:59
+msgctxt "src/main/java/pit12/feature/webui/WebUiApi.java#1"
+msgid "Switch language"
+msgstr ""
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:36
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Settings"
 msgstr "设置"
 
-#: web-ui/src/App.vue:169:14
+#: web-ui/src/App.vue:199:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Settings"
 msgstr "设置"
 
-#: web-ui/src/SettingsPage.vue:75:12
+#: web-ui/src/SettingsPage.vue:73:12
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Settings"
 msgstr "设置"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:47
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:37
+msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
+msgid "Configures language, interface appearance, key bindings, and Discord RPC."
+msgstr "配置语言、界面外观、按键绑定和 Discord RPC。"
+
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:39
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Language"
 msgstr "语言"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:48
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:40
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Sets the language for the interface, commands, and HUD."
-msgstr "设置界面、命令回显和 HUD 的语言。"
+msgstr "设置界面、命令和 HUD 的语言。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:49
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:41
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Accent color"
 msgstr "主题色"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:49
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:42
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
-msgid "Controls the interface accent."
-msgstr "设置界面的主题色。"
+msgid "Sets the interface accent color."
+msgstr "设置界面的强调色。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:51
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:44
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
-msgid "Show details"
-msgstr "显示详细说明"
+msgid "Shows 12pit activity and elapsed time on your Discord profile."
+msgstr "在你的 Discord 个人资料上显示 12pit 活动和已用时间。"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:52
-msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
-msgid "Shows descriptions for features and settings."
-msgstr "显示功能和设置的说明。"
-
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:54
-msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
-msgid "Shows 12pit and elapsed time on your Discord profile."
-msgstr "在 Discord 个人资料中显示 12pit 和本次使用时长。"
-
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:55
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:45
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Interface key"
 msgstr "界面快捷键"
 
-#: src/main/java/pit12/feature/webui/WebUiConfig.java:56
+#: src/main/java/pit12/feature/webui/WebUiConfig.java:46
 msgctxt "src/main/java/pit12/feature/webui/WebUiConfig.java#1"
 msgid "Opens the HUD editor. Press again with no HUD selected to open settings."
-msgstr "打开 HUD 编辑器。未选中 HUD 时，再按一次即可打开设置。"
+msgstr "打开 HUD 编辑器。未选中 HUD 时再次按下可打开设置。"
 
-#: src/main/java/pit12/feature/webui/WebUiPreferences.java:291
+#: src/main/java/pit12/feature/webui/WebUiFeature.java:75
+msgctxt "src/main/java/pit12/feature/webui/WebUiFeature.java#1"
+msgid "Open the configuration interface"
+msgstr ""
+
+#: src/main/java/pit12/feature/webui/WebUiPreferences.java:312
 msgctxt "src/main/java/pit12/feature/webui/WebUiPreferences.java#1"
 msgid "Could not save configuration interface settings"
 msgstr "无法保存配置界面设置"
 
-#: src/main/java/pit12/feature/webui/WebUiPreferences.java:298
+#: src/main/java/pit12/feature/webui/WebUiPreferences.java:319
 msgctxt "src/main/java/pit12/feature/webui/WebUiPreferences.java#1"
 msgid "Could not load configuration interface settings"
 msgstr "无法加载配置界面设置"
+
+#: src/main/java/pit12/platform/mixinconfig/MixinFailureWarning.java:68
+msgctxt "src/main/java/pit12/platform/mixinconfig/MixinFailureWarning.java#1"
+msgid "{0} failed to apply: {1}. This may cause unexpected behavior. If you are unsure how this may affect the game, we recommend reporting this issue with your logs."
+msgstr ""
 
 #: src/main/java/pit12/runtime/command/CommandRegistry.java:51
 msgctxt "src/main/java/pit12/runtime/command/CommandRegistry.java#1"
@@ -3664,10 +3656,35 @@ msgctxt "src/main/java/pit12/runtime/command/CommandRegistry.java#1"
 msgid "Usage: {0}"
 msgstr "用法：{0}"
 
+#: src/main/java/pit12/runtime/command/CommandRegistry.java:253
+msgctxt "src/main/java/pit12/runtime/command/CommandRegistry.java#1"
+msgid " (aliases: {0})"
+msgstr ""
+
+#: src/main/java/pit12/runtime/config/ConfigCategory.java:26
+msgctxt "src/main/java/pit12/runtime/config/ConfigCategory.java#1"
+msgid "Combat"
+msgstr ""
+
+#: src/main/java/pit12/runtime/config/ConfigCategory.java:27
+msgctxt "src/main/java/pit12/runtime/config/ConfigCategory.java#1"
+msgid "Render"
+msgstr ""
+
+#: src/main/java/pit12/runtime/config/ConfigCategory.java:28
+msgctxt "src/main/java/pit12/runtime/config/ConfigCategory.java#1"
+msgid "Misc"
+msgstr ""
+
+#: src/main/java/pit12/runtime/config/ConfigCategory.java:29
+msgctxt "src/main/java/pit12/runtime/config/ConfigCategory.java#1"
+msgid "Patch"
+msgstr ""
+
 #: src/main/java/pit12/runtime/config/FeatureConfig.java:73
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Turns this feature on."
-msgstr "开启此功能。"
+msgstr "启用此功能。"
 
 #: src/main/java/pit12/runtime/config/FeatureConfig.java:168
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
@@ -3697,134 +3714,144 @@ msgstr ""
 #: src/main/java/pit12/runtime/config/FeatureConfig.java:174
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Font used for HUD text."
-msgstr ""
+msgstr "HUD 文字使用的字体。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:176
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:177
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Anchor"
 msgstr "锚点"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:188
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:238
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "Anchor"
 msgstr "锚点"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:177
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Auto chooses an anchor when the HUD is moved."
-msgstr "选择自动时，移动 HUD 会自动确定锚点。"
-
 #: src/main/java/pit12/runtime/config/FeatureConfig.java:178
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Auto"
-msgstr "自动"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:179
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Top left"
-msgstr "左上"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Top center"
-msgstr "顶部居中"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:181
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Top right"
-msgstr "右上"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:182
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Center left"
-msgstr "左侧居中"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Center"
-msgstr "居中"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:184
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Center right"
-msgstr "右侧居中"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:185
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Bottom left"
-msgstr "左下"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:186
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Bottom center"
-msgstr "底部居中"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:187
-msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
-msgid "Bottom right"
-msgstr "右下"
-
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:189
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Stores the anchor chosen by Auto."
 msgstr "保存自动确定的锚点。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:191
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Horizontal offset"
 msgstr "水平偏移"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:191
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:180
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Offset from the anchor, in GUI pixels."
 msgstr "相对锚点的偏移量，单位为界面像素。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:194
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:183
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#2"
 msgid "Offset from the anchor, in GUI pixels."
 msgstr "相对锚点的偏移量，单位为界面像素。"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:193
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:182
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Vertical offset"
 msgstr "垂直偏移"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:195
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:184
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "Scale"
 msgstr "缩放"
 
-#: src/main/java/pit12/runtime/config/FeatureConfig.java:196
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:185
 msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
 msgid "HUD size, in percent."
 msgstr "HUD 大小，单位为百分比。"
 
-#: web-ui/src/App.vue:138:22
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:213
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Lets you move and resize this group separately in the HUD editor."
+msgstr ""
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:216
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Independent layout"
+msgstr ""
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:239
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Auto selects the HUD anchor when you move the HUD."
+msgstr "移动 HUD 时，Auto 会选择 HUD 的锚点。"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:240
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Auto"
+msgstr "自动"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:241
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Top left"
+msgstr "左上"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:242
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Top center"
+msgstr "顶部居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:243
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Top right"
+msgstr "右上"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:244
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Center left"
+msgstr "左侧居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:245
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Center"
+msgstr "居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:246
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Center right"
+msgstr "右侧居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:247
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Bottom left"
+msgstr "左下"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:248
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Bottom center"
+msgstr "底部居中"
+
+#: src/main/java/pit12/runtime/config/FeatureConfig.java:249
+msgctxt "src/main/java/pit12/runtime/config/FeatureConfig.java#1"
+msgid "Bottom right"
+msgstr "右下"
+
+#: web-ui/src/App.vue:167:22
 msgctxt "web-ui/src/App.vue#1"
 msgid "Pages"
 msgstr "页面"
 
-#: web-ui/src/App.vue:147:14
+#: web-ui/src/App.vue:177:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Features"
 msgstr "功能"
 
-#: web-ui/src/FeaturesPage.vue:133:14
+#: web-ui/src/FeaturesPage.vue:132:14
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Features"
 msgstr "功能"
 
-#: web-ui/src/FeaturesPage.vue:199:16
+#: web-ui/src/FeaturesPage.vue:196:16
 msgctxt "web-ui/src/FeaturesPage.vue#2"
 msgid "Features"
 msgstr "功能"
 
-#: web-ui/src/App.vue:154:14
+#: web-ui/src/App.vue:184:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Profiles"
 msgstr "配置方案"
 
-#: web-ui/src/ProfilesPage.vue:156:12
+#: web-ui/src/ProfilesPage.vue:161:12
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Profiles"
 msgstr "配置方案"
@@ -3834,7 +3861,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Profiles"
 msgstr "配置方案"
 
-#: web-ui/src/App.vue:161:14
+#: web-ui/src/App.vue:191:16
 msgctxt "web-ui/src/App.vue#1"
 msgid "Relations"
 msgstr "玩家关系"
@@ -3849,7 +3876,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Relations"
 msgstr "玩家关系"
 
-#: web-ui/src/App.vue:276:25
+#: web-ui/src/App.vue:332:25
 msgctxt "web-ui/src/App.vue#1"
 msgid "Dismiss error"
 msgstr "关闭错误提示"
@@ -3899,82 +3926,72 @@ msgctxt "web-ui/src/ColorPicker.vue#1"
 msgid "Enter a valid Hex, RGBA or HSLA color."
 msgstr "请输入有效的 Hex、RGBA 或 HSLA 颜色。"
 
-#: web-ui/src/FeaturesPage.vue:81:11
+#: web-ui/src/FeaturesPage.vue:80:11
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "All"
 msgstr "全部"
 
-#: web-ui/src/FeaturesPage.vue:134:45
+#: web-ui/src/FeaturesPage.vue:133:45
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Search features"
 msgstr "搜索功能"
 
-#: web-ui/src/FeaturesPage.vue:136:61
+#: web-ui/src/FeaturesPage.vue:135:61
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Category"
 msgstr "分类"
 
-#: web-ui/src/FeaturesPage.vue:171:26
+#: web-ui/src/FeaturesPage.vue:168:26
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Favorite {0}"
 msgstr "收藏 {0}"
 
-#: web-ui/src/FeaturesPage.vue:175:26
+#: web-ui/src/FeaturesPage.vue:172:26
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Remove from favorites"
 msgstr "取消收藏"
 
-#: web-ui/src/FeaturesPage.vue:175:55
+#: web-ui/src/FeaturesPage.vue:172:55
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Add to favorites"
 msgstr "添加收藏"
 
-#: web-ui/src/FeaturesPage.vue:183:21
+#: web-ui/src/FeaturesPage.vue:180:21
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Enable {0}"
 msgstr "启用 {0}"
 
-#: web-ui/src/FeaturesPage.vue:189:14
+#: web-ui/src/FeaturesPage.vue:186:14
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "No matching features."
 msgstr "没有匹配的功能。"
 
-#: web-ui/src/FeaturesPage.vue:195:61
+#: web-ui/src/FeaturesPage.vue:192:61
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Breadcrumb"
 msgstr "导航路径"
 
-#: web-ui/src/FeaturesPage.vue:217:20
+#: web-ui/src/FeaturesPage.vue:211:20
 msgctxt "web-ui/src/FeaturesPage.vue#1"
 msgid "Subcategory"
 msgstr "子分类"
 
-#: web-ui/src/LanguageNotice.vue:120:18
-msgctxt "web-ui/src/LanguageNotice.vue#1"
-msgid "{0} is available. Open Settings to change your language."
-msgstr "我们支持 {0}！打开设置以更改您的语言。"
-
-#: web-ui/src/LanguageNotice.vue:126:17
-msgctxt "web-ui/src/LanguageNotice.vue#1"
-msgid "Switch language"
-msgstr "切换语言"
-
-#: web-ui/src/LanguagePicker.vue:106:22
+#: web-ui/src/LanguagePicker.vue:102:22
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Change {0}"
 msgstr "更改 {0}"
 
-#: web-ui/src/SettingRow.vue:264:15
+#: web-ui/src/SettingRow.vue:263:15
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Change {0}"
 msgstr "更改 {0}"
 
-#: web-ui/src/LanguagePicker.vue:126:24
+#: web-ui/src/LanguagePicker.vue:122:24
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Close"
 msgstr "关闭"
 
-#: web-ui/src/LanguagePicker.vue:127:19
+#: web-ui/src/LanguagePicker.vue:123:19
 msgctxt "web-ui/src/LanguagePicker.vue#2"
 msgid "Close"
 msgstr "关闭"
@@ -3984,12 +4001,12 @@ msgctxt "web-ui/src/RelationsPage.vue#1"
 msgid "Close"
 msgstr "关闭"
 
-#: web-ui/src/SettingsPage.vue:142:22
+#: web-ui/src/SettingsPage.vue:137:22
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Close"
 msgstr "关闭"
 
-#: web-ui/src/SettingsPage.vue:143:17
+#: web-ui/src/SettingsPage.vue:138:17
 msgctxt "web-ui/src/SettingsPage.vue#2"
 msgid "Close"
 msgstr "关闭"
@@ -4004,37 +4021,37 @@ msgctxt "web-ui/src/TransferDialog.vue#2"
 msgid "Close"
 msgstr "关闭"
 
-#: web-ui/src/LanguagePicker.vue:142:16
+#: web-ui/src/LanguagePicker.vue:138:16
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Request a language on GitHub"
 msgstr "在 GitHub 上请求语言"
 
-#: web-ui/src/LanguagePicker.vue:151:16
+#: web-ui/src/LanguagePicker.vue:147:16
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Help improve translations on Crowdin"
 msgstr "在 Crowdin 上帮助改进翻译"
 
-#: web-ui/src/LanguagePicker.vue:155:47
+#: web-ui/src/LanguagePicker.vue:151:47
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Search languages"
 msgstr "搜索语言"
 
-#: web-ui/src/LanguagePicker.vue:177:16
+#: web-ui/src/LanguagePicker.vue:173:16
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "No matching languages."
 msgstr "没有匹配的语言。"
 
-#: web-ui/src/LanguagePicker.vue:188:14
+#: web-ui/src/LanguagePicker.vue:184:14
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Use system language"
 msgstr "使用系统语言"
 
-#: web-ui/src/LanguagePicker.vue:191:14
+#: web-ui/src/LanguagePicker.vue:187:14
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Cancel"
 msgstr "取消"
 
-#: web-ui/src/ProfilesPage.vue:238:18
+#: web-ui/src/ProfilesPage.vue:243:18
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Cancel"
 msgstr "取消"
@@ -4054,7 +4071,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Cancel"
 msgstr "取消"
 
-#: web-ui/src/LanguagePicker.vue:199:14
+#: web-ui/src/LanguagePicker.vue:195:14
 msgctxt "web-ui/src/LanguagePicker.vue#1"
 msgid "Apply"
 msgstr "应用"
@@ -4064,102 +4081,102 @@ msgctxt "web-ui/src/PageScrollbar.vue#1"
 msgid "Page scroll"
 msgstr "页面滚动"
 
-#: web-ui/src/ProfilesPage.vue:167:25
+#: web-ui/src/ProfilesPage.vue:172:25
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Profile name"
 msgstr "配置方案名称"
 
-#: web-ui/src/ProfilesPage.vue:256:26
+#: web-ui/src/ProfilesPage.vue:261:26
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Profile name"
 msgstr "配置方案名称"
 
-#: web-ui/src/ProfilesPage.vue:168:24
+#: web-ui/src/ProfilesPage.vue:173:24
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "New profile name"
 msgstr "新配置方案名称"
 
-#: web-ui/src/ProfilesPage.vue:191:17
+#: web-ui/src/ProfilesPage.vue:196:17
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "New profile"
 msgstr "新建配置方案"
 
-#: web-ui/src/ProfilesPage.vue:196:17
+#: web-ui/src/ProfilesPage.vue:201:17
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Create"
 msgstr "创建"
 
-#: web-ui/src/ProfilesPage.vue:203:8
+#: web-ui/src/ProfilesPage.vue:208:8
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Loading profiles..."
 msgstr "正在加载配置方案…"
 
-#: web-ui/src/ProfilesPage.vue:227:17
+#: web-ui/src/ProfilesPage.vue:232:17
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Delete"
 msgstr "删除"
 
-#: web-ui/src/ProfilesPage.vue:247:18
+#: web-ui/src/ProfilesPage.vue:252:18
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Delete"
 msgstr "删除"
 
-#: web-ui/src/ProfilesPage.vue:265:28
+#: web-ui/src/ProfilesPage.vue:270:28
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Save name"
 msgstr "保存名称"
 
-#: web-ui/src/ProfilesPage.vue:266:23
+#: web-ui/src/ProfilesPage.vue:271:23
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Save name"
 msgstr "保存名称"
 
-#: web-ui/src/ProfilesPage.vue:273:28
+#: web-ui/src/ProfilesPage.vue:278:28
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Cancel rename"
 msgstr "取消重命名"
 
-#: web-ui/src/ProfilesPage.vue:274:23
+#: web-ui/src/ProfilesPage.vue:279:23
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Cancel rename"
 msgstr "取消重命名"
 
-#: web-ui/src/ProfilesPage.vue:300:20
+#: web-ui/src/ProfilesPage.vue:305:20
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Switch"
 msgstr "切换"
 
-#: web-ui/src/ProfilesPage.vue:306:28
+#: web-ui/src/ProfilesPage.vue:311:28
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Rename {0}"
 msgstr "重命名 {0}"
 
-#: web-ui/src/ProfilesPage.vue:307:23
+#: web-ui/src/ProfilesPage.vue:312:23
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Rename {0}"
 msgstr "重命名 {0}"
 
-#: web-ui/src/ProfilesPage.vue:316:21
+#: web-ui/src/ProfilesPage.vue:321:21
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "The active profile cannot be deleted"
 msgstr "无法删除当前使用的配置方案"
 
-#: web-ui/src/ProfilesPage.vue:325:23
+#: web-ui/src/ProfilesPage.vue:330:23
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Cannot delete active profile"
 msgstr "无法删除当前使用的配置方案"
 
-#: web-ui/src/ProfilesPage.vue:326:23
+#: web-ui/src/ProfilesPage.vue:331:23
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "Delete {0}"
 msgstr "删除 {0}"
 
-#: web-ui/src/ProfilesPage.vue:331:23
+#: web-ui/src/ProfilesPage.vue:336:23
 msgctxt "web-ui/src/ProfilesPage.vue#2"
 msgid "Delete {0}"
 msgstr "删除 {0}"
 
-#: web-ui/src/ProfilesPage.vue:343:10
+#: web-ui/src/ProfilesPage.vue:348:10
 msgctxt "web-ui/src/ProfilesPage.vue#1"
 msgid "No profiles."
 msgstr "暂无配置方案。"
@@ -4359,52 +4376,52 @@ msgctxt "web-ui/src/SearchField.vue#2"
 msgid "Clear search"
 msgstr "清空搜索"
 
-#: web-ui/src/SettingRow.vue:137:34
+#: web-ui/src/SettingRow.vue:136:34
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Right Shift"
 msgstr "右 Shift"
 
-#: web-ui/src/SettingRow.vue:138:34
+#: web-ui/src/SettingRow.vue:137:34
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Left Shift"
 msgstr "左 Shift"
 
-#: web-ui/src/SettingRow.vue:139:29
+#: web-ui/src/SettingRow.vue:138:29
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Unbound"
 msgstr "未绑定"
 
-#: web-ui/src/SettingRow.vue:188:26
+#: web-ui/src/SettingRow.vue:187:26
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Value for {0}"
 msgstr "{0} 的值"
 
-#: web-ui/src/SettingRow.vue:240:24
+#: web-ui/src/SettingRow.vue:239:24
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Color #{0}"
 msgstr "颜色 #{0}"
 
-#: web-ui/src/SettingRow.vue:263:15
+#: web-ui/src/SettingRow.vue:262:15
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Cancel capture for {0}"
 msgstr "取消为 {0} 录入按键"
 
-#: web-ui/src/SettingRow.vue:272:11
+#: web-ui/src/SettingRow.vue:271:11
 msgctxt "web-ui/src/SettingRow.vue#1"
 msgid "Press a key"
 msgstr "按下按键"
 
-#: web-ui/src/SettingsPage.vue:81:17
+#: web-ui/src/SettingsPage.vue:79:17
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Replaces the active profile configuration with defaults."
 msgstr "将当前使用的配置方案恢复为默认设置。"
 
-#: web-ui/src/SettingsPage.vue:84:36
+#: web-ui/src/SettingsPage.vue:82:36
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Restore defaults"
 msgstr "恢复默认设置"
 
-#: web-ui/src/SettingsPage.vue:92:35
+#: web-ui/src/SettingsPage.vue:90:35
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Export"
 msgstr "导出"
@@ -4414,7 +4431,7 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Export"
 msgstr "导出"
 
-#: web-ui/src/SettingsPage.vue:100:33
+#: web-ui/src/SettingsPage.vue:98:33
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Import"
 msgstr "导入"
@@ -4424,22 +4441,22 @@ msgctxt "web-ui/src/TransferDialog.vue#1"
 msgid "Import"
 msgstr "导入"
 
-#: web-ui/src/SettingsPage.vue:138:37
+#: web-ui/src/SettingsPage.vue:133:37
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Help others discover 12pit?"
 msgstr "愿意让更多人认识 12pit 吗？"
 
-#: web-ui/src/SettingsPage.vue:152:11
+#: web-ui/src/SettingsPage.vue:147:11
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Showing 12pit on Discord helps more players find us. If you’re comfortable sharing it, we’d love for you to keep it on 🥺"
 msgstr "在 Discord 上显示 12pit，能帮更多玩家发现我们。如果你愿意，希望你能保留它 🥺"
 
-#: web-ui/src/SettingsPage.vue:165:12
+#: web-ui/src/SettingsPage.vue:160:12
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Turn off"
 msgstr "关闭"
 
-#: web-ui/src/SettingsPage.vue:173:12
+#: web-ui/src/SettingsPage.vue:168:12
 msgctxt "web-ui/src/SettingsPage.vue#1"
 msgid "Keep on"
 msgstr "保持开启"
@@ -4624,7 +4641,7 @@ msgctxt "web-ui/src/useKeyCapture.ts#2"
 msgid "This key cannot be bound"
 msgstr "此按键无法绑定"
 
-#: web-ui/src/useWebUiState.ts:85:60
+#: web-ui/src/useWebUiState.ts:156:60
 msgctxt "web-ui/src/useWebUiState.ts#1"
 msgid "Request failed"
 msgstr "请求失败"
@@ -4638,3 +4655,53 @@ msgstr "英语"
 msgctxt "src/main/resources/assets/pit12/languages/languages.json#zh-CN"
 msgid "Chinese Simplified"
 msgstr "简体中文"
+
+#: src/main/resources/assets/pit12/languages/languages.json:fr-FR
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#fr-FR"
+msgid "French"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:de-DE
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#de-DE"
+msgid "German"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:it-IT
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#it-IT"
+msgid "Italian"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:ja-JP
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#ja-JP"
+msgid "Japanese"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:ko-KR
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#ko-KR"
+msgid "Korean"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:pl-PL
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#pl-PL"
+msgid "Polish"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:pt-BR
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#pt-BR"
+msgid "Portuguese, Brazilian"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:ru-RU
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#ru-RU"
+msgid "Russian"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:es-ES
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#es-ES"
+msgid "Spanish"
+msgstr ""
+
+#: src/main/resources/assets/pit12/languages/languages.json:tr-TR
+msgctxt "src/main/resources/assets/pit12/languages/languages.json#tr-TR"
+msgid "Turkish"
+msgstr ""
