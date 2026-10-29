@@ -7,6 +7,10 @@ on:
         description: 'Target tag (blank for the latest tag)'
         required: false
         type: string
+      pr:
+        description: 'Pull request number (blank for a draft)'
+        required: false
+        type: string
 
 permissions:
   actions: read
@@ -20,7 +24,7 @@ concurrency:
 
 jobs:
   release:
-    name: Draft release
+    name: Release
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
@@ -48,7 +52,6 @@ jobs:
             exit 1
           fi
 
-          git show-ref --verify "refs/tags/${RELEASE_TAG}" > /dev/null
           git checkout --detach "refs/tags/${RELEASE_TAG}"
           echo "tag=${RELEASE_TAG}" >> "${GITHUB_OUTPUT}"
 
@@ -100,20 +103,73 @@ jobs:
         with:
           subject-path: build/libs/12pit.jar
 
-      - name: Create draft release
+      - name: Create release
         env:
           GH_TOKEN: ${{ secrets[steps.release-token.outputs.secret-name] || github.token }}
           ATTESTATION_URL: ${{ steps.attest.outputs.attestation-url }}
           RELEASE_TAG: ${{ steps.release-tag.outputs.tag }}
+          RELEASE_PR: ${{ inputs.pr }}
         run: |
           set -euo pipefail
 
-          commit_sha="$(git rev-parse HEAD)"
+          draft="$(node <<'NODE'
+          const { execFileSync, spawnSync } = require('node:child_process');
+          const { writeFileSync } = require('node:fs');
+          const tag = process.env.RELEASE_TAG;
+          const repositoryUrl = `https://github.com/${process.env.GITHUB_REPOSITORY}`;
+          const versionOf = tag => {
+            const [major, minor, patch = 0] = tag.split('.').map(Number);
+            return [major, minor, patch];
+          };
+          const target = versionOf(tag);
+          const releases = JSON.parse(execFileSync('gh', [
+            'api', '--paginate', '--slurp',
+            `repos/${process.env.GITHUB_REPOSITORY}/releases?per_page=100`
+          ], { encoding: 'utf8' })).flat()
+            .filter(release => !release.draft && !release.prerelease)
+            .sort((a, b) => b.published_at.localeCompare(a.published_at));
+          const previous = releases.find(release => {
+            const version = versionOf(release.tag_name);
+            if ((version[0] - target[0] || version[1] - target[1] || version[2] - target[2]) >= 0)
+              return false;
+            // Include the full feature range across patch releases.
+            if (target[2] === 0 && version[2] !== 0)
+              return false;
+            return spawnSync('git', [
+              'merge-base', '--is-ancestor', `refs/tags/${release.tag_name}^{commit}`, 'HEAD'
+            ], { stdio: 'ignore' }).status === 0;
+          });
+          const historyUrl = `${repositoryUrl}/compare/${previous.tag_name}...${tag}`;
+          const pr = process.env.RELEASE_PR.trim();
+          let notes = '';
+          let draft = true;
+          if (pr) {
+            const result = spawnSync('gh', [
+              'pr', 'view', '--repo', process.env.GITHUB_REPOSITORY, '--json', 'body', '--jq', '.body', '--', pr
+            ], { encoding: 'utf8' });
+            if (result.status === 0) {
+              notes = result.stdout.replace(/\r\n?/g, '\n').trim();
+              draft = false;
+            } else {
+              process.stderr.write(result.stderr);
+              console.warn('::warning::Could not read the pull request. Creating a draft.');
+            }
+          }
+          const commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+          const paragraphs = [
+            notes,
+            `For a complete list of changes, see the [commit history](${historyUrl}).`,
+            `_The attached JAR was built from commit [${commit.slice(0, 7)}](${repositoryUrl}/commit/${commit}) by [GitHub Actions](${repositoryUrl}/actions/runs/${process.env.GITHUB_RUN_ID}/attempts/${process.env.GITHUB_RUN_ATTEMPT}). You can click [here](${process.env.ATTESTATION_URL}) to view the build provenance attestation._`
+          ];
+          writeFileSync(`${process.env.RUNNER_TEMP}/release-notes.md`, paragraphs.filter(Boolean).join('\n\n') + '\n');
+          console.log(draft);
+          NODE
+          )"
 
           gh release create "${RELEASE_TAG}" \
             build/libs/12pit.jar \
             --repo "${GITHUB_REPOSITORY}" \
             --title "12pit ${RELEASE_TAG}" \
             --verify-tag \
-            --notes "_The attached JAR was built from commit [${commit_sha::7}](https://github.com/${GITHUB_REPOSITORY}/commit/${commit_sha}) by [GitHub Actions](https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}). You can click [here](${ATTESTATION_URL}) to view the build provenance attestation._" \
-            --draft
+            --notes-file "${RUNNER_TEMP}/release-notes.md" \
+            --draft="${draft}"
