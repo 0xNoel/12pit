@@ -26,6 +26,6 @@ import pit12.runtime.config.FeatureConfig;
 public final class ScoreboardFixConfig extends FeatureConfig {
     public ScoreboardFixConfig() {
         super("scoreboardfix", source("Scoreboard Fix"), ConfigCategory.PATCH,
-                source("Prevents crashes caused by removing missing scoreboard entries."));
+                source("Fixes crashes that can occur during scoreboard updates."));
     }
 }

@@ -175,7 +175,8 @@ public abstract class FeatureConfig {
                 new ChoiceSetting.Choice(1, "Unicode"));
         ChoiceSetting anchor = hudAnchor(prefix);
         IntegerSetting autoAnchor = new IntegerSetting(prefix + "auto_anchor", source("Anchor"),
-                source("Stores the anchor chosen by Auto."), defaultAnchor.id(), 0, 8);
+                source("Screen point the HUD stays relative to in Auto mode."), defaultAnchor.id(),
+                0, 8);
         IntegerSetting offsetX = new IntegerSetting(prefix + "offset_x",
                 source("Horizontal offset"), source("Offset from the anchor, in GUI pixels."),
                 defaultOffsetX, -32768, 32767);
@@ -235,8 +236,9 @@ public abstract class FeatureConfig {
     }
 
     private ChoiceSetting hudAnchor(String prefix) {
-        return new ChoiceSetting(prefix + "anchor", source("Anchor"),
-                source("Auto selects the HUD anchor when you move the HUD."), HudConfig.AUTO_ANCHOR,
+        return new ChoiceSetting(prefix + "anchor", source("Anchor"), source(
+                "Keeps the HUD positioned relative to this part of the screen. Auto selects it when you move the HUD."),
+                HudConfig.AUTO_ANCHOR,
                 new ChoiceSetting.Choice(HudConfig.AUTO_ANCHOR, source("Auto")),
                 new ChoiceSetting.Choice(0, source("Top left")),
                 new ChoiceSetting.Choice(1, source("Top center")),

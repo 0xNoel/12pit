@@ -42,7 +42,7 @@ public final class ContractRerollConfig extends FeatureConfig {
 
     public ContractRerollConfig() {
         super("contractreroll", source("Contract Reroll"), ConfigCategory.MISC,
-                source("Rerolls contracts until a task matches an enabled filter."), false);
+                source("Rerolls contracts until a task matches your filters."), false);
         key = keybindSetting("key", source("Contract reroll key"),
                 source("Starts contract rerolling. Press again to stop."), Keyboard.KEY_NONE);
         requireViles = booleanSetting("require_viles", source("Require bonus viles"),

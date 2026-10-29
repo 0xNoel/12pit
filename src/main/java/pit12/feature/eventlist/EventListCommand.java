@@ -44,8 +44,9 @@ final class EventListCommand {
     }
 
     CommandNode definition() {
-        return CommandNode.command("event", source("Show stored events")).aliases("events")
-                .arguments("<event>", 1, 2).executes(this::list).suggests((sender, args) -> {
+        return CommandNode.command("event", source("Show event times and countdowns"))
+                .aliases("events").arguments("<event>", 1, 2).executes(this::list)
+                .suggests((sender, args) -> {
                     List<String> names = new ArrayList<>();
                     if (args.length == 1) {
                         for (EventType type : EventType.values()) {

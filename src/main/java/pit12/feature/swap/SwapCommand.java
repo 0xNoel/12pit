@@ -50,7 +50,7 @@ final class SwapCommand {
     }
 
     CommandNode definition() {
-        return CommandNode.command("swap", source("Manage swap bindings"))
+        return CommandNode.command("swap", source("Manage swaps and key bindings"))
                 .child(operation("bind", source("Bind held armor or a hotbar item"), this::bind)
                         .arguments("<key> [slot]", 1, 2).suggests(this::bindSuggestions))
                 .child(operation("unbind", source("Remove key or held item bindings"), this::unbind)
@@ -60,8 +60,8 @@ final class SwapCommand {
                     bindings.clear();
                     if (config.bindingMessages.get())
                         reply(sender, Tone.SUCCESS, language.translate("Cleared swap bindings"));
-                })).child(operation("status", source("Show automatic swap state"), this::status))
-                .child(operation("reset", source("Reset automatic swap state"), (sender, args) -> {
+                })).child(operation("status", source("Show automatic swap status"), this::status))
+                .child(operation("reset", source("Reset automatic swaps"), (sender, args) -> {
                     automatic.manualReset();
                     reply(sender, Tone.SUCCESS,
                             language.translate("Automatic swap state has been reset"));

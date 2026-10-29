@@ -26,6 +26,6 @@ import pit12.runtime.config.FeatureConfig;
 public final class FontCacheFixConfig extends FeatureConfig {
     public FontCacheFixConfig() {
         super("fontcachefix", source("Font Cache Fix"), ConfigCategory.PATCH,
-                source("Fixes cached text using the wrong font in Lunar and PolyPatcher."));
+                source("Fixes text appearing in the wrong font with Lunar or PolyPatcher."));
     }
 }

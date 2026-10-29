@@ -48,7 +48,7 @@ public final class NametagConfig extends FeatureConfig {
         nickMarker = booleanSetting("nick_marker", source("Show nick marker"),
                 source("Adds N to nicked players' names."), true);
         realNames = booleanSetting("real_names", source("Show real names on nametags"),
-                source("Adds the real name after the nicked name."), true);
+                source("Adds the real name found by Denick after the nicked name."), true);
         subsubcategory("enchantments", source("Enchantments"));
         enchantmentFormat = choiceSetting("enchantment_format", source("Enchantment format"),
                 source("Controls how enchantment names and levels are shown."),
@@ -61,14 +61,14 @@ public final class NametagConfig extends FeatureConfig {
                 source("Shows the leggings' Pit enchantments."), true);
         subsubcategory("timers", source("Timers"));
         pinTimer = booleanSetting("pin_timer", source("Show Pin timer"),
-                source("Shows Pin timers after player names while Timers is enabled."), true);
+                source("Shows Pin timers after player names when enabled in Timers HUD."), true);
         venomTimer = booleanSetting("venom_timer", source("Show Venom timer"),
-                source("Shows Venom timers after player names while Timers is enabled."), true);
+                source("Shows Venom timers after player names when enabled in Timers HUD."), true);
         jumpBoostTimer = booleanSetting("jump_boost_timer", source("Show Jump Boost timer"),
-                source("Shows Jump Boost timers after player names while Timers is enabled."),
+                source("Shows Jump Boost timers after player names when enabled in Timers HUD."),
                 true);
         telebowTimer = booleanSetting("telebow_timer", source("Show Telebow cooldown"),
-                source("Shows Telebow cooldowns after player names while Timers is enabled."),
+                source("Shows Telebow cooldowns after player names when enabled in Timers HUD."),
                 true);
         subsubcategory("display", source("Display"));
         upwardOffset = integerSliderSetting("upward_offset", source("Upward offset (1/100 block)"),

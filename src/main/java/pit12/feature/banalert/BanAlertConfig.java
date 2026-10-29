@@ -25,7 +25,7 @@ import pit12.runtime.config.FeatureConfig;
 
 public final class BanAlertConfig extends FeatureConfig {
     public BanAlertConfig() {
-        super("ban_alert", source("Ban Alerts"), ConfigCategory.MISC, source(
-                "Shows who may have been banned based on ban messages and when players leave."));
+        super("ban_alert", source("Ban Alerts"), ConfigCategory.MISC,
+                source("Shows players who may have been banned."));
     }
 }

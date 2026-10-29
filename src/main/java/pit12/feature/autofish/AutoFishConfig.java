@@ -36,7 +36,7 @@ public final class AutoFishConfig extends FeatureConfig {
 
     public AutoFishConfig() {
         super("autofish", source("Auto Fish"), ConfigCategory.MISC,
-                source("Reels in when the bobber dips and can cast again."));
+                source("Automatically reels in fish and can cast again."));
         subsubcategory("general", source("General"));
         autoRecast = booleanSetting("auto_recast", source("Auto recast"),
                 source("Casts again after reeling in."), true);
